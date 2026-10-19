@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ViT Attention Explorer</title>
+<!--
+  Interactive demo: which patches a query patch attends to, per layer and head of a pretrained
+  Vision Transformer. The attention weights are precomputed (tools/export_attention.py) and
+  shipped as a script, so there are no network requests; works from file:// and on GitHub Pages.
+  Embed in Quarto pages via iframe:
+
+    <iframe src="../../demos/vision_transformers/attention_explorer/index.html" width="100%"
+            height="940" data-auto-height style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: ViT attention explorer"></iframe>
+
+  Data: data/attention.js, data/image.jpg. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #5b6472;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    --accent: #0891b2;
+    --accent-fill: #cffafe;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: clamp(14px, 1.55vw, 18px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.6rem; font-size: 0.85rem; color: var(--muted); }
+  noscript p, .error { padding: 0.5rem 0.7rem; border: 1px solid #ea580c; border-radius: 0.3rem; background: #ffedd5; }
+
+  button, input { font: inherit; color: inherit; }
+  button {
+    padding: 0.15rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-fill); font-weight: 600; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .view { margin: 0; }
+  .view canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 0.3rem;
+    cursor: crosshair;
+    touch-action: none;
+  }
+  .view figcaption { margin-top: 0.3rem; font-size: 0.8rem; color: var(--muted); }
+
+  .controls { display: grid; gap: 0.7rem; font-size: 0.9rem; }
+  .control .label { display: block; margin-bottom: 0.2rem; color: var(--muted); }
+  .row > .label { margin-bottom: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.4rem; }
+  .row input[type="range"] { flex: 1; min-width: 6rem; accent-color: var(--accent); }
+  .value { min-width: 3.2rem; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .hint.note { padding: 0.3rem 0.5rem; border-left: 3px solid var(--accent); background: var(--panel); }
+  .hint a { color: var(--accent); }
+  .hint { margin: 0.2rem 0 0; font-size: 0.78rem; color: var(--muted); }
+
+  .colorbar { display: grid; grid-template-columns: auto 1fr auto; gap: 0.4rem; align-items: center; font-size: 0.78rem; color: var(--muted); }
+  .colorbar span.bar {
+    height: 0.7rem;
+    border-radius: 0.2rem;
+    background: linear-gradient(90deg, #000004, #1b0c41, #4a0c6b, #781c6d, #a52c60, #cf4446, #ed6925, #fb9b06, #fcffa4);
+  }
+
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; margin: 0; }
+  .stats div { padding: 0.4rem 0.5rem; border-radius: 0.4rem; background: var(--panel); }
+  .stats dt { font-size: 0.72rem; color: var(--muted); }
+  .stats dd { margin: 0; font-size: 1.05rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .strip { margin: 0.9rem 0 0; }
+  .strip h2 { margin: 0 0 0.3rem; font-size: 0.9rem; font-weight: 600; }
+  .thumbs { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.35rem; }
+  .thumb { padding: 0.15rem; border: 2px solid transparent; background: none; font-size: 0.72rem; color: var(--muted); }
+  .thumb:hover { background: var(--panel); }
+  .thumb[aria-pressed="true"] { border-color: var(--accent); background: none; color: var(--ink); }
+  .thumb canvas { display: block; width: 100%; aspect-ratio: 1; border-radius: 0.2rem; }
+  .fine { margin: 0.6rem 0 0; font-size: 0.78rem; color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .layout { grid-template-columns: 1fr; }
+    .thumbs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ViT Attention Explorer</h1>
+  <p>Hover over the image to preview, click to select a query patch. The overlay shows how much
+     attention that patch pays to every other patch in the selected layer.</p>
+</header>
+
+<noscript><p>This demo needs JavaScript.</p></noscript>
+<p class="error" id="error" role="alert" hidden></p>
+
+<div class="layout" id="app" hidden>
+  <figure class="view">
+    <canvas id="view" width="512" height="512" tabindex="0"
+            aria-label="Image with attention overlay. Arrow keys move the query patch."></canvas>
+    <figcaption id="view-caption" aria-live="polite"></figcaption>
+  </figure>
+
+  <div class="controls">
+    <div class="control">
+      <div class="row">
+        <label class="label" for="layer">Layer</label>
+        <button type="button" id="reset" style="margin-left: auto;">Reset</button>
+      </div>
+      <div class="row">
+        <input id="layer" type="range" min="1" step="1">
+        <span class="value" id="layer-value"></span>
+      </div>
+    </div>
+
+    <div class="control">
+      <span class="label" id="head-label">Attention head</span>
+      <div class="row" id="heads" role="group" aria-labelledby="head-label"></div>
+      <p class="hint">"Mean" averages the attention weights of all heads.</p>
+    </div>
+
+    <div class="control">
+      <span class="label" id="query-label">Query token</span>
+      <div class="row" id="queries" role="group" aria-labelledby="query-label">
+        <button type="button" id="query-patch" aria-pressed="true">Patch</button>
+      </div>
+      <p class="hint">Register tokens are extra tokens without an image location, where the model
+         can collect global information.</p>
+      <p class="hint note" id="registers-identical" hidden><b>Note:</b> the 4 registers of this model
+         are identical, so all 4 show the same attention. They have no positional embedding and were
+         all initialized with zeros, so nothing in training could make them differ (fixed in timm
+         after this model was trained; see
+         <a href="https://github.com/huggingface/pytorch-image-models/pull/2229" target="_blank" rel="noopener">timm PR #2229</a>).</p>
+    </div>
+
+    <div class="control">
+      <span class="label" id="scale-label">Color scale</span>
+      <div class="row" role="group" aria-labelledby="scale-label">
+        <button type="button" id="scale-layer" aria-pressed="true">Per layer</button>
+        <button type="button" id="scale-shared" aria-pressed="false">Shared across layers</button>
+        <label class="row" style="margin-left: auto;"><input id="smooth" type="checkbox"> smooth</label>
+      </div>
+      <div class="colorbar"><span>0</span><span class="bar"></span><span id="scale-max">max</span></div>
+    </div>
+
+    <dl class="stats" aria-live="polite">
+      <div><dt>On the query patch itself</dt><dd id="stat-self"></dd></div>
+      <div><dt>On register tokens</dt><dd id="stat-reg"></dd></div>
+      <div><dt>Mean attention distance</dt><dd id="stat-dist"></dd></div>
+    </dl>
+  </div>
+</div>
+
+<section class="strip" id="strip" hidden>
+  <h2>Same query in all layers</h2>
+  <div class="thumbs" id="thumbs"></div>
+  <p class="fine" id="fine"></p>
+</section>
+
+<script src="data/attention.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

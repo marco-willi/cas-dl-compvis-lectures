@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Receptive Field of Stacked Convolutions</title>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<!--
+  Interactive demo: receptive field of an activation in the last layer of a stack of 3 or 4
+  convolutional layers, shown in every activation map. No backend; works from file:// and on
+  GitHub Pages. Embed in Quarto pages / Reveal.js slides via iframe:
+
+    <iframe src="../../demos/cnns/receptive_field/index.html" width="100%" height="640"
+            style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: receptive field"></iframe>
+
+  Defaults: config.js. Computation: rf.js. Interface: app.js.
+  Formulas are typeset with KaTeX from ../vendor/katex/.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #667085;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    --accent: #e8910c;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: clamp(13px, min(1.55vw, 2.4vh), 22px); }
+  html.auto-height { font-size: clamp(13px, 1.55vw, 22px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.35;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.5rem; font-size: 0.8rem; color: var(--muted); }
+
+  button { font: inherit; color: inherit; }
+  button {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1.1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+  }
+  .control { display: flex; align-items: center; gap: 0.4rem; }
+  .control > span { color: var(--muted); }
+  .seg { display: flex; }
+  .seg button { min-width: 2rem; border-radius: 0; margin-left: -1px; font-variant-numeric: tabular-nums; }
+  .seg button:first-child { border-radius: 0.3rem 0 0 0.3rem; margin-left: 0; }
+  .seg button:last-child { border-radius: 0 0.3rem 0.3rem 0; }
+  .seg button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .controls label { display: flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+  .controls .spacer { flex: 1; }
+  .layers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+  }
+  .layer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.5rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.4rem;
+    background: var(--panel);
+  }
+  .layer b { min-width: 3.6rem; }
+  .layer span { color: var(--muted); }
+
+  /* Activation maps */
+  #stage { position: relative; }
+  #maps { display: block; width: 100%; touch-action: none; -webkit-tap-highlight-color: transparent; }
+  #maps:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 1rem;
+    margin-top: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .swatch { display: inline-block; width: 0.9rem; height: 0.9rem; margin-right: 0.25rem; vertical-align: -0.15rem; border: 1px solid var(--line); }
+  .swatch.rf { background: var(--accent); border-color: var(--accent); }
+  .swatch.sel { background: var(--ink); border-color: var(--ink); }
+  .swatch.out { background: #fff; border: 2px dashed var(--accent); }
+
+  /* Formula, table and selection */
+  .info {
+    margin-top: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.4rem;
+    background: var(--panel);
+    font-size: 0.85rem;
+  }
+  .info p { margin: 0.2rem 0; }
+  .info .katex { font-size: 1.05em; }
+  .formula { overflow-x: auto; overflow-y: hidden; padding: 0.15rem 0; }
+  table { border-collapse: collapse; margin: 0.4rem 0; font-variant-numeric: tabular-nums; }
+  th, td { padding: 0.15rem 0.7rem; text-align: center; border-bottom: 1px solid var(--line); }
+  th { font-weight: 500; color: var(--muted); }
+  td:first-child, th:first-child { text-align: left; }
+  tr.last td { font-weight: 600; }
+  .note { color: var(--muted); }
+  .warn { color: #b2182b; }
+  @media (min-width: 1100px) {
+    .info { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0 1.2rem; align-items: start; }
+    .info .formula, .info .selection { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Receptive Field</h1>
+  <p>Choose kernel size and stride of each layer. Hover over or tap an activation in the last
+     layer to see which activations of all preceding maps it depends on.</p>
+</header>
+
+<div class="controls">
+  <div class="control"><span id="label-n">Layers</span><div class="seg" id="ctl-layerCount" role="group" aria-labelledby="label-n"></div></div>
+  <label><input id="paths" type="checkbox"> Shade by number of paths</label>
+  <span class="spacer"></span>
+  <button id="reset" type="button">Reset</button>
+</div>
+
+<div class="layers" id="layers"></div>
+
+<div id="stage">
+  <canvas id="maps" tabindex="0" aria-label="Activation maps from the input (left) to the last layer (right); arrow keys move the selected activation"></canvas>
+</div>
+<div class="legend">
+  <span><span class="swatch sel"></span>selected activation</span>
+  <span><span class="swatch rf"></span>activations it depends on</span>
+  <span><span class="swatch out"></span>receptive field reaching into the zero-padding</span>
+</div>
+
+<div class="info" id="info">
+  <div class="formula" id="formula"></div>
+  <table id="table"></table>
+  <p class="selection" id="selection"></p>
+</div>
+
+<script src="../vendor/katex/katex.min.js"></script>
+<script src="config.js"></script>
+<script src="rf.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

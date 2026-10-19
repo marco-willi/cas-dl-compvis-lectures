@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LoRA Rank Explorer</title>
+<!--
+  Interactive demo: how the rank of a LoRA update determines the number of trainable
+  parameters. No dependencies, no backend, no network requests; works from file:// and on
+  GitHub Pages. Embed in Quarto pages via iframe:
+
+    <iframe src="../../demos/downstream_adaptation/lora_rank_explorer/index.html" width="100%"
+            height="760" data-auto-height style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: LoRA rank explorer"></iframe>
+
+  Computation: lora.js. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #5b6472;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    /* Same colors as the diagrams of the lecture: frozen = blue, trainable = orange. */
+    --frozen-fill: #dbeafe;
+    --frozen: #2563eb;
+    --frozen-ink: #172554;
+    --train-fill: #ffedd5;
+    --train: #ea580c;
+    --train-ink: #7c2d12;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: clamp(14px, 1.55vw, 18px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.6rem; font-size: 0.85rem; color: var(--muted); }
+  noscript p { padding: 0.5rem 0.7rem; border: 1px solid var(--train); border-radius: 0.3rem; background: var(--train-fill); }
+
+  button, select, input { font: inherit; color: inherit; }
+  button {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  .control { display: flex; align-items: center; gap: 0.4rem; }
+  .control > span, .control > label { color: var(--muted); }
+  input[type="number"] {
+    width: 4.6rem;
+    padding: 0.2rem 0.35rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .rank { flex: 1 1 100%; }
+  .rank input[type="range"] { flex: 1; min-width: 6rem; accent-color: var(--train); }
+  .hint { flex-basis: 100%; margin: -0.2rem 0 0; font-size: 0.8rem; color: var(--muted); }
+  .controls .spacer { flex: 1; }
+
+  /* Diagram */
+  .diagram { margin: 0.7rem 0 0; padding: 0.5rem; border-radius: 0.4rem; background: var(--panel); }
+  .diagram svg { display: block; width: 100%; }
+  .diagram text { font-family: inherit; fill: var(--ink); }
+  .diagram .dim { fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .diagram .frozen { fill: var(--frozen-fill); stroke: var(--frozen); }
+  .diagram .train { stroke: var(--train); }
+  .diagram .name-frozen { fill: var(--frozen-ink); font-weight: 600; }
+  .diagram .name-train { fill: var(--train-ink); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.2rem 1.2rem; margin: 0.4rem 0 0; padding: 0; list-style: none; font-size: 0.8rem; color: var(--muted); }
+  .swatch { display: inline-block; width: 1rem; height: 0.8rem; margin-right: 0.3rem; vertical-align: -0.1rem; border: 1.5px solid; }
+  .swatch.frozen { background: var(--frozen-fill); border-color: var(--frozen); }
+  .swatch.train, .bar.train {
+    background: repeating-linear-gradient(45deg, var(--train-fill) 0 4px, #fdba74 4px 6px);
+    border-color: var(--train);
+  }
+
+  /* Parameter counts */
+  .bars { margin: 0.7rem 0 0; font-size: 0.85rem; }
+  .bar-row { display: grid; grid-template-columns: 9.5rem 1fr; align-items: center; gap: 0.5rem; margin-top: 0.3rem; }
+  .bar-track { height: 1.1rem; }
+  .bar { height: 100%; min-width: 2px; border: 1.5px solid; }
+  .bar.frozen { background: var(--frozen-fill); border-color: var(--frozen); }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 0.7rem 0 0;
+  }
+  .stats div { padding: 0.45rem 0.6rem; border-radius: 0.4rem; background: var(--panel); }
+  .stats dt { font-size: 0.75rem; color: var(--muted); }
+  .stats dd { margin: 0; font-size: 1.1rem; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .stats small { display: block; font-size: 0.72rem; font-weight: 400; color: var(--muted); }
+  .note {
+    margin: 0.7rem 0 0;
+    padding: 0.4rem 0.6rem;
+    border-left: 4px solid var(--line);
+    font-size: 0.85rem;
+  }
+  .note.warn { border-color: var(--train); background: var(--train-fill); color: var(--train-ink); }
+  .fine { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--muted); }
+
+  @media (max-width: 620px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .bar-row { grid-template-columns: 1fr; gap: 0.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LoRA Rank Explorer</h1>
+  <p>LoRA keeps a pretrained weight matrix <i>W</i> frozen and trains a low-rank update <i>BA</i>.
+     Change the rank and compare the number of parameters for a 64 × 64 matrix.</p>
+</header>
+
+<noscript><p>This demo needs JavaScript. Without it: a full update of a 64 × 64 matrix has
+4,096 parameters, a LoRA update of rank 8 has 8 · (64 + 64) = 1,024 (25%).</p></noscript>
+
+<div class="controls">
+  <div class="control rank">
+    <label for="rank">Rank r</label>
+    <input id="rank" type="range" min="1" step="1">
+    <input id="rank-number" type="number" min="1" step="1" inputmode="numeric" aria-label="Rank r (exact value)">
+    <span id="rank-max"></span>
+  </div>
+  <div class="control">
+    <label for="alpha">α</label>
+    <input id="alpha" type="number" min="0" step="1" inputmode="decimal">
+    <span id="scale" aria-live="polite"></span>
+  </div>
+  <div class="control">
+    <label for="modules">Target matrices</label>
+    <input id="modules" type="number" min="1" max="999" step="1" inputmode="numeric">
+  </div>
+  <span class="spacer"></span>
+  <button id="reset" type="button">Reset</button>
+  <p class="hint">α only scales the update (α / r) and adds no parameters. "Target matrices" multiplies both
+     counts, e.g. 24 for the query and value matrices in 12 transformer blocks.</p>
+</div>
+
+<figure class="diagram">
+  <svg id="diagram" role="img" aria-labelledby="diagram-desc"></svg>
+  <p id="diagram-desc" hidden></p>
+  <ul class="legend">
+    <li><span class="swatch frozen"></span>frozen pretrained weights (solid)</li>
+    <li><span class="swatch train"></span>trainable LoRA factors (hatched)</li>
+    <li>Sizes are drawn to scale, with a minimum thickness of 3 px.</li>
+  </ul>
+</figure>
+
+<div class="bars" id="bars" role="img"></div>
+
+<dl class="stats" aria-live="polite">
+  <div><dt>Full matrix: d<sub>out</sub> · d<sub>in</sub></dt><dd id="stat-full"></dd></div>
+  <div><dt>LoRA: r · (d<sub>in</sub> + d<sub>out</sub>)</dt><dd id="stat-lora"></dd></div>
+  <div><dt>Ratio LoRA / full</dt><dd id="stat-ratio"></dd></div>
+  <div><dt>Difference full − LoRA</dt><dd id="stat-diff"></dd></div>
+</dl>
+
+<p class="note" id="note" role="status"></p>
+<p class="fine">The counts cover only the adapted weight matrices. The classifier head is excluded:
+   it is trained in addition, with full fine-tuning as well as with LoRA.</p>
+
+<script src="lora.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

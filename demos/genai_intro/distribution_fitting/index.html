@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning a 1D Distribution</title>
+<!--
+  Interactive demo: a generator (Gaussian or mixture of two Gaussians) tries to reproduce a
+  fixed bimodal target distribution. No dependencies, no backend, no network requests; works
+  from file:// and on GitHub Pages. Embed in Quarto pages via iframe:
+
+    <iframe src="../../demos/genai_intro/distribution_fitting/index.html" width="100%"
+            height="900" data-auto-height style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: learning a 1D distribution"></iframe>
+
+  Computation: dist.js. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #5b6472;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    /* Same colors as the lecture figures: target = blue, model = orange. */
+    --target: #1f4e9c;
+    --target-fill: #dbe4f3;
+    --model: #d55e00;
+    --model-fill: #fbd9c2;
+    --model-ink: #7c2d12;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: clamp(14px, 1.55vw, 18px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.6rem; font-size: 0.85rem; color: var(--muted); }
+  noscript p { padding: 0.5rem 0.7rem; border: 1px solid var(--model); border-radius: 0.3rem; background: var(--model-fill); }
+
+  button, select, input { font: inherit; color: inherit; }
+  button, select {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  button.primary { border-color: var(--model); color: var(--model-ink); background: var(--model-fill); font-weight: 600; }
+  button.primary:hover { background: #f8c7a5; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* Controls */
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.6rem; font-size: 0.9rem; }
+  fieldset { margin: 0; padding: 0.4rem 0.7rem 0.55rem; border: 1px solid var(--line); border-radius: 0.4rem; min-width: 0; }
+  legend { padding: 0 0.3rem; color: var(--muted); font-size: 0.85rem; }
+  .row { display: grid; grid-template-columns: 4.6rem 1fr 3.2rem; align-items: center; gap: 0.4rem; margin-top: 0.15rem; }
+  .row label { color: var(--muted); }
+  .row output { text-align: right; font-variant-numeric: tabular-nums; }
+  .row input[type="range"] { width: 100%; accent-color: var(--model); }
+  .inline { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.7rem; margin-top: 0.2rem; }
+  .inline label { color: var(--muted); }
+  input[type="number"] {
+    width: 5rem;
+    padding: 0.2rem 0.35rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.6rem 0 0; font-size: 0.9rem; }
+  .actions .label { color: var(--muted); margin-left: 0.4rem; }
+  .actions .spacer { flex: 1; }
+  .check { display: flex; align-items: center; gap: 0.3rem; color: var(--muted); }
+
+  /* Plot */
+  .plot { margin: 0.6rem 0 0; padding: 0.4rem 0.5rem 0.5rem; border-radius: 0.4rem; background: var(--panel); }
+  .plot svg { display: block; width: 100%; height: auto; }
+  .plot text { font-family: inherit; fill: var(--muted); font-size: 12px; }
+  .legend-list { display: flex; flex-wrap: wrap; gap: 0.2rem 1.1rem; margin: 0.3rem 0 0; padding: 0; list-style: none; font-size: 0.8rem; color: var(--muted); }
+  .swatch { display: inline-block; width: 1rem; height: 0.75rem; margin-right: 0.3rem; vertical-align: -0.08rem; }
+  .swatch.target { background: var(--target-fill); border-top: 2px solid var(--target); }
+  .swatch.model { height: 0; border-top: 3px solid var(--model); vertical-align: 0.2rem; }
+  .swatch.hist { background: var(--model-fill); border: 1px solid #f0a776; }
+  .swatch.rug-model { width: 0.2rem; height: 0.8rem; background: var(--model); }
+  .swatch.rug-train { width: 0.2rem; height: 0.8rem; background: var(--target); }
+
+  /* Statistics */
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; margin: 0.6rem 0 0; }
+  .stats div { padding: 0.45rem 0.6rem; border-radius: 0.4rem; background: var(--panel); }
+  .stats dt { font-size: 0.75rem; color: var(--muted); }
+  .stats dd { margin: 0; font-size: 1.1rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stats small { display: block; font-size: 0.72rem; font-weight: 400; color: var(--muted); }
+  .meter { height: 0.35rem; margin-top: 0.25rem; border-radius: 0.2rem; background: #e3e6eb; overflow: hidden; }
+  .meter span { display: block; height: 100%; background: var(--model); }
+  .note { margin: 0.6rem 0 0; padding: 0.4rem 0.6rem; border-left: 4px solid var(--line); font-size: 0.85rem; }
+  .note.warn { border-color: var(--model); background: #fff4ec; color: var(--model-ink); }
+  .note.good { border-color: #2e7d32; background: #eef7ee; color: #1b5e20; }
+  .fine { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--muted); }
+
+  @media (max-width: 620px) {
+    .stats { grid-template-columns: 1fr; }
+    .actions .spacer { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Learning a 1D Distribution</h1>
+  <p>The blue target distribution is fixed. Choose a generator and its parameters, draw samples, and compare
+     the generated samples with the target. Can you reproduce both modes?</p>
+</header>
+
+<noscript><p>This demo needs JavaScript. Without it: a single Gaussian fitted by maximum likelihood to the
+bimodal target has mean ≈ 5 and standard deviation ≈ 2.6. It covers both modes, but many of its samples fall
+between them. A mixture of two Gaussians can reproduce the target.</p></noscript>
+
+<div class="controls">
+  <fieldset>
+    <legend>Generator</legend>
+    <div class="inline">
+      <label for="kind">Model</label>
+      <select id="kind">
+        <option value="1">Single Gaussian</option>
+        <option value="2">Mixture of two Gaussians</option>
+      </select>
+    </div>
+    <div class="row"><label for="mean0">mean μ<sub>1</sub></label><input id="mean0" type="range" min="-2" max="11" step="0.1"><output id="mean0-out" for="mean0"></output></div>
+    <div class="row"><label for="std0">std σ<sub>1</sub></label><input id="std0" type="range" min="0.2" max="5" step="0.05"><output id="std0-out" for="std0"></output></div>
+  </fieldset>
+
+  <fieldset id="second">
+    <legend>Second component</legend>
+    <div class="row"><label for="mean1">mean μ<sub>2</sub></label><input id="mean1" type="range" min="-2" max="11" step="0.1"><output id="mean1-out" for="mean1"></output></div>
+    <div class="row"><label for="std1">std σ<sub>2</sub></label><input id="std1" type="range" min="0.2" max="5" step="0.05"><output id="std1-out" for="std1"></output></div>
+    <div class="row"><label for="weight">weight π<sub>1</sub></label><input id="weight" type="range" min="0" max="1" step="0.01"><output id="weight-out" for="weight"></output></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Sampling</legend>
+    <div class="inline">
+      <label for="count">Samples</label>
+      <select id="count">
+        <option>10</option><option>30</option><option>100</option><option>300</option>
+        <option>1000</option><option>3000</option><option>10000</option>
+      </select>
+    </div>
+    <div class="inline">
+      <label for="seed">Seed</label>
+      <input id="seed" type="number" min="1" max="99999" step="1" inputmode="numeric">
+      <button id="new-seed" type="button">New seed</button>
+    </div>
+    <label class="check"><input id="show-train" type="checkbox"> Show training data (from the target)</label>
+  </fieldset>
+</div>
+
+<div class="actions">
+  <button id="fit" class="primary" type="button">Fit by maximum likelihood</button>
+  <span class="label">Presets:</span>
+  <button type="button" data-preset="collapse">Mode collapse</button>
+  <button type="button" data-preset="broad">Too broad</button>
+  <span class="spacer"></span>
+  <button id="reset" type="button">Reset</button>
+</div>
+
+<figure class="plot">
+  <svg id="plot" viewBox="0 0 760 290" height="290" role="img" aria-labelledby="plot-desc"></svg>
+  <p id="plot-desc" hidden></p>
+  <ul class="legend-list">
+    <li><span class="swatch target"></span>target p<sub>data</sub>(x)</li>
+    <li><span class="swatch model"></span>generator p<sub>θ</sub>(x)</li>
+    <li><span class="swatch hist"></span>histogram of generated samples</li>
+    <li><span class="swatch rug-model"></span>generated samples</li>
+    <li id="legend-train" hidden><span class="swatch rug-train"></span>training data</li>
+  </ul>
+</figure>
+
+<dl class="stats" aria-live="polite">
+  <div>
+    <dt>Fidelity: generated samples in the target's 95% region</dt>
+    <dd id="stat-fidelity"></dd>
+    <div class="meter" aria-hidden="true"><span id="meter-fidelity"></span></div>
+  </div>
+  <div>
+    <dt>Coverage: training samples in the generator's 95% region</dt>
+    <dd id="stat-coverage"></dd>
+    <div class="meter" aria-hidden="true"><span id="meter-coverage"></span></div>
+  </div>
+  <div>
+    <dt>Average log-likelihood of the training data</dt>
+    <dd id="stat-ll"></dd>
+  </div>
+</dl>
+
+<p class="note" id="note" role="status"></p>
+<p class="fine">The 95% region of a distribution is the smallest region that contains 95% of its probability,
+   i.e. where its density is highest. A perfect generator reaches about 95% fidelity and coverage. Fidelity
+   depends on the generated samples (number and seed); coverage and log-likelihood are computed on 1,000 fixed
+   training samples drawn from the target. The fit by maximum likelihood also uses these training samples, never
+   the generated ones.</p>
+
+<script src="dist.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

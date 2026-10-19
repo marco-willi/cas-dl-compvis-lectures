@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convolution with Manually Specified Filters</title>
+<!--
+  Interactive convolution demo: draw an input, pick or edit a 3x3 filter, inspect the output.
+  Self-contained (no dependencies, no backend). Embed in Quarto pages / Reveal.js slides via iframe:
+
+    <iframe src="../../demos/convolution/index.html" width="100%" height="560"
+            style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: convolution with manually specified filters"></iframe>
+
+  Edit PRESETS in the script below to add or change filters.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #667085;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    --accent: #e8910c;
+    --neg: #2166ac;
+    --zero: #f7f7f7;
+    --pos: #b2182b;
+  }
+  * { box-sizing: border-box; }
+  /* Font size follows the iframe width so the demo stays readable on large slides. */
+  html { font-size: clamp(13px, 1.55vw, 22px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.35;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.6rem; font-size: 0.8rem; color: var(--muted); }
+
+  .panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 13rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .panel h2 {
+    margin: 0 0 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .panel h2 span { text-transform: none; letter-spacing: 0; font-weight: 400; }
+  .panel-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* Pixel grids: 28x28 canvases scaled up without smoothing. */
+  .grid-wrap {
+    position: relative;
+    width: min(100%, calc(100vh - 18rem));
+    min-width: 9rem;
+    aspect-ratio: 1;
+  }
+  .grid-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--line);
+    image-rendering: pixelated;
+    touch-action: none;
+  }
+  #input { cursor: crosshair; }
+  #output { cursor: pointer; }
+  .marker {
+    position: absolute;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+  }
+
+  button, select, input { font: inherit; color: inherit; }
+  button, select {
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  select { width: 100%; }
+
+  .weights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem;
+    margin: 0.5rem 0;
+  }
+  .weights input {
+    width: 100%;
+    padding: 0.45rem 0.1rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    -moz-appearance: textfield;
+  }
+  .weights input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .filter-actions { display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; }
+  .filter-actions label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+
+  .legend { flex: 1; }
+  .legend-bar {
+    height: 0.55rem;
+    border: 1px solid var(--line);
+    background: linear-gradient(to right, var(--neg), var(--zero), var(--pos));
+  }
+  .legend-ticks { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+
+  /* Calculation for the selected output cell. */
+  .calc {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.7rem;
+    margin-top: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.4rem;
+    background: var(--panel);
+    font-size: 0.85rem;
+  }
+  .calc .where { flex-basis: 100%; color: var(--muted); font-size: 0.8rem; }
+  .calc figure { margin: 0; text-align: center; }
+  .calc figcaption { font-size: 0.7rem; color: var(--muted); }
+  .mini {
+    display: grid;
+    grid-template-columns: repeat(3, 3.1rem);
+    gap: 1px;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .mini span { padding: 0.12rem 0; background: #fff; border: 1px solid var(--line); }
+  .mini span.pad { border-style: dashed; color: var(--muted); background: transparent; }
+  .calc .op { font-size: 1.1rem; }
+  .calc .result { font-variant-numeric: tabular-nums; }
+  .calc .result b { font-size: 1.05rem; }
+
+  @media (max-width: 620px) {
+    .panels { grid-template-columns: 1fr; }
+    .grid-wrap { width: min(100%, 20rem); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Convolution with Manually Specified Filters</h1>
+  <p>Demonstration: the filter weights are set by hand, not learned.
+     Draw an input, choose or edit a filter, and inspect the output.</p>
+</header>
+
+<div class="panels">
+  <section class="panel">
+    <h2>Input <span>(28 × 28, draw here)</span></h2>
+    <div class="grid-wrap">
+      <canvas id="input" width="28" height="28" aria-label="Input image, draw with mouse or finger"></canvas>
+      <div class="marker" id="patch-marker"></div>
+    </div>
+    <div class="panel-foot">
+      <button id="clear" type="button">Clear</button>
+      <span>0 = black, 1 = white</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Filter <span>(3 × 3)</span></h2>
+    <select id="preset" aria-label="Preset filter"></select>
+    <div class="weights" id="weights"></div>
+    <div class="filter-actions">
+      <button id="restore" type="button">Restore preset</button>
+      <label><input id="relu" type="checkbox"> Apply ReLU</label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Output <span>(feature map, hover or tap)</span></h2>
+    <div class="grid-wrap">
+      <canvas id="output" width="28" height="28" aria-label="Output feature map"></canvas>
+      <div class="marker" id="cell-marker"></div>
+    </div>
+    <div class="panel-foot">
+      <div class="legend">
+        <div class="legend-bar"></div>
+        <div class="legend-ticks"><span id="tick-lo"></span><span>0</span><span id="tick-hi"></span></div>
+      </div>
+      <span id="range"></span>
+    </div>
+  </section>
+</div>
+
+<div class="calc" id="calc" aria-live="polite"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Configuration: add or edit preset filters here (name + 3x3 weight matrix).
+// ---------------------------------------------------------------------------
+const PRESETS = [
+  { name: "Identity",                 weights: [[0, 0, 0], [0, 1, 0], [0, 0, 0]] },
+  { name: "Blur (box)",               weights: [[1/9, 1/9, 1/9], [1/9, 1/9, 1/9], [1/9, 1/9, 1/9]] },
+  { name: "Blur (Gaussian)",          weights: [[1/16, 2/16, 1/16], [2/16, 4/16, 2/16], [1/16, 2/16, 1/16]] },
+  { name: "Horizontal edges (Sobel)", weights: [[-1, -2, -1], [0, 0, 0], [1, 2, 1]] },
+  { name: "Vertical edges (Sobel)",   weights: [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]] },
+  { name: "Sharpen",                  weights: [[0, -1, 0], [-1, 5, -1], [0, -1, 0]] },
+  { name: "Laplacian (all edges)",    weights: [[0, 1, 0], [1, -4, 1], [0, 1, 0]] },
+];
+
+const N = 28;            // input and output are N x N
+const K = 3;             // filter is K x K
+const PAD = (K - 1) / 2; // zero-padding that preserves the input size at stride 1
+const BRUSH_RADIUS = 1.4; // in pixels of the N x N grid
+
+// Diverging colour scale endpoints (negative, zero, positive).
+const NEG = [33, 102, 172], ZERO = [247, 247, 247], POS = [178, 24, 43];
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+const image = new Float32Array(N * N);   // grayscale input in [0, 1]
+let output = new Float32Array(N * N);
+let weights = PRESETS[0].weights.map(row => row.slice());
+let pinned = { x: N / 2, y: N / 2 };     // selected output cell (click / tap)
+let hovered = null;                      // output cell under the pointer
+
+// ---------------------------------------------------------------------------
+// Convolution (cross-correlation, as used in CNNs)
+// ---------------------------------------------------------------------------
+function pixel(x, y) {
+  return x < 0 || y < 0 || x >= N || y >= N ? 0 : image[y * N + x]; // zero-padding
+}
+
+// Input patch under the filter when it is centred on output cell (x, y).
+function patchAt(x, y) {
+  const patch = [];
+  for (let m = 0; m < K; m++) {
+    patch.push([]);
+    for (let n = 0; n < K; n++) {
+      const px = x + n - PAD, py = y + m - PAD;
+      patch[m].push({ value: pixel(px, py), padded: px < 0 || py < 0 || px >= N || py >= N });
+    }
+  }
+  return patch;
+}
+
+function convolve(useRelu) {
+  const out = new Float32Array(N * N);
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      let sum = 0;
+      for (let m = 0; m < K; m++)
+        for (let n = 0; n < K; n++)
+          sum += pixel(x + n - PAD, y + m - PAD) * weights[m][n];
+      out[y * N + x] = useRelu ? Math.max(0, sum) : sum;
+    }
+  }
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+const $ = id => document.getElementById(id);
+const inputCanvas = $("input"), outputCanvas = $("output");
+const inputCtx = inputCanvas.getContext("2d"), outputCtx = outputCanvas.getContext("2d");
+
+// Trim to at most `digits` decimals, without trailing zeros; use a real minus sign.
+function fmt(v, digits = 2) {
+  const s = String(parseFloat(v.toFixed(digits)));
+  return (s === "-0" ? "0" : s).replace("-", "−");
+}
+
+// t in [-1, 1] -> rgb on the diverging scale, centred on zero.
+function diverging(t) {
+  const end = t < 0 ? NEG : POS, a = Math.min(1, Math.abs(t));
+  return ZERO.map((z, i) => Math.round(z + (end[i] - z) * a));
+}
+
+function paint(ctx, colourOf) {
+  const img = ctx.createImageData(N, N);
+  for (let i = 0; i < N * N; i++) {
+    const [r, g, b] = colourOf(i);
+    img.data.set([r, g, b, 255], i * 4);
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+function placeMarker(el, x, y, size) {
+  el.style.left = (x / N * 100) + "%";
+  el.style.top = (y / N * 100) + "%";
+  el.style.width = el.style.height = (size / N * 100) + "%";
+}
+
+function renderCalculation(x, y) {
+  const useRelu = $("relu").checked;
+  const patch = patchAt(x, y);
+  let sum = 0;
+  const cells = { patch: "", filter: "", product: "" };
+  for (let m = 0; m < K; m++) {
+    for (let n = 0; n < K; n++) {
+      const { value, padded } = patch[m][n], product = value * weights[m][n];
+      sum += product;
+      cells.patch += padded ? `<span class="pad" title="zero-padding">0</span>` : `<span>${fmt(value)}</span>`;
+      cells.filter += `<span>${fmt(weights[m][n], 3)}</span>`;
+      cells.product += `<span>${fmt(product)}</span>`;
+    }
+  }
+  const grid = (html, caption) => `<figure><div class="mini">${html}</div><figcaption>${caption}</figcaption></figure>`;
+  const result = useRelu
+    ? `Σ = ${fmt(sum, 3)} &nbsp;→&nbsp; ReLU: max(0, ${fmt(sum, 3)}) = <b>${fmt(Math.max(0, sum), 3)}</b>`
+    : `Σ = <b>${fmt(sum, 3)}</b>`;
+  $("calc").innerHTML =
+    `<div class="where">Output cell at row ${y + 1}, column ${x + 1}: ` +
+    `sum of (input patch × filter weights)${useRelu ? ", then ReLU" : ""}</div>` +
+    grid(cells.patch, "input patch") + `<span class="op">×</span>` +
+    grid(cells.filter, "filter") + `<span class="op">=</span>` +
+    grid(cells.product, "products") +
+    `<span class="result">${result}</span>`;
+}
+
+function render() {
+  const useRelu = $("relu").checked;
+  output = convolve(useRelu);
+
+  // Symmetric range around zero so that zero is always the neutral colour.
+  let lo = Infinity, hi = -Infinity;
+  for (const v of output) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+  const limit = Math.max(Math.abs(lo), Math.abs(hi)) || 1;
+
+  paint(inputCtx, i => { const g = Math.round(image[i] * 255); return [g, g, g]; });
+  paint(outputCtx, i => diverging(output[i] / limit));
+
+  $("tick-lo").textContent = fmt(-limit);
+  $("tick-hi").textContent = "+" + fmt(limit);
+  $("range").textContent = `min ${fmt(lo)} · max ${fmt(hi)}`;
+
+  const { x, y } = hovered || pinned;
+  placeMarker($("patch-marker"), x - PAD, y - PAD, K);
+  placeMarker($("cell-marker"), x, y, 1);
+  renderCalculation(x, y);
+}
+
+// Coalesce bursts of pointer events into one redraw per frame.
+let scheduled = false;
+function scheduleRender() {
+  if (scheduled) return;
+  scheduled = true;
+  requestAnimationFrame(() => { scheduled = false; render(); });
+}
+
+// ---------------------------------------------------------------------------
+// Drawing (pointer events cover mouse, touch and pen)
+// ---------------------------------------------------------------------------
+function gridPosition(canvas, event) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (event.clientX - rect.left) / rect.width * N,
+    y: (event.clientY - rect.top) / rect.height * N,
+  };
+}
+
+// Soft round brush: full intensity at the centre, fading to zero at BRUSH_RADIUS.
+function stamp(gx, gy) {
+  for (let y = Math.floor(gy - BRUSH_RADIUS); y <= Math.ceil(gy + BRUSH_RADIUS); y++) {
+    for (let x = Math.floor(gx - BRUSH_RADIUS); x <= Math.ceil(gx + BRUSH_RADIUS); x++) {
+      if (x < 0 || y < 0 || x >= N || y >= N) continue;
+      const d = Math.hypot(x + 0.5 - gx, y + 0.5 - gy);
+      const v = Math.min(1, 1.5 * (1 - d / BRUSH_RADIUS));
+      if (v > image[y * N + x]) image[y * N + x] = v;
+    }
+  }
+}
+
+function stroke(from, to) {
+  const steps = Math.max(1, Math.ceil(Math.hypot(to.x - from.x, to.y - from.y) / 0.3));
+  for (let s = 0; s <= steps; s++)
+    stamp(from.x + (to.x - from.x) * s / steps, from.y + (to.y - from.y) * s / steps);
+}
+
+let last = null; // previous pointer position while drawing
+inputCanvas.addEventListener("pointerdown", e => {
+  e.preventDefault();
+  inputCanvas.setPointerCapture(e.pointerId);
+  last = gridPosition(inputCanvas, e);
+  stroke(last, last);
+  scheduleRender();
+});
+inputCanvas.addEventListener("pointermove", e => {
+  if (!last) return;
+  const pos = gridPosition(inputCanvas, e);
+  stroke(last, pos);
+  last = pos;
+  scheduleRender();
+});
+for (const type of ["pointerup", "pointercancel"])
+  inputCanvas.addEventListener(type, () => { last = null; });
+
+$("clear").addEventListener("click", () => { image.fill(0); render(); });
+
+// ---------------------------------------------------------------------------
+// Inspecting output cells: hover previews, click / tap selects
+// ---------------------------------------------------------------------------
+function cellAt(event) {
+  const pos = gridPosition(outputCanvas, event);
+  const clamp = v => Math.max(0, Math.min(N - 1, Math.floor(v)));
+  return { x: clamp(pos.x), y: clamp(pos.y) };
+}
+outputCanvas.addEventListener("pointerdown", e => {
+  e.preventDefault();
+  pinned = hovered = cellAt(e);
+  scheduleRender();
+});
+outputCanvas.addEventListener("pointermove", e => {
+  hovered = cellAt(e);
+  if (e.buttons || e.pointerType === "touch") pinned = hovered; // dragging scrubs the selection
+  scheduleRender();
+});
+for (const type of ["pointerleave", "pointercancel"])
+  outputCanvas.addEventListener(type, () => { hovered = null; scheduleRender(); });
+
+// ---------------------------------------------------------------------------
+// Filter controls
+// ---------------------------------------------------------------------------
+const weightInputs = [];
+for (let m = 0; m < K; m++) {
+  for (let n = 0; n < K; n++) {
+    const input = document.createElement("input");
+    input.type = "number";
+    input.step = "any";
+    input.setAttribute("aria-label", `Filter weight row ${m + 1}, column ${n + 1}`);
+    input.addEventListener("input", () => {
+      const v = parseFloat(input.value);
+      weights[m][n] = Number.isFinite(v) ? v : 0; // empty or partial entry ("-") counts as 0
+      tintWeights();
+      render();
+    });
+    $("weights").appendChild(input);
+    weightInputs.push(input);
+  }
+}
+
+// Tint each weight input with the same diverging colours as the output.
+function tintWeights() {
+  const limit = Math.max(...weights.flat().map(Math.abs)) || 1;
+  weightInputs.forEach((input, i) => {
+    const [r, g, b] = diverging(weights[Math.floor(i / K)][i % K] / limit * 0.55);
+    input.style.background = `rgb(${r}, ${g}, ${b})`;
+  });
+}
+
+function loadPreset(index) {
+  weights = PRESETS[index].weights.map(row => row.slice());
+  weightInputs.forEach((input, i) => {
+    input.value = parseFloat(weights[Math.floor(i / K)][i % K].toFixed(4));
+  });
+  tintWeights();
+  render();
+}
+
+PRESETS.forEach((preset, i) => $("preset").add(new Option(preset.name, i)));
+$("preset").addEventListener("change", e => loadPreset(Number(e.target.value)));
+$("restore").addEventListener("click", () => loadPreset(Number($("preset").value)));
+$("relu").addEventListener("change", render);
+
+// ---------------------------------------------------------------------------
+// Start with a simple shape so the effect of the filter is visible immediately.
+// ---------------------------------------------------------------------------
+const START_STROKES = [
+  [[16, 5], [7, 17], [22, 17]],
+  [[17, 5], [17, 23]],
+];
+for (const points of START_STROKES)
+  for (let i = 1; i < points.length; i++)
+    stroke({ x: points[i - 1][0], y: points[i - 1][1] }, { x: points[i][0], y: points[i][1] });
+
+$("preset").value = 4; // vertical edges
+loadPreset(4);
+</script>
+</body>
+</html>
