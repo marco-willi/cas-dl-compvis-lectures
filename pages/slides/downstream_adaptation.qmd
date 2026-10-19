@@ -1,0 +1,281 @@
+---
+title: "6 - Adapting Models"
+params:
+   images_path: "/assets/images/downstream_adaptation/"
+---
+
+::: {.content-hidden}
+$$
+{{< include /assets/_macros.tex >}}
+$$
+:::
+
+
+## Overview {.center}
+
+- Motivation
+- The adaptation hierarchy
+- Choosing a strategy
+- Worked scenarios
+
+
+# Motivation
+
+
+## The Question {.center}
+
+::: {.fragment}
+You have a pretrained encoder.
+:::
+
+::: {.fragment}
+You have a task with **limited labeled data**.
+:::
+
+::: {.fragment}
+**How much of the model should you train?**
+:::
+
+
+
+
+## Three Tensions {.center}
+
+::: {.incremental}
+- **Labeled data**: how much supervision do you have?
+- **Domain similarity**: how close is the target task to pretraining?
+- **Compute budget**: how much training and tuning can you afford?
+:::
+
+::: {.fragment}
+These factors determine whether you should freeze, adapt, or fine-tune.
+:::
+
+
+# The Adaptation Hierarchy
+
+
+## Five Strategies, One Hierarchy
+
+::: {#fig-da-hierarchy}
+![]({{< meta params.images_path >}}adaptation_hierarchy.png){width=80%}
+
+Adaptation strategies.
+:::
+
+::: {.fragment .highlight-red}
+**Start simple. Descend only when performance demands it.**
+:::
+
+
+## At a Glance
+
+| Strategy | Trainable Parameters | When to Use |
+|---|---:|---|
+| k-NN | 0 | Quick representation-quality check |
+| Linear probe | Head only | Good embeddings, small dataset |
+| LoRA / adapters | Few parameters | Moderate data or mild domain shift |
+| Partial fine-tune | Top layers + head | Larger data or stronger domain shift |
+| Full fine-tune | All weights | Large data and strong task mismatch |
+
+: {tbl-colwidths="[22,23,55]"}
+
+
+# The Strategies
+
+
+## k-NN — No Training
+
+::: {.incremental}
+- Embed labeled images with a **frozen encoder**
+- Store embeddings and labels
+- For a new image, retrieve nearest neighbours in embedding space
+- Predict by majority vote or similarity-weighted vote
+:::
+
+::: {.fragment}
+**What it tells you:** whether the pretrained representation already separates your target data.
+:::
+
+::: {.fragment}
+If k-NN works well, further adaptation may be unnecessary.
+:::
+
+
+## Linear Probe — Freeze Encoder, Train Head
+
+::: {.incremental}
+- Keep the pretrained encoder frozen
+- Extract one embedding per image
+- Train only a small classification head
+- Usually a single linear layer: $\text{Linear}(d, K)$
+:::
+
+::: {.fragment}
+If a linear boundary works, the embedding already contains task-relevant structure.
+:::
+
+::: {.fragment}
+Cheap, stable, and a strong baseline for limited labeled data.
+:::
+
+## LoRA / Adapters — Parameter-Efficient Adaptation
+
+::: {.incremental}
+- Insert small trainable modules into the pretrained model
+- Keep most original weights frozen
+- Train only adapters and the task head
+- Useful when a linear probe is not flexible enough
+:::
+
+::: {.fragment}
+Good default for moderate data or mild domain shift.
+:::
+
+## Partial Fine-Tuning
+
+::: {.incremental}
+- Freeze lower layers
+- Unfreeze the last few encoder blocks and the task head
+- Lower layers retain generic features
+- Higher layers adapt to the target task
+:::
+
+::: {.fragment}
+Useful when the target task needs more task-specific high-level features.
+:::
+
+## Full Fine-Tuning — Last Resort
+
+::: {.incremental}
+- Train all model weights
+- Most flexible strategy
+- Highest compute cost
+- Highest overfitting risk with small datasets
+:::
+
+::: {.fragment}
+Use only when simpler approaches plateau and data + compute justify it.
+:::
+
+# Choosing a Strategy
+
+
+## Dataset Size × Domain
+
+| Dataset Size | Similar to Pretraining Data | Different Domain |
+|---|---|---|
+| < 500 | k-NN / linear probe | k-NN, then LoRA if needed |
+| 500–5K | Linear probe / LoRA | LoRA / partial FT |
+| 5K–50K | Partial FT | Partial / full FT |
+| > 50K | Full FT possible | Full FT possible |
+
+: {tbl-colwidths="[20,40,40]"}
+
+::: {.fragment}
+The stronger the domain shift, the more adaptation you usually need.
+:::
+
+## Practical Rule of Thumb
+
+::: {.incremental}
+1. Start with **k-NN** to test representation quality
+2. Try a **linear probe** as the first trained baseline
+3. Use **LoRA / adapters** when the head is not flexible enough
+4. Use **partial fine-tuning** for stronger domain shift
+5. Use **full fine-tuning** only when data and compute justify it
+:::
+
+::: {.fragment}
+Each step should improve enough to justify the added complexity.
+:::
+
+
+# Worked Scenarios
+
+
+## Scenario 1: Small Similar Dataset
+
+**Scenario**
+
+- 300 labeled product images
+- Classes: shoes, bags, jackets, furniture
+- Similar to common web images
+
+::: {.fragment}
+Recommended start: **k-NN or linear probe**
+:::
+
+::: {.fragment}
+Why: small dataset, similar domain, pretrained visual features are likely useful.
+:::
+
+::: {.fragment}
+Avoid full fine-tuning unless simple baselines clearly fail.
+:::
+
+
+## Scenario 2: Medical Domain Shift
+
+**Scenario**
+
+- 800 labeled chest X-rays
+- Task: pneumonia classification
+- Backbone: DINOv2 pretrained on natural images
+
+::: {.fragment}
+Recommended start: **linear probe**, then **LoRA** if needed.
+:::
+
+::: {.fragment}
+Why: small dataset, but strong domain shift.
+:::
+
+::: {.fragment}
+Full fine-tuning is risky with 800 images unless strongly regularized.
+:::
+
+
+## Scenario 3: Larger Domain-Specific Dataset
+
+**Scenario**
+
+- 30,000 labeled satellite images
+- Strong domain shift from natural images
+
+::: {.fragment}
+Recommended start: **LoRA or partial fine-tuning**
+:::
+
+::: {.fragment}
+Why: enough data to adapt more parameters, but full fine-tuning should still be justified by validation.
+:::
+
+
+# Summary
+
+
+## Key Takeaways
+
+::: {.incremental}
+- Adaptation is a hierarchy: **k-NN → linear probe → LoRA → partial FT → full FT**
+- Start with the simplest method that answers the question
+- With little data, keep most of the encoder frozen
+- Larger domain shift usually requires more adaptation
+- Full fine-tuning is powerful, but data-hungry and easier to overfit
+:::
+
+::: {.fragment}
+**Final rule:** start frozen, train more only when the data demands it.
+:::
+
+
+
+# References
+
+::: {style="font-size: 50%;"}
+
+::: {#refs}
+:::
+
+:::

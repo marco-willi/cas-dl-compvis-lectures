@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Augmentation Stability of a Pretrained CNN</title>
+<!--
+  Interactive demo: how image manipulations change the predictions of an ImageNet-pretrained
+  EfficientNet-B0. Runs entirely in the browser (ONNX Runtime Web, WebAssembly); all assets are
+  loaded with relative paths from this folder. See README.md for setup and embedding.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #667085;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    --accent: #dd8452;      /* the original image's top class */
+    --bar: #8fa3bf;         /* all other classes */
+    --error: #b42318;
+  }
+  * { box-sizing: border-box; }
+  /* Font size follows the iframe width so the demo stays readable on large slides. */
+  html { font-size: clamp(12.5px, 1.15vw, 19px); }
+  body {
+    margin: 0;
+    padding: 0.6rem 0.9rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.35;
+  }
+  h1 { margin: 0; font-size: 1.15rem; }
+  h2 {
+    margin: 0 0 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h2 span { text-transform: none; letter-spacing: 0; font-weight: 400; }
+  button, input, select { font: inherit; color: inherit; }
+  button, .button {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover:not(:disabled), .button:hover { background: var(--panel); }
+  button:disabled { opacity: 0.5; cursor: default; }
+
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 1rem; margin-bottom: 0.5rem; }
+  header p { margin: 0; font-size: 0.8rem; color: var(--muted); flex: 1 1 20rem; }
+
+  /* Model status and loading progress */
+  .status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--muted); }
+  .status progress { width: 7rem; height: 0.5rem; accent-color: var(--accent); }
+  .status.error { color: var(--error); align-items: flex-start; flex-basis: 100%; }
+  .status.error progress, .status.ready progress { display: none; }
+
+  .layout { display: grid; grid-template-columns: 17rem minmax(0, 1fr); gap: 0.9rem; }
+
+  /* ---- Controls ---- */
+  .controls { font-size: 0.85rem; }
+  .samples { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.6rem; }
+  .samples button {
+    width: 2.9rem; height: 2.9rem; padding: 0;
+    background-size: cover; background-position: center;
+    border-width: 2px;
+  }
+  .samples button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .samples .button { align-self: center; }
+  .sliders { display: grid; grid-template-columns: auto minmax(0, 1fr) 3.4rem auto; gap: 0.25rem 0.4rem; align-items: center; }
+  .sliders input[type="range"] { width: 100%; margin: 0; accent-color: var(--ink); }
+  .sliders output { text-align: right; font-variant-numeric: tabular-nums; }
+  .sliders .reset { padding: 0 0.3rem; border-color: transparent; color: var(--muted); }
+  .sliders .wide { grid-column: 2 / -1; }
+  .order { margin: 0.5rem 0; font-size: 0.75rem; color: var(--muted); }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  /* ---- Original vs manipulated ---- */
+  .compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
+  .images { display: flex; align-items: flex-start; gap: 0.5rem; }
+  .images figure { margin: 0; min-width: 0; }
+  .images figcaption { font-size: 0.72rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* --img-h is set by layout() in app.js so that both frames of a row share one height. */
+  .frame { position: relative; height: var(--img-h, 10rem); width: calc(var(--img-h, 10rem) * var(--ar, 1)); background: var(--panel); }
+  .frame canvas { display: block; width: 100%; height: 100%; }
+  /* Region that survives the model's center crop */
+  .crop-marker { position: absolute; border: 1.5px dashed #fff; outline: 1px dashed rgba(0, 0, 0, 0.6); pointer-events: none; }
+  #manip-frame.movable { cursor: move; touch-action: none; }
+  .note { height: 1.3em; margin: 0.15rem 0 0.3rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 0.72rem; line-height: 1.3; color: var(--muted); }
+
+  .preds { font-size: 0.82rem; }
+  .preds.stale { opacity: 0.45; }
+  .pred { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr) 3.3rem; gap: 0.4rem; align-items: center; height: 1.4rem; }
+  .pred .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pred .track { height: 0.75rem; background: var(--panel); }
+  .pred .fill { height: 100%; background: var(--bar); }
+  .pred.orig .fill { background: var(--accent); }
+  .pred.orig .name { font-weight: 600; }
+  .pred .pct { text-align: right; font-variant-numeric: tabular-nums; }
+  .pinned { margin-top: 0.25rem; padding-top: 0.25rem; border-top: 1px solid var(--line); }
+  .pinned .caption, .preds .caption { font-size: 0.72rem; color: var(--muted); }
+
+  /* ---- Explanation ---- */
+  .explain { margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px solid var(--line); font-size: 0.8rem; }
+  .explain p { margin: 0 0 0.4rem; max-width: 75em; }
+  details { font-size: 0.75rem; color: var(--muted); }
+  details table { border-collapse: collapse; margin-top: 0.3rem; }
+  details td, details th { padding: 0.1rem 0.5rem 0.1rem 0; text-align: left; }
+  .ok { color: #067647; }
+  .bad { color: var(--error); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; }
+    .controls .samples, .controls .order, .controls .actions { grid-column: 1 / -1; }
+    .sliders { grid-column: 1 / -1; grid-template-columns: repeat(2, auto minmax(0, 1fr) 3.4rem auto); column-gap: 0.4rem; }
+    .order { margin: 0.3rem 0; }
+  }
+  @media (max-width: 600px) {
+    .compare { grid-template-columns: minmax(0, 1fr); }
+    .sliders { grid-template-columns: auto minmax(0, 1fr) 3.4rem auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Augmentation Stability of a Pretrained CNN</h1>
+  <p>EfficientNet-B0 (ImageNet-1k) running in your browser. Manipulate the image and compare the model's predictions.</p>
+  <div class="status" id="status" role="status">
+    <span id="status-text">Loading…</span>
+    <progress id="progress" max="1" value="0"></progress>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="controls">
+    <div class="samples" id="samples">
+      <label class="button">Upload…<input id="upload" type="file" accept="image/*" hidden></label>
+    </div>
+    <div class="sliders" id="sliders"></div>
+    <p class="order">
+      Applied in this order: flip → zoom → rotation → shift → brightness → blur → occlusion,
+      then the model's preprocessing. Areas outside the image are filled with black.
+    </p>
+    <div class="actions">
+      <button id="reset-all" type="button">Reset all</button>
+    </div>
+  </aside>
+
+  <div>
+    <div class="compare">
+      <section>
+        <h2>Original</h2>
+        <div class="images">
+          <figure>
+            <div class="frame" id="orig-frame"><canvas id="orig-view"></canvas><div class="crop-marker"></div></div>
+            <figcaption>Image (dashed: model's center crop)</figcaption>
+          </figure>
+          <figure>
+            <div class="frame"><canvas id="orig-input" width="224" height="224"></canvas></div>
+            <figcaption>Model input, 224 × 224</figcaption>
+          </figure>
+        </div>
+        <p class="note"></p>
+        <div class="preds" id="orig-preds"></div>
+      </section>
+
+      <section>
+        <h2>Manipulated</h2>
+        <div class="images">
+          <figure>
+            <div class="frame" id="manip-frame"><canvas id="manip-view"></canvas><div class="crop-marker"></div></div>
+            <figcaption>Image after manipulation</figcaption>
+          </figure>
+          <figure>
+            <div class="frame"><canvas id="manip-input" width="224" height="224"></canvas></div>
+            <figcaption>Model input, 224 × 224</figcaption>
+          </figure>
+        </div>
+        <p class="note" id="manip-note"></p>
+        <div class="preds" id="manip-preds"></div>
+      </section>
+    </div>
+
+    <section class="explain">
+      <p><strong>Standard CNNs are not invariant to these manipulations.</strong> Convolutions
+        make a CNN equivariant to translations, but nothing in the architecture guarantees stable
+        predictions when an image is flipped, zoomed, rotated, brightened, blurred or partly
+        occluded. Any robustness is learned from the training data and its augmentations.
+        The bars show the model's softmax outputs: they are model probabilities, not guarantees
+        that a prediction is correct.</p>
+      <details id="verify">
+        <summary>Verification against Python</summary>
+        <button id="selftest" type="button">Run self-check</button>
+        <div id="selftest-out"></div>
+      </details>
+    </section>
+  </div>
+</div>
+
+<script src="preprocess.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

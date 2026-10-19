@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FID, Precision and Recall</title>
+<!--
+  Interactive demo: a generator produces 2D "feature vectors" that are compared with fixed real
+  features by FID (with its mean and covariance term) and by precision and recall for generative
+  models. No dependencies, no backend, no network requests; works from file:// and on GitHub
+  Pages. Embed in Quarto pages via iframe:
+
+    <iframe src="../../demos/genai_intro/fid_precision_recall/index.html" width="100%"
+            height="820" data-auto-height style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: FID, precision and recall"></iframe>
+
+  Computation: fid.js. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #5b6472;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    /* Same colors as the lecture figures: real = blue, generated = orange. */
+    --target: #1f4e9c;
+    --target-fill: #dbe4f3;
+    --model: #d55e00;
+    --model-fill: #fbd9c2;
+    --model-ink: #7c2d12;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: clamp(14px, 1.55vw, 18px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.6rem; font-size: 0.85rem; color: var(--muted); }
+  noscript p { padding: 0.5rem 0.7rem; border: 1px solid var(--model); border-radius: 0.3rem; background: var(--model-fill); }
+
+  button, select, input { font: inherit; color: inherit; }
+  button, select {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* Controls */
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.6rem; font-size: 0.9rem; }
+  fieldset { margin: 0; padding: 0.4rem 0.7rem 0.55rem; border: 1px solid var(--line); border-radius: 0.4rem; min-width: 0; }
+  legend { padding: 0 0.3rem; color: var(--muted); font-size: 0.85rem; }
+  .row { display: grid; grid-template-columns: 4.6rem 1fr 3.2rem; align-items: center; gap: 0.4rem; margin-top: 0.15rem; }
+  .row label { color: var(--muted); }
+  .row output { text-align: right; font-variant-numeric: tabular-nums; }
+  .row input[type="range"] { width: 100%; accent-color: var(--model); }
+  .inline { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.7rem; margin-top: 0.2rem; }
+  .inline > span, .inline > label:first-child { color: var(--muted); }
+  .inline label input { accent-color: var(--model); }
+  input[type="number"] {
+    width: 5rem;
+    padding: 0.2rem 0.35rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.6rem 0 0; font-size: 0.9rem; }
+  .actions .label { color: var(--muted); }
+  .actions .spacer { flex: 1; }
+  .actions button.active { border-color: var(--model); background: var(--model-fill); color: var(--model-ink); }
+
+  /* Plot and statistics side by side on wide screens */
+  .main { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 1fr); gap: 0.6rem; margin: 0.6rem 0 0; align-items: start; }
+  .plot { margin: 0; padding: 0.4rem 0.5rem 0.5rem; border-radius: 0.4rem; background: var(--panel); }
+  .plot svg { display: block; width: 100%; height: auto; }
+  .plot text { font-family: inherit; fill: var(--muted); font-size: 12px; }
+  .legend-list { display: flex; flex-wrap: wrap; gap: 0.2rem 1.1rem; margin: 0.3rem 0 0; padding: 0; list-style: none; font-size: 0.8rem; color: var(--muted); }
+  .dot { display: inline-block; width: 0.6rem; height: 0.6rem; margin-right: 0.3rem; border-radius: 50%; vertical-align: 0.02rem; }
+  .dot.real { background: var(--target); }
+  .dot.gen { background: var(--model); }
+  .dot.out { background: #fff; border: 2px solid var(--muted); }
+  .swatch-ellipse { display: inline-block; width: 1rem; height: 0.6rem; margin-right: 0.3rem; border: 2px solid var(--muted); border-radius: 50%; vertical-align: 0; }
+
+  .stats { display: grid; gap: 0.5rem; margin: 0; }
+  .stats > div { padding: 0.45rem 0.6rem; border-radius: 0.4rem; background: var(--panel); }
+  .stats dt { font-size: 0.75rem; color: var(--muted); }
+  .stats dd { margin: 0; font-size: 1.1rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stats small { display: block; font-size: 0.72rem; font-weight: 400; color: var(--muted); }
+  .meter { height: 0.35rem; margin-top: 0.25rem; border-radius: 0.2rem; background: #e3e6eb; overflow: hidden; }
+  .meter span { display: block; height: 100%; background: var(--model); }
+  .note { margin: 0.6rem 0 0; padding: 0.4rem 0.6rem; border-left: 4px solid var(--line); font-size: 0.85rem; }
+  .note.warn { border-color: var(--model); background: #fff4ec; color: var(--model-ink); }
+  .note.good { border-color: #2e7d32; background: #eef7ee; color: #1b5e20; }
+  .fine { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--muted); }
+
+  @media (max-width: 620px) {
+    .main { grid-template-columns: 1fr; }
+    .actions .spacer { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FID, Precision and Recall</h1>
+  <p>Blue: real feature vectors (fixed). Orange: feature vectors of generated images. Change the generator and
+     compare how FID, precision and recall react. Real features have 2048 dimensions; here they have 2.</p>
+</header>
+
+<noscript><p>This demo needs JavaScript. Without it: when the generator produces only one of the three clusters,
+precision stays high and recall drops to about one third. When the clusters become too narrow, FID barely changes,
+but recall drops.</p></noscript>
+
+<div class="controls">
+  <fieldset>
+    <legend>Generator</legend>
+    <div class="row"><label for="shift-x">shift x</label><input id="shift-x" type="range" min="-3" max="3" step="0.1"><output id="shift-x-out" for="shift-x"></output></div>
+    <div class="row"><label for="shift-y">shift y</label><input id="shift-y" type="range" min="-3" max="3" step="0.1"><output id="shift-y-out" for="shift-y"></output></div>
+    <div class="row"><label for="spread">spread</label><input id="spread" type="range" min="0.2" max="3" step="0.05"><output id="spread-out" for="spread"></output></div>
+    <div class="inline">
+      <span>Clusters</span>
+      <label><input id="cluster0" type="checkbox"> left</label>
+      <label><input id="cluster1" type="checkbox"> right</label>
+      <label><input id="cluster2" type="checkbox"> top</label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Sampling and display</legend>
+    <div class="inline">
+      <label for="count">Samples per set</label>
+      <select id="count">
+        <option>50</option><option>100</option><option>300</option><option>1000</option>
+      </select>
+    </div>
+    <div class="inline">
+      <label for="seed">Seed</label>
+      <input id="seed" type="number" min="1" max="99999" step="1" inputmode="numeric">
+      <button id="new-seed" type="button">New seed</button>
+    </div>
+    <div class="inline">
+      <label><input id="show-gauss" type="checkbox"> fitted Gaussians (FID)</label>
+    </div>
+    <div class="inline">
+      <label for="manifold">Show balls</label>
+      <select id="manifold">
+        <option value="none">none</option>
+        <option value="real">around real points (precision)</option>
+        <option value="gen">around generated points (recall)</option>
+      </select>
+    </div>
+  </fieldset>
+</div>
+
+<div class="actions">
+  <span class="label">Presets:</span>
+  <button type="button" data-preset="good">Good model</button>
+  <button type="button" data-preset="shift">Shifted</button>
+  <button type="button" data-preset="collapse">Mode collapse</button>
+  <button type="button" data-preset="broad">Too broad</button>
+  <button type="button" data-preset="narrow">Too narrow</button>
+  <span class="spacer"></span>
+  <button id="reset" type="button">Reset</button>
+</div>
+
+<div class="main">
+  <figure class="plot">
+    <svg id="plot" viewBox="0 0 520 470" role="img" aria-labelledby="plot-desc"></svg>
+    <p id="plot-desc" hidden></p>
+    <ul class="legend-list">
+      <li><span class="dot real"></span>real features</li>
+      <li><span class="dot gen"></span>generated features</li>
+      <li id="legend-gauss"><span class="swatch-ellipse"></span>fitted Gaussian (2 std), × mean</li>
+      <li id="legend-out" hidden><span class="dot out"></span><span id="legend-out-text"></span></li>
+    </ul>
+  </figure>
+
+  <dl class="stats" aria-live="polite">
+    <div>
+      <dt>FID (lower is better)</dt>
+      <dd id="stat-fid"></dd>
+    </div>
+    <div>
+      <dt>Precision (fidelity): generated points inside the real manifold</dt>
+      <dd id="stat-precision"></dd>
+      <div class="meter" aria-hidden="true"><span id="meter-precision"></span></div>
+    </div>
+    <div>
+      <dt>Recall (coverage): real points inside the generated manifold</dt>
+      <dd id="stat-recall"></dd>
+      <div class="meter" aria-hidden="true"><span id="meter-recall"></span></div>
+    </div>
+  </dl>
+</div>
+
+<p class="note" id="note" role="status"></p>
+<p class="fine">FID fits one Gaussian to each set and adds a mean term and a covariance term. Precision and recall
+   approximate the region covered by a set (its manifold) by a ball around every point, reaching to its
+   3rd nearest neighbour within the same set. Real and generated sets have the same number of points.
+   The values of this 2D toy example are not comparable to FIDs reported in papers.</p>
+
+<script src="fid.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

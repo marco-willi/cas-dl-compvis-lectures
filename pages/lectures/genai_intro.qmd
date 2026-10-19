@@ -1,0 +1,838 @@
+---
+title: "8 - Generative AI for Computer Vision"
+params:
+   images_path: "/assets/images/genai/"
+---
+
+::: {.content-hidden}
+$$
+{{< include /assets/_macros.tex >}}
+$$
+:::
+
+
+::: {.callout-tip title="Learning Objectives"  collapse="true"}
+
+After this lecture you should be able to:
+
+- Explain how generative modeling differs from classification: sampling from a distribution of plausible outputs instead of predicting a label (one-to-many vs. many-to-one mapping)
+- Describe the role of random inputs and latent variables in enabling diverse outputs from a single condition
+- Distinguish unconditional and conditional generation, and recognize common conditional generation tasks
+- Describe the common goal of generative models, $p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})$, and explain maximum likelihood as one principle to reach it
+- Define fidelity and coverage, and explain the trade-offs between model properties: sampling efficiency, fidelity and coverage, latent-space structure, and likelihood computation
+- Select appropriate evaluation methods for generative models depending on the task and available ground truth, and explain why fidelity and coverage must be assessed separately (precision and recall vs. FID)
+
+:::
+
+
+::: {.callout-tip title="TLDR Recap" collapse="true"}
+
+- Generative models sample from a distribution of plausible outputs, $p_{\theta}(\vect{x} \mid \vect{y})$ (one-to-many), instead of predicting a label, $p_{\theta}(\vect{y} \mid \vect{x})$ (many-to-one). Random inputs $\vect{z}$ provide the diversity.
+- In conditional generation, $\hat{\vect{x}} = g_{\theta}(\vect{z}, \vect{c})$, the condition $\vect{c}$ (class label, text prompt, image, mask, reference image, ...) provides control. Models create, edit, complete, enhance, translate, or animate visual data.
+- The common goal is $p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})$, for example via maximum likelihood. A good model needs both **fidelity** (realistic samples) and **coverage** (the full variety of the data).
+- Model families trade off sampling efficiency, fidelity and coverage, latent-space structure, and likelihood computation; no family excels at all of them.
+- Evaluation starts from the question: FID summarizes fidelity and coverage in a single number, **precision** and **recall** measure them separately. Prompt following, faithfulness to the input, and usefulness require human or task-specific evaluation.
+- A plausible output is not necessarily a faithful one, which is critical for super-resolution, medical, and scientific images.
+
+:::
+
+## Motivation {#sec-genai-intro-motivation}
+
+Generative AI has had a profound effect on many aspects of our society. Particularly, the release of ChatGPT [see @openai_introducing_2022] kicked off a new era of AI applications, focused on generating natural language. Recently, the quality of image generative models has made significant leaps: Nowadays, it is difficult to distinguish between real and synthetic images (see @fig-genai-intro-receipt).
+
+::: {#fig-genai-intro-receipt}
+
+![]({{< meta params.images_path >}}intro_receipt.jpg){height=300}
+
+[Source](https://x.com/deedydas/status/1905909215308447874)
+:::
+
+Arguably, the most impressive generative models are multimodal: they understand text and images and allow precise control of the generation process using natural language. Models such as GPT Image 2 ([Source](https://openai.com/index/introducing-chatgpt-images-2-0/)), Nano Banana 2 ([Source](https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/)) and FLUX.2 ([Source](https://bfl.ai/blog/flux-2)) edit existing images by following instructions (see @fig-genai-intro-editing). Notably, the requested aspect is changed while the rest of the scene is preserved.
+
+::: {#fig-genai-intro-editing layout-ncol=3}
+
+![]({{< meta params.images_path >}}elephant.jpg)
+
+![]({{< meta params.images_path >}}elephant_edit_lion_nano-banana-2.jpg)
+
+![]({{< meta params.images_path >}}elephant_edit_dawn_nano-banana-2.jpg)
+
+Instruction-based image editing with Nano Banana 2. Left: original image ([Source](https://unsplash.com/de/fotos/elefantenwanderung-tagsuber-QJbyG6O0ick)). Middle: prompt *"Replace the elephant with a lion, keep background identical, only replace the animal, keep its pose."* Right: prompt *"Keep the scene exactly as is, only change the lighting condition to dawn."*
+:::
+
+Modern models can also use one or several reference images as a condition. They generate new scenes while preserving the identity of an object, a person, or a style (see @fig-genai-intro-reference).
+
+::: {#fig-genai-intro-reference layout-ncol=2}
+
+![]({{< meta params.images_path >}}monkey_toy.webp)
+
+![]({{< meta params.images_path >}}monkey_toy_jungle_nano-banana-2.jpg)
+
+Reference-based generation. Left: reference image ([Source](https://www.anamalz.com/products/gorilla)). Right: generated with Nano Banana 2 using the prompt *"The exact same wooden toy monkey from the reference image is dancing joyfully in a lush tropical jungle. It holds a yellow banana in one hand and a shampoo bottle in the other hand. Preserve every detail of the toy: the dark brown wooden body, light beige wooden face and belly, rope arms, and round wooden hands and feet. Photorealistic scene, vibrant jungle background with green leaves and sunlight filtering through the canopy."*
+:::
+
+Commercial applications of generative AI include the virtual staging of rooms with objects (furniture). This helps realtors present their properties in a more appealing and "real" way (see @fig-genai-intro-virtual-staging).
+
+::: {#fig-genai-intro-virtual-staging layout-ncol=2}
+
+![]({{< meta params.images_path >}}virtual_staging1.jpg)
+
+![]({{< meta params.images_path >}}virtual_staging3.png)
+
+Virtual staging examples from [Link](https://www.spacely.ai/tools/ai-virtual-staging)
+:::
+
+AI-generated images are prevalent in commercials and ads. Restuarants or fast food businesses  increasingly use generative AI to promote their menus, since it is cheaper and quicker than hiring a food photographer ([Source](https://www.nytimes.com/interactive/2026/10/06/technology/ai-slop-food-images-restaurant-menus.html)). The results often look uncanny (see @fig-genai-intro-ai-food). Humans are particularly sensitive to food that does not look real, and food images depend on texture, repetition, and the interfaces between materials, which older and free models handle poorly: they may, for example, spread the pattern of sesame seeds over an entire dish. Moreover, even a convincing image does not show the dish that is actually served: it is *plausible*, but not *faithful*. We will return to this distinction in @sec-genai-intro-eval-task.
+
+::: {#fig-genai-intro-ai-food}
+
+![]({{< meta params.images_path >}}ai_food.webp){width=400}
+
+AI-generated food image used in restaurant advertising. [Source](https://www.nytimes.com/interactive/2026/10/06/technology/ai-slop-food-images-restaurant-menus.html)
+:::
+
+Video generation has advanced rapidly as well. Models such as Google's Veo 3.1 generate short clips including audio and can be conditioned on reference images ([Source](https://blog.google/innovation-and-ai/technology/ai/veo-3-1-ingredients-to-video/)).
+
+Not all generative models create images from scratch. Image super resolution is a task where generative models up-sample images spatially and enrich detail (see @fig-genai-intro-superres). Again, the generated details are plausible, but they are not necessarily the details of the true high-resolution image.
+
+::: {#fig-genai-intro-superres}
+
+![]({{< meta params.images_path >}}intro_superres_images.png)
+
+From @ledig_photo-realistic_2017
+:::
+
+Similar ideas are used in real-time graphics. NVIDIA DLSS renders a game at a lower resolution and upscales each frame with a neural network, which is cheaper than rendering natively at high resolution (see @fig-genai-intro-nvidia-dlss). Recent versions even synthesize entire additional frames between rendered ones ([Source](https://www.nvidia.com/en-us/geforce/news/dlss4-multi-frame-generation-ai-innovations/)).
+
+::: {#fig-genai-intro-nvidia-dlss}
+
+{{< video https://youtu.be/K8DddlREHEE?si=TvQIpHQUaLBf_M7Z&t=4 >}}
+
+NVIDIA DLSS ([Link](https://www.nvidia.com/en-us/geforce/technologies/dlss/)).
+:::
+
+Generative AI is used in many domains nowadays. @fig-genai-intro-mri-to-ct shows an application where MRI images are converted to synthetic CT scans. CT scans expose the body to radiation and should thus be avoided if possible. However, CT scans show bone structure much better than MRIs. This application helps get the best of both worlds.
+
+::: {#fig-genai-intro-mri-to-ct}
+
+![]({{< meta params.images_path >}}mri_to_ct.png)
+
+MRI to CT conversion example, from @scharer_improved_2023
+:::
+
+
+::: {.callout-note title="More applications" collapse="true"}
+
+Creating highly creative and diverse images has been enabled by recent advances of models trained on internet-scale datasets. Different companies, such as Midjourney have built businesses around this capability to make it easy for users to generate images (see @fig-genai-intro-midjourney).
+
+::: {#fig-genai-intro-midjourney}
+
+![]({{< meta params.images_path >}}intro_midjourney_images.png){width=600}
+
+[Source](https://www.midjourney.com)
+:::
+
+Companies such as Canva have integrated generative models into their design tools, making it easy for users to generate images and use them in their designs (see @fig-genai-intro-canva).
+
+::: {#fig-genai-intro-canva}
+
+![]({{< meta params.images_path >}}canva_example.jpg){width=600}
+
+[Source](https://www.canva.com/)
+:::
+
+Image editing through conversation became widely accessible in 2025. @fig-genai-intro-openai shows two images that were generated in turn with GPT-4o image generation, following user instructions about how to change the first image.
+
+::: {#fig-genai-intro-openai layout-ncol=2}
+
+![]({{< meta params.images_path >}}intro_openai_1.webp)
+
+![]({{< meta params.images_path >}}intro_openai_2.webp)
+
+Examples from OpenAI image generation. The two images were generated in turn, following user instructions about how to change the first image. [Source](https://openai.com/index/introducing-4o-image-generation/)
+:::
+
+AI-generated content in advertisements seems particularly prevalent. Suspected AI-generated content is shown in @fig-genai-intro-advertisement.
+
+::: {#fig-genai-intro-advertisement layout-nrow=2}
+
+![]({{< meta params.images_path >}}das_original_intro.jpg)
+
+![]({{< meta params.images_path >}}boku_intro.jpg)
+
+AI generated? Top: [Source](https://die-marke-machts.at/), Bottom: [Source](https://offroadcommunications.com/pf/boku-university/)
+
+:::
+
+::: {.callout-note appearance="simple"}
+
+**🤔 What do you think? Are these ads AI-generated?**
+
+:::
+
+Midjourney, a company known for its image generation service, also released a model that animates images into short videos (see @fig-genai-intro-midjourney-video).
+
+<!-- ::: {#fig-genai-intro-midjourney-video}
+
+{{< video {{< meta params.images_path >}}intro_midjourney_videos.mp4 >}}
+
+[Source](https://www.midjourney.com)
+::: -->
+
+
+::: {#fig-genai-intro-midjourney-video}
+
+{{< video https://youtu.be/lEKeShkzKnE?si=kZLA1mWsJpVxeuhA&t=31 >}}
+
+[Source](https://www.midjourney.com)
+:::
+
+NVIDIA DLSS combines several neural networks, each addressing a different part of the rendering pipeline:
+
+- **Super Resolution**: The game renders at a lower resolution, and a network upscales each frame using information from previous frames. Interestingly, up-scaling with a neural network is cheaper than rendering natively at high resolution (see @fig-genai-intro-nvidia-dlss).
+- **Frame Generation**: A network synthesizes entire additional frames between rendered ones, using motion vectors and optical flow. Since DLSS 4.5, up to five frames can be generated per rendered frame ([Source](https://www.nvidia.com/en-us/geforce/news/dlss-4-5-dynamic-multi-frame-gen-6x-2nd-gen-transformer-super-res/)).
+- **Ray Reconstruction**: Ray tracing is expensive, so only a limited number of rays is computed, resulting in a noisy image. A network replaces hand-tuned denoisers and predicts the missing pixels (see @fig-genai-intro-nvidia-rt, [Source](https://www.nvidia.com/en-us/geforce/news/nvidia-dlss-3-5-ray-reconstruction/)).
+
+All three produce pixels that were never rendered, but to different degrees: super resolution and ray reconstruction refine a rendered frame, while frame generation synthesizes entire frames for which no rendered counterpart exists.
+
+::: {#fig-genai-intro-nvidia-rt}
+
+{{< video https://youtu.be/bTJYvtPRRcM?si=Cc_9T87nnNeOO3pH >}}
+
+NVIDIA DLSS Ray Reconstruction for improved graphics  ([Link](https://www.nvidia.com/en-us/geforce/technologies/dlss/)).
+:::
+
+Generative models are also used to create synthetic training data for predictive models, such as for solar flare prediction (see @fig-genai-intro-solar-flares).
+
+::: {#fig-genai-intro-solar-flares}
+
+![]({{< meta params.images_path >}}solar_flares.png)
+
+Synthetic images of solar flares (from @ramunno_solar_2024).
+:::
+
+:::
+
+Generative AI has come a long way. Almost nothing illustrates that better than the quality of generated images of human faces (see @fig-genai-intro-evolution).
+
+::: {#fig-genai-intro-evolution}
+
+![]({{< meta params.images_path >}}genai_evolution.png)
+
+Evolution of generative AI. From left to right, top to bottom: @goodfellow_generative_2014, @liu_coupled_2016,@radford_unsupervised_2016, @karras_progressive_2018, @karras_style-based_2019, @karras_analyzing_2020, @ho_denoising_2020, @rombach_high-resolution_2022, @saharia_photorealistic_2022, @betker_improving_2023
+:::
+
+Over time, the dominant model families have shifted (see @tbl-genai-intro-timeline). We will discuss these families in more detail later.
+
+| Period | Development | Examples |
+|---|---|---|
+| 2014–2019 | GANs: from blurry, low-resolution images to photorealistic faces | @goodfellow_generative_2014, @karras_style-based_2019 |
+| 2020–2022 | Diffusion models; latent diffusion makes high-resolution text-to-image generation widely accessible | @ho_denoising_2020, @rombach_high-resolution_2022, @saharia_photorealistic_2022 |
+| 2023–2024 | Better prompt following; transformer backbones trained with flow-based objectives (rectified flow) | @betker_improving_2023, @esser_scaling_2024 |
+| 2025–2026 | Native multimodal models; instruction-based editing with one or several reference images | GPT-4o image generation, FLUX.1 Kontext [@labs_flux1_2025], Nano Banana 2, FLUX.2, GPT Image 2 |
+
+: Milestones of image generation. {#tbl-genai-intro-timeline tbl-colwidths="[15,50,35]"}
+
+Notably, no model family has completely replaced another. Image generation in GPT-4o, for example, is autoregressive ([Source](https://cdn.openai.com/11998be9-5319-4302-bfbf-1167e093f1fb/Native_Image_Generation_System_Card.pdf)), and latent diffusion models train their autoencoder with an adversarial loss, a key idea of GANs [@rombach_high-resolution_2022].
+
+
+How do such models work, and what does it mean for a model to *generate* data? In the following, we develop the core ideas step by step, starting from a task we already know well: classification.
+
+## What Is Generative Modelling? {#sec-genai-intro-what-is}
+
+Let's contrast generative modelling with a classification task (see @fig-genai-intro-basics-classifier). As a simplified mental picture, let's denote $f(\vect{x}) = \vect{y}$ for a classifier, and $g(\vect{y}) = \vect{x}$ for a generative model.
+
+In classification the model has as input an image $\vect{x}^{(i)}$ and models a probability distribution over all classes $\vect{\hat{y}}^{(i)}$ which ideally assigns a high probability to the true label $\vect{y}^{(i)}$.
+
+
+::: {#fig-genai-intro-basics-classifier}
+
+![]({{< meta params.images_path >}}basics_classifier.png)
+
+Classification.
+:::
+
+At first glance, generative modelling seems to reverse this process: The input can be a label $\vect{y}$, such as a class label, and the output is an image $\vect{x}^{(i)}$, see @fig-genai-intro-basics-elephant.
+
+::: {#fig-genai-intro-basics-elephant}
+
+![]({{< meta params.images_path >}}basics_elephant.png)
+
+Generative modelling.
+:::
+
+
+::: {.callout-note title="What is the problem?" collapse="false"}
+Looking at the input and the output of @fig-genai-intro-basics-elephant. What could be a problem?
+
+<details>
+<summary>Click for result</summary>
+
+If the input (in this case) to the generative model is a label, such as elephant, how can the model generate not just that one elephant?
+
+</details>
+
+:::
+
+An important distinction between a classifier and a generative model is:
+
+- $f(\vect{x})$ is a many-to-one mapping. Many inputs (e.g. images of elephants) should be associated with the same label (e.g the elephant label).
+- $g(\vect{y})$ is a one-to-many mapping. One label (e.g. elephant) should be associated with many outputs (e.g. images of elephants).
+
+Generative modelling is therefore not simply the inverse of classification. More precisely, both tasks can be described by conditional probability distributions, but over different variables:
+
+$$
+\begin{aligned}
+\text{classification:} \quad & p_{\theta}(\vect{y} \mid \vect{x}) \\
+\text{generation:} \quad & p_{\theta}(\vect{x} \mid \vect{y})
+\end{aligned}
+$$ {#eq-genai-intro-classification-vs-generation}
+
+A classifier models a distribution over a handful of classes, and we are usually interested in its most probable class. A conditional generative model has to represent a distribution over all plausible images of an elephant, an extremely high-dimensional space. Moreover, we do not want the single most probable image: we want to **sample** from the distribution, such that each call produces a different, plausible elephant. Notably, simply inverting a trained classifier does not work: optimizing an input image to maximize a classifier's confidence for a class typically yields unrecognizable patterns rather than realistic images [@nguyen_deep_2015]. @fig-genai-intro-classification illustrates the classification side: one input image is mapped to one distribution over a few classes.
+
+::: {#fig-genai-intro-classification}
+
+![]({{< meta params.images_path >}}intro_figures/classification.svg)
+
+Classification. A classifier maps an image to a distribution over classes. The class probabilities are illustrative. Input photo: [Source](https://unsplash.com/de/fotos/elefantenwanderung-tagsuber-QJbyG6O0ick).
+:::
+
+Since neural networks consist of deterministic operations (such as matrix multiplications and additions) we need a way to transform $g()$ to a **stochastic** function. Only then is it possible to generate different elephants and not always the same image (see @fig-genai-intro-basics-elephant-prob).
+
+::: {#fig-genai-intro-basics-elephant-prob}
+
+![]({{< meta params.images_path >}}basics_elephants_probabilistic.png)
+
+Generative modelling with a diverse set of outputs.
+:::
+
+One way to achieve this is to give the generative model an additional random input $\vect{z} \sim p(\vect{z})$ and to generate samples using $g_{\theta}(\vect{z}, \vect{y})$. Typically, $p(\vect{z})$ is a simple distribution that is easy to sample from, such as a standard Gaussian: $\vect{z} \sim \mathcal{N}(\mathbf{0}, \m{I})$. Each new draw of $\vect{z}$ yields a new output.
+
+@fig-genai-intro-conditional-generation shows the resulting conditional generator: it combines the same condition $\vect{c}$ with different random inputs $\vect{z}^{(1)}, \vect{z}^{(2)}, \vect{z}^{(3)}$ and produces a different, plausible image for each of them. In contrast to the classifier in @fig-genai-intro-classification, the output is not a distribution over a few classes but a sample from a distribution over images.
+
+::: {#fig-genai-intro-conditional-generation}
+
+![]({{< meta params.images_path >}}intro_figures/conditional_generation.svg){width=75%}
+
+Conditional generation. The same condition ("elephant") combined with different random inputs yields different, plausible images.
+:::
+
+One way to think about $\vect{z}$ is as a **latent variable**: it is not observed, but it captures variation in the data that is not specified by the input. In our elephant example, the condition $\vect{y}$ specifies that the image should show an elephant, while $\vect{z}$ might define aspects of the animal (pose, size, number of individuals) and of the scene (time of day, surroundings). This is an intuition rather than a guarantee: the model is free to use $\vect{z}$ in whatever way helps it to produce diverse outputs.
+
+::: {.callout-note title="Where does the randomness come from?"}
+A single random vector that is mapped to an image is only one way to make a generator stochastic. Depending on the model family, randomness enters in different ways:
+
+- **Single latent vector**: GANs and VAE decoders map one sample $\vect{z}$ to an output in a single forward pass.
+- **Initial noise image**: Diffusion and flow matching models start from a noise image of the same size as the output (or its compressed representation) and transform it gradually. Many diffusion samplers additionally inject fresh noise at every step.
+- **Sequential sampling**: Autoregressive models predict a probability distribution over the next pixel or token, sample from it, and repeat. There is no single explicit latent vector.
+
+We will see these mechanisms in more detail in the next lecture.
+:::
+
+::: {.callout-note title="Latent Variables Intuition" collapse="false"}
+Consider the dataset shown in @fig-genai-basics-latent-intuition: What could be latent variables for this dataset?
+
+<details>
+<summary>Click for result</summary>
+
+Each output is defined by its width and height. Therefore, we have two (unobserved) latent variables.
+
+</details>
+
+:::
+
+
+::: {#fig-genai-basics-latent-intuition}
+
+![]({{< meta params.images_path >}}latent_variables_intuition1.png)
+
+Intuition about latent variables in generative models. From @foster_generative_2023.
+:::
+
+@fig-genai-basics-latent-intuition2 shows a plausible latent space and the corresponding mapping / samples from that space.
+
+
+::: {#fig-genai-basics-latent-intuition2}
+
+![]({{< meta params.images_path >}}latent_variables_intuition2.png)
+
+Intuition about latent variables in generative models. From @foster_generative_2023.
+:::
+
+This example is deliberately simple: the latent space is two-dimensional and each axis has a clear meaning. Latent spaces of real image generators are high-dimensional, and their individual dimensions usually do not correspond to human-interpretable properties such as pose or time of day.
+
+## Controlling Generation {#sec-genai-intro-conditional}
+
+Generative models differ in what information is given to them. Sometimes we want the model to generate freely, for example any plausible face, room, or product image. This is called **unconditional generation**: the random input is the only input of the model, and different samples of $\vect{z}$ produce different plausible outputs.
+
+$$
+\hat{\vect{x}} = g_{\theta}(\vect{z})
+$$
+
+More often, especially in computer vision applications, we want the model to generate under constraints, such as a class label, a text prompt, an input image, a mask, or a reference image. In **conditional generation**, the model additionally receives this conditioning information $\vect{c}$:
+
+$$
+\hat{\vect{x}} = g_{\theta}(\vect{z}, \vect{c})
+$$
+
+The class label $\vect{y}$ of our elephant example is one such condition. In general, the condition $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, or changed. In probabilistic terms, an unconditional model learns to sample from $p_{\theta}(\vect{x})$, while a conditional model learns to sample from $p_{\theta}(\vect{x} \mid \vect{c})$.
+
+::: {.callout-note title="Notation"}
+In the following, we use $\vect{z}$ as a shorthand for all random inputs of the
+model, whichever of the mechanisms discussed above is used. We often write $g()$
+to simplify notation.
+:::
+
+::: {#fig-genai-unconditional-conditional layout-nrow=2}
+
+![]({{< meta params.images_path >}}random_person1.jpg)
+
+![]({{< meta params.images_path >}}random_person2.jpg)
+
+![]({{< meta params.images_path >}}random_person3.jpg)
+
+
+![]({{< meta params.images_path >}}curly_person1.jpg)
+
+![]({{< meta params.images_path >}}curly_person2.jpg)
+
+![]({{< meta params.images_path >}}curly_person3.jpg)
+
+
+Unconditional vs. conditional generation. The top row shows random samples of
+people, while the bottom row shows samples of people conditioned on the prompt
+"young person with glasses and curly hair."
+:::
+
+::: {.callout-note title="Discussion"}
+Looking at @fig-genai-unconditional-conditional, what do you notice? The images were generated with ChatGPT's image generation model.
+:::
+
+As a result, generative computer vision is much broader than text-to-image generation: models can create, edit, complete, enhance, translate, or animate visual data (see @tbl-genai-intro-conditional-tasks).
+
+| Setting | Condition $\vect{c}$ | Typical task | Example |
+|---------|----------------------|--------------|---------|
+| **Unconditional generation** | none | image generation | generate a random face, room, or product image |
+| **Class-conditional generation** | class label | class-guided image generation | generate an elephant |
+| **Text-to-image generation** | text prompt | prompt-guided image generation | “a red chair in a modern living room” |
+| **Image editing** | image + instruction | modify an existing image | change season, style, material, or lighting (@fig-genai-intro-editing) |
+| **Inpainting / outpainting** | image + mask or extended canvas | complete or extend an image | remove an object, fill a missing region, expand the background beyond the image borders |
+| **Super-resolution / enhancement** | low-resolution or degraded image | enhance visual detail | upscaling, denoising, sharpening (@fig-genai-intro-superres) |
+| **Image translation** | source image | translate to another domain | MRI to CT (@fig-genai-intro-mri-to-ct), sketch to photo, day to night |
+| **Layout-controlled generation** | segmentation map, depth map, pose, or edges | generate with structural control | create an image following a given layout |
+| **Reference-based generation** | reference image | preserve identity, product, or style | generate new views of the same product (@fig-genai-intro-reference) |
+| **Video generation** | prompt, image, or frame sequence | video | short clips, object motion, scene animation (@fig-genai-intro-midjourney-video) |
+
+: Common settings of unconditional and conditional generation. {#tbl-genai-intro-conditional-tasks tbl-colwidths="[20,20,20,40]"}
+
+::: {.callout-note title="Key idea"}
+The stochastic variable $\vect{z}$ provides **diversity**, while the condition
+$\vect{c}$ provides **control**.
+:::
+
+::: {.callout-note title="Quiz"}
+
+| Task | What is the condition? |
+|---|---|
+| super-resolution | ? |
+| inpainting | ? |
+| MRI → CT | ? |
+| text-to-image | ? |
+| product image generation from reference | ? |
+
+
+<details>
+<summary>Click for possible answer</summary>
+
+- low-resolution image
+- image + mask
+- source MRI image
+- text prompt
+- reference product image
+
+</details>
+:::
+
+
+## How Generative Models Learn {#sec-genai-intro-learning}
+
+How do we train a model to produce data that looks like real data? We assume that the training images $\vect{x}^{(1)}, \dots, \vect{x}^{(N)}$ are samples from an unknown data distribution $p_{\text{data}}(\vect{x})$. The goal of a generative model is to learn a model distribution $p_{\theta}(\vect{x})$ that approximates it:
+
+$$
+p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})
+$$ {#eq-genai-intro-objective}
+
+Some models define $p_{\theta}$ explicitly as a formula that can be evaluated. Others define it only implicitly, through their sampling procedure.
+
+::: {.callout-note title="Probability densities"}
+Images take (approximately) continuous values, so $p_{\text{data}}$ and $p_{\theta}$ are probability **density** functions over the image space $\mathcal{X}$, for example $\mathcal{X} = \mathbb{R}^{H \times W \times 3}$. A density $p: \mathcal{X} \to [0, \infty)$ must integrate to one:
+
+$$
+\int_{\mathcal{X}} p(\vect{x}) \, d\vect{x} = 1
+$$
+
+In contrast to a probability mass (e.g. the class probabilities of a classifier), a density value is not a probability: it can be larger than 1, and the probability of observing one exact image is zero. Only regions of $\mathcal{X}$ have a probability. Intuitively, a high density at $\vect{x}$ means that images *in the neighbourhood* of $\vect{x}$ are likely.
+:::
+
+What does @eq-genai-intro-objective mean in practice? First, generated samples should be realistic: they should lie in regions where $p_{\text{data}}$ has a high density. @fig-genai-intro-synthetic-quality illustrates the principle: Models should aim to synthesize data points (x axis) which are probable under the true distribution.
+
+::: {#fig-genai-intro-synthetic-quality}
+
+![]({{< meta params.images_path >}}synthetic_quality/synthetic_quality_evaluation.png)
+
+Shown is the true distribution (blue) of some 1-D data. Green are plausible synthetic examples, while red crosses indicate data points which are improbable (they lie in regions of low density).
+:::
+
+Realistic samples alone, however, are not enough. A model that always produces the same, most typical image, generates only realistic samples, but it has not learned the distribution. Generated samples should also cover all regions where real data occurs, in the right proportions. A good generative model represents the full distribution, not merely individual high-density samples.
+
+::: {.callout-note title="Key concepts: fidelity and coverage"}
+
+- **Fidelity**: generated samples lie in regions where $p_{\text{data}}$ has a high density, i.e. they look like real data.
+- **Coverage**: generated samples occur in all regions where $p_{\text{data}}$ has a high density, in the right proportions, i.e. the model generates the full variety of the real data.
+
+A good generative model needs both. In @sec-genai-intro-eval-pr, we measure them with two metrics: *precision* (fidelity) and *recall* (coverage).
+:::
+
+@fig-genai-intro-fidelity-coverage illustrates the two aspects with a simple 1D example.
+
+::: {#fig-genai-intro-fidelity-coverage}
+
+![]({{< meta params.images_path >}}intro_figures/fidelity_coverage.svg)
+
+Fidelity vs. coverage for a bimodal target distribution (blue). (a) The model concentrates on one mode: its samples are realistic, but the left mode is never generated. (b) A single Gaussian, fitted by maximum likelihood, covers both modes but generates many samples in between. (c) A model close to the target achieves both.
+:::
+
+### Maximum Likelihood
+
+How can we make $p_{\theta}$ similar to $p_{\text{data}}$ if we only have samples from $p_{\text{data}}$? A classic approach is **maximum likelihood estimation**: we choose the parameters $\theta$ such that the training data is as likely as possible under the model:
+
+$$
+\theta^{*} = \underset{\theta}{\arg\max} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})
+$$ {#eq-genai-intro-mle}
+
+It can be shown that, for a large number of training samples, this is equivalent to minimizing the Kullback-Leibler divergence $D_{\mathrm{KL}}(p_{\text{data}} \,\|\, p_{\theta})$, a measure of the difference between the two distributions. Maximum likelihood strongly penalizes a model that assigns a low density to any real training example, which encourages coverage. It requires, however, that $p_{\theta}(\vect{x})$ can be evaluated (or at least bounded) for a given image.
+
+@fig-genai-intro-density-model illustrates how the modelled distribution improves by increasing the likelihood of observing the training data.
+
+::: {#fig-genai-intro-density-model layout-ncol=2}
+
+![]({{< meta params.images_path >}}density_model_1d/initial_distribution.png)
+
+![]({{< meta params.images_path >}}density_model_1d/improved_distribution.png)
+
+Example of learning a density model in 1D.
+:::
+
+**Note:** Evaluating a density and sampling from it are different capabilities. A model that can evaluate $p_{\theta}(\vect{x})$ is useful on its own, for example to detect outliers, but it still needs a mechanism to generate samples. Conversely, some models can generate samples but cannot evaluate $p_{\theta}(\vect{x})$.
+
+### Interactive Demo: Learning a 1D Distribution
+
+The following demo lets you play the role of a generative model. The target distribution (blue) is fixed. You choose the parameters of a generator, draw samples, and compare them with the target. The button *Fit by maximum likelihood* fits the generator to 1,000 training samples drawn from the target. The displayed fidelity and coverage are simple versions of precision and recall, two metrics we will meet again in @sec-genai-intro-eval-pr.
+
+```{=html}
+<iframe name="distribution-fitting" loading="lazy" data-auto-height src="../../demos/genai_intro/distribution_fitting/index.html" width="100%" height="900" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: learning a 1D distribution"></iframe>
+```
+
+::: {.callout-note title="Explore the demo" collapse="true"}
+
+1. Can a single Gaussian reproduce both modes? Try to reach high fidelity *and* high coverage.
+2. With a single Gaussian, press *Fit by maximum likelihood*. Where does the fitted Gaussian lie, and why?
+3. Choose the preset *Mode collapse*. Every generated sample looks realistic. Is this a good generative model?
+4. Increase the number of samples to 10,000. What changes, and what does not?
+5. Switch to the mixture of two Gaussians and fit it again. Compare its log-likelihood with that of the target itself.
+
+<details>
+<summary>Click for possible answers</summary>
+
+1. No. A single Gaussian has only one mode: if it sits on one mode, the other is missing (low coverage); if it is broad enough to cover both, many samples fall between the modes (low fidelity).
+2. Between the two modes, with a large standard deviation (mean ≈ 5, standard deviation ≈ 2.6). Maximum likelihood strongly penalizes training samples with a low density, so the fitted Gaussian must cover both modes. Coverage is high, fidelity is low.
+3. No. Realistic individual samples do not make a good generative model: the left mode is never generated. The very low log-likelihood shows this, since the model assigns almost no density to a large part of the real data.
+4. The histogram approaches the generator's density, and fidelity fluctuates less between seeds. The generator itself does not change: more samples cannot compensate for a model that is too simple to represent the target.
+5. The mixture recovers both modes: fidelity and coverage are close to the maximum of about 95%, and its log-likelihood is close to that of the target. Model capacity, not the number of samples, was the limitation.
+
+</details>
+:::
+
+The demo illustrates two typical failures. A model that is too simple cannot represent the target: it either misses a mode (low coverage) or generates many samples between the modes (low fidelity). A mode-collapsed model generates realistic samples, but only of part of the data (low coverage). In @sec-genai-intro-evaluation, we detect the same failures for images, whose distributions we cannot plot, with precision and recall.
+
+## Properties and Trade-offs {#sec-genai-intro-properties}
+
+Maximum likelihood is an important principle, but it is not the only one. Generative model families differ in how they are trained and in how they produce samples; we discuss them in the next lecture ([Generative Model Families](genai_models.qmd)). These families make different trade-offs with respect to the following properties. Unfortunately, **no single model family excels at all of them**, although modern models narrow some of the gaps.
+
+### Efficient Sampling
+
+Applications such as interactive tools, real-time graphics, or large-scale dataset creation require that new samples can be generated quickly. @fig-genai-intro-sampling-cost compares how many network evaluations the model families typically need for one sample. GANs and VAEs generate a sample in a single forward pass, diffusion and flow matching models typically need tens of steps, and autoregressive models one step per token. Modern variants reduce diffusion sampling to a few or even a single step through distillation [@salimans_progressive_2022; @song_consistency_2023].
+
+::: {#fig-genai-intro-sampling-cost}
+
+![]({{< meta params.images_path >}}intro_figures/sampling_cost.svg)
+
+Typical number of network evaluations per generated sample (log scale). The numbers are orders of magnitude, not benchmarks: the cost of a single evaluation differs between architectures, and autoregressive models need one step per token (here for 16x16 to 64x64 tokens).
+:::
+
+### Fidelity and Coverage
+
+A good generative model needs both fidelity and coverage, as introduced in @sec-genai-intro-learning. A typical failure is **mode collapse**: the model generates realistic samples, but only of a few modes of the data (see @fig-genai-intro-coverage). Mode collapse is a well-known problem of GANs. Likelihood-based models, in contrast, are encouraged by their objective to cover all training data, VAEs sometimes at the cost of sample quality. Diffusion models also tend to have good coverage.
+
+::: {#fig-genai-intro-coverage}
+
+![]({{< meta params.images_path >}}intro_figures/coverage_mode_collapse.svg)
+
+Coverage on a 2D toy dataset with 8 modes. (a) Training data. (b) A model with good coverage generates samples of all modes. (c) A mode-collapsed model generates realistic samples, but only of 2 modes.
+:::
+
+Notably, the two properties are often in tension: techniques that increase fidelity tend to reduce coverage. A prominent example is guidance in diffusion models [@ho_classifier-free_2022], which trades coverage for fidelity (see @fig-genai-intro-guidance).
+
+::: {#fig-genai-intro-guidance}
+
+![]({{< meta params.images_path >}}intro_figures/guidance_tradeoff.svg)
+
+Guidance trades coverage for fidelity. Each class consists of 4 sub-modes, and the inner sub-modes of both classes overlap. Samples for class $c$ are drawn from the guided distribution $p(\vect{x} \mid c)^{1+w}\, p(\vect{x})^{-w}$ of classifier-free guidance. With increasing guidance scale $w$, samples move away from the other class and concentrate on the most class-typical sub-modes: they become less ambiguous, but less diverse.
+:::
+
+### Latent-Space Structure and Controllability
+
+For models with an explicit latent space, such as VAEs and GANs, the structure of this space determines how well outputs can be explored and edited. Ideally, the latent space is **smooth**: similar latent vectors produce similar outputs, and interpolating between two latent vectors yields a gradual transition between the outputs^[Smoothness also depends on how one interpolates. For Gaussian latent variables, spherical interpolation is often preferred over linear interpolation [@white_sampling_2016].] (see @fig-genai-intro-vae-latent-grid). VAEs explicitly encourage this through their training objective, and GANs such as StyleGAN also exhibit smooth latent spaces [@karras_style-based_2019].
+
+::: {#fig-genai-intro-vae-latent-grid}
+
+![]({{< meta params.images_path >}}intro_figures/vae_latent_grid.png){width=50%}
+
+Decoded images of a regular grid of latent vectors of a VAE with a 2D latent space, trained on MNIST for this lecture (see `demos/genai/genai_intro_figures.ipynb`), following the visualization in @Kingma2014. Neighboring latent vectors produce similar digits, and moving through the latent space gradually morphs one digit into another.
+:::
+
+Beyond smoothness, a latent space can be **disentangled**: each dimension controls one independent factor of variation, such as pose or lighting. @fig-genai-intro-disentanglement illustrates this with the cylinder dataset from @fig-genai-basics-latent-intuition. It has been shown, however, that unsupervised disentanglement is fundamentally impossible without inductive biases in the model or the data [@locatello_challenging_2019].
+
+::: {#fig-genai-intro-disentanglement}
+
+![]({{< meta params.images_path >}}intro_figures/disentanglement.svg)
+
+Disentangled vs. entangled latent space, illustrated with a synthetic decoder that maps a 2D latent vector to a cylinder. (a) $z_1$ only controls the width, $z_2$ only the height. (b) $z_1$ controls the overall size, $z_2$ the aspect ratio: each latent dimension changes both width and height, the factors of variation are mixed. Both latent spaces can represent all cylinders.
+:::
+
+Disentanglement is attractive for interpretability, but it is not required for controllable generation. Modern models achieve control primarily through conditioning, i.e. through text prompts, reference images, masks, or structural inputs such as edge or depth maps (see @sec-genai-intro-conditional), rather than by manipulating individual latent dimensions.
+
+### Likelihood Computation
+
+Some models can evaluate $p_{\theta}(\vect{x})$ for any given input $\vect{x}$ (see @fig-genai-intro-likelihood). This enables training by maximum likelihood, the detection of outliers, and the comparison of models on test data. Autoregressive models and normalizing flows compute the likelihood exactly, VAEs, diffusion and flow matching models provide a lower bound or a computationally expensive estimate, and GANs provide none. Note that a high likelihood does not imply high-quality samples (see @sec-genai-intro-eval-likelihood).
+
+::: {#fig-genai-intro-likelihood}
+
+![]({{< meta params.images_path >}}intro_figures/likelihood_explicit_implicit.svg)
+
+(a) A model with an explicit density assigns a log-likelihood to any input: the typical point has a high, the outlier a very low value. (b) An implicit model such as a GAN only generates samples; it cannot tell how likely a given input is.
+:::
+
+
+## Evaluating Generative Models {#sec-genai-intro-evaluation}
+
+Evaluating generative models is difficult because there is usually no single correct output. For a given prompt, label, mask, or input image, many different outputs may be valid.
+
+A useful evaluation question is therefore not simply:
+
+> Is the generated image correct?
+
+but rather:
+
+> Are the generated images realistic and varied, do they follow the condition, and are they useful?
+
+Different evaluation methods answer different parts of this question. @tbl-genai-intro-eval-questions maps typical evaluation questions to suitable methods, which we discuss in the following.
+
+| Evaluation question | Suitable methods |
+|---|---|
+| Do samples resemble real data? (fidelity) | precision, FID, KID, CMMD, human judgement |
+| Does the model cover the variety of real data? (coverage) | recall, class or mode coverage, FID, KID, CMMD |
+| Does the model assign a high density to real data? | test-set log-likelihood, if available |
+| Does the output follow the prompt? | human judgement, CLIP-based alignment |
+| Which model do people prefer? | blind pairwise comparison, preference leaderboards |
+| Does an edit preserve the original content? | similarity of unchanged regions, human judgement |
+| Are synthetic images useful for training? | downstream performance on real test data |
+
+: Evaluation questions and suitable methods. {#tbl-genai-intro-eval-questions tbl-colwidths="[50,50]"}
+
+### Likelihood {#sec-genai-intro-eval-likelihood}
+
+For models with an explicit density, the average log-likelihood of $N$ held-out test images measures how well the model covers real data:
+
+$$
+\frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})
+$$
+
+Many models, such as GANs, do not provide it. Moreover, it has been shown that likelihood and sample quality are largely independent: a model can achieve a high likelihood while generating poor samples, and vice versa [@theis_note_2016]. Likelihood therefore does not tell us whether generated samples look good or follow a prompt.
+
+### Human Evaluation
+
+A direct but expensive approach is to ask humans to compare generated images. Typical questions are:
+
+- Which image looks more realistic?
+- Which image better matches the prompt?
+- Which image has fewer artifacts?
+- Which image would you prefer to use?
+
+Human studies are often the most meaningful evaluation for visual quality, but they are slow, subjective, and difficult to use during model development.
+
+#### Human Preference Benchmarks
+
+An increasingly popular form of human evaluation is **blind pairwise comparison**. Given the same text prompt, two models generate images that are shown side by side without revealing which model produced which. Human evaluators select the image they prefer. Aggregating many such judgements makes it possible to rank models with a statistical preference model, such as the Bradley–Terry model, often reported on an Elo-like scale. Examples of public leaderboards are the [Arena text-to-image leaderboard](https://arena.ai/leaderboard/image/text-to-image) and the [Artificial Analysis image arena](https://artificialanalysis.ai/text-to-image).
+
+In contrast to distribution-level metrics such as FID, these benchmarks directly capture **human preferences**. However, preference is subjective: it can reflect aesthetic appeal rather than faithfulness, coverage, or usefulness for a downstream task.
+
+::: {.callout-note title="Discussion"}
+If humans consistently prefer images from model A over model B, does this imply that model A is the better generative model? In which applications might this conclusion be misleading?
+
+<details>
+<summary>Click for possible answer</summary>
+
+Not necessarily. Preference benchmarks rate individual, mostly creative images for a given prompt. They reward aesthetic appeal and prompt following, but they do not measure coverage: a model that always generates the same polished style can win many comparisons. The conclusion can be misleading wherever faithfulness matters more than appeal, for example in super-resolution, medical image translation, or synthetic training data, where a less pleasing but faithful or diverse output is more useful.
+
+</details>
+:::
+
+### Distribution-Level Metrics
+
+Many automatic metrics compare the distribution of generated images with the distribution of real images. Since distances between raw pixels say little about image content, the images are first mapped to feature vectors with a pretrained network.
+
+#### Fréchet Inception Distance (FID)
+
+The most widely used metric is the **Fréchet Inception Distance (FID)** [@heusel_gans_2018]. It is computed in three steps (see @fig-genai-intro-fid):
+
+1. Real and generated images are mapped to 2048-dimensional feature vectors with a pretrained Inception network.
+2. A Gaussian is fitted to each set of feature vectors: mean $\vect{\mu}_r$ and covariance $\m{\Sigma}_r$ for the real, $\vect{\mu}_g$ and $\m{\Sigma}_g$ for the generated images.
+3. The Fréchet distance between the two Gaussians is computed:
+
+$$
+\text{FID} = \underbrace{\lVert \vect{\mu}_r - \vect{\mu}_g \rVert^2}_{\text{mean term}} + \underbrace{\operatorname{tr}\big(\m{\Sigma}_r + \m{\Sigma}_g - 2 (\m{\Sigma}_r \m{\Sigma}_g)^{1/2}\big)}_{\text{covariance term}}
+$$ {#eq-genai-intro-fid}
+
+The mean term measures how far apart the centres of the two feature clouds are, the covariance term compares their spread and shape. FID is zero for identical Gaussians: the lower, the better.
+
+::: {#fig-genai-intro-fid}
+
+![]({{< meta params.images_path >}}intro_figures/fid_pipeline.svg)
+
+FID. Top: computation pipeline. Bottom: real (blue) vs. generated (orange) features, shown in 2D instead of 2048-d.
+:::
+
+@fig-genai-intro-fid demonstrates that FID reacts to a lack of fidelity (a, shifted features) as well as to a lack of coverage (b, only one cluster is generated). Notably, both failures result in a similar FID: a single number does not reveal which of the two is the problem. Further limitations:
+
+- it assumes that the features follow a Gaussian distribution (in @fig-genai-intro-fid, three clusters are summarized by a single Gaussian)
+- its value depends on the number of samples, so FIDs are only comparable for a fixed sample size [@binkowski_demystifying_2021]
+- the Inception features were trained on ImageNet and may be poorly suited to other domains, such as medical images, or to the rich content of modern text-to-image models [@jayasumana_rethinking_2024]
+
+::: {.callout-note title="Additional metrics: KID and CMMD" collapse="true"}
+
+**Kernel Inception Distance (KID)** [@binkowski_demystifying_2021] compares the same features without the Gaussian assumption, using a kernel-based distance (maximum mean discrepancy, MMD). It is unbiased and thus more reliable for small sample sizes. **CMMD** [@jayasumana_rethinking_2024] follows the same idea but replaces the Inception features with CLIP embeddings [@radford_learning_2021]. Its authors show that it agrees better with human judgement of modern text-to-image models than FID.
+
+:::
+
+::: {.callout-note title="Historical note: Inception Score (IS)" collapse="true"}
+
+Before FID, the **Inception Score (IS)** [@salimans_improved_2016] was the standard metric. The idea is that good generated images should be classified confidently by a pretrained Inception classifier, while the full set of generated images should cover many classes (see @fig-genai-basics-evaluating).
+
+::: {#fig-genai-basics-evaluating}
+
+![]({{< meta params.images_path >}}evaluating_genai.png)
+
+Evaluating generative AI models using a classifier-based score.
+:::
+
+Its main limitations:
+
+- it does not compare generated images to real images
+- it is most meaningful for class-balanced datasets such as ImageNet
+- it does not detect a lack of coverage within a class (e.g. always generating the same elephant)
+
+:::
+
+#### Precision and Recall {#sec-genai-intro-eval-pr}
+
+To measure fidelity and coverage separately, @kynkaanniemi_improved_2019 define **precision and recall** for generative models. Both compare the real and the generated feature vectors. The region covered by each set (its *manifold*) is approximated by placing a ball around every feature vector, with a radius that reaches to its $k$-th nearest neighbour within the same set.
+
+| Concept | Metric | Definition |
+|---|---|---|
+| fidelity | **precision** | fraction of generated samples that lie within the manifold of the real data |
+| coverage | **recall** | fraction of real samples that lie within the manifold of the generated data |
+
+: Precision and recall for generative models. {#tbl-genai-intro-precision-recall tbl-colwidths="[15,15,70]"}
+
+The fidelity and coverage values in the demo of @sec-genai-intro-learning are simple versions of these two metrics. In @fig-genai-intro-fidelity-coverage, model (a) achieves a high precision but a low recall, while model (b) achieves a high recall but a lower precision. Likewise, the mode-collapsed model in @fig-genai-intro-fid (b) achieves a high precision but a low recall, which FID alone cannot distinguish from a lack of fidelity.
+
+The following demo lets you compare FID, precision and recall directly. The real features (blue) are fixed; you change the generator and observe which metric reacts.
+
+```{=html}
+<iframe name="fid-precision-recall" loading="lazy" data-auto-height src="../../demos/genai_intro/fid_precision_recall/index.html" width="100%" height="900" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: FID, precision and recall"></iframe>
+```
+
+::: {.callout-note title="Explore the demo" collapse="true"}
+
+1. Compare the presets *Shifted* and *Mode collapse*. Both have a high FID. How do precision and recall tell the two failures apart?
+2. Choose *Too narrow*. What happens to FID, and what to recall? Why?
+3. With *Good model*, reduce the number of samples to 50 and change the seed a few times. What happens to FID?
+4. Show the balls around the real points and choose *Too broad*. Which generated points count against precision?
+
+<details>
+<summary>Click for possible answers</summary>
+
+1. *Shifted* has a low precision: many generated points lie outside the real manifold (low fidelity). *Mode collapse* has a high precision but a low recall: every generated point is realistic, but two of three clusters are missing (low coverage).
+2. FID stays close to zero, but recall drops clearly. FID summarizes each set by a single Gaussian, which is dominated by the distances between the three clusters, so narrower clusters hardly change it. Precision and recall compare the sets locally and detect the missing variation.
+3. FID fluctuates and stays above zero, although the generator is perfect. FID is biased for small sample sizes, which is why FIDs are only comparable for a fixed number of samples.
+4. The hollow orange points: they lie outside all balls around real points, i.e. in regions without real data.
+
+</details>
+:::
+
+Like all distribution-level metrics, precision and recall summarize a whole set of images. A model can achieve good average scores while still failing on rare classes, spatial relations, text rendering, or fine-grained details.
+
+### Conditional and Task-Specific Evaluation {#sec-genai-intro-eval-task}
+
+For conditional generation, realism alone is not enough: the output also has to follow the condition and serve its purpose.
+
+::: {.callout-note title="Discussion"}
+Which of the tasks from @sec-genai-intro-conditional require the model to be creative, and which require the model to be faithful to a given input?
+
+<details>
+<summary>Click for possible answer</summary>
+
+Unconditional image generation and text-to-image generation often emphasize creative variety, although they still need to produce plausible images.
+
+Tasks such as inpainting, super-resolution, image translation, and image editing require the output to be faithful to the input. The model should generate new visual content, but it should also preserve important information from the condition, such as identity, geometry, anatomy, layout, or product appearance.
+
+</details>
+:::
+
+The evaluation should therefore match the intended use case (see @tbl-genai-intro-eval-task).
+
+| Task | What should be evaluated? | Possible methods |
+|------|---------------------------|------------------|
+| text-to-image | Does the image match the prompt? | CLIP-based scores, human judgement |
+| image editing, inpainting | Was the requested change made plausibly, and is the rest preserved? | similarity of unchanged regions, human judgement |
+| super-resolution | Are details realistic and faithful to the input? | perceptual quality, reconstruction metrics (e.g. PSNR, SSIM) |
+| medical image translation | Is the target domain reached while preserving anatomy? | expert review, downstream diagnosis |
+| reference-based generation | Is the identity of the product or person preserved? | preservation of identity and geometry |
+| synthetic training data | Does it improve the downstream model? | performance on real validation/test data |
+
+: Evaluation of conditional and task-specific generation. {#tbl-genai-intro-eval-task tbl-colwidths="[22,40,38]"}
+
+For text-to-image models, prompt alignment is often measured using vision-language models such as CLIP, for example with CLIPScore: the cosine similarity between the CLIP embeddings of the image and the prompt [@hessel_clipscore_2022]. CLIP-based scores capture the overall semantic agreement well, but they are unreliable for compositional details: CLIP often behaves like a bag of words and is largely insensitive to word order, attribute binding ("a red cube and a blue sphere") and relations between objects [@yuksekgonul_when_2023].
+
+::: {#fig-genai-evaluation-conditional}
+
+![]({{< meta params.images_path >}}wine_comparison.jpg){width=850}
+
+Evaluation of conditional generation.
+:::
+
+Task-specific evaluation is particularly important for scientific, medical, and industrial applications. A generated image can look realistic but still be scientifically or semantically wrong.
+
+::: {.callout-warning title="Plausible is not the same as faithful"}
+In super-resolution, the information lost by downsampling cannot be recovered. A generative model fills in details that are *plausible* given the low-resolution input, but not necessarily the details that were actually there. Notably, there is a fundamental trade-off: beyond a certain point, improving perceptual quality necessarily increases the deviation from the true image (distortion), and vice versa [@blau_perception-distortion_2018].
+
+For creative applications, plausible details are often all we need. For medical or scientific images, such as synthetic CT scans generated from MRI (@fig-genai-intro-mri-to-ct), hallucinated structures can be harmful. Here, faithfulness to the ground truth and validation by domain experts are essential.
+:::
+
+In summary, there is no single best metric for generative models. A good evaluation starts from the evaluation question (@tbl-genai-intro-eval-questions) and combines several perspectives: distribution-level metrics for benchmarking, precision and recall to separate fidelity from coverage, and task-specific checks of whether the output is faithful to the condition.
+
+## References
+
+::: {#refs}
+:::

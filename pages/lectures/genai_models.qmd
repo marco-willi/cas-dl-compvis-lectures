@@ -1,0 +1,564 @@
+---
+title: "9 - GenAI Model Families"
+params:
+   images_path: "/assets/images/genai_models/"
+---
+
+::: {.content-hidden}
+$$
+{{< include /assets/_macros.tex >}}
+$$
+:::
+
+
+::: {.callout-tip title="Learning Objectives"  collapse="true"}
+
+After this lecture you should be able to:
+
+- Explain the core mechanisms of the major generative model families: autoregressive models, GANs, VAEs, diffusion models, and flow-based models (normalizing flows and flow matching)
+- Compare the tradeoffs of each family across sampling speed, output quality, coverage, and likelihood computation
+- Identify the key strengths and limitations of each family
+- Understand how conditional generation can be applied within each model family
+
+:::
+
+
+::: {.callout-tip title="TLDR Recap" collapse="true"}
+
+The major generative model families make different tradeoffs. **Autoregressive models** factorize the data distribution sequentially and compute exact likelihood, but generation is slow and cannot be parallelized. **GANs** use an adversarial generator–discriminator game for fast, sharp sampling, but training can be unstable and mode collapse is a risk. **VAEs** learn a structured probabilistic latent space with stable training, but classical VAEs tend to produce blurrier outputs. **Diffusion models** learn to reverse a noising process and currently deliver state-of-the-art image quality and diversity, at the cost of iterative, compute-intensive sampling. **Normalizing flows** use invertible transformations for exact likelihoods, at the cost of restricted architectures. **Flow matching** learns a velocity field that transports noise to data along (nearly) straight paths; it is simple to train and underlies many modern text-to-image models. **Conditional generation** — where models additionally receive a class label, text prompt, image, or mask — can be applied within any of these families.
+
+:::
+
+
+## Generative Model Families
+
+Over the past decade, several families of generative models have emerged. They differ in how they model the data distribution, how they generate samples, and which tradeoffs they make. We introduce a few of the most important ones in the following sections. Note that this list is not exhaustive.
+
+### Training Objectives and Sampling
+
+Maximum likelihood is an important principle (see [Generative AI for Computer Vision](genai_intro.qmd#sec-genai-intro-learning)), but it is not the only one. Generative model families differ in **how they are trained** and in **how they produce samples**. @tbl-genai-models-model-families provides a high-level overview. We discuss the most important families in detail in the following sections.
+
+| Model family | Training principle | Sampling |
+|---|---|---|
+| **Autoregressive** [@oord_pixel_2016] | maximum likelihood (exact) | sequential: one pixel or token at a time |
+| **Variational autoencoder (VAE)** [@Kingma2014] | maximize a lower bound on the likelihood (ELBO) | sample a latent vector, decode it in one pass |
+| **Normalizing flow** [@dinh_density_2017] | maximum likelihood (exact, via invertible transformations) | transform a noise sample through the invertible network |
+| **GAN** [@goodfellow_generative_2014] | adversarial objective: generator vs. discriminator | one generator forward pass |
+| **Diffusion** [@ho_denoising_2020; @song_score-based_2021] | learn to denoise (denoising score matching) | iterative denoising, starting from pure noise |
+| **Flow matching** [@lipman_flow_2023] | regress a velocity field that transports noise to data | integrate the learned velocity field, starting from noise |
+
+: Generative model families differ in their training principle and sampling mechanism. {#tbl-genai-models-model-families tbl-colwidths="[25,40,35]"}
+
+All of these families aim at the same goal, $p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})$, but only some of them directly optimize the log-likelihood. GANs never evaluate a density at all: a discriminator network judges whether samples look real. Diffusion models are related to a likelihood bound, but in practice they are trained with a simplified denoising loss that prioritizes sample quality [@ho_denoising_2020].
+
+@fig-genai-models-sampling-mechanisms illustrates how the families produce a sample: in a single network evaluation, token by token, or by gradually transforming noise into an image.
+
+::: {#fig-genai-models-sampling-mechanisms}
+
+![](/assets/images/genai/intro_figures/sampling_mechanisms.svg)
+
+How different model families produce a sample. The images are computed from a real photo (masking, adding noise, interpolating with noise) and only illustrate the sampling process; they are not outputs of trained models. Modern diffusion and flow matching models usually operate in a compressed latent space rather than directly on pixels. The small sketches contrast the stochastic sampling path of many diffusion samplers with the smooth, deterministic path of flow matching.
+:::
+
+::: {.callout-note title="Key idea"}
+Generative models share a common goal: $p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})$. They differ in **what they optimize** to reach it and in **how they generate samples**.
+:::
+
+
+## Autoregressive Models
+
+Autoregressive models generate data sequentially, predicting one element at a time conditioned on all previous elements.
+
+
+For an image represented as a sequence of pixels, patches, or discrete image tokens $x_1, x_2, \ldots, x_n$, the joint distribution can be factorized as a product of conditionals:
+
+$$
+p(x_1, x_2, \ldots, x_n) = p(x_1) \cdot p(x_2|x_1) \cdot p(x_3|x_1,x_2) \cdots p(x_n|x_1,\ldots,x_{n-1})
+$$
+
+During generation, the model samples step by step:
+
+1. Sample $x_1 \sim p(x_1)$
+2. Sample $x_2 \sim p(x_2|x_1)$
+3. Sample $x_3 \sim p(x_3|x_1,x_2)$
+4. Continue until all pixels generated
+
+::: {.callout-note title="Key Idea"}
+Autoregressive models turn image generation into a sequence prediction problem.
+:::
+
+Each conditional $p(x_i|x_1,\ldots,x_{i-1})$ is modeled by a neural network (typically a masked CNN or Transformer). This sequential factorization turns the complex problem of modeling high-dimensional distributions into a series of simpler conditional distributions.
+
+
+Figure @fig-genai-autoregressive-overview illustrates the autoregressive generation process. The model generates pixels one by one, conditioning on all previously generated pixels. This allows for exact likelihood computation, but the sequential nature makes sampling slow and limits parallelization.
+
+::: {#fig-genai-autoregressive-overview}
+
+![]({{< meta params.images_path >}}autoregressive_overview.png)
+
+Autoregressive generation. Models predict each element sequentially, conditioning on all previously generated elements. Figure from @torralba_foundations_2024.
+:::
+
+
+::: {.callout-note}
+Autoregressive ideas are still very important. Many modern multimodal systems use LLM-like components, visual tokens, or autoregressive reasoning, even if the final image generation is diffusion-based.
+:::
+
+A prominent example of autoregressive models is PixelCNN [@oord_conditional_2016], which uses masked convolutions to ensure the autoregressive property. More recently, transformer-based autoregressive models (e.g., Parti @yu_scaling_2022) have shown strong performance by modeling images as sequences of discrete tokens. Also, OpenAI's GPT Image / 4o image generation is described by OpenAI as an autoregressive, natively multimodal image generation model, in contrast to DALL·E-style diffusion models. The exact image tokenization and decoder architecture are not publicly specified.
+
+
+::: {.callout-note title="Pros and Cons of Autoregressive Models"}
+
+**Pros**
+
+- Exact likelihood computation
+- Natural fit for language models
+- Strong for discrete tokens
+
+**Cons**
+
+- Sequential generation is slow
+- Pixel-level image generation is expensive
+- High-resolution images require long sequences
+- Errors can accumulate during sampling
+
+:::
+
+## Generative Adversarial Networks
+
+
+GANs, see @goodfellow_generative_2014, frame generative modeling as an **adversarial game** between two neural networks: a **generator** $g(\vect{z})$ that creates fake samples, and a **discriminator** $d(\vect{x})$ that tries to distinguish real data from generated fakes (see @fig-genai-gan-idea). This adversarial setup drives both networks to improve: the generator learns to create increasingly realistic samples, while the discriminator becomes better at spotting fakes.
+
+::: {#fig-genai-gan-idea}
+
+![]({{< meta params.images_path >}}gan-architecture.jpg)
+
+GAN idea: The generator creates fake samples from random noise $z \sim \mathcal{N}(0, I)$, while the discriminator judges whether samples are real or fake. From [Link](https://microsoft.github.io/GenStudio/)
+:::
+
+The GAN training objective can be expressed as a minimax game:
+
+$$
+\min_{g} \max_{d} \mathbb{E}_{\vect{x} \sim p_{data}}[\log d(\vect{x})] + \mathbb{E}_{\vect{z} \sim p_z}[\log(1 - d(g(\vect{z})))]
+$$
+
+The discriminator $d$ maximizes its ability to correctly classify real ($d(\vect{x}) \approx 1$) vs. fake ($d(g(\vect{z})) \approx 0$) samples. The generator $G$ minimizes the discriminator's success, trying to produce samples where $d(g(\vect{z})) \approx 1$ (fooling the discriminator). See @fig-genai-gan-learning for an illustration.
+
+In practice, training alternates between:
+1. **Discriminator step**: Update $d$ to better distinguish real from fake
+2. **Generator step**: Update $g$ to better fool the current discriminator
+
+
+::: {#fig-genai-gan-learning}
+
+![]({{< meta params.images_path >}}gan_learning.png)
+
+GAN learning process: As training progresses, the generator's distribution (green) moves closer to the real data distribution (black dots). The discriminator's decision boundary (blue) adapts accordingly. From @foster_generative_2023
+:::
+
+::: {.callout-note title="Pros and Cons of GANs"}
+
+**Pros**
+
+- Fast sampling: one forward pass
+- Can produce sharp images
+- Historically very important for image generation
+
+**Cons**
+
+- Training can be unstable
+- Mode collapse: generator produces limited variety
+- No direct likelihood computation
+- Modern text-to-image systems are less commonly pure GANs
+
+:::
+
+## Variational Autoencoders
+
+
+Variational Autoencoders (VAEs) [@Kingma2014] take a different approach to generative modeling, building on the autoencoder architecture (see @fig-genai-vae-illustration) but with a crucial probabilistic twist.
+
+::: {#fig-genai-vae-illustration}
+
+![]({{< meta params.images_path >}}vae_illustration.png)
+
+VAE architecture: The encoder maps inputs to latent distributions $q(z|x)$, while the decoder reconstructs from latent samples. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
+:::
+
+A VAE learns two networks that perform (approximate) inverse operations:
+
+- **Encoder** $q_{\psi}(z|x)$: Maps data $x$ to a distribution over latent codes $z$
+- **Decoder** $p_{\theta}(x|z)$: Maps latent codes $z$ back to data $x$
+
+Unlike standard autoencoders, VAEs enforce structure on the latent space through probabilistic modeling (see @fig-genai-vae-illustration2), ensuring that randomly sampled latent codes produce meaningful outputs.
+
+::: {#fig-genai-vae-illustration2}
+
+![]({{< meta params.images_path >}}vae_illustration2.png)
+
+VAE computational graph: The encoder outputs mean $\mu$ and variance $\sigma^2$ for each latent dimension. The **reparameterization trick** ($z = \mu + \epsilon \cdot \sigma$, where $\epsilon \sim \mathcal{N}(0, 1)$) enables gradient-based optimization. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
+:::
+
+
+VAEs optimize the **Evidence Lower Bound (ELBO)**, which consists of two terms:
+
+$$
+\text{ELBO} = \underbrace{\mathbb{E}_{z \sim q_{\psi}(z|x)}[\log p_{\theta}(x|z)]}_{\text{Reconstruction}} - \underbrace{\text{KL}(q_{\psi}(z|x) \| p(z))}_{\text{Regularization}}
+$$
+
+The **reconstruction term** ensures the decoder can recover the input from the latent code. The **KL regularization term** (typically with prior $p(z) = \mathcal{N}(0, I)$) prevents the latent space from developing "gaps and tendrils"—ensuring that random samples from $\mathcal{N}(0, I)$ decode to meaningful outputs.
+
+This balance is key to VAE behavior: the reconstruction loss wants to use the latent space flexibly, while KL regularization pushes latent codes toward a standard normal distribution. The result is a **structured, continuous latent space** where interpolation and attribute manipulation work smoothly.
+
+::: {#fig-genai-vae-latent-space}
+
+![]({{< meta params.images_path >}}vae_latent_space_face.png)
+
+VAE latent space: Traversing the latent space produces smooth interpolations between faces, demonstrating the structured representation learned by the model. From @prince_understanding_2023.
+:::
+
+::: {.callout-note title="Pros and Cons of VAEs"}
+
+**Pros**
+
+- Principled probabilistic foundation
+- Latent space structure: can interpolate in latent space and interpret factors
+- Stable training
+- Can be used for representation learning
+
+**Cons**
+
+- Blurry outputs (more complex variants can reduce this)
+
+:::
+
+
+
+## Diffusion Models
+
+Diffusion models @ho_denoising_2020 @sohl-dickstein_deep_2015 have emerged as the state-of-the-art approach for high-quality image generation, powering systems like Stable Diffusion. The core insight is remarkably simple: learn to reverse a gradual noising process.
+
+@fig-genai-diffusion-forward-fcv shows the **forward diffusion** process, whereby Gaussian noise is gradually added to an image (from left to right).
+
+::: {#fig-genai-diffusion-forward-fcv}
+
+![]({{< meta params.images_path >}}forward_diffusion_fcv.png)
+
+Forward diffusion process. From @torralba_foundations_2024.
+:::
+
+The Gaussian noise is added to data over $T$ steps, following a pre-specified
+noise schedule. The forward noising process is fixed and does not involve a
+neural network. However, it is stochastic because Gaussian noise is sampled.
+
+The forward process at step $t$ can be written as:
+
+\begin{equation}
+\vect{x}_t =
+\sqrt{1-\beta_t}\vect{x}_{t-1}
++
+\sqrt{\beta_t}\vect{\epsilon}_t,
+\quad
+\vect{\epsilon}_t \sim \mathcal{N}(\mathbf{0}, \mathbfit{I})
+\end{equation}
+
+where $\beta_t$ controls the noise level (**the noise schedule**). This process
+gradually degrades the clean image $\vect{x}_0$ into an almost pure-noise image
+$\vect{x}_T \approx \mathcal{N}(\mathbf{0}, \mathbfit{I})$.
+
+Common noise schedules, such as linear or cosine schedules, start with small
+$\beta_t$ values and gradually increase them. This produces a smooth transition
+from data to noise.
+
+A crucial mathematical property is that we can sample $\vect{x}_t$ directly from
+$\vect{x}_0$ without iterating through all intermediate steps. This enables
+efficient training: we randomly sample timesteps and train the denoiser on many
+noise levels simultaneously.
+
+
+The core idea is to train a neural network to model  the **reverse diffusion** process, thus going in the opposite direction and denoise an image. @fig-genai-diffusion-reverse-fcv shows the idea.
+
+::: {#fig-genai-diffusion-reverse-fcv}
+
+![]({{< meta params.images_path >}}reverse_diffusion_fcv.png)
+
+Reverse diffusion process visualization. From @torralba_foundations_2024.
+:::
+
+A neural network learns to gradually remove noise, step by step. Starting from
+pure noise
+
+$$
+\vect{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbfit{I}),
+$$
+
+the model denoises iteratively to produce a realistic sample
+$\vect{x}_0$.
+
+The neural network learns to predict the noise $\vect{\epsilon}$ that was added
+at a given timestep. Crucially, the network is conditioned on the timestep $t$,
+since the noise level varies dramatically from early timesteps, where the image
+is almost clean, to late timesteps, where it is almost pure noise.
+
+A common simplified training objective is:
+
+\begin{equation}
+\mathcal{L}
+=
+\mathbb{E}_{t, \vect{x}_0, \vect{\epsilon}}
+\left[
+\left\|
+\vect{\epsilon}
+-
+f_\theta(\vect{x}_t, t)
+\right\|^2
+\right]
+\end{equation}
+
+The model is trained to predict the noise $\vect{\epsilon}$ that was used to
+create the noised image $\vect{x}_t$ from the clean image $\vect{x}_0$.
+
+::: {#fig-genai-diffusion-algorithm}
+
+![]({{< meta params.images_path >}}diffusion_algorithm.png)
+
+Training and sampling algorithms: Training samples random timesteps and noise; sampling iteratively denoises from $T$ to 0. Guidance techniques (not shown) can further improve sample quality.
+:::
+
+The denoising network typically uses a **U-Net architecture**—a convolutional encoder-decoder with skip connections. The U-Net processes noisy images at multiple resolutions, with timestep $t$ embedded and injected throughout the network.
+
+::: {#fig-genai-diffusion-unet}
+
+![]({{< meta params.images_path >}}diffusion_unet.png)
+
+U-Net architecture for diffusion models: Downsampling path (left) captures context, upsampling path (right) enables precise localization, and skip connections (horizontal) preserve spatial details. Timestep embeddings condition the network on noise level. From @prince_understanding_2023.
+:::
+
+::: {.callout-note title="Pros and Cons of Diffusion Models"}
+
+**Pros**
+
+- High-quality, diverse outputs
+- Stable and reliable training
+
+**Cons**
+
+- Slow inference time
+- High compute (training + inference) cost
+
+:::
+
+
+::: {.callout-note title="Interesting Note on the Noise" collapse="true"}
+
+While the standard diffusion framework has proven highly successful, researchers have explored numerous extensions and modifications:
+
+**Cold Diffusion** [@bansal_cold_2022] demonstrates that the Gaussian noise assumption is not fundamental to diffusion models. The key insight: any degradation process that can be inverted works. Instead of adding Gaussian noise, Cold Diffusion applies transformations like blurring, pixelation, or masking—yet still learns to reverse them through the same denoising framework.
+
+::: {#fig-genai-cold-diffusion}
+
+![]({{< meta params.images_path >}}cold_diffusion.png)
+
+Cold Diffusion: Various degradation operators (blur, downsampling, masking) can replace Gaussian noise in the diffusion framework. The model learns to reverse these transformations through the same training procedure. From @bansal_cold_2022.
+:::
+
+This generalization reveals that diffusion's success stems from the gradual, multi-step inversion strategy rather than the specific choice of Gaussian noise. The framework adapts to diverse degradation operators, opening possibilities for task-specific degradations that may better suit particular domains or applications.
+
+:::
+
+
+## Flow-Based Models
+
+Flow-based models take yet another perspective: they **transform** a simple distribution, such as a standard Gaussian, into the data distribution. The name refers to the idea that probability mass "flows" from the noise distribution to the data distribution. Two variants are important: **normalizing flows**, which use a sequence of invertible transformations, and **flow matching**, which learns a continuous transformation over time. While normalizing flows are mainly of historical and conceptual interest for image generation, flow matching powers many of today's state-of-the-art text-to-image models.
+
+### Normalizing Flows
+
+A normalizing flow [@rezende_variational_2016; @dinh_density_2017] is an **invertible** neural network $f_\theta$ that maps a latent vector $\vect{z} \sim p(\vect{z}) = \mathcal{N}(\mathbf{0}, \m{I})$ to an image $\vect{x} = f_\theta(\vect{z})$. Because $f_\theta$ is invertible, every image $\vect{x}$ corresponds to exactly one latent vector $\vect{z} = f_\theta^{-1}(\vect{x})$. In contrast to VAEs and GANs, the latent vector has the same dimensionality as the image.
+
+Invertibility allows computing the exact likelihood with the **change of variables** formula:
+
+$$
+\log p_\theta(\vect{x}) = \log p\left(f_\theta^{-1}(\vect{x})\right) + \log \left| \det \frac{\partial f_\theta^{-1}(\vect{x})}{\partial \vect{x}} \right|
+$$ {#eq-genai-models-change-of-variables}
+
+The first term measures how likely the corresponding latent vector is under the Gaussian. The second term, the log-determinant of the Jacobian, accounts for how much the transformation stretches or compresses space: a region that is compressed into a small volume must receive a higher density. The model is trained by maximizing @eq-genai-models-change-of-variables on the training data, i.e. by maximum likelihood.
+
+@fig-genai-models-nf-layers shows a normalizing flow trained on a 2D toy dataset. Each layer bends and stretches the plane a little, until the Gaussian has turned into two moons. Because the mapping is invertible and the stretching is tracked, the model also provides the exact density of every point.
+
+::: {#fig-genai-models-nf-layers}
+
+![]({{< meta params.images_path >}}flow_nf_layers.png)
+
+A normalizing flow with 8 coupling layers, trained on 2D data (two moons). Gaussian samples $\vect{z}$ and a regular grid are pushed through the flow, layer by layer (axes of the intermediate panels are rescaled). Colors encode the position in the Gaussian and show where each region ends up. The grid shows how space is stretched: where grid cells get squeezed together, the density increases. The right panel shows the exact density $p_\theta(\vect{x})$, computed with @eq-genai-models-change-of-variables.
+:::
+
+For a general neural network, computing the determinant of the $d \times d$ Jacobian is prohibitively expensive (for a $256 \times 256 \times 3$ image, $d \approx 200{,}000$). Normalizing flows therefore restrict the architecture to layers that are invertible and have a cheap determinant. A prominent example is the **affine coupling layer** of RealNVP [@dinh_density_2017]. The input is split into two halves $\vect{x}_a$ and $\vect{x}_b$:
+
+$$
+\vect{y}_a = \vect{x}_a, \qquad \vect{y}_b = \vect{x}_b \odot \exp\left(s(\vect{x}_a)\right) + t(\vect{x}_a)
+$$
+
+where $s$ and $t$ are arbitrary neural networks. The layer is easy to invert, since $\vect{x}_a = \vect{y}_a$ is known, and its Jacobian is triangular: the log-determinant is simply the sum of the entries of $s(\vect{x}_a)$. Stacking many such layers, and alternating which half is transformed, yields a flexible model. Glow [@kingma_glow_2018] extended this design and generated realistic faces at high resolution.
+
+::: {#fig-genai-models-coupling-layer}
+
+![]({{< meta params.images_path >}}flow_coupling_layer.svg)
+
+Affine coupling layer. One half $\vect{x}_a$ is copied unchanged. From it, a neural network computes a scale $s$ and a shift $t$, which transform the other half $\vect{x}_b$ element-wise. The networks $s$ and $t$ never have to be inverted, so they can be arbitrarily complex: since $\vect{y}_a = \vect{x}_a$, the same $s$ and $t$ can be recomputed during the inverse pass.
+:::
+
+::: {.callout-note title="Key Idea"}
+Normalizing flows trade architectural flexibility for exact likelihoods: every layer must be invertible and have a cheap Jacobian determinant.
+:::
+
+::: {.callout-note title="Pros and Cons of Normalizing Flows"}
+
+**Pros**
+
+- Exact likelihood computation
+- Exact inference: every image has exactly one latent vector
+- Fast sampling: one pass through the network
+
+**Cons**
+
+- Restricted architectures (invertible layers, cheap determinants)
+- Latent space as large as the data
+- Sample quality lags behind GANs and diffusion models
+
+:::
+
+### Flow Matching {#sec-genai-models-flow-matching}
+
+Instead of a fixed number of invertible layers, one can describe the transformation from noise to data as a **continuous process** over time $t \in [0, 1]$. A neural network $v_\theta(\vect{x}_t, t)$ predicts a **velocity**: in which direction, and how fast, the point $\vect{x}_t$ should move at time $t$. Starting from noise $\vect{x}_0 \sim \mathcal{N}(\mathbf{0}, \m{I})$, a sample is generated by following the velocity field until $t = 1$, i.e. by solving an ordinary differential equation (ODE):
+
+$$
+\frac{d\vect{x}_t}{dt} = v_\theta(\vect{x}_t, t)
+$$
+
+Such models are known as continuous normalizing flows [@chen_neural_2018]. For a long time, they were expensive to train, because the ODE had to be simulated during training. **Flow matching** [@lipman_flow_2023; @liu_flow_2022] solves this problem with a surprisingly simple training procedure. Note that, in contrast to the diffusion notation above, $t = 0$ denotes noise and $t = 1$ denotes data.
+
+During training, we pair a training image $\vect{x}_1$ with a random noise image $\vect{x}_0 = \vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \m{I})$ and connect them with a straight line:
+
+$$
+\vect{x}_t = (1 - t)\, \vect{\epsilon} + t\, \vect{x}_1
+$$
+
+Along this line, the velocity is constant: $\frac{d\vect{x}_t}{dt} = \vect{x}_1 - \vect{\epsilon}$. The network is trained to predict this velocity at randomly sampled times $t$:
+
+$$
+\mathcal{L}
+=
+\mathbb{E}_{t, \vect{x}_1, \vect{\epsilon}}
+\left[
+\left\|
+(\vect{x}_1 - \vect{\epsilon})
+-
+v_\theta(\vect{x}_t, t)
+\right\|^2
+\right]
+$$ {#eq-genai-models-flow-matching}
+
+It can be shown that a network minimizing @eq-genai-models-flow-matching learns a velocity field that transports the noise distribution to the data distribution. Note the similarity to the diffusion objective: both mix an image with noise and train a network with a simple regression loss. Instead of the noise $\vect{\epsilon}$, the network predicts the direction from noise to data.
+
+To generate a sample, we start from noise and take small steps along the predicted velocity (Euler method):
+
+$$
+\vect{x}_{t + \Delta t} = \vect{x}_t + \Delta t \, v_\theta(\vect{x}_t, t)
+$$
+
+In contrast to many diffusion samplers, no fresh noise is injected: given the initial noise, sampling is deterministic.
+
+@fig-genai-models-flow-matching-paths contrasts training and sampling for 1D data. During training, noise and data points are paired at random, so the straight lines cross. The network cannot know which data point a given $\vect{x}_t$ belongs to and learns the *average* direction of all lines passing through it. The resulting trajectories never cross, and they split the noise distribution into the two modes of the data distribution.
+
+::: {#fig-genai-models-flow-matching-paths}
+
+![]({{< meta params.images_path >}}flow_matching_paths_1d.png)
+
+Flow matching in 1D, with time on the horizontal axis. Left: training targets are straight lines between random pairs of noise samples (orange) and data samples (blue). Right: trajectories obtained by integrating the learned velocity field, on top of the density of $\vect{x}_t$ (gray). Each noise sample is deterministically transported to one data sample.
+:::
+
+::: {.callout-note appearance="simple"}
+
+**🤔 Think About It**
+
+Training uses straight lines between noise and data. Why can flow matching models often generate images with fewer steps than diffusion models?
+
+<details>
+<summary>Key considerations</summary>
+
+If the path from noise to data were exactly straight, a single Euler step would reach the end point. The learned velocity field averages over all image-noise pairs that pass through a point, so the actual sampling paths are curved, but typically less than those of diffusion models. Rectified flow [@liu_flow_2022] straightens the paths further by re-training on noise-image pairs generated by the model itself.
+
+::: {#fig-genai-models-flow-matching-steps}
+
+![]({{< meta params.images_path >}}flow_matching_steps.png)
+
+Few-step sampling on 2D data. Top: flow matching. The trajectories are curved, so a single Euler step lands every sample near the mean of the data, which is the average direction at $t = 0$. Bottom: rectified flow, re-trained on (noise, generated sample) pairs of the model above. The trajectories are almost straight, and a single step already produces a reasonable sample.
+:::
+
+</details>
+:::
+
+Flow matching has become the basis of many modern text-to-image models. Stable Diffusion 3 [@esser_scaling_2024] trains a transformer with a rectified flow objective in the latent space of an autoencoder, and FLUX.1 Kontext [@labs_flux1_2025] uses flow matching for both image generation and instruction-based editing.
+
+::: {.callout-note title="Pros and Cons of Flow Matching"}
+
+**Pros**
+
+- High-quality, diverse outputs
+- Simple, stable training (regression loss, no simulation)
+- Deterministic sampling, often with fewer steps than diffusion
+
+**Cons**
+
+- Sampling still requires multiple network evaluations
+- High compute (training + inference) cost
+- Likelihood computation possible, but expensive
+
+:::
+
+
+## Comparing the Model Families
+
+The model families make different trade-offs with respect to the desirable properties of generative models ([Properties and Trade-offs](genai_intro.qmd#sec-genai-intro-properties)). @fig-genai-models-properties-summary summarizes them.
+
+::: {#fig-genai-models-properties-summary}
+
+![](/assets/images/genai/intro_figures/properties_summary.svg)
+
+Coarse summary of the desirable properties per model family. Ratings are qualitative and simplify: modern variants narrow many gaps, e.g. distillation for diffusion sampling or large-scale autoregressive models with high fidelity. Disentanglement is omitted, since no family achieves it without additional inductive biases.
+:::
+
+## Conditioning Across Model Families
+
+So far, we have introduced the model families mostly in their unconditional form:
+they learn to model or sample from $p(\vect{x})$.
+
+In practice, these model families can often be extended to conditional generation,
+where the model learns:
+
+$$
+p_\theta(\vect{x} \mid \vect{c})
+$$
+
+The condition $\vect{c}$ can be a class label, text prompt, source image, mask,
+layout, depth map, or reference image.
+
+For this lecture, the important point is simple: conditioning does not define a
+separate model family. It is a way to control models from different families.
+
+| Model family | How conditioning can enter |
+|-------------|----------------------------|
+| Autoregressive models | condition each prediction step on $\vect{c}$ |
+| VAEs | condition encoder and/or decoder on $\vect{c}$ |
+| GANs | condition generator and often discriminator on $\vect{c}$ |
+| Diffusion models | condition the denoising network on $\vect{c}$ |
+| Flow matching | condition the velocity network on $\vect{c}$ |
+
+Modern text-to-image and image-editing systems use these ideas extensively.
+
+
+
+## References
+
+::: {#refs}
+:::

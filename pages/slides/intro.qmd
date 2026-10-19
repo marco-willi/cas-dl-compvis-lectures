@@ -1,0 +1,434 @@
+---
+title: "1 - Introduction"
+params:
+   images_path: "/assets/images/intro/"
+---
+
+::: {.content-hidden}
+$$
+{{< include /assets/_macros.tex >}}
+$$
+:::
+
+
+# Applications
+
+
+## Wildlife Monitoring
+
+::: {#fig-intro-kora-lynx}
+
+![Source: @breitenmoser-wursten_projekt_2024]({{< meta params.images_path >}}kora_lynx.png){width=70%}
+
+Camera trap image — biologists need to know which species are present.
+:::
+
+::: {.fragment}
+Deep learning automates species identification at scale (@Images2018).
+:::
+
+
+## Synthetic Image Generation & Detection
+
+::: {#fig-intro-synthetic-images layout-ncol=2}
+
+![]({{< meta params.images_path >}}application_synthetic_images_grta.png)
+
+![]({{< meta params.images_path >}}sid_trump.jpg)
+
+Examples of synthetic images: left from @mathys_synthetic_2024, right from [Source](https://x.com/TheInfiniteDude/status/1637211568692932608).
+:::
+
+::: {.fragment}
+Generation enables art and design — but also fuels deepfakes and motivates detection research (@mathys_synthetic_2024-1, @willi_synthetic_2026).
+:::
+
+
+## On-Device Photo Categorization & Safety
+
+::: {#fig-intro-apple-safety}
+![]({{< meta params.images_path >}}apple_nude_safety.png){width=55%}
+
+Apple's on-device safety features — sensitive content detection while preserving privacy. [Source](https://www.apple.com/child-safety/)
+:::
+
+
+## Image Search & Understanding
+
+:::: {.columns}
+
+::: {.column width="48%"}
+![Identification & Search]({{< meta params.images_path >}}google_lens_classification.png)
+:::
+
+::: {.column width="48%"}
+![Translation (OCR)]({{< meta params.images_path >}}google_lens_ocr.png)
+:::
+
+::::
+
+[Google Lens](https://search.google/ways-to-search/lens/) — recognition, retrieval, OCR, translation.
+
+
+## Self-Driving
+
+{{< video https://storage.googleapis.com/waymo-uploads/files/site-animations/waymo-driver/cameras.webm width=1400 >}}
+
+[Example from Waymo](https://waymo.com/waymo-driver/) — simultaneous detection of vehicles, pedestrians, cyclists, lanes, traffic signs.
+
+
+## Face Recognition (Face ID)
+
+{{< video https://www.youtube.com/embed/z-t1h0Y8vuM?si=qnEOYDmqyv8zGvMV start="50" width=1200 height=600 >}}
+
+[Apple Face ID](https://support.apple.com/en-us/102381) — infrared depth sensing creates a 3D facial map.
+
+
+## Precision Agriculture
+
+::: {#fig-intro-minneapple}
+
+![Example from @hani_minneapple_2020]({{< meta params.images_path >}}minneapple.png){width=55%}
+
+Counting apples on trees from images. Drones extend this to yield, type, and crop health estimation.
+:::
+
+
+## Medical Imaging
+
+::: {#fig-intro-sam}
+
+![Example from @ma_segment_2024.]({{< meta params.images_path >}}medsam.png){width=55%}
+
+Generic segmentation model identifies organs and anatomical structures at the pixel level.
+:::
+
+
+## Photo Editing — Magic Editor
+
+{{< video https://storage.googleapis.com/gweb-mobius-cdn/photos/uploads/6e54ed750f84538fd052b31818127f1e4df5711c.compressed.mp4 width=1400 >}}
+
+[Google Magic Editor](https://www.google.com/intl/en/photos/editing/) — maybe even a bit too good?
+
+::: {.fragment}
+**Quiz: What CV tasks must this model perform?**
+:::
+
+
+
+
+## On-Device AI Chips
+
+![From [Pixel](https://store.google.com/intl/en/ideas/pixel-camera-features/).]({{< meta params.images_path >}}tensor_phone.png){width=40%}
+
+Specialized hardware enables real-time deep learning inference on mobile.
+
+
+# Computer Vision Tasks
+
+
+## Core Task: Image Classification
+
+::: {#fig-intro-image_clssifier}
+![]({{< meta params.images_path >}}image_classification_example.png){width=55%}
+
+Multi-class classification: predict the most likely class with confidence (@krizhevsky_imagenet_2012).
+:::
+
+
+## Core Task: Object Detection
+
+::: {#fig-intro-yolo-example}
+
+![]({{< meta params.images_path >}}yolo_object_detection_example.png){width=55%}
+
+Bounding boxes localize multiple objects, each with a class and confidence (@Redmon2016a).
+:::
+
+
+## Core Task: Segmentation
+
+::: {#fig-mask-rcnn-object-segmentation-example}
+
+![]({{< meta params.images_path >}}instance_segmentation_example_maskrcnn.jpg){width=55%}
+
+In segmentation, individual pixels are assigned to specific objects (instance segmentation, here) or classes (semantic segmentation). From @he_mask_2018.
+:::
+
+
+
+## Core Task: Generation
+
+
+::: {#fig-intro-stylegan3 width=400}
+
+![]({{< meta params.images_path >}}stylegan3_examples.png){width=400}
+
+
+StyleGan3 (from @karras_alias-free_2021).
+:::
+
+
+## Beyond Core Tasks
+
+Many applications are combinations or extensions of core tasks.
+
+
+## Example: Keypoint Detection
+
+::: {#fig-mask-rcnn-keypoint-detection-example}
+
+![]({{< meta params.images_path >}}keypoint_detection_exampe_maskrcnn.jpg){width=55%}
+
+Localize specific points (e.g. body joints) (@he_mask_2018).
+:::
+
+::: {.fragment}
+**Quiz**: What core task(s) does keypoint detection combine?
+:::
+
+## Example: Colorization
+
+::: {#fig-intro-colorization-example}
+
+![Norwegian Bride (est. late 1890s) — DeOldify: [Link](https://github.com/jantic/DeOldify)]({{< meta params.images_path >}}colorization_example.png){width=55%}
+
+Black-and-white → RGB.
+:::
+
+
+<!-- ## View Synthesis — NeRF
+
+::: {#fig-intro-nerf}
+
+![]({{< meta params.images_path >}}nerf.png){width=70%}
+
+Neural Radiance Fields generate novel views from a set of input images (@mildenhall_nerf_2020).
+:::
+
+
+## View Synthesis — Gaussian Splatting
+
+{{< video https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/content/videos/bicycle.mp4 width=1400 >}}
+
+3D Gaussian Splatting — real-time, high-quality novel view synthesis (@kerbl_3d_2023). -->
+
+<!--
+## Unconditional Generation — StyleGAN3
+
+::: {#fig-intro-stylegan3}
+
+![]({{< meta params.images_path >}}stylegan3_examples.png){width=45%}
+
+StyleGAN3 — photorealistic synthetic faces (@karras_alias-free_2021).
+::: -->
+
+
+<!-- ## Text-to-Image — Stable Diffusion
+
+::: {#fig-stable-diffusion-example}
+
+![]({{< meta params.images_path >}}stable_diffusion_example.png){width=60%}
+
+Generate images conditioned on natural language (@rombach_high-resolution_2022).
+:::
+
+::: {.fragment}
+Browse [civitai](https://civitai.com/) for examples and models.
+::: -->
+
+
+## Many More Tasks
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Image Classification
+- Object Detection
+  - Object Tracking
+- Image Segmentation
+  - Semantic Segmentation
+  - Instance Segmentation
+- Optical Character Recognition (OCR)
+- Pose Estimation
+- Facial Recognition
+- Action Recognition
+:::
+
+::: {.column width="50%"}
+- Image Generation
+  - Style Transfer
+  - Image Inpainting
+  - Super-Resolution
+  - Text-to-Image (and more)
+- Image Captioning
+- 3D Reconstruction
+- Image Retrieval
+:::
+
+::::
+
+::: {.fragment}
+List is not exhaustive!
+:::
+
+
+## What About Videos?
+
+::: {#fig-intro-sora2}
+
+{{< video https://openaiassets.blob.core.windows.net/$web/nf2/blog-final2/20250929_0337_New%20Video_simple_compose_01k6agr8ctey29mze208t29w38%20(1).mp4 width=1400 >}}
+
+[OpenAI Sora 2](https://openai.com/index/sora-2/) — Prompt: *a man rides a horse which is on another horse*.
+:::
+
+
+## What About Videos?
+
+::: {#fig-intro-cotracker}
+
+{{< video https://co-tracker.github.io/videos/teaser/rollerblade.mp4 width=1400 >}}
+
+[CoTracker](https://co-tracker.github.io/) — tracking points across frames (@karaev_cotracker_2024).
+:::
+
+
+## Videos {.center}
+
+Many image-level tasks extend to videos.
+
+::: {.fragment}
+After all, videos are nothing but a sequence of images.
+:::
+
+
+## Quiz: Application Task
+
+Match each application to a CV task:
+
+::: {.incremental}
+1. Camera trap image analysis
+2. Apple's photo categorization & safety filters
+3. Image search
+4. Finding tumors in medical images
+5. Counting apples in an orchard
+:::
+
+::: {.fragment}
+**Tasks:** Classification · Detection · Segmentation · Retrieval/Embedding
+:::
+
+
+# Challenges
+
+
+## Semantic Gap
+
+::: {#fig-cat-number-grid}
+
+![]({{< meta params.images_path >}}semantic_gap_comparison.png){width=60%}
+
+Computers see numbers, humans see meaning.
+:::
+
+::: {.fragment}
+Bridging raw pixels → high-level concepts is the central problem.
+:::
+
+
+## Viewpoint
+
+::: {#fig-intro-challenge-viewpoint}
+
+![]({{< meta params.images_path >}}viewpoint_challenge.png){width=60%}
+
+Same object — wildly different pixels.
+:::
+
+
+## Deformation
+
+::: {#fig-challenge-deformation}
+
+![]({{< meta params.images_path >}}challenge_deformation.png){width=60%}
+
+Living things bend, twist, curl. [Source](http://cs231n.stanford.edu/)
+:::
+
+
+## Illumination
+
+::: {#fig-challenge-illumination}
+
+![]({{< meta params.images_path >}}challenge_illumination.png){width=60%}
+
+Lighting changes pixels dramatically. [Source](http://cs231n.stanford.edu/)
+:::
+
+
+## Background Clutter
+
+::: {#fig-challenge-background}
+
+![]({{< meta params.images_path >}}challenge_background.png){width=60%}
+
+Foreground vs. background — when textures match. [Source](http://cs231n.stanford.edu/)
+:::
+
+
+## Occlusion
+
+::: {#fig-challenge-occlusion}
+
+![]({{< meta params.images_path >}}challenge_occlusion.png){width=60%}
+
+Recognize from partial views. [Source](http://cs231n.stanford.edu/)
+:::
+
+
+## Intra-Class Variation
+
+::: {#fig-challenge-intra-class}
+
+![]({{< meta params.images_path >}}challenge_intra_class_variation.jpg){width=60%}
+
+All cats — but very different. [Source](https://www.maxpixel.net/)
+:::
+
+
+## Context Dependence
+
+::: {#fig-tiger-context}
+
+![]({{< meta params.images_path >}}tiger_context.jpg){width=55%}
+
+:::
+
+::: {.fragment}
+**Question:** Is this a tiger?
+:::
+
+
+
+## Context Dependence 2
+
+::: {#fig-blop-context}
+
+![]({{< meta params.images_path >}}challenges_context_blop.png){width=60%}
+
+From (@torralba_using_2010).
+:::
+
+::: {.fragment}
+Visual systems lean heavily on **context** when input is degraded.
+:::
+
+
+# References
+
+::: {style="font-size: 50%;"}
+
+::: {#refs}
+:::
+
+:::

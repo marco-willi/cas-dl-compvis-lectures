@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Softmax: From Logits to Probabilities</title>
+<!--
+  Interactive demo: drag the logits of five classes and observe the softmax probabilities.
+  No dependencies, no backend; works from file:// and on GitHub Pages.
+  Embed in Quarto pages / Reveal.js slides via iframe:
+
+    <iframe src="../../demos/classification/softmax_explorer/index.html" width="100%" height="520"
+            style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: softmax"></iframe>
+
+  Presets: config.js. Computation: softmax.js. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #667085;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    --logit: #9ec5e8;
+    --logit-top: #2166ac;
+    --prob: #f2a7a7;
+    --prob-top: #b2182b;
+    --chart: 12rem; /* height of the bar charts */
+  }
+  * { box-sizing: border-box; }
+  html { font-size: clamp(13px, 1.5vw, 20px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.35;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.5rem; font-size: 0.8rem; color: var(--muted); }
+
+  button, select, input { font: inherit; color: inherit; }
+  button, select {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    margin-bottom: 0.7rem;
+    font-size: 0.85rem;
+  }
+  .controls > span { color: var(--muted); }
+  .controls .spacer { flex: 1; }
+
+  .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
+  @media (max-width: 560px) { .panels { grid-template-columns: 1fr; } }
+  .panel h2 {
+    margin: 0 0 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .panel h2 span { text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+  /* Bar charts: one column per class */
+  .chart {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--k), 1fr);
+    gap: 0.4rem;
+    height: var(--chart);
+    padding: 0 0.2rem;
+    border-radius: 0.3rem;
+    background: var(--panel);
+  }
+  .axis {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #9aa3b2;
+    pointer-events: none;
+  }
+  .axis span {
+    position: absolute;
+    right: 100%;
+    margin-right: 0.2rem;
+    transform: translateY(-50%);
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .axis.grid { border-top: 1px dashed var(--line); }
+  .col { position: relative; }
+  .bar { position: absolute; left: 12%; right: 12%; border-radius: 2px; }
+  .value {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+  }
+  .col.top .value { font-weight: 700; }
+  .value.inside { color: #fff; }
+  #logit-chart { margin-left: 1.6rem; cursor: ns-resize; touch-action: none; -webkit-tap-highlight-color: transparent; }
+  #prob-chart { margin-left: 1.6rem; }
+  #logit-chart .bar { background: var(--logit); }
+  #logit-chart .col.top .bar { background: var(--logit-top); }
+  #prob-chart .bar { background: var(--prob); bottom: 0; }
+  #prob-chart .col.top .bar { background: var(--prob-top); }
+  #logit-chart .col:hover .bar { outline: 2px solid var(--ink); }
+  .labels, .inputs {
+    display: grid;
+    grid-template-columns: repeat(var(--k), 1fr);
+    gap: 0.4rem;
+    margin-left: 1.6rem;
+    padding: 0 0.2rem;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  .labels { margin-top: 0.25rem; color: var(--muted); }
+  .labels .top { color: var(--ink); font-weight: 700; }
+  .inputs { margin-top: 0.25rem; }
+  .inputs input {
+    width: 100%;
+    padding: 0.25rem 0;
+    border: 1px solid var(--line);
+    border-radius: 0.25rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .inputs input:focus { outline: 2px solid var(--ink); }
+
+  .facts {
+    margin: 0.8rem 0 0;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.4rem;
+    background: var(--panel);
+    font-size: 0.85rem;
+  }
+  .facts div { display: flex; flex-wrap: wrap; gap: 0 0.5rem; padding: 0.1rem 0; }
+  .facts dt { min-width: 9.5rem; color: var(--muted); }
+  .facts dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .facts .note { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Softmax: From Logits to Probabilities</h1>
+  <p>Drag the logit bars up or down (or type a value) and observe how the softmax turns them
+     into probabilities.</p>
+</header>
+
+<div class="controls">
+  <span>Preset</span>
+  <select id="preset" aria-label="Preset"></select>
+  <button id="shift" type="button" title="Add 1 to every logit">Add 1 to all</button>
+  <button id="double" type="button" title="Multiply every logit by 2">All × 2</button>
+  <button id="halve" type="button" title="Divide every logit by 2">All ÷ 2</button>
+  <span class="spacer"></span>
+  <button id="reset" type="button">Reset</button>
+</div>
+
+<div class="panels">
+  <section class="panel">
+    <h2>Logits <span>(raw model outputs, any real number)</span></h2>
+    <div class="chart" id="logit-chart" aria-label="Logits; drag a bar to change its value"></div>
+    <div class="labels" id="logit-labels"></div>
+    <div class="inputs" id="inputs"></div>
+  </section>
+  <section class="panel">
+    <h2>Probabilities <span>(after softmax)</span></h2>
+    <div class="chart" id="prob-chart" aria-label="Probabilities after softmax"></div>
+    <div class="labels" id="prob-labels"></div>
+  </section>
+</div>
+
+<dl class="facts" id="facts"></dl>
+
+<script src="config.js"></script>
+<script src="softmax.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

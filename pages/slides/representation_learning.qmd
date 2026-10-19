@@ -1,0 +1,563 @@
+---
+title: "5 - Representation Learning"
+params:
+   images_path: "/assets/images/representation_learning/"
+---
+
+## Overview
+
+- Motivation & Introduction
+- What is Representation Learning?
+- Deep Image Representations
+- Comparing Representations
+- Using Visual Representations
+
+
+::: {.content-hidden}
+$$
+{{< include /assets/_macros.tex >}}
+$$
+:::
+
+
+# Motivation
+
+## The Information Overkill
+
+![Example Image [Source](https://unsplash.com/de/fotos/elefantenwanderung-tagsuber-QJbyG6O0ick)]({{< meta params.images_path >}}elephant.jpg)
+
+::: {.fragment}
+How would you describe the photograph?
+:::
+
+## The Information Overkill
+
+![Example Image [Source](https://unsplash.com/de/fotos/elefantenwanderung-tagsuber-QJbyG6O0ick)]({{< meta params.images_path >}}elephant.jpg)
+
+
+::: {.fragment}
+> A photograph of an elephant facing the camera.
+The elephant has large tusks and ears and is standing in a flat savannah.
+It is bright daylight with a cloudy sky.
+:::
+
+::: {.fragment}
+```{python}
+# | eval: true
+# | echo: false
+import pandas as pd
+from IPython.display import HTML
+
+# Natural language description
+description = """
+A photograph of an elephant facing the camera.
+The elephant has large tusks and ears and is standing in a flat savannah.
+It is bright daylight with a cloudy sky.
+"""
+
+# Calculate bits for natural language
+char_count = len(description)
+bits_utf8 = char_count * 8  # UTF-8 uses 8 bits per character
+bits_ascii = char_count * 7  # ASCII uses 7 bits per character
+
+# Raw image stats (from earlier calculation)
+width, height, channels = 640, 360, 3
+raw_bits = width * height * channels * 8
+
+# Compression ratio
+compression_ratio = raw_bits / bits_utf8
+
+# Create comparison table
+comparison_data = pd.DataFrame(
+    {
+        "Representation": [
+            "Raw RGB Image",
+            "Natural Language (UTF-8)",
+            "Natural Language (ASCII)",
+        ],
+        "Size (bits)": [f"{raw_bits:,}", f"{bits_utf8:,}", f"{bits_ascii:,}"],
+        "Size (KB)": [
+            f"{raw_bits / 8 / 1024:.1f}",
+            f"{bits_utf8 / 8 / 1024:.2f}",
+            f"{bits_ascii / 8 / 1024:.2f}",
+        ],
+        "Compression Factor": [
+            "1×",
+            f"{compression_ratio:.0f}×",
+            f"{raw_bits / bits_ascii:.0f}×",
+        ],
+    }
+)
+
+table_html = comparison_data.to_html(
+    index=False,
+    border=0,
+    classes="table table-sm table-striped align-middle caption-top",
+)
+
+HTML(table_html)
+```
+:::
+
+
+::: {.fragment}
+**Key insight**: Massive compression while preserving semantically relevant information!
+:::
+
+
+## The Vastness of Image Space
+
+![Illustrated are the set of all possible images and the subset of natural images]({{< meta params.images_path >}}set_of_images.png){.r-stretch}
+
+::: {.fragment}
+Total possible $256\times256$ RGB images: $255^{256 \times 256 \times 3}$ ≈ **infinite**
+:::
+
+::: {.fragment}
+Natural images: (_relatively_) **tiny subset** of this space
+:::
+
+::: {.fragment}
+**Implication**: Pixel space is extremely inefficient for representing real images!
+:::
+
+
+# What is Representation Learning?
+
+## Definition
+
+::: {.fragment}
+A **representation** is the output $\vect{z} = f(\vect{x})$ produced by an encoder $f$ applied to input $\vect{x}$
+:::
+
+::: {.fragment}
+![]({{< meta params.images_path >}}data_and_representation_space.png){width=80%}
+
+
+**Semantic Coordinate System** where distances $\|\vect{z}_i - \vect{z}_j\|_2$ reflect meaningful relationships.
+:::
+
+::: {.fragment}
+We focus on **vector-valued** (distributed) representations, not symbolic descriptions
+:::
+
+## Intuition
+
+::: {layout-nrow=2}
+
+
+![Elephant - Day 1]({{< meta params.images_path >}}examples/elephant_day_01.png){fig-alt="Elephant in daylight savanna"}
+
+![Elephant - Day 1]({{< meta params.images_path >}}augmented/elephant_flip_horizontal.png){fig-alt="Elephant in daylight savanna"}
+
+![Elephant - Day 1]({{< meta params.images_path >}}augmented/elephant_brightness_1_8x.png){fig-alt="Elephant in daylight savanna"}
+
+![Elephant - Day 2]({{< meta params.images_path >}}examples/elephant_day_02.png){fig-alt="Elephant by watering hole in daylight"}
+
+![Giraffe - Day]({{< meta params.images_path >}}examples/giraffe_day_01.png){fig-alt="Giraffe in daylight grassland"}
+
+![Rhino - Night]({{< meta params.images_path >}}examples/rhino_night_01.png){fig-alt="Rhinoceros at nighttime"}
+
+![Elephant - Night]({{< meta params.images_path >}}examples/elephant_night_01.png){fig-alt="Elephant at night with moonlight"}
+
+![Car - Day]({{< meta params.images_path >}}examples/car_day_01.png){fig-alt="Modern car in bright daylight"}
+
+:::
+
+
+## Exercise: 2D Representation
+
+![Empty 2-dimensional representation space for mapping image similarity]({{< meta params.images_path >}}representation_space.png){width=40%}
+
+::: {.fragment}
+**Your task**: How would you map these images to 2D space?
+:::
+
+::: {.fragment}
+**Hint**: Similar images should be close, dissimilar far apart
+:::
+
+::: {.fragment}
+::: {layout-nrow=1}
+
+
+![]({{< meta params.images_path >}}examples/elephant_day_01.png){fig-alt="Elephant in daylight savanna"}
+
+![]({{< meta params.images_path >}}augmented/elephant_flip_horizontal.png){fig-alt="Elephant in daylight savanna"}
+
+![]({{< meta params.images_path >}}augmented/elephant_brightness_1_8x.png){fig-alt="Elephant in daylight savanna"}
+
+![]({{< meta params.images_path >}}examples/elephant_day_02.png){fig-alt="Elephant by watering hole in daylight"}
+
+![]({{< meta params.images_path >}}examples/giraffe_day_01.png){fig-alt="Giraffe in daylight grassland"}
+
+![]({{< meta params.images_path >}}examples/rhino_night_01.png){fig-alt="Rhinoceros at nighttime"}
+
+![]({{< meta params.images_path >}}examples/elephant_night_01.png){fig-alt="Elephant at night with moonlight"}
+
+![]({{< meta params.images_path >}}examples/car_day_01.png){fig-alt="Modern car in bright daylight"}
+
+:::
+
+:::
+
+## What Makes Good Representations?
+
+
+### Invariance & Selectivity Balance
+
+::: {.incremental}
+
+- **Invariance:** $\|f(\vect{x}) - f(g(\vect{x}))\|_2 < \epsilon$ for nuisance transform $g$ (lighting, pose)
+
+- **Selectivity:** $\|f(\vect{x}_i) - f(\vect{x}_j)\|_2 > \delta$ for semantically different $\vect{x}_i, \vect{x}_j$
+
+- *Trade-off:* Too much invariance → loss of discriminative details
+
+- *Sweet spot:* Preserve task-relevant variations, discard irrelevant ones
+:::
+
+
+### Properties of Good Representations
+
+::: {.incremental}
+- Similar images should be close
+- Different images should be separated
+- Task-relevant details should be preserved
+- Nuisance variation should be ignored
+- Embeddings should be compact and reusable
+:::
+
+
+
+# Deep Image Representations
+
+## Three Learning Paradigms
+
+::: {.incremental}
+1. **Supervised Learning**: Learn from human labels (ImageNet)
+2. **Weakly Supervised**: Learn from noisy/partial labels (image-text pairs)
+3. **Self-Supervised**: Learn from data structure (no labels needed)
+:::
+
+## Supervised Learning
+
+![]({{< meta params.images_path >}}supervised_learning_representations.png)
+
+::: {.fragment}
+- Encoder + classifier trained with labeled data
+- Train on labeled data (e.g., ImageNet 1000 classes)
+- Cross-entropy loss on human-provided labels
+- Penultimate layer embeddings = transferable features
+:::
+
+## Weakly Supervised: CLIP
+
+![From @radford_learning_2021]({{< meta params.images_path >}}clip_contrastive_pre_training.png)
+
+::: {.fragment}
+- Dual encoders align images with text captions
+- Uses image-text pairs (web-scale data)
+- Contrastive loss: maximize diagonal, minimize off-diagonal
+:::
+
+<!-- ## CLIP: Key Properties
+
+::: {.fragment}
+**Zero-shot Classification**
+
+Text prompt: "a photo of a {class}" → class prototype
+:::
+
+::: {.fragment}
+**Scalability**
+
+Learns from billions of noisy web pairs
+:::
+
+::: {.fragment}
+**Vision-Language Alignment**
+
+Shared embedding space for images and text
+::: -->
+
+## Self-Supervised Learning: Masked Autoencoding (MAE)
+
+
+![From @he_masked_2021]({{< meta params.images_path >}}masked_auto_encoder.png)
+
+::: {.fragment}
+- Mask 75% of image patches random
+- Encode only visible patches (efficient!)
+- Decode with mask tokens inserted and reconstruct original pixels
+:::
+
+::: {.fragment}
+**Key insight**: To fill in gaps, model must learn global structure
+:::
+
+## Self-Supervised Learning: Contrastive Learning
+
+::: {layout-ncol=2}
+
+![From @chen_simple_2020]({{< meta params.images_path >}}self_supervised_contrastive1.png){width="60%"}
+
+![From @chen_simple_2020]({{< meta params.images_path >}}self_supervised_contrastive2.png){width="60%"}
+
+:::
+
+::: {.fragment}
+- Pull positive pairs close together in embedding space
+- Push negative pairs apart
+- Form tight clusters of semantically similar samples
+:::
+
+##  Self-Supervised Learning: Self-Distillation {.smaller}
+
+![From @caron_emerging_2021]({{< meta params.images_path >}}dino_principle.png)
+
+::: {.fragment}
+- No explicit negatives needed
+- Works with smaller batches
+- Emergent semantic clustering
+- Produces high-quality local features (patch tokens)
+:::
+
+##  Self-Supervised Learning: Self-Distillation
+
+::: {.r-fit-text}
+
+::: {.r-stack}
+
+What are the consequences if model training uses random left-right flips?
+
+:::
+
+:::
+
+
+
+## DINOv3
+
+{{< video https://www.youtube.com/watch?v=-eOYWK6m3i8 width="100%" height="85%" >}}
+
+
+
+
+## Global vs Local Representations
+
+::: {layout-ncol=2}
+
+::: {.fragment}
+### Global embeddings
+
+**One vector per image**
+
+- image search
+- classification
+- duplicate detection
+
+### Local patch embeddings
+
+**One vector per image region**
+
+- segmentation
+- detection
+- correspondence
+- localization
+
+:::
+
+::: {.fragment}
+![]({{< meta params.images_path >}}dinov3_local_cosine_similarity_example.png){width="100%"}
+:::
+
+:::
+
+
+# Comparing Representations
+
+## Test Images Overview
+
+::: {layout-nrow=2}
+
+![car]({{< meta params.images_path >}}examples/car_day_01.png)
+
+![eleph_d1]({{< meta params.images_path >}}examples/elephant_day_01.png)
+
+![eleph_d2]({{< meta params.images_path >}}examples/elephant_day_02.png)
+
+![eleph_n]({{< meta params.images_path >}}examples/elephant_night_01.png)
+
+![giraffe]({{< meta params.images_path >}}examples/giraffe_day_01.png)
+
+![rhino]({{< meta params.images_path >}}examples/rhino_night_01.png)
+
+![eleph_brt]({{< meta params.images_path >}}augmented/elephant_brightness_1_8x.png)
+
+![eleph_flip]({{< meta params.images_path >}}augmented/elephant_flip_horizontal.png)
+
+
+:::
+
+
+## Comparisons
+
+![]({{< meta params.images_path >}}images_overview.png){.r-stretch}
+
+::: {.panel-tabset #fig-similarity-comparison-models}
+
+### Pixel Space
+
+::: {#fig-rl-similarity-pixel-space}
+
+![]({{< meta params.images_path >}}similarity_pixel_space.png){fig-alt="Pixel-space similarity matrix" width=600}
+
+Raw pixel-level similarity fails to capture semantic relationships.
+:::
+
+### ResNet-50
+
+::: {#fig-rl-similarity-resnet}
+
+![]({{< meta params.images_path >}}similarity_resnet50.png){fig-alt="ResNet-50 supervised representation similarity" width=600}
+
+Supervised CNN representations group semantically similar images.
+:::
+
+### CLIP
+
+::: {#fig-rl-similarity-clip}
+
+![]({{< meta params.images_path >}}similarity_clip.png){fig-alt="CLIP multimodal representation similarity" width=600}
+
+Language-aligned embeddings from CLIP show text-driven semantic structure.
+:::
+
+### DINOv3
+
+::: {#fig-rl-similarity-dinov3}
+
+![]({{< meta params.images_path >}}similarity_dinov3.png){fig-alt="DINOv3 self-supervised representation similarity" width=600}
+
+Self-distilled DINOv3 features reveal fine-grained semantic clusters.
+:::
+
+:::
+<!--
+## Pixel Space Similarity
+
+![]({{< meta params.images_path >}}similarity_pixel_space.png)
+
+::: {.fragment}
+Problem: Lighting variations dominate, semantic relationships hidden!
+:::
+
+## ResNet (Supervised) Similarity
+
+![]({{< meta params.images_path >}}similarity_resnet50.png)
+
+::: {.fragment}
+Better semantic grouping, but still affected by brightness
+:::
+
+## CLIP Similarity
+
+![]({{< meta params.images_path >}}similarity_clip.png)
+
+::: {.fragment}
+Strong vision-language alignment, robust to appearance changes
+:::
+
+## DINOv3 Similarity
+
+![]({{< meta params.images_path >}}similarity_dinov3.png)
+
+::: {.fragment}
+Best semantic discrimination, excellent invariance to nuisance factors
+::: -->
+
+## Comparison Summary
+
+::: {.fragment}
+
+| Model | Strength | Good For |
+|-------|----------|----------|
+| **Pixel** | ❌ Poor semantic similarity | Exact duplicates |
+| **ResNet** | ⚠️ Efficient supervised features | Fast baselines |
+| **CLIP** | ✅ Language-aligned semantics | Text-image search, zero-shot |
+| **DINOv3** | ✅ Fine-grained visual similarity | Visual search, dense tasks |
+
+: {tbl-colwidths="[18,32,50]"}
+
+:::
+
+# Using Visual Representations
+
+## What Can We Do With Embeddings?
+
+::: {.incremental}
+- **Image search:** find visually similar images
+- **Classification:** train a small classifier on frozen embeddings
+- **Clustering:** group images without labels
+- **Outlier detection:** find unusual or duplicate images
+- **Dense tasks:** use patch tokens for segmentation, detection, correspondence
+:::
+
+::: {.fragment}
+Core idea: once images become vectors, many problems become geometry problems.
+:::
+
+## Image Search with Embeddings
+
+::: {.fragment}
+1. Encode every database image:
+$$
+\vect{z}_i = f(\vect{x}_i)
+$$
+:::
+
+::: {.fragment}
+2. Encode the query image:
+$$
+\vect{z}_q = f(\vect{x}_q)
+$$
+:::
+
+::: {.fragment}
+3. Retrieve nearest neighbours:
+$$
+\operatorname{topk}_i \; \text{sim}_{\cos}(\vect{z}_q, \vect{z}_i)
+$$
+:::
+
+::: {.fragment}
+No classifier. No labels. No fine-tuning.
+:::
+
+
+## Next Exercise: Visual Image Search
+
+::: {.incremental}
+- Load a pretrained image encoder
+- Extract one embedding per image
+- Normalize embeddings
+- Compute cosine similarities
+- Retrieve the top-k nearest images
+- Compare results across representations
+:::
+
+::: {.fragment}
+Question: which representation gives the most useful visual search results?
+:::
+
+
+
+# References
+
+::: {style="font-size: 50%;"}
+
+::: {#refs}
+:::
+
+:::

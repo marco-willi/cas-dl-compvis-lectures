@@ -1,0 +1,25 @@
+format:
+  revealjs:
+    theme: q-slides-theme.scss
+    slide-number: c/t
+    show-slide-number: all
+    footer: "[https://marco-willi.github.io/cas-dl-compvis-lectures/](https://marco-willi.github.io/cas-dl-compvis-lectures)"
+    code-copy: true
+    center-title-slide: true
+    code-link: true
+    code-overflow: wrap
+    highlight-style: a11y
+    height: 1080
+    width: 1920
+    chalkboard: true
+    logo: /assets/fhnw_logo.png
+    data-background-image: /assets/fhnw_bg.png
+    title-slide-attributes:
+      data-background-image: /assets/fhnw_bg.png
+      data-background-size: contain
+      data-background-opacity: "1.0"
+subtitle: "CAS Agentic AI & Deep Learning - Computer Vision (Part1)"
+jupyter: python3
+execute:
+  eval: true
+  echo: true

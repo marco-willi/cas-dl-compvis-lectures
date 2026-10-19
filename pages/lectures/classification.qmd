@@ -1,0 +1,535 @@
+---
+title: "4 - Image Classification"
+params:
+   images_path: "/assets/images/classification/"
+execute:
+  cache: false
+  freeze: false
+---
+
+::: {.content-hidden}
+$$
+{{< include /assets/_macros.tex >}}
+$$
+:::
+
+::: {.callout-tip title="Learning Objectives" collapse="true"}
+After this lecture you should be able to:
+
+- Define classification variants (multi-class, binary, multi-label) and identify which applies to a given task.
+- Explain the role of the softmax function in converting logits to class probabilities.
+- Describe cross-entropy loss on a high-level and explain why it penalizes confident wrong predictions.
+- Apply transfer learning and explain when to freeze layers vs. fine-tune.
+- Select appropriate data augmentation strategies for a given dataset.
+- Describe a systematic training recipe and interpret training vs. validation curves.
+:::
+
+::: {.callout-tip title="TLDR Recap" collapse="true"}
+
+**Image Classification**
+
+- Assign images to predefined classes: multi-class ($> 2$ classes), binary (2 classes), multi-label (multiple labels from one shared set), or multi-task (multiple separate label sets, one head per task)
+- Output: class probabilities via a softmax function applied to raw model outputs (logits)
+
+**Softmax: Logits to Probabilities**
+
+$$P(Y = k \mid X = \vect{x}) = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}$$
+
+- Logits $\vect{z}$: raw, unbounded model outputs
+- Softmax: converts logits to a valid probability distribution (sums to 1, all values in $[0, 1]$)
+
+**Cross-Entropy Loss**
+
+$$CE = -\sum_{j=1}^K y_j \log \hat{y}_j$$
+
+- Measures how well predicted probabilities $\hat{\vect{y}}$ match the true distribution $\vect{y}$
+- Penalizes confident wrong predictions heavily; loss approaches 0 when the model is correct and confident
+- Equivalent to the negative log-likelihood under a maximum likelihood framework
+
+**Architecture: ResNet as Default**
+
+- Residual connections: $\vect{x}_{l+1} = \vect{x}_l + F(\vect{x}_l)$ — learn the change, not the full transformation
+- Enable training of very deep networks ($>100$ layers) by smoothing the loss landscape
+- Progression: AlexNet (2012) $\rightarrow$ VGG (2014) $\rightarrow$ ResNet (2015) $\rightarrow$ ConvNeXt (2022)
+- Practical advice: use proven architectures (ResNet-50, EfficientNet, ConvNeXt) rather than designing custom ones
+- More modern backbones (large-scale pretraining, Vision Transformers) follow in later lectures
+
+**Training in Practice**
+
+- Follow a systematic recipe: know the data $\rightarrow$ set baselines $\rightarrow$ overfit $\rightarrow$ regularize $\rightarrow$ tune $\rightarrow$ squeeze
+- Data augmentation generates training variety (flips, crops, color jitter) without collecting new data and teaches invariances that the architecture does not provide; augmentations must preserve the label
+- Monitor training and validation curves to detect overfitting
+- Transfer learning is the practical default: start from a pre-trained backbone, fine-tune for the target task
+
+:::
+
+
+## The Classification Task
+
+Image classification is one of the foundational tasks in computer vision: given an image, assign it to one of a predefined set of categories. It is the task that sparked the deep learning revolution when @krizhevsky_imagenet_2012 demonstrated that CNNs could dramatically outperform classical methods on ImageNet.
+
+There are several variants of image classification:
+
+- **Multi-class classification**: each image is assigned to exactly one of $K > 2$ classes (e.g., species identification)
+- **Binary classification**: a special case with $K = 2$ classes (e.g., "animal present" vs. "empty")
+- **Multi-label classification**: each image can carry multiple labels from the *same* label set (e.g., "deer" and "bird" are both present in one image)
+- **Multi-task classification**: one image is classified across multiple *separate* label sets with different semantics (e.g., a species label *and* a behavior label *and* a time-of-day label — each is its own independent classification head)
+
+The distinction between multi-label and multi-task matters in practice. In **multi-label** classification there is a single shared label set and the model must decide which subset of labels applies; a single sigmoid output per class is typically used. In **multi-task** classification the label sets are semantically distinct: each task has its own output head and its own loss, and the network shares a common backbone. A camera-trap model that predicts *species*, *behavior*, and *group size* simultaneously is multi-task, not multi-label.
+
+| Property | Multi-label | Multi-task |
+|----------|------------|------------|
+| Label sets | One shared set | Multiple separate sets |
+| Example outputs | deer ✓, bird ✓, fox ✗ | species: deer / behavior: grazing / time: day |
+| Output head | Single head, sigmoid per class | One head per task |
+| Loss | Binary cross-entropy per class | Sum of per-task losses |
+
+: {tbl-colwidths="[25,37,38]"}
+
+@fig-classification-tasks illustrates the four classification task variants side-by-side.
+
+::: {#fig-classification-tasks}
+![]({{< meta params.images_path >}}classification_tasks.png)
+
+The four classification task variants: multi-class, binary, multi-label, and multi-task.
+:::
+
+
+## Modelling Classification
+
+
+### Softmax Classifier
+In a parametric approach, we seek a model of the following form:
+
+$$
+\hat{y}^{(i)} = f(\theta, \vect{x}^{(i)})
+$$
+
+We want to find model parameters $\theta$ that output a score/prediction $\hat{y}^{(i)}$ for any data points $\vect{x}^{(i)}$ for each class $k \in K$. We then want to assess how good this score is with the help of a loss function.
+
+Note: The model parameters $\theta$ are all the learnable parameters of a model, e.g. the filters of the convolutional layers.
+
+
+
+With a softmax classifier, we interpret model predictions/scores as probabilities of class memberships: $P(Y=\vect{y}^{(i)}| X = \vect{x}^{(i)})$. We interpret the output of a model as the parameters of a [Categorical Distribution](https://en.wikipedia.org/wiki/Categorical_distribution) over all possible classes.
+
+To obtain a valid probability distribution, the untransformed outputs $\vect{z}$, also called **logits**, of a model are transformed with the softmax function $\sigma(\vect{z})$:
+
+$$
+P(Y = k| X = \vect{x}^{(i)}) = \sigma(\vect{z})_k = \frac{e^{z_k}}{\sum_i^K e^{z_i}}
+$$
+
+@fig-classification-logits-to-probs shows an example of the effect of the softmax transformation.
+
+```{python}
+#| eval: true
+#| echo: false
+#| fig-width: 600
+#| label: fig-classification-logits-to-probs
+#| fig-cap:
+#|   - "Logits (left) to probabilities with the Softmax function (right)."
+
+from matplotlib import pyplot as plt
+import numpy as np
+import seaborn as sns
+
+np.random.seed(123)
+logits = np.random.normal(size=(10, )) * 2
+softmax_output = np.exp(logits) / np.exp(logits).sum()
+
+fig, ax = plt.subplots(ncols=2, figsize=(9, 3))
+_ = sns.barplot(x=[i for i in range(0, 10)], y=logits, ax=ax[0]).set(
+    title="Logits")
+_ = sns.barplot(x=[i for i in range(0, 10)], y=softmax_output, ax=ax[1]).set(
+    title="Softmax", ylim=(0, 1))
+
+plt.tight_layout()
+plt.show()
+```
+
+
+<!-- {{< embed /demos/logits_to_probabilities.ipynb#fig-demo-logits-to-probs >}} -->
+
+
+
+The following demo makes the softmax tangible. Drag the logit bars (or type values) and observe how the probabilities change. The presets cover typical situations, such as a clear winner, a close competition, or uniform logits.
+
+::: {.callout-tip title="🎮 Interactive Demo: From Logits to Probabilities"}
+
+```{=html}
+<iframe name="softmax-explorer" loading="lazy" data-auto-height src="../../demos/classification/softmax_explorer/index.html" width="100%" height="520" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: from logits to probabilities with the softmax"></iframe>
+```
+
+**Key observations**:
+
+- Logits can be any real number (negative, zero, or positive); probabilities always lie in $[0, 1]$ and sum to 1.
+- Only *differences* between logits matter: "Add 1 to all" leaves the probabilities unchanged.
+- Scaling the logits ("All × 2", "All ÷ 2") makes the distribution sharper or flatter.
+- **Entropy** measures uncertainty: 0 for a certain prediction, $\ln K$ for uniform probabilities. Compare "Uniform logits" with "Very confident".
+
+[Open the demo in a new tab](../../demos/classification/softmax_explorer/index.html){target="_blank"} or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/classification/softmax_explorer).
+:::
+
+
+### Cross-Entropy Loss
+
+With the softmax function converting model outputs to probabilities, the next question is: how should the quality of these predictions be measured? A loss function is needed that quantifies how far the predicted distribution $\hat{\vect{y}}$ is from the true distribution $\vect{y}$.
+
+#### Intuition
+
+The key idea is straightforward: a good model should assign high probability to the correct class. If the true class is "deer" and the model predicts $P(\text{deer}) = 0.95$, the loss should be low. If the model instead predicts $P(\text{deer}) = 0.02$, the loss should be very high, and it should be especially high because the model is _confidently_ wrong.
+
+#### The Cross-Entropy Formula
+
+Cross-entropy formalizes this intuition. For a single data point with one-hot encoded true label $\vect{y}$ and predicted probabilities $\hat{\vect{y}}$, the cross-entropy is defined as:
+
+$$
+CE = -\sum_{j=1}^K y_j \log \hat{y}_j
+$$
+
+Since $\vect{y}$ is one-hot (only the true class $c$ has $y_c = 1$, all others are 0), this simplifies to:
+
+$$
+CE = -\log \hat{y}_c
+$$
+
+The loss is simply the negative logarithm of the predicted probability for the correct class. This has a natural interpretation: the closer $\hat{y}_c$ is to 1, the closer $-\log \hat{y}_c$ is to 0. As $\hat{y}_c$ approaches 0, the loss grows toward infinity.
+
+For the full dataset, the loss is averaged over all $N$ samples:
+
+$$
+L(\m{X}, \vect{y}, \theta) = -\frac{1}{N} \sum_{i=1}^N \sum_{j=1}^K y_j^{(i)} \log \hat{y}_j^{(i)}
+$$
+
+@fig-classification-cross-entropy illustrates the relationship between a true distribution and a predicted distribution, showing how the cross-entropy quantifies the mismatch.
+
+```{python}
+#| eval: true
+#| echo: false
+#| fig-width: 600
+#| label: fig-classification-cross-entropy
+#| fig-cap:
+#|   - "True distribution (left) and predicted distribution (right). Cross-entropy measures the mismatch."
+
+from matplotlib import pyplot as plt
+import numpy as np
+import seaborn as sns
+
+np.random.seed(123)
+k = 5
+logits = np.random.normal(size=(5, )) * 2
+y_hat = np.exp(logits) / np.exp(logits).sum()
+y_true = np.zeros_like(logits)
+y_true[1] = 1
+
+fig, ax = plt.subplots(ncols=2, figsize=(9, 3))
+_ = sns.barplot(x=[i for i in range(0, k)], y=y_true, ax=ax[0]).set(
+    title="True Distribution")
+_ = sns.barplot(x=[i for i in range(0, k)], y=y_hat, ax=ax[1]).set(
+    title="Predicted Distribution", ylim=(0, 1))
+
+cross_entropy = f"{(- y_true * np.log(y_hat)).sum():.3f}"
+
+plt.tight_layout()
+plt.show()
+```
+
+The cross-entropy value for this example is: `{python} cross_entropy`.
+
+#### Properties of Cross-Entropy
+
+The asymmetric penalty structure is a critical feature:
+
+- **Confident and correct** ($\hat{y}_c \approx 1$): loss $\rightarrow 0$
+- **Uncertain** ($\hat{y}_c = 0.5$): loss $0.69$
+- **Confident and wrong** ($\hat{y}_c \approx 0$): loss $\rightarrow \infty$
+
+This asymmetry means the model is punished far more for being confidently wrong than for being merely uncertain. During training, this drives the model to be both accurate and well-calibrated.
+
+::: {.callout-tip title="📊 Cross-Entropy Loss Landscape" collapse="true"}
+
+**Visualize how cross-entropy penalizes predictions**:
+
+```{python}
+#| eval: true
+#| echo: false
+#| fig-width: 800
+
+import plotly.graph_objects as go
+from IPython.display import HTML
+
+
+def create_ce_landscape():
+    # For true label = 1
+    p_pred = np.linspace(0.01, 0.99, 100)
+    loss_true_1 = -np.log(p_pred)
+    loss_true_0 = -np.log(1 - p_pred)
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=p_pred,
+        y=loss_true_1,
+        mode='lines',
+        name='True class = 1',
+        line=dict(color='blue', width=3)
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=p_pred,
+        y=loss_true_0,
+        mode='lines',
+        name='True class = 0',
+        line=dict(color='red', width=3)
+    ))
+
+    fig.update_layout(
+        title="Cross-Entropy Loss: How wrong predictions are penalized",
+        xaxis_title="Predicted Probability for Class 1",
+        yaxis_title="Cross-Entropy Loss",
+        hovermode='x unified',
+        height=500
+    )
+
+    # Add annotations
+    fig.add_annotation(
+        x=0.1, y=2.3,
+        text="High penalty for<br>confident wrong prediction!",
+        showarrow=True,
+        arrowhead=2,
+        ax=50, ay=-50
+    )
+
+    fig.add_annotation(
+        x=0.9, y=2.3,
+        text="High penalty for<br>confident wrong prediction!",
+        showarrow=True,
+        arrowhead=2,
+        ax=-50, ay=-50
+    )
+
+    return fig
+
+fig = create_ce_landscape()
+# fig.show() embeds MathJax 3, which breaks the MathJax 4 formulas on the page
+HTML(fig.to_html(full_html=False, include_plotlyjs="cdn", include_mathjax=False))
+```
+
+**Key Insights**:
+
+- Loss approaches **∞** when model is confidently wrong (p→0 for true class)
+- Loss approaches **0** when model is confidently correct (p→1 for true class)
+- **Asymmetric penalty**: Being wrong and confident is much worse than being uncertain
+:::
+
+
+::: {.callout-note appearance="simple"}
+
+**🤔 Think About It**
+
+A model predicts $P(\text{deer}) = 0.4$ for an image that is actually a deer, and $P(\text{deer}) = 0.6$ for an image that is actually a fox. Which prediction incurs a higher cross-entropy loss?
+
+<details>
+<summary>Answer</summary>
+
+The first image: $-\log(0.4) \approx 0.92$, because the model assigns low probability to the true class. For the second image, the true class is fox, so the relevant probability is $P(\text{fox})$, not $P(\text{deer})$. The key insight: cross-entropy only considers the predicted probability for the correct class. However, we know that $P(\text{fox}) \le 0.4$ because of $1 - P(\text{deer})$, so we can say with certainty that the first image incurs at most the same loss than the second.
+
+</details>
+
+:::
+
+::: {.callout-tip title="Formal Derivation: From Maximum Likelihood to Cross-Entropy" collapse="true"}
+
+Cross-entropy can be derived from a maximum likelihood framework. The key steps are:
+
+**1. Likelihood.** Interpreting the model's softmax outputs as parameters of a categorical distribution, the likelihood of observing the true label $y^{(i)}$ given input $\vect{x}^{(i)}$ is:
+
+$$
+P(Y = y^{(i)} \mid X = \vect{x}^{(i)}) = \prod_{j=1}^K P(Y = j \mid X = \vect{x}^{(i)})^{y_j^{(i)}}
+$$
+
+For the full dataset (assuming i.i.d. samples):
+
+$$
+P(\vect{y} \mid \theta, \m{X}) = \prod_{i=1}^N \prod_{j=1}^K P(Y = j \mid X = \vect{x}^{(i)})^{y_j^{(i)}}
+$$
+
+**2. Maximum Likelihood Estimation (MLE).** The goal is to find parameters $\theta$ that maximize this likelihood.
+
+**3. Negative Log-Likelihood.** Taking the logarithm (which preserves the maximum) and negating (to turn maximization into minimization) yields:
+
+$$
+L(\m{X}, \vect{y}, \theta) = -\sum_{i=1}^N \sum_{j=1}^K y_j^{(i)} \log P(Y = j \mid X = \vect{x}^{(i)})
+$$
+
+This is identical to the cross-entropy formula. Minimizing cross-entropy is therefore equivalent to maximizing the likelihood of the observed data under the model.
+
+:::
+
+
+## Architecture Overview
+
+With the loss function defined, the remaining question is: what model produces the logits? The previous lectures covered how CNNs extract hierarchical features from images. For classification, a CNN backbone extracts features, and a classification head (such as a fully-connected layer) maps them to $K$ logits, one per class.
+
+### The Architecture Progression
+
+The history of CNN architectures for classification follows a trend toward depth, made possible with a key innovation:
+
+- **AlexNet** (2012, @krizhevsky_imagenet_2012): 5 convolutional + 3 fully-connected layers. Won the ImageNet competition and demonstrated that CNNs trained on large data with GPUs could dramatically outperform classical methods. See @fig-classification-alexnet2 for an illustration.
+- **VGG** (2014, @simonyan_very_2015): 16–19 layers using exclusively small $3 \times 3$ kernels. Demonstrated that depth with simple building blocks is more effective than shallow networks with large kernels. See @fig-classification-vgg-arch for an illustration of the architecture.
+- **ResNet** (2015, @He2016): 50–152+ layers with residual connections. Solved the degradation problem that prevented training of very deep networks.
+- **ConvNeXt** (2022, @liu_convnet_2022): A modern CNN incorporating design ideas from the Transformer era. Competes with Vision Transformers on standard benchmarks.
+
+### AlexNet
+
+CNNs became extremely popular after winning the [ImageNet](https://www.image-net.org/) Competition. @krizhevsky_imagenet_2012 implemented a CNN with multiple layers, known as the AlexNet architecture, as shown in @fig-classification-alexnet2. AlexNet consists of 5 convolutional layers and 3 fully-connected layers. The last layer is a 1000-way softmax output to model the classes in ImageNet. The model was trained with two GPUs (GTX 580) with 3GB memory each. Since 3GB was insufficient to train the model, the architecture was split across the GPUs. Some layers were split between the GPUs, allowing a larger network to be trained. Since the split across two GPUs is no longer necessary, the architecture is somewhat simplified.
+
+::: {#fig-classification-alexnet2}
+
+![]({{< meta params.images_path >}}alexnet_illustration.jpg){width=400}
+
+AlexNet @prince_understanding_2023
+:::
+
+We can also easily load AlexNet via torchvision.
+
+```{python}
+#| eval: true
+#| echo: true
+
+import torch
+import torchvision.models as models
+import torchinfo
+
+alexnet = models.alexnet()
+x = torch.zeros(1, 3, 224, 224, dtype=torch.float, requires_grad=False)
+yhat = alexnet(x)
+
+print(torchinfo.summary(alexnet, input_size=(1, 3, 224, 224)))
+```
+
+### VGG
+
+@simonyan_very_2015 won the ImageNet Challenge in 2014 with their VGG architecture. They showed that smaller 3x3 kernels work significantly better and that deeper networks with 16-19 layers can be trained. VGG introduced a popular design element: A layer has the same number of filters as the previous layer unless the activation map dimensions are halved, in which case the number of filters is doubled. This was done to maintain the time complexity of the layers. VGG does not use normalization layers. @fig-classification-vgg-arch shows the architecture.
+
+::: {#fig-classification-vgg-arch}
+
+![]({{< meta params.images_path >}}vgg_illustration.jpg)
+
+VGG @prince_understanding_2023
+
+:::
+
+
+
+### ResNet: Residual Connections
+
+ResNet introduced the most influential architectural innovation in deep learning: **residual connections** (skip connections). The key observation by @He2016 was that simply adding more layers to a CNN eventually degrades performance — not because of overfitting, but because optimization becomes difficult.
+
+@fig-classification-resnet-motivation1 illustrates this: a 56-layer network performs worse than a 20-layer network on both training and test sets, indicating an optimization problem rather than overfitting.
+
+::: {#fig-classification-resnet-motivation1}
+![]({{< meta params.images_path >}}resnet_test_error.jpg){width=600}
+
+Deeper networks degrade in performance — not from overfitting but from optimization difficulty. Source: @He2016.
+:::
+
+The solution is elegant. Instead of learning the full transformation at each layer, the network learns only the **residual** — the change from the input:
+
+$$
+\vect{x}_{l+1} = \vect{x}_l + F(\vect{x}_l)
+$$
+
+The identity mapping $\vect{x}_l$ passes through unchanged, and $F(\vect{x}_l)$ represents what the layer adds on top. If a layer has nothing useful to contribute, it can simply learn $F(\vect{x}_l) \approx 0$, effectively becoming an identity mapping. This makes deeper networks at least as good as shallower ones.
+
+::: {#fig-classification-residual-connection}
+![]({{< meta params.images_path >}}residual_connection.jpg){width=600}
+
+A residual connection. The input $\vect{x}$ is added to the output of the learned transformation $F(\vect{x})$. Source: @johnson_eecs_2019.
+:::
+
+Recent studies have shown that residual connections smooth the loss landscape, making optimization significantly easier. @fig-classification-skip-loss-landscape illustrates this effect — the loss surface without skip connections is rough and hard to navigate, while with skip connections it becomes much smoother.
+
+::: {#fig-classification-skip-loss-landscape}
+![]({{< meta params.images_path >}}loss_landscape_skip.png){width=600}
+
+Loss landscape without (left) and with (right) residual connections. Source: @li_visualizing_2018.
+:::
+
+### ConvNext
+
+One of the most modern CNN architectures was described in @liu_convnet_2022. This architecture uses tricks and implementation ideas accumulated over decades from various architectures. @fig-classification-convnext shows, starting from a modern version of ResNet, what has been adjusted to define this state-of-the-art architecture. Examples include: larger kernels, different activation functions, layer normalization instead of batch normalization, and depthwise separable convolutions.
+
+::: {#fig-classification-convnext}
+![]({{< meta params.images_path >}}convnext.png){width=600}
+
+Convnext @liu_convnet_2022.
+:::
+
+There is already a new version of this architecture @woo_convnext_2023.
+
+### Which Architecture to Choose?
+
+A common and effective principle: **don't be a hero.** Use proven, off-the-shelf architectures rather than designing custom ones. Good defaults include:
+
+- **ResNet-50 or ResNet-101**: reliable baselines that work well across a wide range of tasks (though slightly out-dated)
+- **EfficientNet**: when model size or inference speed is a constraint
+- **ConvNeXt**: state-of-the-art CNN performance, competitive with Vision Transformers
+
+The choice depends on practical requirements: accuracy needs, inference speed (FLOPs), model size (memory), and available training data. For most tasks, ResNet-50 with transfer learning is a strong starting point.
+
+These CNNs are, however, no longer the full picture. Today, many applications start from backbones that were pretrained on very large datasets, often with little or no human labeling, and that are based on Vision Transformers. The following lectures introduce these more modern backbones step by step:
+
+- [Visual Representations](representation_learning.qmd): how backbones are pretrained beyond supervised ImageNet classification, e.g. with image-text pairs (CLIP) or self-supervised learning (DINO).
+- [Adapting Models](downstream_adaptation.qmd): how to adapt such pretrained backbones to a classification task, from a linear probe to full fine-tuning.
+- [Modern Vision Backbones](vision_transformers.qmd): Vision Transformers, how they compare to CNNs, and practical guidelines for choosing between the two.
+
+The principle "don't be a hero" applies to these backbones as well: it is usually more effective to start from a strong pretrained model than to train a custom architecture from scratch.
+
+
+## Data Augmentation {#sec-classification-augmentation}
+
+A classifier should produce the same label regardless of many nuisance transformations of the input: the position, size and orientation of the object, the lighting, or a partial occlusion. As discussed in the lecture on [CNNs](cnns.qmd#sec-cnn-invariance), convolutions are translation equivariant, but they provide no such guarantee for other transformations. Robustness to rotation, zoom or brightness changes therefore has to be learned from the training data.
+
+Data augmentation exploits this: random, label-preserving transformations are applied to the training images on-the-fly, so that the model sees each image in many variants. Common augmentation families include:
+
+- **Geometric**: random crops and rescaling, horizontal flips, small rotations
+- **Photometric**: brightness, contrast, saturation, conversion to grayscale
+- **Occlusion and mixing**: erasing random patches (Cutout), blending two images (Mixup), or pasting a patch of one image into another (CutMix)
+
+The key requirement is that an augmentation must not change the label. A horizontal flip is harmless for animals but changes the meaning of text or of a traffic sign pointing left. Strong color changes are counterproductive when color is the discriminative feature, for example to distinguish ripe from unripe fruit.
+
+How robust is a pretrained classifier against such transformations? The following demo illustrates this with an ImageNet-pretrained EfficientNet-B0 that runs directly in the browser. Manipulate the image and compare the predictions on the original and the manipulated version.
+
+::: {.callout-tip title="🎮 Interactive Demo: Augmentation Stability of a Pretrained CNN"}
+
+```{=html}
+<iframe name="augmentation-stability" loading="lazy" data-auto-height src="../../demos/cnns/augmentation_stability/index.html" width="100%" height="820" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: augmentation stability of a pretrained CNN"></iframe>
+```
+
+The demo downloads the model once (about 36 MB including the runtime). The displayed values are the model's softmax probabilities, not guarantees that a prediction is correct. [Open the demo in a new tab](../../demos/cnns/augmentation_stability/index.html){target="_blank"} or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/augmentation_stability).
+:::
+
+::: {.callout-note appearance="simple"}
+
+**🤔 Think About It**
+
+You train a classifier for camera-trap images with the classes empty, deer, fox, badger and bird. Which augmentations would you use, and which would you avoid?
+
+<details>
+<summary>Key considerations</summary>
+
+- **Useful**: horizontal flips (animals walk in both directions), moderate crops and rescaling (animals appear at different distances), brightness and contrast changes (day, dusk, shadows), and grayscale conversion (night images from infrared cameras are grayscale).
+- **Avoid**: vertical flips and large rotations, since camera traps are mounted upright and such images never occur.
+- **Careful**: aggressive random crops can cut the animal out of the image. The image would then show an empty scene, but still carry the label "deer", which contradicts the class "empty".
+
+</details>
+:::
+
+The [Training Guide](practical.qmd#data-augmentation) covers augmentation libraries and practical recipes, such as how much augmentation to use when fine-tuning a pretrained model.
+
+
+## References
+
+::: {#refs}
+:::

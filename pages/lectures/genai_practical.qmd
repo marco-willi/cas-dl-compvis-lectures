@@ -1,0 +1,876 @@
+---
+title: "10 - GenAI: Modern Systems"
+params:
+   images_path: "/assets/images/genai_modern/"
+---
+
+::: {.content-hidden}
+$$
+{{< include /assets/_macros.tex >}}
+$$
+:::
+
+
+::: {.callout-tip title="Learning Objectives" collapse="true"}
+
+After this lecture you should be able to:
+
+- Explain why pixel-space diffusion is computationally expensive and how latent diffusion addresses this
+- Describe the components of a Stable Diffusion-style system: text encoder, VAE encoder/decoder, and diffusion model
+- Understand the architectural shift from U-Net denoisers to Diffusion Transformers and why it matters
+- Distinguish the architecture of a generator (U-Net, diffusion transformer) from its generative objective (diffusion, flow matching)
+- Explain how multimodal conditioning extends image generation beyond simple text prompts, and compare modular and unified multimodal architectures
+- Describe the role of post-training — preference optimization and distillation — in modern image models
+- Choose appropriate adaptation strategies — prompting, reference images, LoRA, or fine-tuning — for different use cases
+- Compare practical deployment options: hosted APIs, enterprise platforms, and open-weight models
+- Recognize responsible use considerations: hallucination, bias, synthetic data risks, provenance, and copyright
+
+:::
+
+
+::: {.callout-tip title="TLDR Recap" collapse="true"}
+
+**Latent diffusion** avoids the cost of denoising directly in pixel space. A VAE encoder compresses images into a compact latent space, the diffusion model operates there, and a VAE decoder converts the final latent back to pixels — this is the core of **Stable Diffusion**-style systems. Modern systems increasingly replace the U-Net denoiser with **Diffusion Transformers**, which process images as patch tokens and scale naturally to richer multimodal conditioning. Independently of the architecture, many of them replace the diffusion objective with **flow matching**, which predicts a velocity from noise to data. Beyond text prompts, systems can condition on reference images, masks, editing instructions, and conversational context. Architectures range from a separate text encoder plus generator, over a vision-language encoder coupled with a multimodal diffusion transformer, to **unified models** that understand and generate in one transformer. Much of the quality of current models results from **post-training**: preference and reward optimization improve aesthetics and prompt adherence, and **distillation** reduces sampling to a few steps. **Adaptation** should start with prompting and reference images; **LoRA** is useful when a subject, style, or domain needs to be reused persistently. In practice, teams choose between hosted APIs (fast setup, opaque), enterprise platforms (governance, cloud integration), or open-weight models (control, operational responsibility). Responsible use requires attention to hallucination, bias, synthetic data risks, provenance, and copyright.
+
+:::
+
+
+# Motivation
+
+Diffusion models learn to reverse a noising process. In the simplest
+pixel-space setting, the model starts from random noise and gradually denoises it
+into an image:
+
+$$
+\vect{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbfit{I})
+\quad \rightarrow \quad
+\vect{x}_{T-1}
+\quad \rightarrow \quad
+\cdots
+\quad \rightarrow \quad
+\vect{x}_0
+$$
+
+This gives us the basic generative mechanism. However, a practical image generation system needs more than the abstract denoising idea. Modern image generators are rarely used only once: users generate many candidates, compare results, adjust the prompt, edit specific regions, and create variations. The system must therefore generate high-resolution images, support repeated sampling, and respond quickly enough for interactive use.
+
+The central practical question is therefore:
+
+> How can we make diffusion efficient enough for high-resolution image generation?
+
+
+## The Pixel-Space Bottleneck
+
+Diffusion models are iterative: they do not produce the final image in a single forward pass, but repeatedly apply a denoising network. If diffusion is performed directly in pixel space, this network operates on a very large representation, and the size grows quickly with the resolution.
+
+| Resolution | Number of RGB values |
+|-----------|----------------------|
+| 256 × 256 | 196,608 |
+| 512 × 512 | 786,432 |
+| 1024 × 1024 | 3,145,728 |
+
+A rough intuition for the computational cost is:
+
+$$
+\text{cost per denoising step}
+\times
+\text{number of denoising steps}
+$$
+
+The cost per step depends on more than the number of RGB values: it also depends on the width and depth of the network and on its architecture. For transformers, which process an image as a sequence of patch tokens, the cost of self-attention grows quadratically with the number of tokens. Doubling the resolution quadruples the number of tokens and therefore increases the cost of attention by a factor of up to 16.
+
+The number of steps is the second lever. Classical diffusion samplers use tens to hundreds of steps. Flow-based and distilled models can generate good images in a handful of steps (see [How Modern Image Models Are Trained](#sec-genai-modern-training)), but each step still has to process the full representation.
+
+The core bottleneck is therefore that pixel-space diffusion asks the denoising network to operate directly on a large, high-dimensional representation. This creates three practical problems:
+
+- high memory usage
+- slow training and sampling
+- expensive high-resolution generation
+
+This leads to the idea of **latent diffusion**:
+
+> Do not run diffusion directly on pixels if a smaller learned representation is sufficient.
+
+
+# Latent Diffusion
+
+The key idea behind **latent diffusion** is to avoid running the diffusion process directly on pixels. Instead, the image is represented in a smaller learned latent space. The diffusion model operates in that latent space, and only the final
+latent representation is decoded back into pixels.
+
+**Stable Diffusion** [@rombach_high-resolution_2022] is the canonical example of this idea. It made diffusion-based image generation much more practical and helped popularize open-weight text-to-image generation. The following description refers to the original Stable Diffusion. Later versions keep the latent space, but replace the denoising network and the training objective, as we will see in [Modern Architectures and Multimodal Systems](#sec-genai-modern-architectures).
+
+::: {#fig-genai-modern-sd35-examples}
+
+![]({{< meta params.images_path >}}pract_sd35_large_examples.png)
+
+Stable Diffusion 3.5 Large: example generations showing diverse styles, subjects, and legible text from text prompts. Like earlier versions, it generates in a VAE latent space, but it replaces the U-Net with a transformer trained with a flow matching objective [@esser_scaling_2024]. [Source](https://huggingface.co/stabilityai/stable-diffusion-3.5-large).
+
+:::
+
+At a high level, Stable Diffusion combines a text encoder, a VAE encoder/decoder, a latent denoising model, and a sampler. The prompt is encoded into a text representation. The diffusion process happens in the latent image space. Finally, a decoder maps the generated latent representation back into pixel space.
+
+::: {#fig-genai-diffusion-sd-architecture}
+
+![]({{< meta params.images_path >}}diffusion_sd_architecture_genbook.png)
+
+Stable Diffusion pipeline: text is encoded, diffusion runs in VAE latent space, and the VAE decoder produces the final image. Adapted from GenBook.
+
+:::
+
+This figure captures the main division of labor. The text encoder provides
+semantic conditioning from the prompt. The VAE maps between pixel space and
+latent space. The diffusion model learns to generate or denoise representations
+inside that latent space.
+
+During training, images are first encoded into latent space:
+
+$$
+\vect{x}
+\quad
+\xrightarrow{\text{VAE encoder}}
+\quad
+\vect{z}
+$$
+
+The diffusion model is then trained to denoise noisy versions of these latent
+representations.
+
+During text-to-image sampling, we do not start from an input image. We start
+from latent noise and denoise in latent space:
+
+$$
+\vect{z}_T
+\rightarrow
+\vect{z}_{T-1}
+\rightarrow
+\cdots
+\rightarrow
+\vect{z}_0
+\quad
+\xrightarrow{\text{VAE decoder}}
+\quad
+\hat{\vect{x}}
+$$
+
+For image-to-image generation, inpainting, or editing, the VAE encoder is also
+used at inference time to map the input image into latent space.
+
+The important point is that the diffusion model does not need to model every low-level pixel detail directly. It learns to generate plausible latent representations. The decoder then turns those latent representations into images.
+
+This separation makes the system more efficient:
+
+- the denoising representation is smaller
+- memory usage is reduced
+- sampling becomes cheaper
+- high-resolution generation becomes more practical
+- adaptation and experimentation become easier
+
+A useful way to remember the architecture is:
+
+| Component | Role |
+|----------|------|
+| Text encoder | converts the prompt into semantic conditioning |
+| VAE encoder | compresses training images, or input images for image-to-image/editing |
+| VAE decoder | converts generated latent representation back to pixels |
+| Diffusion model | denoises or generates latent representations |
+| Sampler | controls the iterative denoising process |
+
+The main takeaway is:
+
+> Stable Diffusion is not a diffusion model that directly draws pixels. It is a latent diffusion system: diffusion happens in a compressed VAE latent space, and the decoder turns the final latent into an image.
+
+This is why latent diffusion made high-resolution diffusion-based image generation much more practical.
+
+# Modern Architectures and Multimodal Systems {#sec-genai-modern-architectures}
+
+The latent diffusion architecture explains why models such as Stable Diffusion became practical: the expensive denoising process is moved from pixel space into a compressed latent space. This is already a major systems-level improvement. However, modern image generation systems have continued to evolve beyond the original Stable Diffusion-style architecture.
+
+There are three important developments to understand. First, the denoising network itself is changing. Earlier systems commonly used U-Net architectures, while newer systems increasingly use transformer-based denoisers. Second, many modern systems replace the classical diffusion objective with flow matching. Third, image generation is becoming more tightly integrated with multimodal interfaces. Modern systems do not only take a text prompt and return an image. They may accept text, images, masks, reference images, previous outputs, or editing instructions, and they may be embedded inside a conversational assistant.
+
+The purpose of this section is not to describe one specific commercial architecture in detail. Many current systems are not fully disclosed. Instead, the goal is to understand the main architectural ideas that explain the direction of modern generative AI systems.
+
+
+## From U-Net Denoisers to Diffusion Transformers
+
+Earlier diffusion systems commonly used U-Net denoisers. This is a natural choice for images because convolutions encode locality and the encoder-decoder structure captures both global context and spatial detail.
+
+More recent systems increasingly use transformer-based denoisers (see @fig-genai-modern-diffusion-transformer). The basic idea is to represent the noisy image or noisy latent as a sequence of tokens. These tokens may correspond to patches, latent patches, or learned visual tokens. The transformer then predicts how these tokens should be denoised.
+
+
+::: {#fig-genai-modern-diffusion-transformer}
+
+![]({{< meta params.images_path >}}diffusion_transformer.jpg)
+
+Transformer-based architecture for diffusion models: Tokens (patches or latent representations) interact through self-attention, capturing long-range dependencies. Timestep embeddings condition the network on noise level. From @peebles_scalable_2023.
+:::
+
+
+
+
+Conceptually, this is similar to the transition from convolutional networks to vision transformers in discriminative computer vision. Instead of processing the representation primarily as a spatial feature map, the model processes it as a sequence. Attention allows each token to interact with other tokens, which can be useful for modeling long-range relationships and global structure.
+
+The comparison is summarized below.
+
+| Aspect | U-Net diffusion | Diffusion transformer |
+|--------|-----------------|-----------------------|
+| Representation | spatial feature maps | token sequence |
+| Main operation | convolution + attention blocks | self-attention + MLP blocks |
+| Inductive bias | strong image locality | more general sequence modeling |
+| Conditioning | often cross-attention | cross-attention or joint attention over text and image tokens |
+| Scaling behavior | strong, but architecture-specific | often attractive for large-scale training |
+| Multimodal extension | possible, via added conditioning layers | architecturally simpler: additional tokens in the sequence |
+
+The important point is not that transformers are always better. U-Nets remain effective and efficient in many settings. The important point is that transformer-based denoisers fit naturally into a broader trend: text, image, video, and other modalities can all be represented as tokens or token-like latent representations. This makes it easier to build models that combine multiple modalities.
+
+
+## Diffusion or Flow Matching? Objective vs. Architecture
+
+The terms U-Net and diffusion transformer describe the **architecture** of the network. They do not describe **what** the network is trained to predict. This is determined by the generative objective, and it is a separate design choice. Classical diffusion trains the network to reverse a stochastic noising process by predicting the added noise. Many modern systems instead use **flow matching** (see [Flow Matching](genai_models.qmd#sec-genai-models-flow-matching)), which trains the network to predict a velocity that transports noise to data along a straight path:
+
+$$
+\vect{x}_t = (1 - t)\, \vect{\epsilon} + t\, \vect{x}_1,
+\qquad
+v_\theta(\vect{x}_t, t) \approx \vect{x}_1 - \vect{\epsilon}
+$$
+
+where $\vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \m{I})$ is noise, $\vect{x}_1$ is a training image (or its latent), and $t \in [0, 1]$. In practice, both formulations start from Gaussian noise, apply the network iteratively, and can use either architecture. Flow matching, however, often requires fewer sampling steps, because its trajectories from noise to data are straighter.
+
+Stable Diffusion 3 is a typical example that combines all three ideas: a VAE latent space, a transformer denoiser, and a rectified flow objective [@esser_scaling_2024]. The widely used FLUX models follow the same recipe and also use flow matching for instruction-based editing [@labs_flux1_2025]. Modern image generation is therefore not simply "classical denoising implemented with transformers".
+
+| Design choice | Classical Stable Diffusion | Modern systems (e.g. SD3, FLUX) |
+|---|---|---|
+| Representation | VAE latent | VAE latent |
+| Architecture | U-Net | diffusion transformer |
+| Objective | diffusion (noise prediction) | flow matching (velocity prediction) |
+
+
+## Why Token-Based Architectures Are Attractive
+
+A token-based representation gives a more uniform interface between modalities. Text is already represented as a sequence of tokens. Images can be represented as patch tokens, latent tokens, or visual embeddings. Video can be represented as tokens across space and time. Reference images, masks, or editing instructions can also be converted into conditioning representations.
+
+This is one reason diffusion transformers and multimodal transformers are attractive for modern systems. They provide a route toward architectures where text, image, and possibly video information can interact more directly. This does not mean that all modalities become identical. Text tokens and image tokens still have different origins and structure. But a transformer architecture provides a common computational mechanism: attention over sequences of representations.
+
+Notably, tokenization alone does not make a model understand how a prompt relates to an image. Semantic alignment between text and image tokens is learned from large amounts of paired training data, and it depends on how the conditioning information enters the network. Two mechanisms are common (see @fig-genai-modern-cross-vs-joint-attention):
+
+- **Cross-attention**: image tokens attend to the output tokens of a separate text encoder, which is typically frozen. Information flows only from the text into the image. This is the mechanism of the original Stable Diffusion U-Net.
+- **Joint attention**: text and image tokens are concatenated into one sequence, and attention runs over both, so that information flows in both directions. The multimodal diffusion transformer (MM-DiT) of Stable Diffusion 3 uses separate weights for each modality, but a joint attention operation [@esser_scaling_2024].
+
+::: {#fig-genai-modern-cross-vs-joint-attention}
+
+![]({{< meta params.images_path >}}cross_vs_joint_attention.svg)
+
+Cross-attention vs. joint attention, shown as attention matrices: rows are the tokens that read information (queries), columns the tokens that are read (keys). With cross-attention, only the image tokens read from fixed text tokens. With joint attention, all four blocks exist, and the text tokens are updated as well. The weights are illustrative.
+
+:::
+
+That this alignment is learned can be made visible. With cross-attention, every spatial position of the latent attends to the tokens of the prompt. Averaging these attention weights over the sampling process yields one map per word, which shows where in the image the model has used that word (see @fig-genai-modern-cross-attention-maps). The word "dog" attends to the dog and "cat" to the cat. Interestingly, the adjective "red" attends mainly to the sofa it describes. This binding of words to image regions is not built into the architecture. It emerges from training on image-text pairs, and it is the basis of editing methods that modify an image by manipulating these maps ([Prompt-to-Prompt](https://arxiv.org/abs/2208.01626)).
+
+::: {#fig-genai-modern-cross-attention-maps}
+
+![]({{< meta params.images_path >}}cross_attention_maps.png)
+
+Cross-attention maps of Stable Diffusion 1.5 for selected words of the prompt, averaged over attention heads, the layers at 16x16 resolution, and 30 sampling steps. Brighter regions attend more strongly to the word.
+
+:::
+
+
+## Multimodal Diffusion Systems
+
+A multimodal diffusion system extends the basic text-to-image setup by accepting more than one type of input. Instead of conditioning only on a text prompt, the model may also condition on an image, a mask, a reference subject, an editing instruction, or previous generated content.
+
+This enables workflows that are difficult to achieve with text prompts alone. For example, a user may provide an image and ask the model to change only the background. Or the user may provide a reference image of a product and ask the model to generate advertising images while preserving the product identity. Or the user may iteratively refine a generated image in a conversational interface. See @fig-genai-modern-interative-generation for an example of a multimodal interactive generation workflow (done with Nano Banana 2,  @raisinghani_nano_2026).
+
+
+::: {#fig-genai-modern-interative-generation}
+
+![]({{< meta params.images_path >}}dada_design-9KGB4HspwsM-unsplash.jpg)
+
+[Source](https://unsplash.com/photos/a-living-room-with-a-couch-and-a-table-9KGB4HspwsM)
+
+
+![]({{< meta params.images_path >}}room_step1_no_books.jpg)
+
+After: "Remove the book lying on the floor, replace it with clean floor"
+
+![]({{< meta params.images_path >}}room_step2_turquoise_sofa.jpg)
+
+After: "Recolor the sofa and ottoman to a vibrant turquoise color"
+
+![]({{< meta params.images_path >}}room_step3_matching_carpet.jpg)
+
+After: "Change the carpet color to match the turquoise sofa"
+
+:::
+
+
+
+
+How are such systems built? There is more than one architectural answer. @fig-genai-modern-multimodal-patterns illustrates three simplified patterns, which differ mainly in how tightly understanding and generation are integrated.
+
+::: {#fig-genai-modern-multimodal-patterns}
+
+![]({{< meta params.images_path >}}multimodal_patterns.svg)
+
+Three architectural patterns of multimodal image generation. Blue: understanding of the inputs, green: generation. The patterns are deliberately simplified and are not exact diagrams of the named models.
+
+:::
+
+1. **Text-conditioned generator.** A separate text encoder converts the prompt into conditioning, and a latent diffusion or flow model generates the image. This is the classical Stable Diffusion-style pipeline. Editing and reference images require additional conditioning mechanisms.
+2. **Multimodal encoder + multimodal diffusion transformer.** A vision-language model encodes the prompt *and* the input images, and a multimodal diffusion transformer processes these conditioning tokens jointly with the image tokens being generated. Qwen-Image 2.0, for example, uses Qwen3-VL as condition encoder and unifies generation and editing in a single model [@zhao_qwen-image-20_2026]. Seedream 4.0 handles text-to-image synthesis, editing, and multi-image composition within one diffusion transformer [@seedream_seedream_2025].
+3. **Unified multimodal model.** A single LLM-style transformer processes text and images, and also generates both. HunyuanImage 3.0, for example, predicts text tokens autoregressively, but generates image latents with diffusion inside the same model [@team_hunyuanimage_2026].
+
+@fig-genai-modern-qwen-image-architecture shows a concrete example of the second pattern for an editing task: the user provides a photo of two palm trees and the instruction "Replace the two coconut trees with two phoenix trees". The frozen vision-language model Qwen3-VL encodes the instruction together with the input image, which captures *what* should change. In addition, the input image is encoded by the VAE, which preserves *how* it looks: its exact layout, colors, and details. The target image enters as noisy VAE latents together with the timestep $t$. All these token types are processed jointly by a stack of transformer blocks, which predict how to denoise the target tokens. For text-to-image generation, the input image is simply omitted.
+
+::: {#fig-genai-modern-qwen-image-architecture}
+
+![]({{< meta params.images_path >}}qwen2-image-architecture.png)
+
+Architecture of Qwen-Image 2.0 for an editing task. A frozen Qwen3-VL encodes the prompt and the input image (semantic conditioning), a VAE encodes the input image (appearance conditioning), and the noisy latents of the target image are denoised by a multimodal diffusion transformer that processes all tokens jointly. From @zhao_qwen-image-20_2026.
+
+:::
+
+Notably, in all three examples, the image itself is still generated by diffusion or flow matching in a VAE latent space, although fully autoregressive image generation exists as well (see [Autoregressive Models](genai_models.qmd)). What changes between the patterns is how much of the system's language and image *understanding* is available during generation.
+
+The distinction between the underlying model and the user-facing system becomes important here. A user may experience the system as a single assistant, but internally it may involve several components: a multimodal language model, an image encoder, an image generation model, an editing model, safety filters, retrieval systems, or tool-calling infrastructure.
+
+
+## How to Explain Systems Like ChatGPT or Gemini
+
+A modern multimodal assistant may combine several capabilities:
+
+- understanding text instructions
+- understanding uploaded images
+- maintaining conversational context
+- planning an edit or generation request
+- using a specialized image generation model
+- using a specialized image editing model
+- checking safety constraints
+- returning the result through a unified interface
+
+The user experiences one coherent system. Internally, the system may be modular, unified, or somewhere in between. Two extremes are useful to distinguish:
+
+- **Tool-orchestrated systems**: a language model interprets the request and calls a separate image generation or editing model as a tool, for example by writing a detailed prompt for it.
+- **Natively multimodal models**: one model both understands and generates images, as in pattern 3 of @fig-genai-modern-multimodal-patterns. OpenAI, for example, describes image generation in GPT-4o as native and autoregressive ([Source](https://cdn.openai.com/11998be9-5319-4302-bfbf-1167e093f1fb/Native_Image_Generation_System_Card.pdf)).
+
+From the user's perspective, both can look identical. Technically, they differ substantially: a native model can use its full understanding of the conversation and of uploaded images during generation, while a tool-orchestrated system passes only what fits into the interface between the components. For most commercial assistants, the internal architecture is not disclosed, so statements about it should remain hypothetical.
+
+This is the main conceptual takeaway:
+
+> Modern multimodal generation is not just a model that maps one prompt to one image. It is increasingly a system for understanding, planning, generating, editing, and iterating across modalities.
+
+This perspective also helps explain why modern image generation is moving closer to general AI assistants. The image model is no longer only a standalone generator. It becomes one capability inside a broader multimodal system.
+
+
+## How Modern Image Models Are Trained {#sec-genai-modern-training}
+
+Architecture and objective explain *how* a model generates images. They do not fully explain why current models follow complex prompts, render legible text, and produce aesthetically pleasing images. Much of this results from the training pipeline. Recent technical reports describe pipelines with several stages, summarized in @tbl-genai-modern-training-pipeline.
+
+| Stage | Goal | Typical training signal |
+|---|---|---|
+| Pretraining | learn visual concepts, composition, and text-image alignment | billions of image-text pairs, often with increasing resolution |
+| Supervised fine-tuning | improve aesthetics, instruction following, and task-specific behavior | small, carefully curated datasets |
+| Preference and reward optimization | improve aesthetics, prompt adherence, and editing quality | human preference pairs, learned reward models |
+| Distillation | reduce the number of sampling steps and the cost | outputs of the model itself (teacher) |
+
+: A representative training pipeline of modern image generation models. Individual models deviate from it. {#tbl-genai-modern-training-pipeline tbl-colwidths="[22,43,35]"}
+
+**Pretraining** is where most of the compute goes. To keep it affordable, resolution is typically increased progressively: Qwen-Image 2.0, for example, is first pretrained at 256 and 512 pixels, where training is cheap, and only later continues at 1024 and 2048 pixels [@zhao_qwen-image-20_2026].
+
+**Preference and reward optimization** is the image counterpart of reinforcement learning from human feedback (RLHF) for language models. Reward models, often fine-tuned vision-language models, score generated images, for example for prompt alignment, aesthetics, or identity preservation. The generator is then updated to produce images with higher rewards. Qwen-Image 2.0, for example, gains substantially in blind pairwise comparisons after this stage [@xu_qwen-image-20-rl_2026]. Interestingly, the human preferences we used for evaluation in [Evaluating Generative Models](genai_intro.qmd#sec-genai-intro-evaluation) here become a training signal. The model therefore also inherits their limitations: it optimizes what the reward measures, which may be aesthetic appeal rather than faithfulness or diversity.
+
+**Distillation** trains a student model to reproduce the outputs of a teacher model with far fewer sampling steps, and often without classifier-free guidance, which otherwise doubles the number of network evaluations per step. This directly addresses the cost problem from the [Motivation](#motivation). The distilled student of Qwen-Image 2.0, for example, generates an image with 4 network evaluations, compared to 40 sampling steps of its undistilled teacher [@zhao_qwen-image-20_2026]. Seedream 4.0 combines adversarial distillation and distribution matching to generate 2K images in a few seconds [@seedream_seedream_2025]. Distillation can also serve other purposes: Qwen-Image 2.0 uses it to merge separately optimized text-to-image and editing models into a single model [@xu_qwen-image-20-rl_2026].
+
+::: {.callout-note appearance="simple"}
+
+**🤔 Think About It**
+
+Open model families often publish both an undistilled base model and a fast distilled variant. Why might the distilled model be a poor starting point for fine-tuning or LoRA training?
+
+<details>
+<summary>Key considerations</summary>
+
+A distilled model is trained to jump from noise to an image in a few large steps. It no longer learns the full velocity field that the standard flow matching objective describes, so fine-tuning it with that objective can destroy the few-step behavior. A common workflow is therefore to adapt the undistilled base model, and to rely on distillation, or on adapters that transfer to the distilled model, for fast inference.
+
+</details>
+:::
+
+
+
+# Adapting and Personalizing Generative Models
+
+Modern image generators are trained as large, general-purpose foundation models.
+They can generate many subjects, styles, and visual concepts, but they are not
+automatically optimized for one specific project, product, brand, character, or
+visual domain.
+
+::: {#fig-genai-modern-person-adaptation}
+![]({{< meta params.images_path >}}person_comparison.jpg)
+:::
+
+In practice, the question is not only:
+
+> Can the model generate good images?
+
+but also:
+
+> Can it generate the right images consistently for this use case?
+
+Recent multimodal image systems have made this easier. Many tasks that used to
+require fine-tuning can now be handled with better prompts, reference images,
+image editing, inpainting, masks, or multi-turn refinement. Therefore,
+adaptation should usually start with the smallest intervention that gives enough
+control.
+
+## The Adaptation Spectrum
+
+| Method | What changes? | Use when... |
+|---|---|---|
+| Prompting | only the input text | you need fast exploration or weak control |
+| Reference images / image editing | input image context | you need one-off subject, style, or local edits |
+| Masks / inpainting / control inputs | generation is constrained | you need spatial or structural control |
+| Textual inversion | a learned token embedding | you need a lightweight concept token |
+| LoRA / DreamBooth-LoRA | small trainable adapter weights | you need persistent style, subject, or domain adaptation |
+| Full fine-tuning | many or all model parameters | you need a strongly specialized model and have enough data/compute |
+
+The practical rule is:
+
+> Do not fine-tune because the model is imperfect. Fine-tune when the same
+> failure appears repeatedly and simpler controls are not enough.
+
+
+
+## Prompting and Reference Images First
+
+Prompting is the lowest-cost form of adaptation. It can control subject matter,
+style, camera angle, lighting, composition, mood, and output format.
+
+~~~text
+a studio product photo of a hiking backpack,
+white background, softbox lighting,
+high detail, commercial photography
+~~~
+
+For many applications, this is enough. Modern image models can also use
+reference images, masks, and multi-turn edits to preserve a product, character,
+or style without any training.
+
+A typical first workflow is:
+
+~~~text
+prompt
+→ inspect result
+→ add reference image or mask
+→ edit locally
+→ only then consider training
+~~~
+
+However, prompting and reference images may still fail when we need strong
+repeatability: the same product in hundreds of scenes, a fixed brand style, a
+recurring character, or a specialized visual domain.
+
+## When LoRA Still Makes Sense
+
+LoRA is a lightweight fine-tuning method. Instead of updating all model weights,
+it freezes the base model and learns a small low-rank update:
+
+$$
+\Delta W = BA
+$$
+
+The result is a small adapter that can be loaded on top of the base model.
+
+LoRA is useful when the goal is not just one good image, but a reusable image
+generator with a persistent bias toward a subject, style, or domain.
+
+Good LoRA use cases include:
+
+- a recurring character or mascot
+- a specific product or object
+- a consistent brand or illustration style
+- a domain such as fashion, architecture, product photography, microscopy, or industrial imagery
+- local or private deployment with an open model
+- many lightweight variants of one base model
+
+LoRA is less useful for:
+
+- one-off image generation
+- general image quality
+- factual reasoning
+- precise spatial layout
+- problems that can be solved with masks, reference images, or editing
+
+In other words:
+
+> LoRA is no longer the default answer to "how do I control the model?" It is
+> useful when we need persistent specialization.
+
+## Example Workflows
+
+| Situation | Preferred workflow |
+|---|---|
+| One-off image | prompt + reference image + editing |
+| Product shown in a few scenes | reference image + image-to-image / inpainting |
+| Product or character reused across many scenes | DreamBooth-LoRA or LoRA |
+| Company-wide visual style | style reference images; style LoRA if consistency must hold across many generations |
+| Specialized visual domain | LoRA first, full fine-tuning only if necessary |
+
+Several current tools make this accessible without large budgets. Hugging Face
+Diffusers provides LoRA and DreamBooth-LoRA training examples, including
+FLUX-based workflows. Replicate provides hosted FLUX fine-tuning via web
+interface or API, so users can train a subject or style adapter without managing
+GPU infrastructure.
+
+Useful references:
+
+- Hugging Face Diffusers LoRA: <https://huggingface.co/docs/diffusers/en/training/lora>
+- Hugging Face FLUX QLoRA example: <https://huggingface.co/blog/flux-qlora>
+- Replicate FLUX fine-tuning: <https://replicate.com/docs/get-started/fine-tune-with-flux>
+- Replicate FLUX fine-tuning API: <https://replicate.com/blog/fine-tune-flux-with-an-api>
+
+## Full Fine-Tuning
+
+Full fine-tuning updates many or all model parameters. This gives maximum
+flexibility, but it is expensive and risky. It requires more data, more compute,
+larger model artifacts, and careful evaluation.
+
+It may be appropriate for highly specialized domains such as medical imaging,
+satellite imagery, industrial inspection, or proprietary product imagery. For
+most projects, it should not be the first choice.
+
+A useful decision rule is:
+
+| Situation | Prefer |
+|---|---|
+| quick exploration | prompting |
+| local edit | inpainting / image editing |
+| preserve layout or pose | masks, depth, pose, edges, ControlNet-like conditioning |
+| reuse a subject or product many times | DreamBooth-LoRA / LoRA |
+| reproduce a visual style consistently | style reference images, then LoRA |
+| adapt to a narrow visual domain | LoRA, possibly full fine-tuning later |
+| build a fully specialized generator | full fine-tuning or custom training |
+
+## Evaluating Adapted Models
+
+Adaptation is only useful if it is evaluated. A few cherry-picked images are not
+enough.
+
+For an adapted model, ask:
+
+- Does it preserve the subject, product, or style?
+- Does it still respond to different prompts?
+- Does it overfit to the training examples?
+- Does it reduce diversity?
+- Does it introduce artifacts?
+- Is the improvement large enough to justify maintaining the adapter?
+
+A simple evaluation strategy is to define a fixed prompt suite before training
+and compare:
+
+~~~text
+base model
+vs.
+prompt/reference-image workflow
+vs.
+LoRA-adapted model
+~~~
+
+Visual inspection should be complemented with simple quantitative measures,
+computed over the whole prompt suite and several seeds:
+
+| Question | Possible measure |
+|---|---|
+| Is the subject or style preserved? | image similarity to the reference images, e.g. cosine similarity of DINO or CLIP embeddings |
+| Does it still follow the prompt? | text-image similarity (CLIP score) or a vision-language model as judge |
+| Does it reduce diversity? | average pairwise similarity between images generated with different seeds |
+| Do people prefer it? | blind pairwise comparison against the base model |
+
+These measures are imperfect, as discussed in [Evaluating Generative Models](genai_intro.qmd#sec-genai-intro-eval-task), but they make the comparison reproducible and reveal overfitting that a few cherry-picked examples hide.
+
+This keeps the central question clear:
+
+> Did adaptation solve a real, repeated failure mode?
+
+# Case Study: Novel-Domain Image Synthesis
+
+General-purpose image models are strongest on common visual domains. In medical,
+scientific, or industrial imagery, visual realism is not enough.
+
+Examples:
+
+| Domain | Typical task | Main risk |
+|---|---|---|
+| MRI → CT (see @scharer_improved_2023)| image-to-image translation | anatomy or dose-relevant structure is wrong |
+| solar flares (see @ramunno_solar_2024) | conditional / temporal synthesis | physically implausible flare patterns |
+| industrial defects | rare-defect generation | synthetic artifacts do not match real defects |
+
+Practical workflow:
+
+1. Define why generation is needed.
+2. Start with a supervised domain-specific baseline.
+3. Use generative models when uncertainty, diversity, or augmentation matters.
+4. Condition on the variables that matter: images, masks, metadata, time, sensors.
+5. Evaluate utility, not just realism.
+
+
+## Example: MRI to CT
+
+MRI-to-CT synthesis is a typical image-to-image translation problem.
+
+The goal is not simply to create a plausible CT-like image. The output should
+preserve anatomy and provide meaningful information for the downstream use case.
+
+This suggests a workflow such as:
+
+- collect paired and registered MRI/CT data
+- train a supervised translation model
+- evaluate structural accuracy and downstream usefulness
+- use generative models only if they provide a clear benefit
+
+This is a good example where physical validity matters more than photorealism.
+
+## Example: Solar Activity With and Without Flares
+
+Generating solar images with and without flares is a conditional scientific
+generation problem.
+
+The model may be asked to:
+
+- generate images conditioned on flare class
+- predict future observations from previous frames
+- simulate possible flare-related changes
+- generate rare-event examples for augmentation
+
+Here, temporal information, multi-channel sensor data, and event labels may all
+be important conditioning signals.
+
+Again, the key question is not just whether the generated image looks realistic,
+but whether it is scientifically meaningful and useful for analysis or prediction.
+
+
+# Practical Use, Deployment Choices, and Responsible Use
+
+After understanding latent diffusion, modern multimodal architectures, and
+adaptation methods, the final question is practical:
+
+> How should we actually use these systems in a real project?
+
+For most applied work, we do not train a generative image model from scratch.
+Instead, we choose an access pattern. The main options are hosted APIs,
+enterprise platforms, and open-weight models.
+
+## Choosing an Access Pattern
+
+| Need | Prefer | Why |
+|---|---|---|
+| Fastest prototype | Hosted API | minimal setup, no GPU operations |
+| Strong current model quality | Hosted API | access to frontier or near-frontier models |
+| Internal demo or product experiment | Hosted API or Replicate/fal.ai | quick integration and iteration |
+| Governance, IAM, logging, quotas | Enterprise platform | fits organizational cloud and security workflows |
+| Regulated or sensitive company workflow | Enterprise platform | integrated auditing and access control |
+| Private or sensitive images | Enterprise platform or private deployment | contractual and technical control over data handling |
+| Reproducible experiments | Open-weight model | fixed model versions and controllable inference pipeline |
+| Customization / LoRA | Open-weight model or hosted fine-tuning | access to weights or adapter workflows |
+| Local/offline use | Open-weight model | no dependency on external API availability |
+| Maximum control | Open-weight model | inspectable pipeline, custom schedulers, adapters, safety layers |
+| Lowest operational burden | Hosted API | provider manages infrastructure |
+| Lowest vendor lock-in | Open-weight model | easier to move across infrastructure providers |
+
+The categories are not perfectly separate. For example, Replicate can expose
+open-weight models through a hosted API, and enterprise platforms may provide
+access to both proprietary and open models. Still, the distinction is useful
+because each option makes a different tradeoff between convenience, control,
+governance, cost, and reproducibility.
+
+Note that the category alone does not make a deployment secure. Whether sensitive
+data is adequately protected depends on the contractual terms, the data retention
+and training policies of the provider, the deployment configuration (for example
+the region), and the access controls. An enterprise platform makes these aspects
+easier to manage, but they still have to be checked and configured.
+
+## Three Access Patterns
+
+| Access pattern | Examples | Strengths | Limitations |
+|---|---|---|---|
+| Hosted API | OpenAI, Google, Replicate, fal.ai | fastest setup, strong models, no GPU management | opaque model changes, provider dependency, usage-based cost |
+| Enterprise platform | Vertex AI, Azure, Bedrock | IAM, logging, monitoring, quotas, compliance integration | more setup, cloud/vendor lock-in, sometimes less flexible |
+| Open-weight model | Hugging Face Diffusers, ComfyUI, self-hosted pipelines | control, reproducibility, private deployment, LoRA/fine-tuning | operational burden, GPU cost, licensing and safety responsibility |
+
+A practical rule of thumb:
+
+> Start with a hosted API for exploration, move to an enterprise platform when
+> governance matters, and use open-weight models when control, reproducibility,
+> privacy, or adaptation becomes central.
+
+
+::: {#fig-genai-modern-replicate}
+
+![]({{< meta params.images_path >}}replicate.jpg)
+
+Replicate: a hosted API that provides access to both proprietary and open-weight models, allowing users to choose between convenience and control. [Source](https://replicate.com/).
+:::
+
+
+
+## Hallucination in Image Generation
+
+Hallucination is often discussed for language models, but image models can hallucinate too.
+
+They may invent:
+
+- objects
+- text
+- logos
+- identities
+- physical relationships
+- medical or technical details
+- impossible geometry
+- misleading context
+
+The output may look visually convincing while being factually wrong. For example, a generated product image may include plausible but nonexistent features. A generated street scene may show signs or architecture that never existed. A generated scientific illustration may look authoritative while being anatomically or technically incorrect.
+
+This is why visual plausibility should not be confused with correctness.
+
+
+::: {#fig-genai-modern-luce-rear}
+
+![]({{< meta params.images_path >}}ferrari_rear_nanob2.jpg)
+
+The new electric Ferrari Luce seen from the rear. This image is visually plausible but given the vehicle is electric, it is unlikely to have a visible exhaust pipe. This is an example of a plausible but factually incorrect generated image.
+:::
+
+
+
+## Synthetic Data: Useful but Risky
+
+Synthetic data is an important application of generative models. It can be useful when real data is scarce, labels are expensive, rare cases are underrepresented, or privacy concerns limit data collection.
+
+Examples include:
+
+- generating rare object poses
+- augmenting defect detection datasets
+- simulating unusual lighting conditions
+- creating training examples for early prototypes
+- generating privacy-preserving examples for demonstrations
+
+However, synthetic data also creates risks. If models are trained on increasing amounts of synthetic data without careful filtering, artifacts can be amplified. Diversity can decrease. The generated distribution may drift away from the real data distribution. Models may start learning the mistakes of previous models.
+
+This problem is sometimes discussed as synthetic data pollution or model collapse. Model collapse is, however, not inevitable. It occurs mainly when synthetic data *replaces* real data over successive model generations. If synthetic data is *accumulated* alongside the original real data, the degradation can be avoided, as shown for language models, diffusion models, and VAEs [@gerstgrasser_is_2024]. The exact outcome depends on the data mixture, filtering, training setup, and evaluation procedure, but the general warning is simple: synthetic data should be validated, not assumed to be beneficial.
+
+::: {#fig-genai-deterioration-on-pollution}
+
+![]({{< meta params.images_path >}}deterioration_on_pollution.png)
+
+Example: deterioration of generated image quality under pollution or domain shift. From @alemohammad_self-consuming_2023.
+
+:::
+
+The practical question is therefore not whether synthetic data is good or bad. The practical question is whether a specific synthetic dataset improves performance on the real target distribution.
+
+
+## Bias in Generated Images
+
+Generative models learn from large-scale datasets, and large-scale datasets reflect the biases of the world and the biases of data collection. These biases can appear in generated outputs.
+
+A model may associate certain occupations with certain genders. It may represent beauty, professionalism, wealth, poverty, or danger in stereotyped ways. It may overrepresent some cultures and underrepresent others. It may produce different levels of realism or dignity for different demographic groups.
+
+This is not only a technical issue. It affects how generated images shape expectations, reinforce stereotypes, and influence communication.
+
+::: {#fig-genai-ai-bias-wp-front}
+
+![]({{< meta params.images_path >}}ai_bias_wp_front.png)
+
+AI bias example. Source: Washington Post.
+
+:::
+
+::: {#fig-genai-ai-bias-wp-examples}
+
+![]({{< meta params.images_path >}}ai_bias_wp_examples.png)
+
+Example outputs illustrating biased visual associations. Source: Washington Post.
+
+:::
+
+For practical work, bias evaluation should be tied to the use case. A creative toy application has different risks than a hiring platform, educational tool, public communication campaign, or medical assistant. But in all cases, generated outputs should be inspected critically rather than treated as neutral.
+
+
+## Provenance, Watermarking, and Detection
+
+As synthetic images become more realistic, provenance becomes increasingly important. Provenance asks where an image came from, who created it, whether it was edited, and whether the editing history can be verified.
+
+Relevant questions include:
+
+- Was the image captured by a camera or generated by a model?
+- Was it edited after capture?
+- Which parts were modified?
+- Is there metadata describing the origin?
+- Is there a watermark or content credential?
+- Can the source be cryptographically verified?
+
+::: {#fig-genai-real-or-not-musk}
+
+![]({{< meta params.images_path >}}real_or_not_musk.png)
+
+"Real or Not?" Example of uncertainty around whether an event image is real or synthetic. Source: Spiegel.
+
+:::
+
+There are several possible approaches:
+
+- visible watermarks
+- invisible watermarks
+- metadata-based provenance
+- cryptographic signatures
+- synthetic image detectors
+- content credentials
+
+None of these is perfect. Metadata can be removed. Watermarks can sometimes be attacked. Detectors can fail under distribution shift or adversarial manipulation. Provenance is therefore best understood as a system-level problem rather than a single model-level solution.
+
+A recent example illustrates these limits. In July 2026, Google introduced an AI feature in Google Earth that allowed users to generate images and superimpose them onto satellite views of the real world. Within hours, people used it to create realistic fake scenes of real places: a plane crashing into a Manhattan skyscraper, army tanks on the Golden Gate Bridge, or a bomb crater next to the Washington Monument (see @fig-genai-modern-google-earth-fake). Google paused the feature the next day, "while we work on implementing stronger guardrails".
+
+::: {#fig-genai-modern-google-earth-fake}
+
+![]({{< meta params.images_path >}}google_earth_fake_monument.jpg)
+
+Fake bomb crater next to the Washington Monument, created by a Washington Post reporter with a short prompt in Google Earth's AI image feature. The map labels and the familiar interface lend the fake credibility. [Source](https://www.washingtonpost.com/technology/2026/07/31/see-how-google-earth-let-people-make-fake-scenes-bombings-riots-destruction/): Washington Post.
+
+:::
+
+Notably, the generated images did carry an invisible SynthID watermark. However, when a Washington Post reporter photographed one of the altered images with an iPhone, Google's detector no longer identified it as AI-generated. Even an intact watermark only helps if someone actually checks it — while images are typically viewed and shared within seconds. The example also shows why the context of a generator matters: the fakes inherit the credibility of a source that journalists, governments, and open-source researchers have relied on for years to assess the impact of wars and disasters.
+
+
+## Copyright and Licensing
+
+Generated images also raise copyright and licensing questions. These questions can concern the training data, the model weights, the generated outputs, and any adapters or fine-tuned checkpoints used in the workflow.
+
+Important questions include:
+
+- What data was used to train the model?
+- Is the model license compatible with the intended use?
+- Can outputs be used commercially?
+- Could outputs resemble protected training examples?
+- Are there restrictions on generated content?
+- Are LoRA adapters or fine-tuned models licensed separately?
+- Are reference images owned or licensed by the user?
+
+For professional use, these questions should be addressed explicitly. From an engineering perspective, licensing is part of the model selection process, not an afterthought.
+
+
+## Practical Responsibility Checklist
+
+Before using generated images in a project, it is useful to ask a few basic questions.
+
+First, what is the risk level of the use case? A playful internal prototype is different from a medical, legal, political, or journalistic use case.
+
+Second, could the image mislead people? If so, labeling, provenance, and review become more important.
+
+Third, are there identity, privacy, or consent issues? This matters especially when generating or editing images of people.
+
+Fourth, are there copyright or licensing constraints? This applies to the base model, reference images, generated outputs, and adapters.
+
+Fifth, could the output reinforce stereotypes or biased visual associations? If the output will be public or influence decisions, this needs careful review.
+
+
+## References
+
+::: {#refs}
+:::

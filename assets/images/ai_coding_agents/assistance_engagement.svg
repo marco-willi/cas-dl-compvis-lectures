@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" font-family="Helvetica, Arial, sans-serif">
+  <rect width="640" height="480" fill="#ffffff"/>
+
+  <!-- quadrants -->
+  <rect x="100" y="40"  width="250" height="180" fill="#e3eef8" stroke="#ffffff" stroke-width="4"/>
+  <rect x="350" y="40"  width="250" height="180" fill="#d3ecd9" stroke="#ffffff" stroke-width="4"/>
+  <rect x="100" y="220" width="250" height="180" fill="#f1f1f1" stroke="#ffffff" stroke-width="4"/>
+  <rect x="350" y="220" width="250" height="180" fill="#f8dcdc" stroke="#ffffff" stroke-width="4"/>
+
+  <!-- quadrant labels -->
+  <g text-anchor="middle" fill="#222222">
+    <text x="225" y="115" font-size="17" font-weight="bold">Independent practice</text>
+    <text x="225" y="140" font-size="13">You reason and implement;</text>
+    <text x="225" y="158" font-size="13">AI as tutor gives hints</text>
+
+    <text x="475" y="115" font-size="17" font-weight="bold">Augmentation</text>
+    <text x="475" y="140" font-size="13">AI does much of the work;</text>
+    <text x="475" y="158" font-size="13">you predict, decide, verify</text>
+
+    <text x="225" y="295" font-size="17" font-weight="bold">Disengagement</text>
+    <text x="225" y="320" font-size="13">Little effort,</text>
+    <text x="225" y="338" font-size="13">little help</text>
+
+    <text x="475" y="295" font-size="17" font-weight="bold">Automation</text>
+    <text x="475" y="320" font-size="13">Answer substitution,</text>
+    <text x="475" y="338" font-size="13">"cognitive surrender"</text>
+  </g>
+
+  <!-- axes -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333333"/>
+    </marker>
+  </defs>
+  <line x1="100" y1="400" x2="610" y2="400" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="100" y1="400" x2="100" y2="30"  stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <text x="350" y="440" font-size="16" text-anchor="middle" fill="#222222">Amount of AI assistance</text>
+  <text x="50" y="220" font-size="16" text-anchor="middle" fill="#222222" transform="rotate(-90 50 220)">Your cognitive engagement</text>
+  <text x="110" y="420" font-size="12" fill="#666666">low</text>
+  <text x="590" y="420" font-size="12" fill="#666666" text-anchor="end">high</text>
+  <text x="90" y="395" font-size="12" fill="#666666" text-anchor="end">low</text>
+  <text x="90" y="50" font-size="12" fill="#666666" text-anchor="end">high</text>
+</svg>

@@ -1,0 +1,27 @@
+[
+  {
+    "key": "elephant",
+    "label": "Elephant",
+    "file": "samples/elephant.png"
+  },
+  {
+    "key": "cat",
+    "label": "Cat",
+    "file": "samples/cat.png"
+  },
+  {
+    "key": "shepherd",
+    "label": "German shepherd",
+    "file": "samples/shepherd.png"
+  },
+  {
+    "key": "beagle",
+    "label": "Dog with ball",
+    "file": "samples/beagle.png"
+  },
+  {
+    "key": "car",
+    "label": "Car",
+    "file": "samples/car.png"
+  }
+]
