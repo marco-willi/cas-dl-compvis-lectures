@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generative Processes in 1D</title>
+<!--
+  Interactive demo: generative model families (autoregressive, GAN, VAE, diffusion,
+  flow matching) turn the same 1-D noise into samples of the same bimodal target. No dependencies, no backend,
+  no network requests; works from file:// and on GitHub Pages. Embed in Quarto pages via iframe:
+
+    <iframe src="../../demos/genai_models/generative_paths/index.html?family=fm" width="100%"
+            height="1000" data-auto-height style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: generative processes in 1D"></iframe>
+
+  URL parameters: family = ar | gan | vae | diffusion | fm, view = compare, embed = 1 (one method
+  without tabs, for lecture sections), full = 1 (all options), optional mode = 2d | seq | tokens (ar),
+  reverse | forward (diffusion) or flow | pairs (fm). family=ar2d is short for family=ar&mode=2d. Computation: toy.js. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #5b6472;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    /* Same colors as the lecture figures: noise = orange, data/target = blue. */
+    --noise: #d55e00;
+    --noise-fill: #fbd9c2;
+    --target: #1f4e9c;
+    --target-fill: #dbe4f3;
+    --hist: #6b7280;
+    --accent: #1f4e9c;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: clamp(14px, 1.55vw, 18px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+  }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.8rem; }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  .badge { padding: 0.05rem 0.5rem; border: 1px solid var(--target); border-radius: 1rem; font-size: 0.75rem; color: var(--target); background: var(--target-fill); cursor: help; }
+  .badge.trained { border-color: #8c510a; color: #8c510a; background: #f6e8c3; }
+  .badge.mixed { border-color: var(--muted); color: var(--muted); background: var(--panel); }
+  noscript p { padding: 0.5rem 0.7rem; border: 1px solid var(--noise); border-radius: 0.3rem; background: var(--noise-fill); }
+
+  button, select, input { font: inherit; color: inherit; }
+  button, select {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* Family tabs */
+  .tabs { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0 0 0.5rem; border-bottom: 1px solid var(--line); }
+  .tabs button { margin-bottom: -1px; border-radius: 0.4rem 0.4rem 0 0; border-bottom-color: var(--line); color: var(--muted); }
+  .tabs button[aria-selected="true"] { border-color: var(--line) var(--line) #fff; color: var(--ink); font-weight: 600; background: #fff; }
+
+  /* Controls */
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.2rem; font-size: 0.9rem; }
+  .controls label { color: var(--muted); }
+  .group { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.5rem; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 0.3rem; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; border-left: 1px solid var(--line); }
+  .seg button:first-child { border-left: 0; }
+  .seg button[aria-pressed="true"] { background: var(--target-fill); color: var(--target); font-weight: 600; }
+  input[type="number"] { width: 4.6rem; padding: 0.2rem 0.35rem; border: 1px solid var(--line); border-radius: 0.3rem; font-variant-numeric: tabular-nums; }
+  .check { display: flex; align-items: center; gap: 0.3rem; }
+
+  /* Progress */
+  .progress { display: grid; grid-template-columns: auto auto 1fr 8.5rem; align-items: center; gap: 0.5rem; margin: 0.6rem 0 0; font-size: 0.9rem; }
+  .progress label { color: var(--muted); }
+  .progress input[type="range"] { width: 100%; accent-color: var(--accent); }
+  .progress output { font-variant-numeric: tabular-nums; }
+  #play { min-width: 4.6rem; }
+
+  /* Plot */
+  .plot { margin: 0.5rem 0 0; padding: 0.4rem 0.5rem 0.5rem; border-radius: 0.4rem; background: var(--panel); }
+  .plot svg { display: block; width: 100%; height: auto; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  .plot svg.drag { touch-action: none; }
+  .plot text { font-family: inherit; fill: var(--muted); font-size: 12px; }
+  .plot text.title { fill: var(--ink); font-size: 12.5px; font-weight: 600; }
+  .legend-list { display: flex; flex-wrap: wrap; gap: 0.2rem 1.1rem; margin: 0.3rem 0 0; padding: 0; list-style: none; font-size: 0.8rem; color: var(--muted); }
+  .swatch { display: inline-block; width: 1rem; height: 0.75rem; margin-right: 0.3rem; vertical-align: -0.08rem; }
+  .swatch.noise { background: var(--noise-fill); border-top: 2px solid var(--noise); }
+  .swatch.target { background: var(--target-fill); border-top: 2px solid var(--target); }
+  .swatch.hist { background: #c9ccd2; border: 1px solid var(--hist); }
+  .swatch.marg { height: 0; border-top: 2px dashed var(--target); vertical-align: 0.2rem; }
+  .swatch.paths { background: linear-gradient(90deg, #6a3d9a, #1b9e77, #d4a017); }
+  .swatch.heat { background: linear-gradient(90deg, #fff, #7d9ccc); }
+  .swatch.field { height: 0; border-top: 2px solid #8a919c; vertical-align: 0.2rem; }
+  .swatch.probe { height: 0; border-top: 3px solid var(--noise); vertical-align: 0.2rem; }
+  .swatch.tokbar { background: #c7d3ea; border: 1px solid var(--target); }
+  .swatch.uniform { background: repeating-linear-gradient(90deg, #eef0f3 0 4px, #dfe3e9 4px 8px); border: 1px solid #9aa1ab; }
+  .swatch.disc { height: 0; border-top: 2px dashed #8c510a; vertical-align: 0.2rem; }
+  .swatch.gcurve { height: 0; border-top: 3px solid #111; vertical-align: 0.2rem; }
+  .swatch.q { background: #e4d7f0; border-top: 2px solid #6a3d9a; }
+  .swatch.cmpA { height: 0; border-top: 3px solid #6a3d9a; vertical-align: 0.2rem; }
+  .swatch.cmpB { height: 0; border-top: 3px solid #1b9e77; vertical-align: 0.2rem; }
+  .swatch.dec { background: #d9dde5; border-top: 2px solid #444; }
+  .swatch.cond { background: var(--target-fill); border-top: 2px solid var(--target); }
+  .swatch.margdash { height: 0; border-top: 2px dashed #6b7280; vertical-align: 0.2rem; }
+  .swatch.dots { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #444; vertical-align: 0.02rem; }
+
+  .trace { margin: 0.3rem 0 0; font-size: 0.85rem; min-height: 1.2em; }
+  .trace button { padding: 0 0.4rem; font-size: 0.8rem; }
+
+  /* Inset (flow-matching probe) */
+  .inset { display: grid; grid-template-columns: minmax(0, 18rem) 1fr; gap: 0.8rem; align-items: center; margin: 0.6rem 0 0; padding: 0.4rem 0.6rem; border-radius: 0.4rem; background: var(--panel); font-size: 0.85rem; }
+  .inset svg { display: block; width: 100%; height: auto; }
+  .inset text { font-family: inherit; fill: var(--muted); font-size: 12px; }
+  .inset p { margin: 0.2rem 0; }
+
+  .run { color: var(--muted); font-size: 0.85rem; }
+
+  .compare-link { margin: -0.3rem 0 0.4rem; text-align: right; font-size: 0.85rem; }
+  button.link { padding: 0; border: 0; background: none; color: var(--target); text-decoration: underline; cursor: pointer; }
+  button.link[aria-current="true"] { font-weight: 600; text-decoration: none; }
+  a.link { color: var(--target); }
+  /* Embedded in a lecture section (?embed=1): one method, no tabs. */
+  body.embed > header, body.embed .tabs, body.embed #compare-link { display: none; }
+  body.embed .compare-link { margin-top: 0; }
+
+  /* Lecture template: method head, guide, collapsible panels */
+  .method-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.7rem; margin: 0.2rem 0 0.5rem; }
+  .method-head h2 { margin: 0; font-size: 1.05rem; }
+  .question { flex-basis: 100%; margin: 0; font-size: 1rem; }
+  .primary-extra { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; margin: 0.4rem 0 0; font-size: 0.9rem; }
+  .guide { display: grid; grid-template-columns: 5.2rem 1fr; gap: 0.25rem 0.6rem; margin: 0.6rem 0 0; padding: 0.5rem 0.7rem; border-left: 4px solid var(--target); background: #f1f5fb; font-size: 0.9rem; }
+  .guide dt { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; color: var(--target); padding-top: 0.15rem; }
+  .guide dd { margin: 0; }
+  details.panel { margin: 0.6rem 0 0; border: 1px solid var(--line); border-radius: 0.4rem; }
+  details.panel > summary { padding: 0.35rem 0.7rem; cursor: pointer; color: var(--muted); font-size: 0.9rem; }
+  details.panel[open] > summary { border-bottom: 1px solid var(--line); }
+  .panel-body { padding: 0.5rem 0.7rem 0.6rem; }
+  .panel-body .controls { flex-direction: column; align-items: flex-start; gap: 0.55rem; }
+  .caption { display: block; flex-basis: 100%; margin: -0.1rem 0 0; font-size: 0.78rem; color: var(--muted); }
+  .diag { margin: 0; padding-left: 1.1rem; font-size: 0.88rem; }
+  .diag li { margin: 0.15rem 0; }
+
+  .fine { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--muted); }
+
+  @media (max-width: 620px) {
+    body { padding: 0.6rem; }
+    .progress { grid-template-columns: auto 1fr; }
+    .progress label { display: none; }
+    .progress output { grid-column: 1 / -1; }
+    .inset { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Generative Processes in 1D</h1>
+</header>
+
+<noscript><p>This demo needs JavaScript. It shows an autoregressive model, a GAN, a VAE, diffusion and
+flow matching turning random numbers into samples of a bimodal distribution with modes at 2 and 7.</p></noscript>
+
+<div class="tabs" role="tablist" aria-label="Model family">
+  <button type="button" role="tab" id="tab-ar" data-family="ar" aria-controls="family-controls">Autoregressive</button>
+  <button type="button" role="tab" id="tab-gan" data-family="gan" aria-controls="family-controls">GAN</button>
+  <button type="button" role="tab" id="tab-vae" data-family="vae" aria-controls="family-controls">VAE</button>
+  <button type="button" role="tab" id="tab-diffusion" data-family="diffusion" aria-controls="family-controls">Diffusion</button>
+  <button type="button" role="tab" id="tab-fm" data-family="fm" aria-controls="family-controls">Flow matching</button>
+</div>
+
+<p class="compare-link"><button type="button" class="link" id="compare-link">Compare final distributions →</button>
+  <a class="link" id="open-full" target="_blank" rel="noopener" hidden>Open all methods in a new tab ↗</a></p>
+
+<div class="method-head">
+  <h2 id="method-name"></h2>
+  <span class="badge" id="badge"></span>
+  <p class="question" id="question"></p>
+</div>
+
+
+<figure class="plot">
+  <svg id="plot" viewBox="0 0 800 434" role="img" aria-labelledby="plot-desc"></svg>
+  <p id="plot-desc" hidden></p>
+  <ul class="legend-list" id="legend"></ul>
+  <p class="trace" id="trace" aria-live="polite"></p>
+</figure>
+
+<div class="progress" id="progress-row">
+  <button id="play" type="button">▶ Play</button>
+  <label for="cursor" id="cursor-label">Position</label>
+  <input id="cursor" type="range" min="0" max="1" step="1">
+  <output id="cursor-out" for="cursor"></output>
+</div>
+<div class="primary-extra" id="primary-extra">
+  <label class="check" id="dist-toggle"><input id="show-dist" type="checkbox"> Show distribution</label>
+</div>
+
+<dl class="guide" id="guide"></dl>
+
+<div class="inset" id="fm-inset" hidden>
+  <svg id="fm-probe" viewBox="0 0 280 200" role="img" aria-labelledby="fm-probe-desc"></svg>
+  <div>
+    <p><strong>What the network learns at one point (x, t)</strong></p>
+    <p id="fm-probe-desc"></p>
+    <p>Click anywhere in the plot to move the point.</p>
+  </div>
+</div>
+
+<details class="panel" id="advanced">
+  <summary>Advanced</summary>
+  <div class="panel-body" id="advanced-body">
+<div class="controls" id="family-controls" role="tabpanel">
+  <div class="group" data-for="ar" data-primary>
+    <span class="seg" data-key="mode">
+      <button type="button" data-value="2d">2D: x₁, then x₂</button>
+      <button type="button" data-value="seq">Sequence</button>
+      <button type="button" data-value="tokens">1D: two tokens</button>
+    </span>
+  </div>
+  <div class="group" data-for="ar" data-mode="tokens" data-primary>
+    <button id="ar-next" type="button">Next token</button>
+  </div>
+  <div class="group" data-for="ar" data-mode="seq" data-primary>
+    <button id="seq-next" type="button">Next value</button>
+  </div>
+  <div class="group" data-for="ar" data-mode="2d" data-primary>
+    <button id="ar2d-one" type="button">Next value</button>
+  </div>
+  <div class="group" data-for="ar" data-mode="tokens">
+    <label for="tau">Temperature</label>
+    <select id="tau"></select>
+    <small class="caption">Lower: likely tokens become even more likely, so each mode gets narrower. Higher: flatter probabilities.</small>
+  </div>
+  <div class="group" data-for="ar" data-mode="tokens">
+    <label class="check"><input id="ar-gauges" type="checkbox"> Show the random numbers</label>
+    <small class="caption">Each token is chosen by a uniform random number u falling into one segment of the cumulative probabilities.</small>
+  </div>
+  <div class="group" data-for="ar" data-mode="seq">
+    <button id="seq-clear" type="button">Clear finished sequences</button>
+    <small class="caption">Finished sequences stay in grey so that you can compare where they went.</small>
+  </div>
+  <div class="group" data-for="ar" data-mode="2d">
+    <button id="ar2d-many" type="button">Sample 100</button>
+    <button id="ar2d-reset" type="button">Clear samples</button>
+  </div>
+
+  <div class="group" data-for="gan" data-mode="generate" data-primary>
+    <button id="gan-generate" type="button">Generate another sample</button>
+  </div>
+  <div class="group" data-for="gan">
+    <label>View</label>
+    <span class="seg" data-key="mode">
+      <button type="button" data-value="generate">Generation</button>
+      <button type="button" data-value="training">Training dynamics</button>
+    </span>
+    <small class="caption">Training dynamics: how G changes during training (not a step of generation).</small>
+  </div>
+  <div class="group" data-for="gan" data-mode="training">
+    <label>Training run</label>
+    <span class="seg" data-key="run">
+      <button type="button" data-value="standard">standard</button>
+      <button type="button" data-value="unstable">unstable (learning rate × 10)</button>
+    </span>
+  </div>
+
+  <div class="group" data-for="vae" data-mode="generate" data-primary id="vae-primary">
+    <button id="vae-again" type="button">Sample x again</button>
+    <button id="vae-newz" type="button">New z</button>
+  </div>
+  <div class="group" data-for="vae">
+    <label>View</label>
+    <span class="seg" data-key="mode">
+      <button type="button" data-value="generate">Generation z → x</button>
+      <button type="button" data-value="infer">Inference x → z (encoder)</button>
+    </span>
+    <small class="caption">Inference: the encoder maps an observed x to a distribution over z.</small>
+  </div>
+  <div class="group" data-for="vae" data-mode="generate">
+    <label class="check"><input id="vae-noise" type="checkbox"> Decoder noise</label>
+    <small class="caption">Off: x is the decoder mean, so the same z always gives the same x.</small>
+  </div>
+
+  <div class="group" data-for="diffusion">
+    <label>View</label>
+    <span class="seg" data-key="mode">
+      <button type="button" data-value="reverse">Generation (reverse)</button>
+      <button type="button" data-value="forward">Forward noising (training)</button>
+    </span>
+    <small class="caption">Forward noising is the training direction: data are mixed with more and more noise.</small>
+  </div>
+  <div class="group" data-for="diffusion" data-mode="reverse">
+    <label for="sampler">Sampler</label>
+    <select id="sampler">
+      <option value="ddpm">stochastic (DDPM)</option>
+      <option value="ddim">deterministic (DDIM)</option>
+      <option value="ode">probability-flow ODE</option>
+    </select>
+    <small class="caption">Deterministic: the same start always gives the same sample.</small>
+  </div>
+  <div class="group" data-for="diffusion">
+    <label for="diff-steps">Steps</label>
+    <select id="diff-steps"></select>
+    <small class="caption" id="steps-caption"></small>
+  </div>
+  <div class="group" data-for="diffusion" data-mode="reverse" data-sampler="ddpm">
+    <button id="rerun" type="button">Re-run sampler (same x<sub>T</sub>)</button>
+    <span class="run" id="run-count"></span>
+    <small class="caption">Same starting noise, new noise during sampling. The highlighted sample's end points are listed below the plot.</small>
+  </div>
+
+  <div class="group" data-for="fm" data-primary>
+    <span class="seg" data-key="mode">
+      <button type="button" data-value="pairs">Training</button>
+      <button type="button" data-value="flow">Sampling</button>
+    </span>
+  </div>
+  <div class="group" data-for="fm" data-mode="flow">
+    <label for="fm-steps">Euler steps</label>
+    <select id="fm-steps"></select>
+    <small class="caption" id="fm-steps-caption"></small>
+  </div>
+  <div class="group" data-for="fm" data-mode="pairs">
+    <button id="fm-resample" type="button">Resample training pairs</button>
+    <small class="caption">New random noise–data pairs. The average direction at the probe stays almost the same.</small>
+  </div>
+  <label class="check group" data-for="fm"><input id="fm-field" type="checkbox"> Velocity field arrows</label>
+
+  <div class="group" id="seed-group">
+    <label for="seed">Noise seed</label>
+    <input id="seed" type="number" min="1" max="99999" step="1" inputmode="numeric">
+    <button id="new-seed" type="button">New</button>
+  </div>
+  <label class="check" id="density-group"><input id="show-density" type="checkbox"> Density heat map</label>
+</div>
+</div>
+</details>
+
+<details class="panel" id="diagnostics">
+  <summary>Diagnostics</summary>
+  <div class="panel-body">
+<ul class="diag" id="diag-list"></ul>
+
+<p class="fine">W<sub>1</sub> (Wasserstein-1) is the average distance probability mass has to be moved to turn
+   the sample distribution into the target. 0 is perfect, but even perfect samples reach 0.02–0.09 because there
+   are only 4,000 of them.</p>
+  </div>
+</details>
+
+<script src="toy.js"></script>
+<script src="content.js"></script>
+<script src="data/models.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

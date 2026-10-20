@@ -578,9 +578,9 @@ window.Quarto = {
 </div>
 <section id="motivation" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="motivation"><span class="header-section-number">1</span> Motivation</h2>
-<p>AI coding assistants have evolved rapidly: from autocompleting a single line, to generating whole functions from a comment, to <strong>agents</strong> that work autonomously on an entire codebase. An agent receives a task in natural language (“fine-tune a DINOv2 model on my camera trap images”), inspects the repository and the data, writes code, runs it, reads error messages and outputs, and iterates.</p>
-<p>For a course like this one, this creates a tension. AI tools can help you learn faster, explore more, and build far more ambitious projects than would otherwise fit into the available time. At the same time, an agent can produce a complete, working project without you having understood any of it. <strong>Accomplishing more does not automatically mean learning more.</strong> Effective use depends on which cognitive activities you delegate and which you keep.</p>
-<p>The tools also change <strong>where expertise is needed</strong>. Writing a data loader from scratch becomes less central for many tasks; problem formulation, experimental design, evaluation, and critical interpretation become more important. Implementation skills do not become obsolete: understanding software and model internals remains essential to diagnose subtle failures. As discussed in the <a href="../../pages/lectures/practical.html">Training Guide</a>, training neural networks <strong>fails silently</strong> — and recognizing such failures requires exactly the knowledge this course aims to build.</p>
+<p>AI coding assistants have evolved rapidly: from autocompleting a single line, to generating whole functions from a comment, to <strong>agents</strong> that work autonomously on an entire codebase. An agent might receive a complex task in natural language (“fine-tune a DINOv3 model on my camera trap images”), inspects the repository and the data, writes code, runs it, reads error messages and outputs, and iterates.</p>
+<p>Using AI tools in education obviously has benefits and risks. AI tools can help learn faster, explore more, and build far more ambitious projects than would otherwise be possible given the available time. At the same time, an agent can produce a complete, working project without any understanding. <strong>Accomplishing more does not automatically mean learning more.</strong> Effective use depends on which cognitive activities you delegate and which you keep.</p>
+<p>In practice AI tools also change <strong>where expertise is needed</strong>. Writing a data loader from scratch becomes less important; problem formulation, experimental design, evaluation, and critical interpretation however remain cruicial. Implementation skills do not become obsolete: understanding software and model internals is essential to diagnose subtle failures. As discussed in the <a href="../../pages/lectures/practical.html">Training Guide</a>, training neural networks <strong>fails silently</strong> — and recognizing such failures requires exactly the knowledge this course aims to teach.</p>
 <p>This page first focuses on how to use AI for learning, then on how to use coding agents in applied projects, and finally on how to verify results — your own and the agent’s.</p>
 </section>
 <section id="what-is-an-ai-coding-agent" class="level2" data-number="2">
@@ -598,7 +598,7 @@ window.Quarto = {
 <li><strong>Agentic software engineering</strong>: navigating a repository, making changes, running checks, and iterating toward a goal (“add mixed-precision training and make sure all tests pass”).</li>
 <li><strong>Agent-assisted scientific work</strong>: helping to formulate hypotheses, design experiments, identify methodological risks, and interpret results (“investigate whether the dataset contains correlated observations and recommend a split”).</li>
 </ul>
-<p>The same tool can also act as a tutor that explains, asks questions, and gives hints — which leads to the central question of this page: what role should AI play when the goal is learning?</p>
+<p>The same tool can also act as a tutor that explains, asks questions, and gives hints. This leads to the central question: what role should AI play when the goal is learning?</p>
 </section>
 <section id="ai-for-learning" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="ai-for-learning"><span class="header-section-number">3</span> AI for Learning</h2>
@@ -607,9 +607,10 @@ window.Quarto = {
 <p>Consider two ways of spending 40 minutes:</p>
 <ul>
 <li>Debugging a tensor shape mismatch in a PyTorch training loop.</li>
-<li>Investigating why a model trained on randomly split camera trap images fails at a new camera location.</li>
+<li>Investigating why a model trained on camera trap images fails at a new camera location.</li>
 </ul>
-<p>It is tempting to call the first “incidental” and the second “productive” effort. But debugging a shape mismatch can be an excellent learning experience: it reveals how convolutional layers transform spatial dimensions, how batches are represented, or how broadcasting works. Whether effort is productive is <strong>not a property of the task, but of the learning objective</strong>:</p>
+<p>It is tempting to call the first a waste of time and the second a “productive” effort. But debugging a shape mismatch can be a good learning experience: it reveals how convolutional layers transform spatial dimensions, how batches are represented, or how broadcasting works. Personally, I used to write comments in the code to document input and output shapes which helped me understand and debug the flow of data through a neural network.</p>
+<p>Whether effort is productive is <strong>not a property of the task, but of the learning objective</strong>:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -669,7 +670,7 @@ window.Quarto = {
 </ul>
 <p>These are best read as a framework for designing good learning practices — not as proof that AI inevitably reduces learning. At the same time, the report notes that “the potential of these technologies to augment work across campus is immense”.</p>
 <p>Universities worldwide face this tension (<a href="https://www.nytimes.com/2026/09/15/us/universities-ai-warnings-enthusiasm.html">The New York Times, 2026</a>): AI proficiency is increasingly seen as a professional necessity, yet education aims to develop exactly the reasoning that can be delegated. The same reporting cites a study of 26,000 secondary-school students in which AI adoption raised homework scores by 18% but lowered scores on secure exams by 20% — performing well <em>with</em> AI is not the same as having learned. Ohio State’s president frames the central question as “What is OK to offload to A.I., and what is not? The answer to that depends on the field and depends on your stage of learning.” The University of Sydney’s “two-lane approach” responds by combining both: some assessments under secure conditions without AI, others that <em>require</em> AI use.</p>
-<p>This course follows the same idea: you should learn both to solve selected problems on your own and to solve more ambitious problems effectively with AI.</p>
+<p>My recommendation is to strike a balance: learn both to solve selected problems on your own and to solve more ambitious problems effectively with AI.</p>
 </section>
 <section id="choosing-the-level-of-ai-assistance" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="choosing-the-level-of-ai-assistance"><span class="header-section-number">3.3</span> Choosing the Level of AI Assistance</h3>
@@ -1764,489 +1765,492 @@ Spracklen, Joseph, Raveen Wijewickrama, A. H. M. Nazmus Sakib, Anindya Maiti, Bi
 <span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## Motivation</span></span>
 <span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>AI coding assistants have evolved rapidly: from autocompleting a single line, to generating whole functions from a comment, to **agents** that work autonomously on an entire codebase. An agent receives a task in natural language ("fine-tune a DINOv2 model on my camera trap images"), inspects the repository and the data, writes code, runs it, reads error messages and outputs, and iterates.</span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>AI coding assistants have evolved rapidly: from autocompleting a single line, to generating whole functions from a comment, to **agents** that work autonomously on an entire codebase. An agent might receive a complex task in natural language ("fine-tune a DINOv3 model on my camera trap images"), inspects the repository and the data, writes code, runs it, reads error messages and outputs, and iterates.</span>
 <span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>For a course like this one, this creates a tension. AI tools can help you learn faster, explore more, and build far more ambitious projects than would otherwise fit into the available time. At the same time, an agent can produce a complete, working project without you having understood any of it. **Accomplishing more does not automatically mean learning more.** Effective use depends on which cognitive activities you delegate and which you keep.</span>
-<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>The tools also change **where expertise is needed**. Writing a data loader from scratch becomes less central for many tasks; problem formulation, experimental design, evaluation, and critical interpretation become more important. Implementation skills do not become obsolete: understanding software and model internals remains essential to diagnose subtle failures. As discussed in the [Training Guide](../lectures/practical.qmd), training neural networks **fails silently** — and recognizing such failures requires exactly the knowledge this course aims to build.</span>
-<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>This page first focuses on how to use AI for learning, then on how to use coding agents in applied projects, and finally on how to verify results — your own and the agent's.</span>
-<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>Using AI tools in education obviously has benefits and risks. AI tools can help learn faster, explore more, and build far more ambitious projects than would otherwise be possible given the available time. At the same time, an agent can produce a complete, working project without any understanding.</span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>**Accomplishing more does not automatically mean learning more.** Effective use depends on which cognitive activities you delegate and which you keep.</span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>In practice AI tools also change **where expertise is needed**. Writing a data loader from scratch becomes less important; problem formulation, experimental design, evaluation, and critical interpretation however remain cruicial. Implementation skills do not become obsolete: understanding software and model internals is essential to diagnose subtle failures. As discussed in the [Training Guide](../lectures/practical.qmd), training neural networks **fails silently** — and recognizing such failures requires exactly the knowledge this course aims to teach.</span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>This page first focuses on how to use AI for learning, then on how to use coding agents in applied projects, and finally on how to verify results — your own and the agent's.</span>
 <span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## What is an AI Coding Agent?</span></span>
-<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>A coding agent combines a large language model (LLM) with **tools** and a **loop**. In contrast to a chat interface that only returns text, an agent can act on its environment:</span>
-<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Read**: inspect files, search the codebase, read documentation and dataset metadata</span>
-<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Write**: create and edit files</span>
-<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Execute**: run scripts, tests, experiments, shell commands, install packages</span>
-<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Iterate**: observe outputs (a stack trace, a metric, a plot) and decide on the next step</span>
-<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>An agent can support three different activities:</span>
-<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Code generation**: producing code that implements a requested operation ("write a function computing IoU").</span>
-<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Agentic software engineering**: navigating a repository, making changes, running checks, and iterating toward a goal ("add mixed-precision training and make sure all tests pass").</span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Agent-assisted scientific work**: helping to formulate hypotheses, design experiments, identify methodological risks, and interpret results ("investigate whether the dataset contains correlated observations and recommend a split").</span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>The same tool can also act as a tutor that explains, asks questions, and gives hints — which leads to the central question of this page: what role should AI play when the goal is learning?</span>
-<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## What is an AI Coding Agent?</span></span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>A coding agent combines a large language model (LLM) with **tools** and a **loop**. In contrast to a chat interface that only returns text, an agent can act on its environment:</span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Read**: inspect files, search the codebase, read documentation and dataset metadata</span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Write**: create and edit files</span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Execute**: run scripts, tests, experiments, shell commands, install packages</span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Iterate**: observe outputs (a stack trace, a metric, a plot) and decide on the next step</span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>An agent can support three different activities:</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Code generation**: producing code that implements a requested operation ("write a function computing IoU").</span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Agentic software engineering**: navigating a repository, making changes, running checks, and iterating toward a goal ("add mixed-precision training and make sure all tests pass").</span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Agent-assisted scientific work**: helping to formulate hypotheses, design experiments, identify methodological risks, and interpret results ("investigate whether the dataset contains correlated observations and recommend a split").</span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>The same tool can also act as a tutor that explains, asks questions, and gives hints. This leads to the central question: what role should AI play when the goal is learning?</span>
 <span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## AI for Learning</span></span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a><span class="fu">### Learning vs. Productivity</span></span>
-<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>Consider two ways of spending 40 minutes:</span>
-<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Debugging a tensor shape mismatch in a PyTorch training loop.</span>
-<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Investigating why a model trained on randomly split camera trap images fails at a new camera location.</span>
-<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>It is tempting to call the first "incidental" and the second "productive" effort. But debugging a shape mismatch can be an excellent learning experience: it reveals how convolutional layers transform spatial dimensions, how batches are represented, or how broadcasting works. Whether effort is productive is **not a property of the task, but of the learning objective**:</span>
-<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Task <span class="pp">|</span> If the learning goal is… <span class="pp">|</span> Appropriate AI assistance <span class="pp">|</span></span>
-<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Fix a tensor shape mismatch <span class="pp">|</span> Understand tensor shapes <span class="pp">|</span> Hints and diagnostic questions <span class="pp">|</span></span>
-<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Fix a tensor shape mismatch <span class="pp">|</span> Compare model architectures <span class="pp">|</span> Let AI fix it, then inspect the change <span class="pp">|</span></span>
-<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Implement a CNN <span class="pp">|</span> Learn CNN mechanics <span class="pp">|</span> Attempt the implementation yourself <span class="pp">|</span></span>
-<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Implement a CNN <span class="pp">|</span> Explore generalization <span class="pp">|</span> Delegate routine implementation <span class="pp">|</span></span>
-<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Evaluate a classifier <span class="pp">|</span> Understand evaluation metrics <span class="pp">|</span> Compute examples by hand <span class="pp">|</span></span>
-<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Evaluate a classifier <span class="pp">|</span> Compare pretrained backbones <span class="pp">|</span> Delegate metric computation, validate the protocol yourself <span class="pp">|</span></span>
-<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>A consequence that is particularly relevant in continuing education: participants with different backgrounds may appropriately use **different levels of assistance on the same exercise**. A software engineer may delegate the training loop and focus on evaluation design; someone new to Python may learn most by writing the training loop with AI as a tutor.</span>
-<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="fu">### What Do We Know?</span></span>
-<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>Empirical evidence on AI and learning is still limited and mixed. In a randomized controlled trial with 120 university students at a single institution, those who used ChatGPT as a study aid scored lower on a surprise retention test 45 days later (57.5% vs. 68.5% correct) than those who used traditional study methods <span class="co">[</span><span class="ot">@barcaui_chatgpt_2025</span><span class="co">]</span>. In contrast, a study with novice programmers found that access to an AI code generator improved code-authoring performance without a significant penalty on later post-tests <span class="co">[</span><span class="ot">@kazemitabaar_studying_2023</span><span class="co">]</span>. Neither study evaluates autonomous coding agents, and both populations differ from this course — the results should not be generalized lightly.</span>
-<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a>Beyond experimental findings, educational institutions are formulating **pedagogical recommendations**. The [MIT Ad Hoc Committee on AI Use in Teaching, Learning, and Research Training (2026)](https://aiandeducation.mit.edu/report/) proposes the principle of **augmentation, not automation**: AI should enhance curiosity, creativity, and learning rather than automate them. The report names several concerns:</span>
-<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Illusion of learning**: obtaining a correct answer from a chatbot feels like having learned.</span>
-<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cognitive surrender**: falling back on AI at the first hint of struggle.</span>
-<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Displaced social learning**: AI interaction replacing study groups, peer discussions, and contact with instructors.</span>
-<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a>These are best read as a framework for designing good learning practices — not as proof that AI inevitably reduces learning. At the same time, the report notes that "the potential of these technologies to augment work across campus is immense".</span>
-<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>Universities worldwide face this tension (<span class="co">[</span><span class="ot">The New York Times, 2026</span><span class="co">](https://www.nytimes.com/2026/09/15/us/universities-ai-warnings-enthusiasm.html)</span>): AI proficiency is increasingly seen as a professional necessity, yet education aims to develop exactly the reasoning that can be delegated. The same reporting cites a study of 26,000 secondary-school students in which AI adoption raised homework scores by 18% but lowered scores on secure exams by 20% — performing well *with* AI is not the same as having learned. Ohio State's president frames the central question as "What is OK to offload to A.I., and what is not? The answer to that depends on the field and depends on your stage of learning." The University of Sydney's "two-lane approach" responds by combining both: some assessments under secure conditions without AI, others that *require* AI use.</span>
-<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>This course follows the same idea: you should learn both to solve selected problems on your own and to solve more ambitious problems effectively with AI.</span>
-<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a><span class="fu">### Choosing the Level of AI Assistance</span></span>
-<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a>AI can take on different roles, which differ both in autonomy and in pedagogical purpose:</span>
-<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
-<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a>**Level 1 — AI as Tutor**</span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a><span class="fu">## AI for Learning</span></span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### Learning vs. Productivity</span></span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>Consider two ways of spending 40 minutes:</span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Debugging a tensor shape mismatch in a PyTorch training loop.</span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Investigating why a model trained on camera trap images fails at a new camera location.</span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>It is tempting to call the first a waste of time and the second a "productive" effort. But debugging a shape mismatch can be a good learning experience: it reveals how convolutional layers transform spatial dimensions, how batches are represented, or how broadcasting works. Personally, I used to write comments in the code to document input and output shapes which helped me understand and debug the flow of data through a neural network.</span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a> Whether effort is productive is **not a property of the task, but of the learning objective**:</span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Task <span class="pp">|</span> If the learning goal is… <span class="pp">|</span> Appropriate AI assistance <span class="pp">|</span></span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Fix a tensor shape mismatch <span class="pp">|</span> Understand tensor shapes <span class="pp">|</span> Hints and diagnostic questions <span class="pp">|</span></span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Fix a tensor shape mismatch <span class="pp">|</span> Compare model architectures <span class="pp">|</span> Let AI fix it, then inspect the change <span class="pp">|</span></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Implement a CNN <span class="pp">|</span> Learn CNN mechanics <span class="pp">|</span> Attempt the implementation yourself <span class="pp">|</span></span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Implement a CNN <span class="pp">|</span> Explore generalization <span class="pp">|</span> Delegate routine implementation <span class="pp">|</span></span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Evaluate a classifier <span class="pp">|</span> Understand evaluation metrics <span class="pp">|</span> Compute examples by hand <span class="pp">|</span></span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Evaluate a classifier <span class="pp">|</span> Compare pretrained backbones <span class="pp">|</span> Delegate metric computation, validate the protocol yourself <span class="pp">|</span></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>A consequence that is particularly relevant in continuing education: participants with different backgrounds may appropriately use **different levels of assistance on the same exercise**. A software engineer may delegate the training loop and focus on evaluation design; someone new to Python may learn most by writing the training loop with AI as a tutor.</span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### What Do We Know?</span></span>
+<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a>Empirical evidence on AI and learning is still limited and mixed. In a randomized controlled trial with 120 university students at a single institution, those who used ChatGPT as a study aid scored lower on a surprise retention test 45 days later (57.5% vs. 68.5% correct) than those who used traditional study methods <span class="co">[</span><span class="ot">@barcaui_chatgpt_2025</span><span class="co">]</span>. In contrast, a study with novice programmers found that access to an AI code generator improved code-authoring performance without a significant penalty on later post-tests <span class="co">[</span><span class="ot">@kazemitabaar_studying_2023</span><span class="co">]</span>. Neither study evaluates autonomous coding agents, and both populations differ from this course — the results should not be generalized lightly.</span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a>Beyond experimental findings, educational institutions are formulating **pedagogical recommendations**. The [MIT Ad Hoc Committee on AI Use in Teaching, Learning, and Research Training (2026)](https://aiandeducation.mit.edu/report/) proposes the principle of **augmentation, not automation**: AI should enhance curiosity, creativity, and learning rather than automate them. The report names several concerns:</span>
+<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Illusion of learning**: obtaining a correct answer from a chatbot feels like having learned.</span>
+<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cognitive surrender**: falling back on AI at the first hint of struggle.</span>
+<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Displaced social learning**: AI interaction replacing study groups, peer discussions, and contact with instructors.</span>
+<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>These are best read as a framework for designing good learning practices — not as proof that AI inevitably reduces learning. At the same time, the report notes that "the potential of these technologies to augment work across campus is immense".</span>
+<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>Universities worldwide face this tension (<span class="co">[</span><span class="ot">The New York Times, 2026</span><span class="co">](https://www.nytimes.com/2026/09/15/us/universities-ai-warnings-enthusiasm.html)</span>): AI proficiency is increasingly seen as a professional necessity, yet education aims to develop exactly the reasoning that can be delegated. The same reporting cites a study of 26,000 secondary-school students in which AI adoption raised homework scores by 18% but lowered scores on secure exams by 20% — performing well *with* AI is not the same as having learned. Ohio State's president frames the central question as "What is OK to offload to A.I., and what is not? The answer to that depends on the field and depends on your stage of learning." The University of Sydney's "two-lane approach" responds by combining both: some assessments under secure conditions without AI, others that *require* AI use.</span>
+<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a>My recommendation is to strike a balance: learn both to solve selected problems on your own and to solve more ambitious problems effectively with AI.</span>
+<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a><span class="fu">### Choosing the Level of AI Assistance</span></span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a>AI can take on different roles, which differ both in autonomy and in pedagogical purpose:</span>
 <span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a>You do the reasoning and the implementation. The AI asks questions, explains, and gives incremental hints.</span>
-<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a>*Best for*: unfamiliar concepts and fundamental techniques.</span>
-<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
+<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a>**Level 1 — AI as Tutor**</span>
+<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a>You do the reasoning and the implementation. The AI asks questions, explains, and gives incremental hints.</span>
 <span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
-<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a>**Level 2 — AI as Collaborator**</span>
+<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a>*Best for*: unfamiliar concepts and fundamental techniques.</span>
+<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a>You and the AI develop the solution together. You make the technical decisions, review alternatives, and validate results.</span>
-<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>*Best for*: applying concepts and developing practical competence.</span>
-<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
+<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a>**Level 2 — AI as Collaborator**</span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>You and the AI develop the solution together. You make the technical decisions, review alternatives, and validate results.</span>
 <span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
-<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>**Level 3 — AI as Agent**</span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>*Best for*: applying concepts and developing practical competence.</span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>The AI executes multi-step tasks with substantial autonomy. You specify the objective and verify the important outcomes.</span>
-<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a>*Best for*: implementation-heavy work where the underlying concepts are already understood.</span>
-<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>**Level 3 — AI as Agent**</span>
+<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a>The AI executes multi-step tasks with substantial autonomy. You specify the objective and verify the important outcomes.</span>
 <span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>These are not stages that everybody must progress through. In the same project, you may use an autonomous agent for the data loading infrastructure while using AI as a tutor to understand contrastive learning.</span>
-<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a>@fig-aica-assistance-engagement illustrates that the amount of AI assistance and the amount of your own cognitive engagement are two **separate** dimensions. More assistance does not have to mean less thinking — if you stay actively involved in reasoning, predicting, and evaluating.</span>
-<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>::: {#fig-aica-assistance-engagement}</span>
-<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}assistance_engagement.svg)</span>{width=600}</span>
+<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>*Best for*: implementation-heavy work where the underlying concepts are already understood.</span>
+<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>These are not stages that everybody must progress through. In the same project, you may use an autonomous agent for the data loading infrastructure while using AI as a tutor to understand contrastive learning.</span>
+<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a>@fig-aica-assistance-engagement illustrates that the amount of AI assistance and the amount of your own cognitive engagement are two **separate** dimensions. More assistance does not have to mean less thinking — if you stay actively involved in reasoning, predicting, and evaluating.</span>
 <span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>AI assistance and cognitive engagement are not necessarily inversely related. Conceptual model, not empirical measurements. Own illustration; the terms *augmentation* and *automation* follow the <span class="co">[</span><span class="ot">MIT report</span><span class="co">](https://aiandeducation.mit.edu/report/)</span>.</span>
-<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>::: {#fig-aica-assistance-engagement}</span>
+<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}assistance_engagement.svg)</span>{width=600}</span>
 <span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a><span class="fu">### Effective Learning Workflows</span></span>
-<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a>How AI is prompted largely determines in which quadrant of @fig-aica-assistance-engagement one ends up. The following prompts illustrate interactions that keep the reasoning with you.</span>
-<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a>**Socratic tutoring** — when struggling with an unfamiliar concept:</span>
-<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a><span class="in">Help me understand why self-attention uses separate query and key vectors.</span></span>
-<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a><span class="in">Ask me questions, give hints progressively, and correct my misconceptions.</span></span>
-<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a><span class="in">Do not immediately provide the full explanation.</span></span>
-<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a>**Guided debugging** — when the debugging process is part of the learning objective:</span>
-<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a><span class="in">My CNN produces an unexpected tensor shape. Do not change the code yet.</span></span>
-<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a><span class="in">Help me trace the dimensions layer by layer, ask me to predict the output</span></span>
-<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a><span class="in">shape of each layer, and point out where my predictions are inconsistent.</span></span>
-<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a>**Critical collaboration** — for experiments and project work:</span>
-<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a><span class="in">Review my experimental design for comparing two pretrained vision models.</span></span>
-<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a><span class="in">Challenge my assumptions about splits, preprocessing, metrics, and confounders.</span></span>
-<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a><span class="in">Prioritize threats to validity and suggest tests that could reveal them.</span></span>
-<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a><span class="in">Do not modify the implementation.</span></span>
-<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a>In contrast, prompts such as "fix this error", "write the training script for my project", or "explain what this code does" are not wrong — but when the objective is learning, they delegate exactly the part that builds understanding.</span>
-<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a><span class="fu">### Illusion of Competence and Self-Assessment</span></span>
-<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a>The main risks for learners are:</span>
-<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Cognitive offloading of productive effort**</span><span class="co">]</span>{style="color: red;"}: delegating exactly the struggle that builds understanding.</span>
-<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Illusion of competence**: a working notebook, or a fluent AI explanation one can repeat, feels like understanding.</span>
-<span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Missing judgment**: detecting the subtle errors <span class="co">[</span><span class="ot">further below</span><span class="co">](#cv-examples)</span> requires the knowledge the course aims to build.</span>
-<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a>It helps to distinguish three kinds of understanding, which overlap but are not interchangeable: understanding a **concept**, being able to **apply** it independently, and being able to **critically evaluate** an AI-generated solution. A simple routine after AI-assisted work tests all three:</span>
-<span id="cb12-197"><a href="#cb12-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-198"><a href="#cb12-198" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Explain**: describe the key concepts and implementation decisions *without* consulting AI.</span>
-<span id="cb12-199"><a href="#cb12-199" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Predict**: what happens if a parameter, the architecture, or a preprocessing step changes?</span>
-<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Modify**: make one meaningful change independently.</span>
-<span id="cb12-201"><a href="#cb12-201" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Diagnose**: when a failure or unexpected result occurs, explain its cause *before* asking for a fix.</span>
-<span id="cb12-202"><a href="#cb12-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-203"><a href="#cb12-203" aria-hidden="true" tabindex="-1"></a>This is a suggested learning strategy, not a formal assessment instrument. Being able to modify and troubleshoot a system is particularly telling: reproducing an AI explanation is possible without the understanding needed to apply it.</span>
-<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a>In particular, be able to explain the *design decisions* of your work — what was split how and why, which preprocessing the backbone requires, which metric answers which question — and defend them with evidence. Do not delegate this reasoning to the agent: having the agent explain *its* choices is cognitive offloading of exactly the understanding the project should demonstrate.</span>
-<span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a>Finally, learning is also social. AI is an additional resource, not a replacement for discussing with peers, asking instructors, or explaining a concept to someone else. For example, formulate and compare your hypotheses about an experiment in a group *first*, then ask an agent to challenge them.</span>
-<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-209"><a href="#cb12-209" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Exercise: Can You Explain What Your Agent Built?" collapse="true"}</span>
-<span id="cb12-210"><a href="#cb12-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-211"><a href="#cb12-211" aria-hidden="true" tabindex="-1"></a>*Duration*: 10–15 minutes. *Goal*: experience the difference between completing a task and understanding it.</span>
-<span id="cb12-212"><a href="#cb12-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-213"><a href="#cb12-213" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Ask an AI agent to implement a simple image classifier with a training and evaluation pipeline.</span>
-<span id="cb12-214"><a href="#cb12-214" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Before running it: identify the key design decisions and predict the expected behavior (e.g. approximate accuracy, training time, which classes will be confused).</span>
-<span id="cb12-215"><a href="#cb12-215" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Inspect the implementation. Explain the training objective, the data flow, and the evaluation procedure.</span>
-<span id="cb12-216"><a href="#cb12-216" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Without AI assistance, modify one important aspect (e.g. the split, the augmentation, or the metric) and predict its effect before running it.</span>
-<span id="cb12-217"><a href="#cb12-217" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Ask the AI to critique the original solution and compare its findings with your own.</span>
-<span id="cb12-218"><a href="#cb12-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-219"><a href="#cb12-219" aria-hidden="true" tabindex="-1"></a>**Discussion**: Did the agent help you understand the system, or primarily help you obtain a working implementation? What would you do differently next time?</span>
-<span id="cb12-220"><a href="#cb12-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-221"><a href="#cb12-221" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-222"><a href="#cb12-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a>AI assistance and cognitive engagement are not necessarily inversely related. Conceptual model, not empirical measurements. Own illustration; the terms *augmentation* and *automation* follow the <span class="co">[</span><span class="ot">MIT report</span><span class="co">](https://aiandeducation.mit.edu/report/)</span>.</span>
+<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a><span class="fu">### Effective Learning Workflows</span></span>
+<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a>How AI is prompted largely determines in which quadrant of @fig-aica-assistance-engagement one ends up. The following prompts illustrate interactions that keep the reasoning with you.</span>
+<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a>**Socratic tutoring** — when struggling with an unfamiliar concept:</span>
+<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a><span class="in">Help me understand why self-attention uses separate query and key vectors.</span></span>
+<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a><span class="in">Ask me questions, give hints progressively, and correct my misconceptions.</span></span>
+<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a><span class="in">Do not immediately provide the full explanation.</span></span>
+<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a>**Guided debugging** — when the debugging process is part of the learning objective:</span>
+<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a><span class="in">My CNN produces an unexpected tensor shape. Do not change the code yet.</span></span>
+<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a><span class="in">Help me trace the dimensions layer by layer, ask me to predict the output</span></span>
+<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a><span class="in">shape of each layer, and point out where my predictions are inconsistent.</span></span>
+<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a>**Critical collaboration** — for experiments and project work:</span>
+<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a><span class="in">Review my experimental design for comparing two pretrained vision models.</span></span>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a><span class="in">Challenge my assumptions about splits, preprocessing, metrics, and confounders.</span></span>
+<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a><span class="in">Prioritize threats to validity and suggest tests that could reveal them.</span></span>
+<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a><span class="in">Do not modify the implementation.</span></span>
+<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a>In contrast, prompts such as "fix this error", "write the training script for my project", or "explain what this code does" are not wrong — but when the objective is learning, they delegate exactly the part that builds understanding.</span>
+<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a><span class="fu">### Illusion of Competence and Self-Assessment</span></span>
+<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a>The main risks for learners are:</span>
+<span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**Cognitive offloading of productive effort**</span><span class="co">]</span>{style="color: red;"}: delegating exactly the struggle that builds understanding.</span>
+<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Illusion of competence**: a working notebook, or a fluent AI explanation one can repeat, feels like understanding.</span>
+<span id="cb12-197"><a href="#cb12-197" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Missing judgment**: detecting the subtle errors <span class="co">[</span><span class="ot">further below</span><span class="co">](#cv-examples)</span> requires the knowledge the course aims to build.</span>
+<span id="cb12-198"><a href="#cb12-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-199"><a href="#cb12-199" aria-hidden="true" tabindex="-1"></a>It helps to distinguish three kinds of understanding, which overlap but are not interchangeable: understanding a **concept**, being able to **apply** it independently, and being able to **critically evaluate** an AI-generated solution. A simple routine after AI-assisted work tests all three:</span>
+<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-201"><a href="#cb12-201" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Explain**: describe the key concepts and implementation decisions *without* consulting AI.</span>
+<span id="cb12-202"><a href="#cb12-202" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Predict**: what happens if a parameter, the architecture, or a preprocessing step changes?</span>
+<span id="cb12-203"><a href="#cb12-203" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Modify**: make one meaningful change independently.</span>
+<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Diagnose**: when a failure or unexpected result occurs, explain its cause *before* asking for a fix.</span>
+<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a>This is a suggested learning strategy, not a formal assessment instrument. Being able to modify and troubleshoot a system is particularly telling: reproducing an AI explanation is possible without the understanding needed to apply it.</span>
+<span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a>In particular, be able to explain the *design decisions* of your work — what was split how and why, which preprocessing the backbone requires, which metric answers which question — and defend them with evidence. Do not delegate this reasoning to the agent: having the agent explain *its* choices is cognitive offloading of exactly the understanding the project should demonstrate.</span>
+<span id="cb12-209"><a href="#cb12-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-210"><a href="#cb12-210" aria-hidden="true" tabindex="-1"></a>Finally, learning is also social. AI is an additional resource, not a replacement for discussing with peers, asking instructors, or explaining a concept to someone else. For example, formulate and compare your hypotheses about an experiment in a group *first*, then ask an agent to challenge them.</span>
+<span id="cb12-211"><a href="#cb12-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-212"><a href="#cb12-212" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Exercise: Can You Explain What Your Agent Built?" collapse="true"}</span>
+<span id="cb12-213"><a href="#cb12-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-214"><a href="#cb12-214" aria-hidden="true" tabindex="-1"></a>*Duration*: 10–15 minutes. *Goal*: experience the difference between completing a task and understanding it.</span>
+<span id="cb12-215"><a href="#cb12-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-216"><a href="#cb12-216" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Ask an AI agent to implement a simple image classifier with a training and evaluation pipeline.</span>
+<span id="cb12-217"><a href="#cb12-217" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Before running it: identify the key design decisions and predict the expected behavior (e.g. approximate accuracy, training time, which classes will be confused).</span>
+<span id="cb12-218"><a href="#cb12-218" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Inspect the implementation. Explain the training objective, the data flow, and the evaluation procedure.</span>
+<span id="cb12-219"><a href="#cb12-219" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Without AI assistance, modify one important aspect (e.g. the split, the augmentation, or the metric) and predict its effect before running it.</span>
+<span id="cb12-220"><a href="#cb12-220" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Ask the AI to critique the original solution and compare its findings with your own.</span>
+<span id="cb12-221"><a href="#cb12-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-222"><a href="#cb12-222" aria-hidden="true" tabindex="-1"></a>**Discussion**: Did the agent help you understand the system, or primarily help you obtain a working implementation? What would you do differently next time?</span>
 <span id="cb12-223"><a href="#cb12-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-224"><a href="#cb12-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## AI for Applied Projects</span></span>
+<span id="cb12-224"><a href="#cb12-224" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb12-225"><a href="#cb12-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-226"><a href="#cb12-226" aria-hidden="true" tabindex="-1"></a>In industry and research — and in your course project — coding agents are increasingly part of the daily workflow. The question is how to organize work so that agents can be highly productive while their results remain verifiable.</span>
-<span id="cb12-227"><a href="#cb12-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-228"><a href="#cb12-228" aria-hidden="true" tabindex="-1"></a><span class="fu">### Benefits</span></span>
-<span id="cb12-229"><a href="#cb12-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-230"><a href="#cb12-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Speed for routine work**: data loaders, configs, logging, plotting, and other boilerplate.</span>
-<span id="cb12-231"><a href="#cb12-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rapid prototyping and experimentation**: baselines, ablations, and backbone comparisons in a fraction of the time — supporting the "build a baseline pipeline" step of the training recipe.</span>
-<span id="cb12-232"><a href="#cb12-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Navigating unfamiliar code and libraries**: large APIs (<span class="in">`timm`</span>, <span class="in">`transformers`</span>, <span class="in">`torchvision.transforms.v2`</span>), reference implementations of papers.</span>
-<span id="cb12-233"><a href="#cb12-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Investigating data**: summarizing metadata, finding duplicates, plotting class distributions, inspecting misclassified samples.</span>
-<span id="cb12-234"><a href="#cb12-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Review and critique**: an agent instructed to *challenge* a pipeline can find leakage, metric bugs, or unjustified conclusions.</span>
-<span id="cb12-235"><a href="#cb12-235" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tackling previously infeasible tasks**: work that would not have been attempted at all due to time constraints.</span>
-<span id="cb12-236"><a href="#cb12-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-237"><a href="#cb12-237" aria-hidden="true" tabindex="-1"></a><span class="fu">### Risks</span></span>
-<span id="cb12-238"><a href="#cb12-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-239"><a href="#cb12-239" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Plausible but wrong results**: code runs and produces numbers, but contains methodological errors (see <span class="co">[</span><span class="ot">examples</span><span class="co">](#cv-examples)</span>).</span>
-<span id="cb12-240"><a href="#cb12-240" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Optimizing for the wrong goal**: asked to make a failing script or test pass, an agent may weaken checks, catch and ignore exceptions, or modify the evaluation instead of fixing the underlying problem.</span>
-<span id="cb12-241"><a href="#cb12-241" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Self-confirming verification**: generating tests is easy; generating *meaningful, independent* tests is much harder (see <span class="co">[</span><span class="ot">Independent Verification</span><span class="co">](#independent-verification)</span>).</span>
-<span id="cb12-242"><a href="#cb12-242" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Silent changes to experimental conditions**: updating a dependency, changing a seed, modifying a dataset filter, or switching a checkpoint — each reasonable on its own, yet invalidating a comparison between experiments.</span>
-<span id="cb12-243"><a href="#cb12-243" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Outdated or hallucinated APIs**: deprecated arguments (<span class="in">`pretrained=True`</span> instead of <span class="in">`weights=...`</span>), non-existent model identifiers, and — worst — a silent fallback to random initialization when the pretrained weights cannot be loaded.</span>
-<span id="cb12-244"><a href="#cb12-244" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Supply chain**: hallucinated package names can be registered by attackers ("slopsquatting", see @spracklen_we_2025-1).</span>
-<span id="cb12-245"><a href="#cb12-245" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Prompt injection and data exposure**: agents read untrusted content — READMEs, documentation, dependencies, issues — that may contain instructions attempting to influence what the agent executes or discloses. Repository content or data may also be transmitted to external services. For confidential datasets (e.g. medical images), this deserves explicit attention.</span>
-<span id="cb12-246"><a href="#cb12-246" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Review burden and ownership**: large agent-generated changes are hard to review; if nobody understands the pipeline, diagnosing failures becomes difficult.</span>
-<span id="cb12-247"><a href="#cb12-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-248"><a href="#cb12-248" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaboration Modes</span></span>
-<span id="cb12-249"><a href="#cb12-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-250"><a href="#cb12-250" aria-hidden="true" tabindex="-1"></a>How much autonomy to grant depends on the task. In contrast to the learning levels above, these modes describe *workflows*, and they require different degrees of supervision:</span>
-<span id="cb12-251"><a href="#cb12-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-252"><a href="#cb12-252" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mode <span class="pp">|</span> Human responsibility <span class="pp">|</span> Agent responsibility <span class="pp">|</span></span>
-<span id="cb12-253"><a href="#cb12-253" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb12-254"><a href="#cb12-254" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Direct implementation** <span class="pp">|</span> Specify change, review output <span class="pp">|</span> Implement and test <span class="pp">|</span></span>
-<span id="cb12-255"><a href="#cb12-255" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Plan and execute** <span class="pp">|</span> Review approach and milestones <span class="pp">|</span> Investigate, plan, implement <span class="pp">|</span></span>
-<span id="cb12-256"><a href="#cb12-256" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Exploratory research** <span class="pp">|</span> Evaluate hypotheses and evidence <span class="pp">|</span> Investigate alternatives, run analyses <span class="pp">|</span></span>
-<span id="cb12-257"><a href="#cb12-257" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Adversarial review** <span class="pp">|</span> Decide which findings matter <span class="pp">|</span> Challenge assumptions, identify weaknesses <span class="pp">|</span></span>
-<span id="cb12-258"><a href="#cb12-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-259"><a href="#cb12-259" aria-hidden="true" tabindex="-1"></a>Implementing a known function can be verified by a test. Determining the right evaluation protocol for an unfamiliar dataset requires judgment about the deployment scenario — which the human must own.</span>
-<span id="cb12-260"><a href="#cb12-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-261"><a href="#cb12-261" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
-<span id="cb12-262"><a href="#cb12-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-263"><a href="#cb12-263" aria-hidden="true" tabindex="-1"></a>**🤔 Think About It**</span>
-<span id="cb12-264"><a href="#cb12-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-265"><a href="#cb12-265" aria-hidden="true" tabindex="-1"></a>What is the stopping criterion of a coding agent? How does it decide that a task such as "train a classifier with good performance" is finished?</span>
-<span id="cb12-266"><a href="#cb12-266" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-267"><a href="#cb12-267" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb12-268"><a href="#cb12-268" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Key considerations<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb12-226"><a href="#cb12-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-227"><a href="#cb12-227" aria-hidden="true" tabindex="-1"></a><span class="fu">## AI for Applied Projects</span></span>
+<span id="cb12-228"><a href="#cb12-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-229"><a href="#cb12-229" aria-hidden="true" tabindex="-1"></a>In industry and research — and in your course project — coding agents are increasingly part of the daily workflow. The question is how to organize work so that agents can be highly productive while their results remain verifiable.</span>
+<span id="cb12-230"><a href="#cb12-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-231"><a href="#cb12-231" aria-hidden="true" tabindex="-1"></a><span class="fu">### Benefits</span></span>
+<span id="cb12-232"><a href="#cb12-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-233"><a href="#cb12-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Speed for routine work**: data loaders, configs, logging, plotting, and other boilerplate.</span>
+<span id="cb12-234"><a href="#cb12-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rapid prototyping and experimentation**: baselines, ablations, and backbone comparisons in a fraction of the time — supporting the "build a baseline pipeline" step of the training recipe.</span>
+<span id="cb12-235"><a href="#cb12-235" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Navigating unfamiliar code and libraries**: large APIs (<span class="in">`timm`</span>, <span class="in">`transformers`</span>, <span class="in">`torchvision.transforms.v2`</span>), reference implementations of papers.</span>
+<span id="cb12-236"><a href="#cb12-236" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Investigating data**: summarizing metadata, finding duplicates, plotting class distributions, inspecting misclassified samples.</span>
+<span id="cb12-237"><a href="#cb12-237" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Review and critique**: an agent instructed to *challenge* a pipeline can find leakage, metric bugs, or unjustified conclusions.</span>
+<span id="cb12-238"><a href="#cb12-238" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tackling previously infeasible tasks**: work that would not have been attempted at all due to time constraints.</span>
+<span id="cb12-239"><a href="#cb12-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-240"><a href="#cb12-240" aria-hidden="true" tabindex="-1"></a><span class="fu">### Risks</span></span>
+<span id="cb12-241"><a href="#cb12-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-242"><a href="#cb12-242" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Plausible but wrong results**: code runs and produces numbers, but contains methodological errors (see <span class="co">[</span><span class="ot">examples</span><span class="co">](#cv-examples)</span>).</span>
+<span id="cb12-243"><a href="#cb12-243" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Optimizing for the wrong goal**: asked to make a failing script or test pass, an agent may weaken checks, catch and ignore exceptions, or modify the evaluation instead of fixing the underlying problem.</span>
+<span id="cb12-244"><a href="#cb12-244" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Self-confirming verification**: generating tests is easy; generating *meaningful, independent* tests is much harder (see <span class="co">[</span><span class="ot">Independent Verification</span><span class="co">](#independent-verification)</span>).</span>
+<span id="cb12-245"><a href="#cb12-245" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Silent changes to experimental conditions**: updating a dependency, changing a seed, modifying a dataset filter, or switching a checkpoint — each reasonable on its own, yet invalidating a comparison between experiments.</span>
+<span id="cb12-246"><a href="#cb12-246" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Outdated or hallucinated APIs**: deprecated arguments (<span class="in">`pretrained=True`</span> instead of <span class="in">`weights=...`</span>), non-existent model identifiers, and — worst — a silent fallback to random initialization when the pretrained weights cannot be loaded.</span>
+<span id="cb12-247"><a href="#cb12-247" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Supply chain**: hallucinated package names can be registered by attackers ("slopsquatting", see @spracklen_we_2025-1).</span>
+<span id="cb12-248"><a href="#cb12-248" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Prompt injection and data exposure**: agents read untrusted content — READMEs, documentation, dependencies, issues — that may contain instructions attempting to influence what the agent executes or discloses. Repository content or data may also be transmitted to external services. For confidential datasets (e.g. medical images), this deserves explicit attention.</span>
+<span id="cb12-249"><a href="#cb12-249" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Review burden and ownership**: large agent-generated changes are hard to review; if nobody understands the pipeline, diagnosing failures becomes difficult.</span>
+<span id="cb12-250"><a href="#cb12-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-251"><a href="#cb12-251" aria-hidden="true" tabindex="-1"></a><span class="fu">### Collaboration Modes</span></span>
+<span id="cb12-252"><a href="#cb12-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-253"><a href="#cb12-253" aria-hidden="true" tabindex="-1"></a>How much autonomy to grant depends on the task. In contrast to the learning levels above, these modes describe *workflows*, and they require different degrees of supervision:</span>
+<span id="cb12-254"><a href="#cb12-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-255"><a href="#cb12-255" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mode <span class="pp">|</span> Human responsibility <span class="pp">|</span> Agent responsibility <span class="pp">|</span></span>
+<span id="cb12-256"><a href="#cb12-256" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb12-257"><a href="#cb12-257" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Direct implementation** <span class="pp">|</span> Specify change, review output <span class="pp">|</span> Implement and test <span class="pp">|</span></span>
+<span id="cb12-258"><a href="#cb12-258" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Plan and execute** <span class="pp">|</span> Review approach and milestones <span class="pp">|</span> Investigate, plan, implement <span class="pp">|</span></span>
+<span id="cb12-259"><a href="#cb12-259" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Exploratory research** <span class="pp">|</span> Evaluate hypotheses and evidence <span class="pp">|</span> Investigate alternatives, run analyses <span class="pp">|</span></span>
+<span id="cb12-260"><a href="#cb12-260" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Adversarial review** <span class="pp">|</span> Decide which findings matter <span class="pp">|</span> Challenge assumptions, identify weaknesses <span class="pp">|</span></span>
+<span id="cb12-261"><a href="#cb12-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-262"><a href="#cb12-262" aria-hidden="true" tabindex="-1"></a>Implementing a known function can be verified by a test. Determining the right evaluation protocol for an unfamiliar dataset requires judgment about the deployment scenario — which the human must own.</span>
+<span id="cb12-263"><a href="#cb12-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-264"><a href="#cb12-264" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
+<span id="cb12-265"><a href="#cb12-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-266"><a href="#cb12-266" aria-hidden="true" tabindex="-1"></a>**🤔 Think About It**</span>
+<span id="cb12-267"><a href="#cb12-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-268"><a href="#cb12-268" aria-hidden="true" tabindex="-1"></a>What is the stopping criterion of a coding agent? How does it decide that a task such as "train a classifier with good performance" is finished?</span>
 <span id="cb12-269"><a href="#cb12-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-270"><a href="#cb12-270" aria-hidden="true" tabindex="-1"></a>It depends on the task description, the agent's configuration, and the available checks. With a vague task, a plausible stopping point is "the script runs and prints a reasonable validation accuracy". With explicit acceptance criteria — "no location appears in both train and test", "the model overfits 32 images", "macro-F1 is reported per class", "results are compared to a linear probe baseline" — the agent can execute a substantial validation workflow before stopping. Vague success criteria invite superficially successful solutions.</span>
-<span id="cb12-271"><a href="#cb12-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-272"><a href="#cb12-272" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb12-273"><a href="#cb12-273" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-270"><a href="#cb12-270" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb12-271"><a href="#cb12-271" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Key considerations<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb12-272"><a href="#cb12-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-273"><a href="#cb12-273" aria-hidden="true" tabindex="-1"></a>It depends on the task description, the agent's configuration, and the available checks. With a vague task, a plausible stopping point is "the script runs and prints a reasonable validation accuracy". With explicit acceptance criteria — "no location appears in both train and test", "the model overfits 32 images", "macro-F1 is reported per class", "results are compared to a linear probe baseline" — the agent can execute a substantial validation workflow before stopping. Vague success criteria invite superficially successful solutions.</span>
 <span id="cb12-274"><a href="#cb12-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-275"><a href="#cb12-275" aria-hidden="true" tabindex="-1"></a><span class="fu">### What About Productivity?</span></span>
-<span id="cb12-276"><a href="#cb12-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-277"><a href="#cb12-277" aria-hidden="true" tabindex="-1"></a>Evidence on productivity is mixed and setting-dependent. A randomized study with 16 experienced open-source developers working on their own, familiar repositories found that early-2025 AI tools made them **19% slower**, while they believed they were faster [@becker_measuring_2025-1]. A follow-up study [@joel_becker_we_2026] estimated an 18% speedup for returning developers and 4% for newly recruited ones. These estimates are **statistically inconclusive** (confidence intervals include zero) and, according to the authors, an unreliable signal due to selection effects: developers increasingly declined to participate or withheld tasks because they did not want to work without AI.</span>
-<span id="cb12-278"><a href="#cb12-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-279"><a href="#cb12-279" aria-hidden="true" tabindex="-1"></a>Productivity is also multidimensional: implementation time is only one part, next to correctness, review effort, maintainability, and the ability to tackle tasks that were previously out of reach. An experienced developer in a familiar repository and a student building an exploratory ML prototype are very different settings.</span>
-<span id="cb12-280"><a href="#cb12-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-275"><a href="#cb12-275" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb12-276"><a href="#cb12-276" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-277"><a href="#cb12-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-278"><a href="#cb12-278" aria-hidden="true" tabindex="-1"></a><span class="fu">### What About Productivity?</span></span>
+<span id="cb12-279"><a href="#cb12-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-280"><a href="#cb12-280" aria-hidden="true" tabindex="-1"></a>Evidence on productivity is mixed and setting-dependent. A randomized study with 16 experienced open-source developers working on their own, familiar repositories found that early-2025 AI tools made them **19% slower**, while they believed they were faster [@becker_measuring_2025-1]. A follow-up study [@joel_becker_we_2026] estimated an 18% speedup for returning developers and 4% for newly recruited ones. These estimates are **statistically inconclusive** (confidence intervals include zero) and, according to the authors, an unreliable signal due to selection effects: developers increasingly declined to participate or withheld tasks because they did not want to work without AI.</span>
 <span id="cb12-281"><a href="#cb12-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-282"><a href="#cb12-282" aria-hidden="true" tabindex="-1"></a><span class="fu">## When Code Fails Silently {#cv-examples}</span></span>
+<span id="cb12-282"><a href="#cb12-282" aria-hidden="true" tabindex="-1"></a>Productivity is also multidimensional: implementation time is only one part, next to correctness, review effort, maintainability, and the ability to tackle tasks that were previously out of reach. An experienced developer in a familiar repository and a student building an exploratory ML prototype are very different settings.</span>
 <span id="cb12-283"><a href="#cb12-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-284"><a href="#cb12-284" aria-hidden="true" tabindex="-1"></a>The statement "deep learning code fails silently" can be made more precise. There are three distinct propositions:</span>
-<span id="cb12-285"><a href="#cb12-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-286"><a href="#cb12-286" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Code can execute correctly while implementing the wrong operation** — e.g. an IoU function with a wrong union, or an augmentation that does not transform the bounding boxes.</span>
-<span id="cb12-287"><a href="#cb12-287" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**An experiment can be implemented correctly while measuring the wrong quantity** — e.g. a correct training loop evaluated on a split that leaks near-duplicates.</span>
-<span id="cb12-288"><a href="#cb12-288" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**An experiment can be conducted correctly while its conclusions remain unjustified** — e.g. claiming backbone A beats backbone B based on a single seed and a 0.5% difference.</span>
-<span id="cb12-289"><a href="#cb12-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-290"><a href="#cb12-290" aria-hidden="true" tabindex="-1"></a>These apply equally to human- and agent-written code. Agents add speed, scale, and autonomy — and the possibility that nobody developed a mental model of the system. The following examples are typical of computer vision projects. In every case, **the code runs without error**, and recognizing the problem requires subject-matter expertise.</span>
-<span id="cb12-291"><a href="#cb12-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-292"><a href="#cb12-292" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example 1: The Split Encodes a Deployment Assumption</span></span>
-<span id="cb12-293"><a href="#cb12-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-294"><a href="#cb12-294" aria-hidden="true" tabindex="-1"></a>*Task*: "Train a species classifier on my camera trap images and report test accuracy."</span>
-<span id="cb12-295"><a href="#cb12-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-296"><a href="#cb12-296" aria-hidden="true" tabindex="-1"></a>A typical default is a random split:</span>
-<span id="cb12-297"><a href="#cb12-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-298"><a href="#cb12-298" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb12-299"><a href="#cb12-299" aria-hidden="true" tabindex="-1"></a>train_ds, val_ds, test_ds <span class="op">=</span> random_split(dataset, [<span class="fl">0.7</span>, <span class="fl">0.15</span>, <span class="fl">0.15</span>])</span>
-<span id="cb12-300"><a href="#cb12-300" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-301"><a href="#cb12-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-302"><a href="#cb12-302" aria-hidden="true" tabindex="-1"></a>Camera traps record **sequences** (several near-identical frames per trigger) at **fixed locations**. A random split places near-duplicates into training and test set, and the model can exploit the background rather than the animal. Whether this is a problem depends on the question being asked:</span>
-<span id="cb12-303"><a href="#cb12-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-304"><a href="#cb12-304" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Generalization objective <span class="pp">|</span> Appropriate split <span class="pp">|</span></span>
-<span id="cb12-305"><a href="#cb12-305" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb12-306"><a href="#cb12-306" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> New frames from already observed sequences <span class="pp">|</span> Frame-level split (rarely a meaningful objective) <span class="pp">|</span></span>
-<span id="cb12-307"><a href="#cb12-307" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> New sequences at known camera locations <span class="pp">|</span> Sequence-level split <span class="pp">|</span></span>
-<span id="cb12-308"><a href="#cb12-308" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> New dates or seasons at known locations <span class="pp">|</span> Temporal split <span class="pp">|</span></span>
-<span id="cb12-309"><a href="#cb12-309" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Completely unseen camera locations <span class="pp">|</span> Location-level split <span class="pp">|</span></span>
-<span id="cb12-310"><a href="#cb12-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-311"><a href="#cb12-311" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb12-312"><a href="#cb12-312" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GroupShuffleSplit</span>
+<span id="cb12-284"><a href="#cb12-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-285"><a href="#cb12-285" aria-hidden="true" tabindex="-1"></a><span class="fu">## When Code Fails Silently {#cv-examples}</span></span>
+<span id="cb12-286"><a href="#cb12-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-287"><a href="#cb12-287" aria-hidden="true" tabindex="-1"></a>The statement "deep learning code fails silently" can be made more precise. There are three distinct propositions:</span>
+<span id="cb12-288"><a href="#cb12-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-289"><a href="#cb12-289" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Code can execute correctly while implementing the wrong operation** — e.g. an IoU function with a wrong union, or an augmentation that does not transform the bounding boxes.</span>
+<span id="cb12-290"><a href="#cb12-290" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**An experiment can be implemented correctly while measuring the wrong quantity** — e.g. a correct training loop evaluated on a split that leaks near-duplicates.</span>
+<span id="cb12-291"><a href="#cb12-291" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**An experiment can be conducted correctly while its conclusions remain unjustified** — e.g. claiming backbone A beats backbone B based on a single seed and a 0.5% difference.</span>
+<span id="cb12-292"><a href="#cb12-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-293"><a href="#cb12-293" aria-hidden="true" tabindex="-1"></a>These apply equally to human- and agent-written code. Agents add speed, scale, and autonomy — and the possibility that nobody developed a mental model of the system. The following examples are typical of computer vision projects. In every case, **the code runs without error**, and recognizing the problem requires subject-matter expertise.</span>
+<span id="cb12-294"><a href="#cb12-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-295"><a href="#cb12-295" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example 1: The Split Encodes a Deployment Assumption</span></span>
+<span id="cb12-296"><a href="#cb12-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-297"><a href="#cb12-297" aria-hidden="true" tabindex="-1"></a>*Task*: "Train a species classifier on my camera trap images and report test accuracy."</span>
+<span id="cb12-298"><a href="#cb12-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-299"><a href="#cb12-299" aria-hidden="true" tabindex="-1"></a>A typical default is a random split:</span>
+<span id="cb12-300"><a href="#cb12-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-301"><a href="#cb12-301" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb12-302"><a href="#cb12-302" aria-hidden="true" tabindex="-1"></a>train_ds, val_ds, test_ds <span class="op">=</span> random_split(dataset, [<span class="fl">0.7</span>, <span class="fl">0.15</span>, <span class="fl">0.15</span>])</span>
+<span id="cb12-303"><a href="#cb12-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-304"><a href="#cb12-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-305"><a href="#cb12-305" aria-hidden="true" tabindex="-1"></a>Camera traps record **sequences** (several near-identical frames per trigger) at **fixed locations**. A random split places near-duplicates into training and test set, and the model can exploit the background rather than the animal. Whether this is a problem depends on the question being asked:</span>
+<span id="cb12-306"><a href="#cb12-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-307"><a href="#cb12-307" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Generalization objective <span class="pp">|</span> Appropriate split <span class="pp">|</span></span>
+<span id="cb12-308"><a href="#cb12-308" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb12-309"><a href="#cb12-309" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> New frames from already observed sequences <span class="pp">|</span> Frame-level split (rarely a meaningful objective) <span class="pp">|</span></span>
+<span id="cb12-310"><a href="#cb12-310" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> New sequences at known camera locations <span class="pp">|</span> Sequence-level split <span class="pp">|</span></span>
+<span id="cb12-311"><a href="#cb12-311" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> New dates or seasons at known locations <span class="pp">|</span> Temporal split <span class="pp">|</span></span>
+<span id="cb12-312"><a href="#cb12-312" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Completely unseen camera locations <span class="pp">|</span> Location-level split <span class="pp">|</span></span>
 <span id="cb12-313"><a href="#cb12-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-314"><a href="#cb12-314" aria-hidden="true" tabindex="-1"></a>splitter <span class="op">=</span> GroupShuffleSplit(n_splits<span class="op">=</span><span class="dv">1</span>, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb12-315"><a href="#cb12-315" aria-hidden="true" tabindex="-1"></a>train_idx, test_idx <span class="op">=</span> <span class="bu">next</span>(splitter.split(df, groups<span class="op">=</span>df[<span class="st">"location_id"</span>]))</span>
-<span id="cb12-316"><a href="#cb12-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-317"><a href="#cb12-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-318"><a href="#cb12-318" aria-hidden="true" tabindex="-1"></a>Note that <span class="in">`GroupShuffleSplit`</span> creates a single holdout split that keeps groups separate; it does not guarantee class balance or representativeness. Check the class distribution of the resulting splits, or use <span class="in">`StratifiedGroupKFold`</span>.</span>
-<span id="cb12-319"><a href="#cb12-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-320"><a href="#cb12-320" aria-hidden="true" tabindex="-1"></a>The same structure appears with multiple images per patient, per product, or overlapping tiles of a satellite scene. The general principle: **a train/test split encodes an assumption about the deployment distribution**. An agent can be tasked to investigate what constitutes an independent observation — but deciding which deployment scenario matters is your responsibility.</span>
-<span id="cb12-321"><a href="#cb12-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-322"><a href="#cb12-322" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example 2: Augmentations Encode Assumptions</span></span>
-<span id="cb12-323"><a href="#cb12-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-324"><a href="#cb12-324" aria-hidden="true" tabindex="-1"></a>*Task*: "Add data augmentation to reduce overfitting."</span>
-<span id="cb12-325"><a href="#cb12-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-326"><a href="#cb12-326" aria-hidden="true" tabindex="-1"></a>A generic pipeline is easy to generate:</span>
-<span id="cb12-327"><a href="#cb12-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-328"><a href="#cb12-328" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb12-329"><a href="#cb12-329" aria-hidden="true" tabindex="-1"></a>T.Compose([T.RandomResizedCrop(<span class="dv">224</span>), T.RandomHorizontalFlip(), T.RandomRotation(<span class="dv">30</span>)])</span>
-<span id="cb12-330"><a href="#cb12-330" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-331"><a href="#cb12-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-332"><a href="#cb12-332" aria-hidden="true" tabindex="-1"></a>Several distinct failure modes can hide in such a pipeline:</span>
-<span id="cb12-333"><a href="#cb12-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-334"><a href="#cb12-334" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The transformation changes the label**: rotating a 6 produces a 9; flipping an image labelled "left lung lesion" invalidates a laterality-sensitive label.</span>
-<span id="cb12-335"><a href="#cb12-335" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The transformation removes the relevant object**: <span class="in">`RandomResizedCrop`</span> with its default scale <span class="in">`(0.08, 1.0)`</span> can crop away a small, distant animal in a camera trap image, leaving an empty background labelled "zebra". How often this happens depends on object size and position. For detection with correctly updated annotations, cropping can be perfectly valid.</span>
-<span id="cb12-336"><a href="#cb12-336" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The transformation creates unrealistic samples**: a flipped chest X-ray shows the heart on the wrong side. For a binary pneumonia classifier this may not change the label, but it trains on anatomically implausible data.</span>
-<span id="cb12-337"><a href="#cb12-337" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Image and target are desynchronized**: transforming the image but not the bounding boxes or masks (e.g. using <span class="in">`torchvision.transforms`</span> v1 on images only) silently corrupts the targets.</span>
-<span id="cb12-338"><a href="#cb12-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-339"><a href="#cb12-339" aria-hidden="true" tabindex="-1"></a>Augmentations impose **invariance and distributional assumptions**. Choosing them is a modeling decision, not boilerplate.</span>
-<span id="cb12-340"><a href="#cb12-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-341"><a href="#cb12-341" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example 3: Flawed Evaluation</span></span>
-<span id="cb12-342"><a href="#cb12-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-343"><a href="#cb12-343" aria-hidden="true" tabindex="-1"></a>*Task*: "Evaluate the model on the validation set and report the results."</span>
-<span id="cb12-344"><a href="#cb12-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-345"><a href="#cb12-345" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb12-346"><a href="#cb12-346" aria-hidden="true" tabindex="-1"></a>val_ds <span class="op">=</span> ImageFolder(<span class="st">"data/val"</span>, transform<span class="op">=</span>train_transform)</span>
-<span id="cb12-347"><a href="#cb12-347" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x, y <span class="kw">in</span> val_loader:</span>
-<span id="cb12-348"><a href="#cb12-348" aria-hidden="true" tabindex="-1"></a>    preds <span class="op">=</span> model(x).argmax(<span class="dv">1</span>)</span>
-<span id="cb12-349"><a href="#cb12-349" aria-hidden="true" tabindex="-1"></a>    correct <span class="op">+=</span> (preds <span class="op">==</span> y).<span class="bu">sum</span>()</span>
-<span id="cb12-350"><a href="#cb12-350" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>correct <span class="op">/</span> <span class="bu">len</span>(val_ds)<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb12-351"><a href="#cb12-351" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-352"><a href="#cb12-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-353"><a href="#cb12-353" aria-hidden="true" tabindex="-1"></a>The snippet contains several issues with very different implications:</span>
-<span id="cb12-354"><a href="#cb12-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-355"><a href="#cb12-355" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Issue <span class="pp">|</span> Implication <span class="pp">|</span></span>
-<span id="cb12-356"><a href="#cb12-356" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb12-357"><a href="#cb12-357" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Random (training) transforms on validation data <span class="pp">|</span> Increases measurement variability and changes which distribution is evaluated; not necessarily a bias in a fixed direction <span class="pp">|</span></span>
-<span id="cb12-358"><a href="#cb12-358" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Missing <span class="in">`model.eval()`</span> <span class="pp">|</span> For models with mode-dependent layers (Dropout, BatchNorm), predictions differ from inference behavior — invalidates the evaluation <span class="pp">|</span></span>
-<span id="cb12-359"><a href="#cb12-359" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Missing <span class="in">`torch.no_grad()`</span> <span class="pp">|</span> Wastes memory and compute; does *not* make predictions incorrect <span class="pp">|</span></span>
-<span id="cb12-360"><a href="#cb12-360" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Accuracy on imbalanced data <span class="pp">|</span> Can hide poor minority-class performance; with 65% "deer", predicting only "deer" yields 65% accuracy <span class="pp">|</span></span>
-<span id="cb12-361"><a href="#cb12-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-362"><a href="#cb12-362" aria-hidden="true" tabindex="-1"></a>A further, process-level issue: an agent asked to "improve the test score" will tune against the test set, effectively turning it into a validation set. And the agent's summary ("the model achieves 94% accuracy") is a claim, not a verified result.</span>
-<span id="cb12-363"><a href="#cb12-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-364"><a href="#cb12-364" aria-hidden="true" tabindex="-1"></a><span class="fu">### Further Examples</span></span>
-<span id="cb12-365"><a href="#cb12-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-366"><a href="#cb12-366" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Preprocessing Mismatch with the Pretrained Backbone" collapse="true"}</span>
-<span id="cb12-367"><a href="#cb12-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-368"><a href="#cb12-368" aria-hidden="true" tabindex="-1"></a>*Task*: "Use a pretrained SigLIP model as a feature extractor."</span>
-<span id="cb12-369"><a href="#cb12-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-370"><a href="#cb12-370" aria-hidden="true" tabindex="-1"></a>A common default is the ImageNet normalization (<span class="in">`mean=[0.485, 0.456, 0.406]`</span>, <span class="in">`std=[0.229, 0.224, 0.225]`</span>). Many foundation models were trained with different statistics (SigLIP uses mean and std of $0.5$, mapping pixels to $<span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$), resolutions, or cropping. A related classic is loading images with OpenCV (BGR) and feeding them to an RGB model. The impact is model- and task-dependent — sometimes negligible, sometimes substantial — and nothing in the code indicates the problem.</span>
-<span id="cb12-371"><a href="#cb12-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-372"><a href="#cb12-372" aria-hidden="true" tabindex="-1"></a>Preprocessing is specific to the **checkpoint and implementation**, not to the architecture family. Resolve it from the model and verify it with a pinned library version:</span>
-<span id="cb12-373"><a href="#cb12-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-374"><a href="#cb12-374" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb12-375"><a href="#cb12-375" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
+<span id="cb12-314"><a href="#cb12-314" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb12-315"><a href="#cb12-315" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GroupShuffleSplit</span>
+<span id="cb12-316"><a href="#cb12-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-317"><a href="#cb12-317" aria-hidden="true" tabindex="-1"></a>splitter <span class="op">=</span> GroupShuffleSplit(n_splits<span class="op">=</span><span class="dv">1</span>, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb12-318"><a href="#cb12-318" aria-hidden="true" tabindex="-1"></a>train_idx, test_idx <span class="op">=</span> <span class="bu">next</span>(splitter.split(df, groups<span class="op">=</span>df[<span class="st">"location_id"</span>]))</span>
+<span id="cb12-319"><a href="#cb12-319" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-320"><a href="#cb12-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-321"><a href="#cb12-321" aria-hidden="true" tabindex="-1"></a>Note that <span class="in">`GroupShuffleSplit`</span> creates a single holdout split that keeps groups separate; it does not guarantee class balance or representativeness. Check the class distribution of the resulting splits, or use <span class="in">`StratifiedGroupKFold`</span>.</span>
+<span id="cb12-322"><a href="#cb12-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-323"><a href="#cb12-323" aria-hidden="true" tabindex="-1"></a>The same structure appears with multiple images per patient, per product, or overlapping tiles of a satellite scene. The general principle: **a train/test split encodes an assumption about the deployment distribution**. An agent can be tasked to investigate what constitutes an independent observation — but deciding which deployment scenario matters is your responsibility.</span>
+<span id="cb12-324"><a href="#cb12-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-325"><a href="#cb12-325" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example 2: Augmentations Encode Assumptions</span></span>
+<span id="cb12-326"><a href="#cb12-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-327"><a href="#cb12-327" aria-hidden="true" tabindex="-1"></a>*Task*: "Add data augmentation to reduce overfitting."</span>
+<span id="cb12-328"><a href="#cb12-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-329"><a href="#cb12-329" aria-hidden="true" tabindex="-1"></a>A generic pipeline is easy to generate:</span>
+<span id="cb12-330"><a href="#cb12-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-331"><a href="#cb12-331" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb12-332"><a href="#cb12-332" aria-hidden="true" tabindex="-1"></a>T.Compose([T.RandomResizedCrop(<span class="dv">224</span>), T.RandomHorizontalFlip(), T.RandomRotation(<span class="dv">30</span>)])</span>
+<span id="cb12-333"><a href="#cb12-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-334"><a href="#cb12-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-335"><a href="#cb12-335" aria-hidden="true" tabindex="-1"></a>Several distinct failure modes can hide in such a pipeline:</span>
+<span id="cb12-336"><a href="#cb12-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-337"><a href="#cb12-337" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The transformation changes the label**: rotating a 6 produces a 9; flipping an image labelled "left lung lesion" invalidates a laterality-sensitive label.</span>
+<span id="cb12-338"><a href="#cb12-338" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The transformation removes the relevant object**: <span class="in">`RandomResizedCrop`</span> with its default scale <span class="in">`(0.08, 1.0)`</span> can crop away a small, distant animal in a camera trap image, leaving an empty background labelled "zebra". How often this happens depends on object size and position. For detection with correctly updated annotations, cropping can be perfectly valid.</span>
+<span id="cb12-339"><a href="#cb12-339" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The transformation creates unrealistic samples**: a flipped chest X-ray shows the heart on the wrong side. For a binary pneumonia classifier this may not change the label, but it trains on anatomically implausible data.</span>
+<span id="cb12-340"><a href="#cb12-340" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Image and target are desynchronized**: transforming the image but not the bounding boxes or masks (e.g. using <span class="in">`torchvision.transforms`</span> v1 on images only) silently corrupts the targets.</span>
+<span id="cb12-341"><a href="#cb12-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-342"><a href="#cb12-342" aria-hidden="true" tabindex="-1"></a>Augmentations impose **invariance and distributional assumptions**. Choosing them is a modeling decision, not boilerplate.</span>
+<span id="cb12-343"><a href="#cb12-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-344"><a href="#cb12-344" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example 3: Flawed Evaluation</span></span>
+<span id="cb12-345"><a href="#cb12-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-346"><a href="#cb12-346" aria-hidden="true" tabindex="-1"></a>*Task*: "Evaluate the model on the validation set and report the results."</span>
+<span id="cb12-347"><a href="#cb12-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-348"><a href="#cb12-348" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb12-349"><a href="#cb12-349" aria-hidden="true" tabindex="-1"></a>val_ds <span class="op">=</span> ImageFolder(<span class="st">"data/val"</span>, transform<span class="op">=</span>train_transform)</span>
+<span id="cb12-350"><a href="#cb12-350" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x, y <span class="kw">in</span> val_loader:</span>
+<span id="cb12-351"><a href="#cb12-351" aria-hidden="true" tabindex="-1"></a>    preds <span class="op">=</span> model(x).argmax(<span class="dv">1</span>)</span>
+<span id="cb12-352"><a href="#cb12-352" aria-hidden="true" tabindex="-1"></a>    correct <span class="op">+=</span> (preds <span class="op">==</span> y).<span class="bu">sum</span>()</span>
+<span id="cb12-353"><a href="#cb12-353" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>correct <span class="op">/</span> <span class="bu">len</span>(val_ds)<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb12-354"><a href="#cb12-354" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-355"><a href="#cb12-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-356"><a href="#cb12-356" aria-hidden="true" tabindex="-1"></a>The snippet contains several issues with very different implications:</span>
+<span id="cb12-357"><a href="#cb12-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-358"><a href="#cb12-358" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Issue <span class="pp">|</span> Implication <span class="pp">|</span></span>
+<span id="cb12-359"><a href="#cb12-359" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb12-360"><a href="#cb12-360" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Random (training) transforms on validation data <span class="pp">|</span> Increases measurement variability and changes which distribution is evaluated; not necessarily a bias in a fixed direction <span class="pp">|</span></span>
+<span id="cb12-361"><a href="#cb12-361" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Missing <span class="in">`model.eval()`</span> <span class="pp">|</span> For models with mode-dependent layers (Dropout, BatchNorm), predictions differ from inference behavior — invalidates the evaluation <span class="pp">|</span></span>
+<span id="cb12-362"><a href="#cb12-362" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Missing <span class="in">`torch.no_grad()`</span> <span class="pp">|</span> Wastes memory and compute; does *not* make predictions incorrect <span class="pp">|</span></span>
+<span id="cb12-363"><a href="#cb12-363" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Accuracy on imbalanced data <span class="pp">|</span> Can hide poor minority-class performance; with 65% "deer", predicting only "deer" yields 65% accuracy <span class="pp">|</span></span>
+<span id="cb12-364"><a href="#cb12-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-365"><a href="#cb12-365" aria-hidden="true" tabindex="-1"></a>A further, process-level issue: an agent asked to "improve the test score" will tune against the test set, effectively turning it into a validation set. And the agent's summary ("the model achieves 94% accuracy") is a claim, not a verified result.</span>
+<span id="cb12-366"><a href="#cb12-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-367"><a href="#cb12-367" aria-hidden="true" tabindex="-1"></a><span class="fu">### Further Examples</span></span>
+<span id="cb12-368"><a href="#cb12-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-369"><a href="#cb12-369" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Preprocessing Mismatch with the Pretrained Backbone" collapse="true"}</span>
+<span id="cb12-370"><a href="#cb12-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-371"><a href="#cb12-371" aria-hidden="true" tabindex="-1"></a>*Task*: "Use a pretrained SigLIP model as a feature extractor."</span>
+<span id="cb12-372"><a href="#cb12-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-373"><a href="#cb12-373" aria-hidden="true" tabindex="-1"></a>A common default is the ImageNet normalization (<span class="in">`mean=[0.485, 0.456, 0.406]`</span>, <span class="in">`std=[0.229, 0.224, 0.225]`</span>). Many foundation models were trained with different statistics (SigLIP uses mean and std of $0.5$, mapping pixels to $<span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$), resolutions, or cropping. A related classic is loading images with OpenCV (BGR) and feeding them to an RGB model. The impact is model- and task-dependent — sometimes negligible, sometimes substantial — and nothing in the code indicates the problem.</span>
+<span id="cb12-374"><a href="#cb12-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-375"><a href="#cb12-375" aria-hidden="true" tabindex="-1"></a>Preprocessing is specific to the **checkpoint and implementation**, not to the architecture family. Resolve it from the model and verify it with a pinned library version:</span>
 <span id="cb12-376"><a href="#cb12-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-377"><a href="#cb12-377" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> timm.create_model(<span class="st">"hf-hub:timm/vit_base_patch16_siglip_224.webli"</span>, pretrained<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb12-378"><a href="#cb12-378" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> timm.data.resolve_model_data_config(model)</span>
-<span id="cb12-379"><a href="#cb12-379" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(config)  <span class="co"># inspect mean, std, input_size, interpolation, crop_pct</span></span>
-<span id="cb12-380"><a href="#cb12-380" aria-hidden="true" tabindex="-1"></a>transform <span class="op">=</span> timm.data.create_transform(<span class="op">**</span>config, is_training<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb12-381"><a href="#cb12-381" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-382"><a href="#cb12-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-383"><a href="#cb12-383" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-384"><a href="#cb12-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-385"><a href="#cb12-385" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="<span class="dv">&amp;quot;</span>Fixing<span class="dv">&amp;quot;</span> a Crash by Hiding It" collapse="true"}</span>
-<span id="cb12-386"><a href="#cb12-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-387"><a href="#cb12-387" aria-hidden="true" tabindex="-1"></a>*Task*: "The training script crashes, please fix it." Some images are corrupted. A quick fix that makes the script run:</span>
-<span id="cb12-388"><a href="#cb12-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-389"><a href="#cb12-389" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb12-390"><a href="#cb12-390" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):</span>
-<span id="cb12-391"><a href="#cb12-391" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb12-392"><a href="#cb12-392" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> Image.<span class="bu">open</span>(<span class="va">self</span>.paths[idx])</span>
-<span id="cb12-393"><a href="#cb12-393" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.transform(img), <span class="va">self</span>.labels[idx]</span>
-<span id="cb12-394"><a href="#cb12-394" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span>:</span>
-<span id="cb12-395"><a href="#cb12-395" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>[(idx <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> <span class="bu">len</span>(<span class="va">self</span>)]  <span class="co"># silently skip</span></span>
-<span id="cb12-396"><a href="#cb12-396" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-397"><a href="#cb12-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-398"><a href="#cb12-398" aria-hidden="true" tabindex="-1"></a>The crash disappears, but <span class="in">`except Exception`</span> also swallows unrelated bugs; replacing a failing sample with its neighbor **changes the sampling distribution** (neighbors often share class or sequence); and if all samples fail (e.g. a wrong root directory), the recursion ends in a <span class="in">`RecursionError`</span> far from the actual cause. The immediate objective (prevent a crash) conflicts with the methodological one (preserve correct sampling). Better: scan and log problematic files once, decide explicitly how to handle them, and fail loudly otherwise.</span>
-<span id="cb12-399"><a href="#cb12-399" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-400"><a href="#cb12-400" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-401"><a href="#cb12-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-402"><a href="#cb12-402" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="A Detection Metric that Passes its Tests" collapse="true"}</span>
-<span id="cb12-403"><a href="#cb12-403" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-404"><a href="#cb12-404" aria-hidden="true" tabindex="-1"></a>*Task*: "Compute precision and recall for my object detector at IoU 0.5."</span>
-<span id="cb12-405"><a href="#cb12-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-406"><a href="#cb12-406" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb12-407"><a href="#cb12-407" aria-hidden="true" tabindex="-1"></a>tp <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb12-408"><a href="#cb12-408" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> pred <span class="kw">in</span> preds:</span>
-<span id="cb12-409"><a href="#cb12-409" aria-hidden="true" tabindex="-1"></a>    ious <span class="op">=</span> [iou(pred.box, gt.box) <span class="cf">for</span> gt <span class="kw">in</span> gts]</span>
-<span id="cb12-410"><a href="#cb12-410" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">max</span>(ious, default<span class="op">=</span><span class="dv">0</span>) <span class="op">&gt;=</span> <span class="fl">0.5</span>:</span>
-<span id="cb12-411"><a href="#cb12-411" aria-hidden="true" tabindex="-1"></a>        tp <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb12-412"><a href="#cb12-412" aria-hidden="true" tabindex="-1"></a>precision <span class="op">=</span> tp <span class="op">/</span> <span class="bu">len</span>(preds)</span>
-<span id="cb12-413"><a href="#cb12-413" aria-hidden="true" tabindex="-1"></a>recall <span class="op">=</span> tp <span class="op">/</span> <span class="bu">len</span>(gts)</span>
-<span id="cb12-414"><a href="#cb12-414" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-415"><a href="#cb12-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-416"><a href="#cb12-416" aria-hidden="true" tabindex="-1"></a>A simple test with one prediction per object passes. But one ground-truth object can be matched by **multiple predictions**: duplicates all count as true positives, precision is inflated, and recall can exceed 1. A common protocol processes predictions in order of decreasing confidence and matches each ground-truth box at most once. Benchmark protocols differ in details — COCO evaluation, for example, also handles categories, crowd/ignore flags, and area ranges — so prefer established tools such as <span class="in">`pycocotools`</span> or <span class="in">`torchmetrics`</span>.</span>
-<span id="cb12-417"><a href="#cb12-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-418"><a href="#cb12-418" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-419"><a href="#cb12-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-420"><a href="#cb12-420" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Exercise: What Would You Investigate First?" collapse="true"}</span>
-<span id="cb12-421"><a href="#cb12-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-422"><a href="#cb12-422" aria-hidden="true" tabindex="-1"></a>An agent has trained a camera trap classifier and reports:</span>
-<span id="cb12-423"><a href="#cb12-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-424"><a href="#cb12-424" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> Accuracy <span class="pp">|</span></span>
-<span id="cb12-425"><a href="#cb12-425" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb12-426"><a href="#cb12-426" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Training <span class="pp">|</span> 98% <span class="pp">|</span></span>
-<span id="cb12-427"><a href="#cb12-427" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Validation <span class="pp">|</span> 96% <span class="pp">|</span></span>
-<span id="cb12-428"><a href="#cb12-428" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> New site (deployment) <span class="pp">|</span> 72% <span class="pp">|</span></span>
-<span id="cb12-429"><a href="#cb12-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-430"><a href="#cb12-430" aria-hidden="true" tabindex="-1"></a>The dataset contains multiple images per camera location. What would you investigate first?</span>
-<span id="cb12-431"><a href="#cb12-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-432"><a href="#cb12-432" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Whether the validation split shares locations with training</span>
-<span id="cb12-433"><a href="#cb12-433" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Whether a larger backbone improves performance</span>
-<span id="cb12-434"><a href="#cb12-434" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Whether stronger augmentation improves robustness</span>
-<span id="cb12-435"><a href="#cb12-435" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>All three, without prioritizing an explanation</span>
-<span id="cb12-436"><a href="#cb12-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-437"><a href="#cb12-437" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb12-438"><a href="#cb12-438" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for discussion<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb12-377"><a href="#cb12-377" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb12-378"><a href="#cb12-378" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
+<span id="cb12-379"><a href="#cb12-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-380"><a href="#cb12-380" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> timm.create_model(<span class="st">"hf-hub:timm/vit_base_patch16_siglip_224.webli"</span>, pretrained<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-381"><a href="#cb12-381" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> timm.data.resolve_model_data_config(model)</span>
+<span id="cb12-382"><a href="#cb12-382" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(config)  <span class="co"># inspect mean, std, input_size, interpolation, crop_pct</span></span>
+<span id="cb12-383"><a href="#cb12-383" aria-hidden="true" tabindex="-1"></a>transform <span class="op">=</span> timm.data.create_transform(<span class="op">**</span>config, is_training<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-384"><a href="#cb12-384" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-385"><a href="#cb12-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-386"><a href="#cb12-386" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-387"><a href="#cb12-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-388"><a href="#cb12-388" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="<span class="dv">&amp;quot;</span>Fixing<span class="dv">&amp;quot;</span> a Crash by Hiding It" collapse="true"}</span>
+<span id="cb12-389"><a href="#cb12-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-390"><a href="#cb12-390" aria-hidden="true" tabindex="-1"></a>*Task*: "The training script crashes, please fix it." Some images are corrupted. A quick fix that makes the script run:</span>
+<span id="cb12-391"><a href="#cb12-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-392"><a href="#cb12-392" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb12-393"><a href="#cb12-393" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):</span>
+<span id="cb12-394"><a href="#cb12-394" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb12-395"><a href="#cb12-395" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> Image.<span class="bu">open</span>(<span class="va">self</span>.paths[idx])</span>
+<span id="cb12-396"><a href="#cb12-396" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.transform(img), <span class="va">self</span>.labels[idx]</span>
+<span id="cb12-397"><a href="#cb12-397" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb12-398"><a href="#cb12-398" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>[(idx <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> <span class="bu">len</span>(<span class="va">self</span>)]  <span class="co"># silently skip</span></span>
+<span id="cb12-399"><a href="#cb12-399" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-400"><a href="#cb12-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-401"><a href="#cb12-401" aria-hidden="true" tabindex="-1"></a>The crash disappears, but <span class="in">`except Exception`</span> also swallows unrelated bugs; replacing a failing sample with its neighbor **changes the sampling distribution** (neighbors often share class or sequence); and if all samples fail (e.g. a wrong root directory), the recursion ends in a <span class="in">`RecursionError`</span> far from the actual cause. The immediate objective (prevent a crash) conflicts with the methodological one (preserve correct sampling). Better: scan and log problematic files once, decide explicitly how to handle them, and fail loudly otherwise.</span>
+<span id="cb12-402"><a href="#cb12-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-403"><a href="#cb12-403" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-404"><a href="#cb12-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-405"><a href="#cb12-405" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="A Detection Metric that Passes its Tests" collapse="true"}</span>
+<span id="cb12-406"><a href="#cb12-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-407"><a href="#cb12-407" aria-hidden="true" tabindex="-1"></a>*Task*: "Compute precision and recall for my object detector at IoU 0.5."</span>
+<span id="cb12-408"><a href="#cb12-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-409"><a href="#cb12-409" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb12-410"><a href="#cb12-410" aria-hidden="true" tabindex="-1"></a>tp <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-411"><a href="#cb12-411" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> pred <span class="kw">in</span> preds:</span>
+<span id="cb12-412"><a href="#cb12-412" aria-hidden="true" tabindex="-1"></a>    ious <span class="op">=</span> [iou(pred.box, gt.box) <span class="cf">for</span> gt <span class="kw">in</span> gts]</span>
+<span id="cb12-413"><a href="#cb12-413" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">max</span>(ious, default<span class="op">=</span><span class="dv">0</span>) <span class="op">&gt;=</span> <span class="fl">0.5</span>:</span>
+<span id="cb12-414"><a href="#cb12-414" aria-hidden="true" tabindex="-1"></a>        tp <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-415"><a href="#cb12-415" aria-hidden="true" tabindex="-1"></a>precision <span class="op">=</span> tp <span class="op">/</span> <span class="bu">len</span>(preds)</span>
+<span id="cb12-416"><a href="#cb12-416" aria-hidden="true" tabindex="-1"></a>recall <span class="op">=</span> tp <span class="op">/</span> <span class="bu">len</span>(gts)</span>
+<span id="cb12-417"><a href="#cb12-417" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-418"><a href="#cb12-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-419"><a href="#cb12-419" aria-hidden="true" tabindex="-1"></a>A simple test with one prediction per object passes. But one ground-truth object can be matched by **multiple predictions**: duplicates all count as true positives, precision is inflated, and recall can exceed 1. A common protocol processes predictions in order of decreasing confidence and matches each ground-truth box at most once. Benchmark protocols differ in details — COCO evaluation, for example, also handles categories, crowd/ignore flags, and area ranges — so prefer established tools such as <span class="in">`pycocotools`</span> or <span class="in">`torchmetrics`</span>.</span>
+<span id="cb12-420"><a href="#cb12-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-421"><a href="#cb12-421" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-422"><a href="#cb12-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-423"><a href="#cb12-423" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Exercise: What Would You Investigate First?" collapse="true"}</span>
+<span id="cb12-424"><a href="#cb12-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-425"><a href="#cb12-425" aria-hidden="true" tabindex="-1"></a>An agent has trained a camera trap classifier and reports:</span>
+<span id="cb12-426"><a href="#cb12-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-427"><a href="#cb12-427" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> Accuracy <span class="pp">|</span></span>
+<span id="cb12-428"><a href="#cb12-428" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb12-429"><a href="#cb12-429" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Training <span class="pp">|</span> 98% <span class="pp">|</span></span>
+<span id="cb12-430"><a href="#cb12-430" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Validation <span class="pp">|</span> 96% <span class="pp">|</span></span>
+<span id="cb12-431"><a href="#cb12-431" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> New site (deployment) <span class="pp">|</span> 72% <span class="pp">|</span></span>
+<span id="cb12-432"><a href="#cb12-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-433"><a href="#cb12-433" aria-hidden="true" tabindex="-1"></a>The dataset contains multiple images per camera location. What would you investigate first?</span>
+<span id="cb12-434"><a href="#cb12-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-435"><a href="#cb12-435" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Whether the validation split shares locations with training</span>
+<span id="cb12-436"><a href="#cb12-436" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Whether a larger backbone improves performance</span>
+<span id="cb12-437"><a href="#cb12-437" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Whether stronger augmentation improves robustness</span>
+<span id="cb12-438"><a href="#cb12-438" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>All three, without prioritizing an explanation</span>
 <span id="cb12-439"><a href="#cb12-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-440"><a href="#cb12-440" aria-hidden="true" tabindex="-1"></a>**Good first investigation:** 1</span>
-<span id="cb12-441"><a href="#cb12-441" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-442"><a href="#cb12-442" aria-hidden="true" tabindex="-1"></a>The small train/validation gap combined with a large drop at the new site suggests that the validation set does not measure the relevant generalization — likely a shortcut based on location-specific features (background, camera angle). Before changing the model, establish exactly how the validation and new-site datasets were constructed. Options 2 and 3 may help later, but without a trustworthy validation protocol, their effect cannot be measured.</span>
-<span id="cb12-443"><a href="#cb12-443" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-444"><a href="#cb12-444" aria-hidden="true" tabindex="-1"></a>**Extension**: given the agent's training code, formulate three tests that would detect potential problems — then run them.</span>
-<span id="cb12-445"><a href="#cb12-445" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-446"><a href="#cb12-446" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb12-447"><a href="#cb12-447" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-440"><a href="#cb12-440" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb12-441"><a href="#cb12-441" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for discussion<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb12-442"><a href="#cb12-442" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-443"><a href="#cb12-443" aria-hidden="true" tabindex="-1"></a>**Good first investigation:** 1</span>
+<span id="cb12-444"><a href="#cb12-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-445"><a href="#cb12-445" aria-hidden="true" tabindex="-1"></a>The small train/validation gap combined with a large drop at the new site suggests that the validation set does not measure the relevant generalization — likely a shortcut based on location-specific features (background, camera angle). Before changing the model, establish exactly how the validation and new-site datasets were constructed. Options 2 and 3 may help later, but without a trustworthy validation protocol, their effect cannot be measured.</span>
+<span id="cb12-446"><a href="#cb12-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-447"><a href="#cb12-447" aria-hidden="true" tabindex="-1"></a>**Extension**: given the agent's training code, formulate three tests that would detect potential problems — then run them.</span>
 <span id="cb12-448"><a href="#cb12-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-449"><a href="#cb12-449" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-450"><a href="#cb12-450" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verification</span></span>
+<span id="cb12-449"><a href="#cb12-449" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb12-450"><a href="#cb12-450" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb12-451"><a href="#cb12-451" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-452"><a href="#cb12-452" aria-hidden="true" tabindex="-1"></a>The examples share a pattern: the code runs, and the error lies in an **assumption** about the data, the model, or the evaluation. Checking that code works is not the same as checking that a result is valid. It is useful to distinguish four levels of verification — for your own work as much as for an agent's:</span>
-<span id="cb12-453"><a href="#cb12-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-454"><a href="#cb12-454" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Level <span class="pp">|</span> Question <span class="pp">|</span> Typical evidence <span class="pp">|</span></span>
-<span id="cb12-455"><a href="#cb12-455" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb12-456"><a href="#cb12-456" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **1. Implementation correctness** <span class="pp">|</span> Does the program implement the intended operations? <span class="pp">|</span> Unit tests, shape assertions, reference implementations, inspecting transformed inputs <span class="pp">|</span></span>
-<span id="cb12-457"><a href="#cb12-457" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **2. Experimental correctness** <span class="pp">|</span> Does the evaluation measure what it claims to measure? <span class="pp">|</span> Split validation, leakage checks, baselines, metric checks, reproducibility <span class="pp">|</span></span>
-<span id="cb12-458"><a href="#cb12-458" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **3. Scientific validity** <span class="pp">|</span> Does the evidence support the conclusion? <span class="pp">|</span> Ablations, multiple seeds and uncertainty estimates, confounders, alternative explanations <span class="pp">|</span></span>
-<span id="cb12-459"><a href="#cb12-459" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **4. Operational validity** <span class="pp">|</span> Does it work under realistic deployment conditions? <span class="pp">|</span> Distribution shift, latency, memory, failure handling, security, monitoring <span class="pp">|</span></span>
-<span id="cb12-460"><a href="#cb12-460" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-461"><a href="#cb12-461" aria-hidden="true" tabindex="-1"></a>Agents can assist at every level, but evidence at one level does not establish correctness at another. A perfectly tested pipeline (level 1) can still evaluate on a leaky split (level 2).</span>
-<span id="cb12-462"><a href="#cb12-462" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-463"><a href="#cb12-463" aria-hidden="true" tabindex="-1"></a><span class="fu">### Independent Verification {#independent-verification}</span></span>
-<span id="cb12-464"><a href="#cb12-464" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-465"><a href="#cb12-465" aria-hidden="true" tabindex="-1"></a>Agents can generate both the implementation **and** the tests that confirm it. If both share the same misunderstanding, all tests pass. Consider an IoU function with a wrong union:</span>
-<span id="cb12-466"><a href="#cb12-466" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-467"><a href="#cb12-467" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb12-468"><a href="#cb12-468" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> iou(a, b):  <span class="co"># boxes in xyxy format</span></span>
-<span id="cb12-469"><a href="#cb12-469" aria-hidden="true" tabindex="-1"></a>    inter <span class="op">=</span> intersection_area(a, b)</span>
-<span id="cb12-470"><a href="#cb12-470" aria-hidden="true" tabindex="-1"></a>    union <span class="op">=</span> area(a) <span class="op">+</span> area(b)          <span class="co"># bug: should subtract inter</span></span>
-<span id="cb12-471"><a href="#cb12-471" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> inter <span class="op">/</span> union</span>
-<span id="cb12-472"><a href="#cb12-472" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-473"><a href="#cb12-473" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_iou():</span>
-<span id="cb12-474"><a href="#cb12-474" aria-hidden="true" tabindex="-1"></a>    <span class="co"># expected value computed with the same (wrong) formula</span></span>
-<span id="cb12-475"><a href="#cb12-475" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> iou([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>]) <span class="op">==</span> <span class="dv">1</span> <span class="op">/</span> <span class="dv">8</span></span>
-<span id="cb12-476"><a href="#cb12-476" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-477"><a href="#cb12-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-478"><a href="#cb12-478" aria-hidden="true" tabindex="-1"></a>The test passes; the correct value is $1/7$. "Independent" refers to how the **expected behavior is derived** — not necessarily to who writes the test (a different agent may well share the same misconception). Independent sources of expectations include:</span>
-<span id="cb12-479"><a href="#cb12-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-480"><a href="#cb12-480" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Analytically derived properties**: identical boxes must give IoU $= 1$ (the buggy version returns $0.5$); disjoint boxes must give $0$.</span>
-<span id="cb12-481"><a href="#cb12-481" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reference implementations**: compare against <span class="in">`torchvision.ops.box_iou`</span> or <span class="in">`pycocotools`</span>.</span>
-<span id="cb12-482"><a href="#cb12-482" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Constructed counterexamples**: duplicate predictions for the detection metric, a split with a known shared location.</span>
-<span id="cb12-483"><a href="#cb12-483" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Acceptance criteria defined before implementation**.</span>
-<span id="cb12-484"><a href="#cb12-484" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-485"><a href="#cb12-485" aria-hidden="true" tabindex="-1"></a><span class="fu">### Acceptance Criteria before Implementation</span></span>
-<span id="cb12-486"><a href="#cb12-486" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-487"><a href="#cb12-487" aria-hidden="true" tabindex="-1"></a>Verification criteria can be specified **before** an agent writes a single line of code, which makes the task much harder to satisfy superficially. For a camera trap training pipeline, for example:</span>
-<span id="cb12-488"><a href="#cb12-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-489"><a href="#cb12-489" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dataset integrity**: no <span class="in">`location_id`</span> appears in both training and test set.</span>
-<span id="cb12-490"><a href="#cb12-490" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Preprocessing**: generated inputs match the pretrained model's reference transform.</span>
-<span id="cb12-491"><a href="#cb12-491" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Learning sanity check**: the model can overfit a tiny subset (e.g. 32 images).</span>
-<span id="cb12-492"><a href="#cb12-492" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Metric implementation**: metrics on a hand-constructed example match expected values.</span>
-<span id="cb12-493"><a href="#cb12-493" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Generalization**: sequence-level and location-level test performance are both reported.</span>
-<span id="cb12-494"><a href="#cb12-494" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Traceability**: dataset version, model weights, configuration, and random seeds are recorded.</span>
-<span id="cb12-495"><a href="#cb12-495" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-496"><a href="#cb12-496" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reproducibility and Provenance</span></span>
-<span id="cb12-497"><a href="#cb12-497" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-498"><a href="#cb12-498" aria-hidden="true" tabindex="-1"></a>Agents iterate quickly, and every iteration may change something. To keep experiments comparable, track:</span>
-<span id="cb12-499"><a href="#cb12-499" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-500"><a href="#cb12-500" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Data**: dataset version, filters, split definition (ideally the split indices themselves)</span>
-<span id="cb12-501"><a href="#cb12-501" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Model**: exact checkpoint identifier and source</span>
-<span id="cb12-502"><a href="#cb12-502" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Configuration**: all hyperparameters in a versioned config file</span>
-<span id="cb12-503"><a href="#cb12-503" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Environment**: pinned library versions (a lock file)</span>
-<span id="cb12-504"><a href="#cb12-504" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Results**: metrics with the commit, config, and seed that produced them</span>
-<span id="cb12-505"><a href="#cb12-505" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-506"><a href="#cb12-506" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
-<span id="cb12-507"><a href="#cb12-507" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-508"><a href="#cb12-508" aria-hidden="true" tabindex="-1"></a>**🤔 Think About It**</span>
-<span id="cb12-509"><a href="#cb12-509" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-510"><a href="#cb12-510" aria-hidden="true" tabindex="-1"></a>Which of the examples above would be caught by a unit test? Which by visualizing a batch of inputs after preprocessing? And which only by reasoning about the data and the deployment scenario?</span>
-<span id="cb12-511"><a href="#cb12-511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-512"><a href="#cb12-512" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb12-513"><a href="#cb12-513" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Key considerations<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb12-452"><a href="#cb12-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-453"><a href="#cb12-453" aria-hidden="true" tabindex="-1"></a><span class="fu">## Verification</span></span>
+<span id="cb12-454"><a href="#cb12-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-455"><a href="#cb12-455" aria-hidden="true" tabindex="-1"></a>The examples share a pattern: the code runs, and the error lies in an **assumption** about the data, the model, or the evaluation. Checking that code works is not the same as checking that a result is valid. It is useful to distinguish four levels of verification — for your own work as much as for an agent's:</span>
+<span id="cb12-456"><a href="#cb12-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-457"><a href="#cb12-457" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Level <span class="pp">|</span> Question <span class="pp">|</span> Typical evidence <span class="pp">|</span></span>
+<span id="cb12-458"><a href="#cb12-458" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb12-459"><a href="#cb12-459" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **1. Implementation correctness** <span class="pp">|</span> Does the program implement the intended operations? <span class="pp">|</span> Unit tests, shape assertions, reference implementations, inspecting transformed inputs <span class="pp">|</span></span>
+<span id="cb12-460"><a href="#cb12-460" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **2. Experimental correctness** <span class="pp">|</span> Does the evaluation measure what it claims to measure? <span class="pp">|</span> Split validation, leakage checks, baselines, metric checks, reproducibility <span class="pp">|</span></span>
+<span id="cb12-461"><a href="#cb12-461" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **3. Scientific validity** <span class="pp">|</span> Does the evidence support the conclusion? <span class="pp">|</span> Ablations, multiple seeds and uncertainty estimates, confounders, alternative explanations <span class="pp">|</span></span>
+<span id="cb12-462"><a href="#cb12-462" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **4. Operational validity** <span class="pp">|</span> Does it work under realistic deployment conditions? <span class="pp">|</span> Distribution shift, latency, memory, failure handling, security, monitoring <span class="pp">|</span></span>
+<span id="cb12-463"><a href="#cb12-463" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-464"><a href="#cb12-464" aria-hidden="true" tabindex="-1"></a>Agents can assist at every level, but evidence at one level does not establish correctness at another. A perfectly tested pipeline (level 1) can still evaluate on a leaky split (level 2).</span>
+<span id="cb12-465"><a href="#cb12-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-466"><a href="#cb12-466" aria-hidden="true" tabindex="-1"></a><span class="fu">### Independent Verification {#independent-verification}</span></span>
+<span id="cb12-467"><a href="#cb12-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-468"><a href="#cb12-468" aria-hidden="true" tabindex="-1"></a>Agents can generate both the implementation **and** the tests that confirm it. If both share the same misunderstanding, all tests pass. Consider an IoU function with a wrong union:</span>
+<span id="cb12-469"><a href="#cb12-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-470"><a href="#cb12-470" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb12-471"><a href="#cb12-471" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> iou(a, b):  <span class="co"># boxes in xyxy format</span></span>
+<span id="cb12-472"><a href="#cb12-472" aria-hidden="true" tabindex="-1"></a>    inter <span class="op">=</span> intersection_area(a, b)</span>
+<span id="cb12-473"><a href="#cb12-473" aria-hidden="true" tabindex="-1"></a>    union <span class="op">=</span> area(a) <span class="op">+</span> area(b)          <span class="co"># bug: should subtract inter</span></span>
+<span id="cb12-474"><a href="#cb12-474" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> inter <span class="op">/</span> union</span>
+<span id="cb12-475"><a href="#cb12-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-476"><a href="#cb12-476" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_iou():</span>
+<span id="cb12-477"><a href="#cb12-477" aria-hidden="true" tabindex="-1"></a>    <span class="co"># expected value computed with the same (wrong) formula</span></span>
+<span id="cb12-478"><a href="#cb12-478" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> iou([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>]) <span class="op">==</span> <span class="dv">1</span> <span class="op">/</span> <span class="dv">8</span></span>
+<span id="cb12-479"><a href="#cb12-479" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-480"><a href="#cb12-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-481"><a href="#cb12-481" aria-hidden="true" tabindex="-1"></a>The test passes; the correct value is $1/7$. "Independent" refers to how the **expected behavior is derived** — not necessarily to who writes the test (a different agent may well share the same misconception). Independent sources of expectations include:</span>
+<span id="cb12-482"><a href="#cb12-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-483"><a href="#cb12-483" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Analytically derived properties**: identical boxes must give IoU $= 1$ (the buggy version returns $0.5$); disjoint boxes must give $0$.</span>
+<span id="cb12-484"><a href="#cb12-484" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reference implementations**: compare against <span class="in">`torchvision.ops.box_iou`</span> or <span class="in">`pycocotools`</span>.</span>
+<span id="cb12-485"><a href="#cb12-485" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Constructed counterexamples**: duplicate predictions for the detection metric, a split with a known shared location.</span>
+<span id="cb12-486"><a href="#cb12-486" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Acceptance criteria defined before implementation**.</span>
+<span id="cb12-487"><a href="#cb12-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-488"><a href="#cb12-488" aria-hidden="true" tabindex="-1"></a><span class="fu">### Acceptance Criteria before Implementation</span></span>
+<span id="cb12-489"><a href="#cb12-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-490"><a href="#cb12-490" aria-hidden="true" tabindex="-1"></a>Verification criteria can be specified **before** an agent writes a single line of code, which makes the task much harder to satisfy superficially. For a camera trap training pipeline, for example:</span>
+<span id="cb12-491"><a href="#cb12-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-492"><a href="#cb12-492" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dataset integrity**: no <span class="in">`location_id`</span> appears in both training and test set.</span>
+<span id="cb12-493"><a href="#cb12-493" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Preprocessing**: generated inputs match the pretrained model's reference transform.</span>
+<span id="cb12-494"><a href="#cb12-494" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Learning sanity check**: the model can overfit a tiny subset (e.g. 32 images).</span>
+<span id="cb12-495"><a href="#cb12-495" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Metric implementation**: metrics on a hand-constructed example match expected values.</span>
+<span id="cb12-496"><a href="#cb12-496" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Generalization**: sequence-level and location-level test performance are both reported.</span>
+<span id="cb12-497"><a href="#cb12-497" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Traceability**: dataset version, model weights, configuration, and random seeds are recorded.</span>
+<span id="cb12-498"><a href="#cb12-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-499"><a href="#cb12-499" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reproducibility and Provenance</span></span>
+<span id="cb12-500"><a href="#cb12-500" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-501"><a href="#cb12-501" aria-hidden="true" tabindex="-1"></a>Agents iterate quickly, and every iteration may change something. To keep experiments comparable, track:</span>
+<span id="cb12-502"><a href="#cb12-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-503"><a href="#cb12-503" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Data**: dataset version, filters, split definition (ideally the split indices themselves)</span>
+<span id="cb12-504"><a href="#cb12-504" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Model**: exact checkpoint identifier and source</span>
+<span id="cb12-505"><a href="#cb12-505" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Configuration**: all hyperparameters in a versioned config file</span>
+<span id="cb12-506"><a href="#cb12-506" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Environment**: pinned library versions (a lock file)</span>
+<span id="cb12-507"><a href="#cb12-507" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Results**: metrics with the commit, config, and seed that produced them</span>
+<span id="cb12-508"><a href="#cb12-508" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-509"><a href="#cb12-509" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
+<span id="cb12-510"><a href="#cb12-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-511"><a href="#cb12-511" aria-hidden="true" tabindex="-1"></a>**🤔 Think About It**</span>
+<span id="cb12-512"><a href="#cb12-512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-513"><a href="#cb12-513" aria-hidden="true" tabindex="-1"></a>Which of the examples above would be caught by a unit test? Which by visualizing a batch of inputs after preprocessing? And which only by reasoning about the data and the deployment scenario?</span>
 <span id="cb12-514"><a href="#cb12-514" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-515"><a href="#cb12-515" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Unit tests (with independently derived expectations)**: the detection metric (duplicate predictions as counterexample), unsynchronized box transforms, silently skipped samples (count loaded samples per class), missing <span class="in">`model.eval()`</span> (assert <span class="in">`model.training is False`</span> in the evaluation function).</span>
-<span id="cb12-516"><a href="#cb12-516" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Visualizing inputs after preprocessing**: wrong normalization or channel order, label-breaking augmentations, crops that remove the object.</span>
-<span id="cb12-517"><a href="#cb12-517" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reasoning about data and deployment**: split design, which invariances hold, which metric answers the question.</span>
-<span id="cb12-518"><a href="#cb12-518" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-519"><a href="#cb12-519" aria-hidden="true" tabindex="-1"></a>The last category is the hardest to automate — and the one this course aims to build.</span>
-<span id="cb12-520"><a href="#cb12-520" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-521"><a href="#cb12-521" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb12-522"><a href="#cb12-522" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-515"><a href="#cb12-515" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb12-516"><a href="#cb12-516" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Key considerations<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb12-517"><a href="#cb12-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-518"><a href="#cb12-518" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Unit tests (with independently derived expectations)**: the detection metric (duplicate predictions as counterexample), unsynchronized box transforms, silently skipped samples (count loaded samples per class), missing <span class="in">`model.eval()`</span> (assert <span class="in">`model.training is False`</span> in the evaluation function).</span>
+<span id="cb12-519"><a href="#cb12-519" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Visualizing inputs after preprocessing**: wrong normalization or channel order, label-breaking augmentations, crops that remove the object.</span>
+<span id="cb12-520"><a href="#cb12-520" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reasoning about data and deployment**: split design, which invariances hold, which metric answers the question.</span>
+<span id="cb12-521"><a href="#cb12-521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-522"><a href="#cb12-522" aria-hidden="true" tabindex="-1"></a>The last category is the hardest to automate — and the one this course aims to build.</span>
 <span id="cb12-523"><a href="#cb12-523" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-524"><a href="#cb12-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-525"><a href="#cb12-525" aria-hidden="true" tabindex="-1"></a><span class="fu">## Takeaways</span></span>
+<span id="cb12-524"><a href="#cb12-524" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb12-525"><a href="#cb12-525" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb12-526"><a href="#cb12-526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-527"><a href="#cb12-527" aria-hidden="true" tabindex="-1"></a>AI tools will keep improving, and many of the specific failure modes on this page may become less frequent. Three principles are more durable than guidance tied to any particular tool or model generation:</span>
-<span id="cb12-528"><a href="#cb12-528" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-529"><a href="#cb12-529" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Use AI deliberately**: choose its role based on what you are trying to learn, not merely on what can be automated.</span>
-<span id="cb12-530"><a href="#cb12-530" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Stay cognitively engaged**: ask questions, make predictions, challenge explanations, and regularly work independently.</span>
-<span id="cb12-531"><a href="#cb12-531" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Take responsibility for results**: understand the assumptions, validate important claims, and be able to explain what the system does and why.</span>
-<span id="cb12-532"><a href="#cb12-532" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-533"><a href="#cb12-533" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
-<span id="cb12-534"><a href="#cb12-534" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-535"><a href="#cb12-535" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
-<span id="cb12-536"><a href="#cb12-536" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb12-527"><a href="#cb12-527" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-528"><a href="#cb12-528" aria-hidden="true" tabindex="-1"></a><span class="fu">## Takeaways</span></span>
+<span id="cb12-529"><a href="#cb12-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-530"><a href="#cb12-530" aria-hidden="true" tabindex="-1"></a>AI tools will keep improving, and many of the specific failure modes on this page may become less frequent. Three principles are more durable than guidance tied to any particular tool or model generation:</span>
+<span id="cb12-531"><a href="#cb12-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-532"><a href="#cb12-532" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Use AI deliberately**: choose its role based on what you are trying to learn, not merely on what can be automated.</span>
+<span id="cb12-533"><a href="#cb12-533" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Stay cognitively engaged**: ask questions, make predictions, challenge explanations, and regularly work independently.</span>
+<span id="cb12-534"><a href="#cb12-534" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Take responsibility for results**: understand the assumptions, validate important claims, and be able to explain what the system does and why.</span>
+<span id="cb12-535"><a href="#cb12-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-536"><a href="#cb12-536" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb12-537"><a href="#cb12-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-538"><a href="#cb12-538" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb12-539"><a href="#cb12-539" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
