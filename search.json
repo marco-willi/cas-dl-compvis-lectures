@@ -67,7 +67,7 @@
     "href": "pages/slides/representation_learning.html#the-vastness-of-image-space",
     "title": "5 - Representation Learning",
     "section": "The Vastness of Image Space",
-    "text": "The Vastness of Image Space\n\nIllustrated are the set of all possible images and the subset of natural images\nTotal possible \\(256\\times256\\) RGB images: \\(255^{256 \\times 256 \\times 3}\\) ≈ infinite\n\n\nNatural images: (relatively) tiny subset of this space\n\n\nImplication: Pixel space is extremely inefficient for representing real images!",
+    "text": "The Vastness of Image Space\n\nIllustrated are the set of all possible images and the subset of natural images\nTotal possible \\(256\\times256\\) RGB images: \\(256^{256 \\times 256 \\times 3}\\) ≈ infinite\n\n\nNatural images: (relatively) tiny subset of this space\n\n\nImplication: Pixel space is extremely inefficient for representing real images!",
     "crumbs": [
       "Slides",
       "5 - Representation Learning"
@@ -107,6 +107,17 @@
     ]
   },
   {
+    "objectID": "pages/slides/representation_learning.html#one-answer-dinov3",
+    "href": "pages/slides/representation_learning.html#one-answer-dinov3",
+    "title": "5 - Representation Learning",
+    "section": "One Answer: DINOv3",
+    "text": "One Answer: DINOv3\n\nDINOv3 embeddings of the example images, reduced to 2D with t-SNE.\nAugmented copies and other elephants land close together; the car is far away.",
+    "crumbs": [
+      "Slides",
+      "5 - Representation Learning"
+    ]
+  },
+  {
     "objectID": "pages/slides/representation_learning.html#what-makes-good-representations",
     "href": "pages/slides/representation_learning.html#what-makes-good-representations",
     "title": "5 - Representation Learning",
@@ -133,7 +144,7 @@
     "href": "pages/slides/representation_learning.html#supervised-learning",
     "title": "5 - Representation Learning",
     "section": "Supervised Learning",
-    "text": "Supervised Learning\n\n\n\nEncoder + classifier trained with labeled data\nTrain on labeled data (e.g., ImageNet 1000 classes)\nCross-entropy loss on human-provided labels\nPenultimate layer embeddings = transferable features",
+    "text": "Supervised Learning\n\n\n\nEncoder + classifier trained on labeled data (e.g., ImageNet, 1000 classes)\nCross-entropy loss on human-provided labels\nPenultimate layer embeddings = transferable features",
     "crumbs": [
       "Slides",
       "5 - Representation Learning"
@@ -155,7 +166,7 @@
     "href": "pages/slides/representation_learning.html#self-supervised-learning-masked-autoencoding-mae",
     "title": "5 - Representation Learning",
     "section": "Self-Supervised Learning: Masked Autoencoding (MAE)",
-    "text": "Self-Supervised Learning: Masked Autoencoding (MAE)\n\nFrom He et al. (2021)\n\nMask 75% of image patches random\nEncode only visible patches (efficient!)\nDecode with mask tokens inserted and reconstruct original pixels\n\n\n\nKey insight: To fill in gaps, model must learn global structure",
+    "text": "Self-Supervised Learning: Masked Autoencoding (MAE)\n\nFrom He et al. (2021)\n\nMask 75% of image patches at random\nEncode only visible patches (efficient!)\nDecode with mask tokens inserted and reconstruct original pixels\n\n\n\nKey insight: To fill in gaps, model must learn global structure",
     "crumbs": [
       "Slides",
       "5 - Representation Learning"
@@ -177,7 +188,7 @@
     "href": "pages/slides/representation_learning.html#self-supervised-learning-self-distillation",
     "title": "5 - Representation Learning",
     "section": "Self-Supervised Learning: Self-Distillation",
-    "text": "Self-Supervised Learning: Self-Distillation\n\nFrom Caron et al. (2021)\n\nNo explicit negatives needed\nWorks with smaller batches\nEmergent semantic clustering\nProduces high-quality local features (patch tokens)",
+    "text": "Self-Supervised Learning: Self-Distillation\n\nFrom Caron et al. (2021)\n\nA student sees different crops of an image and must match the teacher (a slow average of the student)\nDifferent views of the same image → same output: nuisance changes are ignored\nCentering and sharpening keep outputs from becoming identical for all images",
     "crumbs": [
       "Slides",
       "5 - Representation Learning"
@@ -228,11 +239,44 @@
     ]
   },
   {
-    "objectID": "pages/slides/representation_learning.html#comparisons",
-    "href": "pages/slides/representation_learning.html#comparisons",
+    "objectID": "pages/slides/representation_learning.html#pixel-space-similarity",
+    "href": "pages/slides/representation_learning.html#pixel-space-similarity",
     "title": "5 - Representation Learning",
-    "section": "Comparisons",
-    "text": "Comparisons\n\n\nPixel SpaceResNet-50CLIPDINOv3\n\n\n\n\n\n\n\n\nFigure 1: Raw pixel-level similarity fails to capture semantic relationships.\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Supervised CNN representations group semantically similar images.\n\n\n\n\n\n\n\n\n\n\n\nFigure 3: Language-aligned embeddings from CLIP show text-driven semantic structure.\n\n\n\n\n\n\n\n\n\n\n\nFigure 4: Self-distilled DINOv3 features reveal fine-grained semantic clusters.",
+    "section": "Pixel Space Similarity",
+    "text": "Pixel Space Similarity\n\n\nProblem: Lighting variations dominate, semantic relationships hidden!",
+    "crumbs": [
+      "Slides",
+      "5 - Representation Learning"
+    ]
+  },
+  {
+    "objectID": "pages/slides/representation_learning.html#resnet-supervised-similarity",
+    "href": "pages/slides/representation_learning.html#resnet-supervised-similarity",
+    "title": "5 - Representation Learning",
+    "section": "ResNet (Supervised) Similarity",
+    "text": "ResNet (Supervised) Similarity\n\n\nBetter semantic grouping, but still affected by brightness",
+    "crumbs": [
+      "Slides",
+      "5 - Representation Learning"
+    ]
+  },
+  {
+    "objectID": "pages/slides/representation_learning.html#clip-similarity",
+    "href": "pages/slides/representation_learning.html#clip-similarity",
+    "title": "5 - Representation Learning",
+    "section": "CLIP Similarity",
+    "text": "CLIP Similarity\n\n\nStrong vision-language alignment, robust to appearance changes",
+    "crumbs": [
+      "Slides",
+      "5 - Representation Learning"
+    ]
+  },
+  {
+    "objectID": "pages/slides/representation_learning.html#dinov3-similarity",
+    "href": "pages/slides/representation_learning.html#dinov3-similarity",
+    "title": "5 - Representation Learning",
+    "section": "DINOv3 Similarity",
+    "text": "DINOv3 Similarity\n\n\nBest semantic discrimination, excellent invariance to nuisance factors",
     "crumbs": [
       "Slides",
       "5 - Representation Learning"
@@ -272,6 +316,17 @@
     ]
   },
   {
+    "objectID": "pages/slides/representation_learning.html#image-search-example",
+    "href": "pages/slides/representation_learning.html#image-search-example",
+    "title": "5 - Representation Learning",
+    "section": "Image Search: Example",
+    "text": "Image Search: Example\n\nDINOv3 embeddings of furniture photos (ABO) in 2D; query in black, neighbours in red.\nNeighbours share shape and style (hairpin legs), without any labels.",
+    "crumbs": [
+      "Slides",
+      "5 - Representation Learning"
+    ]
+  },
+  {
     "objectID": "pages/slides/representation_learning.html#next-exercise-visual-image-search",
     "href": "pages/slides/representation_learning.html#next-exercise-visual-image-search",
     "title": "5 - Representation Learning",
@@ -294,11 +349,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/images_as_data.html#images-as-tensors",
-    "href": "pages/slides/images_as_data.html#images-as-tensors",
+    "objectID": "pages/slides/images_as_data.html#images-as-tensors-12",
+    "href": "pages/slides/images_as_data.html#images-as-tensors-12",
     "title": "2 - Images as Data",
-    "section": "Images as Tensors",
-    "text": "Images as Tensors\n\n\nFigure 1: An image as a tensor of shape H × W × C.\n\nPixel values: uint8 [0, 255] → float [0, 1] → standardized (zero mean, unit variance)\n\n\nShape conventions:\n\nNumPy / PIL: (H, W, C) — channels last\nPyTorch: (C, H, W) — channels first\n\nMismatched conventions → silent bugs.",
+    "section": "Images as Tensors (1/2)",
+    "text": "Images as Tensors (1/2)\n\n\nFigure 1: An image as a tensor of shape H × W × C.",
+    "crumbs": [
+      "Slides",
+      "2 - Images as Data"
+    ]
+  },
+  {
+    "objectID": "pages/slides/images_as_data.html#images-as-tensors-22",
+    "href": "pages/slides/images_as_data.html#images-as-tensors-22",
+    "title": "2 - Images as Data",
+    "section": "Images as Tensors (2/2)",
+    "text": "Images as Tensors (2/2)\n\n\nFigure 2: An image as a tensor of shape H × W × C.\n\nPixel values: uint8 [0, 255] → float [0, 1] → standardized (zero mean, unit variance)\n\n\nShape conventions:\n\nNumPy / PIL: (H, W, C) — channels last\nPyTorch: (C, H, W) — channels first\n\nMismatched conventions → silent bugs.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -309,7 +375,7 @@
     "href": "pages/slides/images_as_data.html#channels-what-does-c-mean",
     "title": "2 - Images as Data",
     "section": "Channels: What Does C Mean?",
-    "text": "Channels: What Does C Mean?\n\n\nFigure 2: RGB (3 channels) vs. grayscale (1 channel).\n\n1: grayscale, depth, IR/thermal, X-ray, ultrasound\n3: RGB (or HSV, same info, different axes)\n4: RGBA (alpha) or RGB + near-IR\nN (10s–100s): multispectral / hyperspectral (remote sensing, agriculture, astronomy)\n\n\nFor ordinary 2-D images, only C changes , the tensor structure stays H × W × C. For volumes or time series, we add additional axes.",
+    "text": "Channels: What Does C Mean?\n\n\nFigure 3: RGB (3 channels) vs. grayscale (1 channel).\n\n1: grayscale, depth, IR/thermal, X-ray, ultrasound\n3: RGB (or HSV, same info, different axes)\n4: RGBA (alpha) or RGB + near-IR\nN (10s–100s): multispectral / hyperspectral (remote sensing, agriculture, astronomy)\n\n\nFor ordinary 2-D images, only C changes; the tensor structure stays H × W × C. For volumes or time series, we add additional axes.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -320,7 +386,7 @@
     "href": "pages/slides/images_as_data.html#thermal-imaging",
     "title": "2 - Images as Data",
     "section": "Thermal Imaging",
-    "text": "Thermal Imaging\n\n\nFigure 3: Thermal images are often single-channel sensor measurements: each pixel represents heat / infrared intensity. For display, they may be mapped to false-color RGB.",
+    "text": "Thermal Imaging\n\n\nFigure 4: Thermal images are often single-channel sensor measurements: each pixel represents heat / infrared intensity. For display, they may be mapped to false-color RGB.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -331,7 +397,7 @@
     "href": "pages/slides/images_as_data.html#quiz-batch-shape",
     "title": "2 - Images as Data",
     "section": "Quiz: Batch Shape",
-    "text": "Quiz: Batch Shape\nA batch of 32 RGB images, each 224 × 224, in PyTorch.\nWhat is the tensor shape?\n\nAnswer: (32, 3, 224, 224) — batch × channels × height × width\n\n\nThe batch dimension is always first in PyTorch, enables parallel GPU computation.",
+    "text": "Quiz: Batch Shape\nA batch of 32 RGB images, each 224 × 224, in PyTorch.\nWhat is the tensor shape?\n\nAnswer: (32, 3, 224, 224) — batch × channels × height × width\n\n\nThe batch dimension is always first in PyTorch; it enables parallel GPU computation.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -342,7 +408,7 @@
     "href": "pages/slides/images_as_data.html#resolution",
     "title": "2 - Images as Data",
     "section": "Resolution",
-    "text": "Resolution\n\n\nFigure 4: Same image at 224 × 224, 64 × 64, 16 × 16. Detail is progressively lost.\n\nHigher → detail, more memory + compute\nLower → faster, but discards information\nAspect-ratio distortion → squashing deforms objects\n\n\nCommon: resize shortest edge + center-crop, or resize with padding.",
+    "text": "Resolution\n\n\nFigure 5: Same image at 224 × 224, 64 × 64, 16 × 16. Detail is progressively lost.\n\nHigher → detail, more memory + compute\nLower → faster, but discards information\nAspect-ratio distortion → squashing deforms objects\n\n\nCommon: resize shortest edge + center-crop, or resize with padding.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -353,7 +419,7 @@
     "href": "pages/slides/images_as_data.html#quiz-mri-as-a-tensor",
     "title": "2 - Images as Data",
     "section": "Quiz: MRI as a Tensor",
-    "text": "Quiz: MRI as a Tensor\nHow would an MRI scan be represented?\nIs it still H × W × C?\n\n\nFigure 5: Source",
+    "text": "Quiz: MRI as a Tensor\nHow would an MRI scan be represented?\nIs it still H × W × C?\n\n\nFigure 6: Source",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -364,7 +430,7 @@
     "href": "pages/slides/images_as_data.html#mri-as-a-tensor",
     "title": "2 - Images as Data",
     "section": "MRI as a Tensor",
-    "text": "MRI as a Tensor\nHow would an MRI scan be represented?\n\n\nFigure 6: MRI scans.\n\nThe H × W × C abstraction generalizes, sequences/depth become extra axes.",
+    "text": "MRI as a Tensor\nHow would an MRI scan be represented?\n\n\nFigure 7: MRI scans.\n\nThe H × W × C abstraction generalizes: sequences and depth become extra axes.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -375,7 +441,7 @@
     "href": "pages/slides/images_as_data.html#real-world-camera-trap-dataset",
     "title": "2 - Images as Data",
     "section": "Real-World Camera Trap Dataset",
-    "text": "Real-World Camera Trap Dataset\n\n\nFigure 7: Source: Snapshot Kgalgadi\n\nQuestion: What makes this dataset difficult for image classification?",
+    "text": "Real-World Camera Trap Dataset\n\n\nFigure 8: Source: Snapshot Kgalgadi\n\nQuestion: What could be the challenge for classification, looking at these examples?",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -386,7 +452,7 @@
     "href": "pages/slides/images_as_data.html#class-imbalance",
     "title": "2 - Images as Data",
     "section": "Class Imbalance",
-    "text": "Class Imbalance\n\n\nFigure 8: Class imbalances are common in real-world datsets.\n\nQuestion: What makes this dataset challenging for image classification?",
+    "text": "Class Imbalance\n\n\nFigure 9: Captures per class in the Kalahari dataset (log scale).\n\n74% of captures are empty; many species appear only once.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -397,7 +463,7 @@
     "href": "pages/slides/images_as_data.html#label-noise",
     "title": "2 - Images as Data",
     "section": "Label Noise",
-    "text": "Label Noise\n\n\nFigure 9: Wolf or large dog? Empty, or a tail at the edge of the frame?\n\nInter-annotator disagreement on borderline cases\nSystematic errors: annotators consistently confuse two classes\nAmbiguous category boundaries: class definitions overlap\n\n\nDeep networks can eventually memorize noisy labels (Arpit et al. 2017), so validation monitoring and data inspection matter.",
+    "text": "Label Noise\n\n\nFigure 10: Wolf or large dog? Empty, or a tail at the edge of the frame?\n\nInter-annotator disagreement on borderline cases\nSystematic errors: annotators consistently confuse two classes\nAmbiguous category boundaries: class definitions overlap\n\n\nDeep networks can eventually memorize noisy labels (Arpit et al. 2017), so validation monitoring and data inspection matter.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -408,7 +474,7 @@
     "href": "pages/slides/images_as_data.html#hidden-bias",
     "title": "2 - Images as Data",
     "section": "Hidden Bias",
-    "text": "Hidden Bias\n\n\nFigure 10: Same animal, different background: different prediction. The background, not the cow, drives the prediction. Adapted from Beery et al. (2018).\n\nGeographic: limited regional diversity (architecture, vegetation, clothing)\nSelection:internet-sourced images overrepresent certain demographics/styles\nWatermark / source artifacts: visual quirks correlate with labels",
+    "text": "Hidden Bias\n\n\nFigure 11: Same animal, different background: different prediction. The background, not the cow, drives the prediction. Adapted from Beery et al. (2018).\n\nGeographic: limited regional diversity (architecture, vegetation, clothing)\nSelection: internet-sourced images overrepresent certain demographics/styles\nWatermark / source artifacts: visual quirks correlate with labels",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -430,7 +496,7 @@
     "href": "pages/slides/images_as_data.html#splitting-a-dataset",
     "title": "2 - Images as Data",
     "section": "Splitting a Dataset",
-    "text": "Splitting a Dataset\n\n\nFigure 11: Source: Voxel51\n\nQuestion: What is wrong with this split?",
+    "text": "Splitting a Dataset\n\n\nFigure 12: Source: Voxel51\n\nQuestion: What is wrong with this split?",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -441,7 +507,7 @@
     "href": "pages/slides/images_as_data.html#data-leakage",
     "title": "2 - Images as Data",
     "section": "Data Leakage",
-    "text": "Data Leakage\nData leakage means the model receives information during training that would not be available at deployment.\nResult: validation/test metrics look good, but real-world performance collapses.\n\nNear-duplicates across splits (camera-trap bursts, video frames)\nSame subject / location in multiple splits\nPreprocessing stats computed over the full dataset (not just training)",
+    "text": "Data Leakage\nThe model sees information during training that it will not have at deployment.\n\n\nFigure 13: Same images and model, different splits: the score drops as the split gets stricter.\n\nCauses: near-duplicates, same site in train and test, statistics computed on all data.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -453,17 +519,6 @@
     "title": "2 - Images as Data",
     "section": "Quiz: Skin Cancer Detection Dataset",
     "text": "Quiz: Skin Cancer Detection Dataset\n500 patients, multiple visits each. Images randomly shuffled and split 80/10/10.\nWhat goes wrong?\n\nThe same patient can appear in both train and test. The model may learn patient-specific cues instead of lesion-specific cues.\n\n\nFix: split at the patient level.",
-    "crumbs": [
-      "Slides",
-      "2 - Images as Data"
-    ]
-  },
-  {
-    "objectID": "pages/slides/images_as_data.html#key-takeaways",
-    "href": "pages/slides/images_as_data.html#key-takeaways",
-    "title": "2 - Images as Data",
-    "section": "Key Takeaways",
-    "text": "Key Takeaways\n\nImages are tensors: usually H × W × C, but volumes/time series add axes.\nShape conventions matter: NumPy/PIL use H × W × C; PyTorch uses C × H × W.\nResolution is a trade-off between detail, memory, and compute.\nDataset quality matters: imbalance, noisy labels, hidden bias, and leakage can dominate performance.\nSplits must respect the data structure: group related samples together.\n\n\nThe model can only be as good as the data it learns from.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -723,6 +778,72 @@
     ]
   },
   {
+    "objectID": "pages/slides/genai_models.html#from-noise-to-data-continuously",
+    "href": "pages/slides/genai_models.html#from-noise-to-data-continuously",
+    "title": "9 - GenAI Model Families",
+    "section": "From Noise to Data, Continuously",
+    "text": "From Noise to Data, Continuously\n\nNoise turns into an image as a continuous process over time \\(t \\in [0, 1]\\) (frames interpolated from a photo, not model outputs).\nA network \\(v_\\theta(\\mathbf{x}_t, t)\\) predicts a velocity: where should \\(\\mathbf{x}_t\\) move? \\(\\quad \\frac{d\\mathbf{x}_t}{dt} = v_\\theta(\\mathbf{x}_t, t)\\)\n\n\nNote: here \\(t = 0\\) is noise and \\(t = 1\\) is data (opposite to diffusion).",
+    "crumbs": [
+      "Slides",
+      "9 - GenAI Model Families"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_models.html#training-straight-lines",
+    "href": "pages/slides/genai_models.html#training-straight-lines",
+    "title": "9 - GenAI Model Families",
+    "section": "Training: Straight Lines",
+    "text": "Training: Straight Lines\n\nPair a training image \\(\\mathbf{x}_1\\) with noise \\(\\mathbf{\\epsilon} \\sim \\mathcal{N}(\\mathbf{0}, \\mathbf{I})\\), connect them with a line:\n\\[\\mathbf{x}_t = (1 - t)\\, \\mathbf{\\epsilon} + t\\, \\mathbf{x}_1\\]\n\n\nPredict the constant velocity along the line (Lipman et al. 2023; Liu et al. 2022):\n\\[\\mathcal{L} = \\mathbb{E}_{t, \\mathbf{x}_1, \\mathbf{\\epsilon}}\\left[\\, \\| (\\mathbf{x}_1 - \\mathbf{\\epsilon}) - v_\\theta(\\mathbf{x}_t, t) \\|^2 \\,\\right]\\]\n\n\nLike diffusion: mix image and noise, simple regression loss. But the target is the direction from noise to data.",
+    "crumbs": [
+      "Slides",
+      "9 - GenAI Model Families"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_models.html#flow-matching-in-1d",
+    "href": "pages/slides/genai_models.html#flow-matching-in-1d",
+    "title": "9 - GenAI Model Families",
+    "section": "Flow Matching in 1D",
+    "text": "Flow Matching in 1D\n\n\nTraining lines cross; the network learns their average direction. The learned trajectories never cross.",
+    "crumbs": [
+      "Slides",
+      "9 - GenAI Model Families"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_models.html#sampling",
+    "href": "pages/slides/genai_models.html#sampling",
+    "title": "9 - GenAI Model Families",
+    "section": "Sampling",
+    "text": "Sampling\n\nStart from noise \\(\\mathbf{x}_0 \\sim \\mathcal{N}(\\mathbf{0}, \\mathbf{I})\\) and follow the velocity (Euler steps):\n\\[\\mathbf{x}_{t + \\Delta t} = \\mathbf{x}_t + \\Delta t \\, v_\\theta(\\mathbf{x}_t, t)\\]\n\n\nNo fresh noise is injected: given the initial noise, sampling is deterministic.",
+    "crumbs": [
+      "Slides",
+      "9 - GenAI Model Families"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_models.html#in-practice",
+    "href": "pages/slides/genai_models.html#in-practice",
+    "title": "9 - GenAI Model Families",
+    "section": "In Practice",
+    "text": "In Practice\n\nStable Diffusion 3 (Esser et al. 2024): transformer trained with a flow matching objective in latent space\nFLUX.1 Kontext (Labs et al. 2025): flow matching for generation and instruction-based editing",
+    "crumbs": [
+      "Slides",
+      "9 - GenAI Model Families"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_models.html#pros-cons-4",
+    "href": "pages/slides/genai_models.html#pros-cons-4",
+    "title": "9 - GenAI Model Families",
+    "section": "Pros & Cons",
+    "text": "Pros & Cons\n\nPros\n\nHigh-quality, diverse outputs\nSimple, stable training (regression loss, no simulation)\nDeterministic sampling, often with fewer steps than diffusion\n\n\n\nCons\n\nSampling still needs multiple network evaluations\nHigh compute cost (training and inference)\nLikelihood possible, but expensive",
+    "crumbs": [
+      "Slides",
+      "9 - GenAI Model Families"
+    ]
+  },
+  {
     "objectID": "pages/slides/genai_models.html#from-pmathbfx-to-pmathbfx-mid-mathbfc",
     "href": "pages/slides/genai_models.html#from-pmathbfx-to-pmathbfx-mid-mathbfc",
     "title": "9 - GenAI Model Families",
@@ -738,32 +859,10 @@
     "href": "pages/slides/genai_models.html#conditioning-is-not-a-separate-family",
     "title": "9 - GenAI Model Families",
     "section": "Conditioning Is Not a Separate Family",
-    "text": "Conditioning Is Not a Separate Family\n\n\n\nFamily\nHow conditioning enters\n\n\n\n\nAutoregressive\ncondition each prediction step on \\(\\mathbf{c}\\)\n\n\nVAEs\ncondition encoder and/or decoder on \\(\\mathbf{c}\\)\n\n\nGANs\ncondition generator (and often discriminator) on \\(\\mathbf{c}\\)\n\n\nDiffusion\ncondition the denoising network on \\(\\mathbf{c}\\)\n\n\n\n\nModern text-to-image and image-editing systems use these mechanisms extensively.",
+    "text": "Conditioning Is Not a Separate Family\n\n\n\nFamily\nHow conditioning enters\n\n\n\n\nAutoregressive\ncondition each prediction step on \\(\\mathbf{c}\\)\n\n\nVAEs\ncondition encoder and/or decoder on \\(\\mathbf{c}\\)\n\n\nGANs\ncondition generator (and often discriminator) on \\(\\mathbf{c}\\)\n\n\nDiffusion\ncondition the denoising network on \\(\\mathbf{c}\\)\n\n\nFlow matching\ncondition the velocity network on \\(\\mathbf{c}\\)\n\n\n\n\nModern text-to-image and image-editing systems use these mechanisms extensively.",
     "crumbs": [
       "Slides",
       "9 - GenAI Model Families"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_models.html#recap",
-    "href": "pages/slides/genai_models.html#recap",
-    "title": "9 - GenAI Model Families",
-    "section": "Recap",
-    "text": "Recap\n\nAutoregressive — exact likelihood, slow sequential sampling\nGAN — fast & sharp, unstable, mode collapse risk\nVAE — structured latent, stable, blurrier\nDiffusion — SOTA quality, iterative & costly\nConditioning — applies to all of them",
-    "crumbs": [
-      "Slides",
-      "9 - GenAI Model Families"
-    ]
-  },
-  {
-    "objectID": "pages/slides/downstream_adaptation.html#overview",
-    "href": "pages/slides/downstream_adaptation.html#overview",
-    "title": "6 - Adapting Models",
-    "section": "Overview",
-    "text": "Overview\n\nMotivation\nThe adaptation hierarchy\nChoosing a strategy\nWorked scenarios",
-    "crumbs": [
-      "Slides",
-      "6 - Adapting Models"
     ]
   },
   {
@@ -778,22 +877,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/downstream_adaptation.html#three-tensions",
-    "href": "pages/slides/downstream_adaptation.html#three-tensions",
+    "objectID": "pages/slides/downstream_adaptation.html#what-decides",
+    "href": "pages/slides/downstream_adaptation.html#what-decides",
     "title": "6 - Adapting Models",
-    "section": "Three Tensions",
-    "text": "Three Tensions\n\nLabeled data: how much supervision do you have?\nDomain similarity: how close is the target task to pretraining?\nCompute budget: how much training and tuning can you afford?\n\n\nThese factors determine whether you should freeze, adapt, or fine-tune.",
+    "section": "What Decides?",
+    "text": "What Decides?\n\nRepresentation: what does the pretrained encoder already contain?\nTask: what does the downstream task require (vector, spatial features, similarity)?\nData: what can the target data support (labels, domain shift)?\n\n\nA larger training set helps, but it is not the only deciding factor.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
     ]
   },
   {
-    "objectID": "pages/slides/downstream_adaptation.html#five-strategies-one-hierarchy",
-    "href": "pages/slides/downstream_adaptation.html#five-strategies-one-hierarchy",
+    "objectID": "pages/slides/downstream_adaptation.html#five-strategies",
+    "href": "pages/slides/downstream_adaptation.html#five-strategies",
     "title": "6 - Adapting Models",
-    "section": "Five Strategies, One Hierarchy",
-    "text": "Five Strategies, One Hierarchy\n\n\nFigure 1: Adaptation strategies.\n\nStart simple. Descend only when performance demands it.",
+    "section": "Five Strategies",
+    "text": "Five Strategies\n\n\n\n\n\n\n\n\nflowchart LR\n    subgraph K[\"&lt;div style='width:10em'&gt;k-NN&lt;/div&gt;\"]\n        direction TB\n        K1[\"&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;frozen&lt;/div&gt;\"] --&gt; K2[\"&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;frozen&lt;/div&gt;\"] --&gt; K3[\"&lt;div style='width:8em'&gt;k-NN on features&lt;br/&gt;no training&lt;/div&gt;\"]\n    end\n    subgraph A[\"&lt;div style='width:10em'&gt;Linear probe&lt;/div&gt;\"]\n        direction TB\n        A1[\"&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;frozen&lt;/div&gt;\"] --&gt; A2[\"&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;frozen&lt;/div&gt;\"] --&gt; A3[\"&lt;div style='width:8em'&gt;Head&lt;br/&gt;trainable&lt;/div&gt;\"]\n    end\n    subgraph B[\"&lt;div style='width:10em'&gt;Partial fine-tuning&lt;/div&gt;\"]\n        direction TB\n        B1[\"&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;frozen&lt;/div&gt;\"] --&gt; B2[\"&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;trainable&lt;/div&gt;\"] --&gt; B3[\"&lt;div style='width:8em'&gt;Head&lt;br/&gt;trainable&lt;/div&gt;\"]\n    end\n    subgraph D[\"&lt;div style='width:10em'&gt;LoRA&lt;/div&gt;\"]\n        direction TB\n        D1[\"&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;frozen + LoRA&lt;/div&gt;\"] --&gt; D2[\"&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;frozen + LoRA&lt;/div&gt;\"] --&gt; D3[\"&lt;div style='width:8em'&gt;Head&lt;br/&gt;trainable&lt;/div&gt;\"]\n    end\n    subgraph C[\"&lt;div style='width:10em'&gt;Full fine-tuning&lt;/div&gt;\"]\n        direction TB\n        C1[\"&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;trainable&lt;/div&gt;\"] --&gt; C2[\"&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;trainable&lt;/div&gt;\"] --&gt; C3[\"&lt;div style='width:8em'&gt;Head&lt;br/&gt;trainable&lt;/div&gt;\"]\n    end\n    K ~~~ A ~~~ B ~~~ D ~~~ C\n    classDef frozen fill:#dbeafe,stroke:#2563eb,color:#172554\n    classDef train fill:#ffedd5,stroke:#ea580c,color:#7c2d12\n    classDef mixed fill:#dbeafe,stroke:#ea580c,color:#172554,stroke-width:2px,stroke-dasharray:6 3\n    classDef none fill:#ffffff,stroke:#6b7280,color:#1f2328,stroke-dasharray:6 3\n    classDef panel fill:#f6f7f9,stroke:#d5d9e0,color:#1f2328\n    class K1,K2,A1,A2,B1 frozen\n    class A3,B2,B3,C1,C2,C3,D3 train\n    class D1,D2 mixed\n    class K3 none\n    class K,A,B,C,D panel\n\n\n\n\n\n\n\n\nFigure 1: Blue: frozen, orange: trainable, dashed orange: frozen + trainable low-rank update.\n\n\n\n\nOptions to compare, not a fixed ranking: start with frozen features.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
@@ -804,18 +903,18 @@
     "href": "pages/slides/downstream_adaptation.html#at-a-glance",
     "title": "6 - Adapting Models",
     "section": "At a Glance",
-    "text": "At a Glance\n\n\n\n\n\n\n\n\nStrategy\nTrainable Parameters\nWhen to Use\n\n\n\n\nk-NN\n0\nQuick representation-quality check\n\n\nLinear probe\nHead only\nGood embeddings, small dataset\n\n\nLoRA / adapters\nFew parameters\nModerate data or mild domain shift\n\n\nPartial fine-tune\nTop layers + head\nLarger data or stronger domain shift\n\n\nFull fine-tune\nAll weights\nLarge data and strong task mismatch",
+    "text": "At a Glance\n\n\n\n\n\n\n\n\nStrategy\nWhat is learned?\nKey property\n\n\n\n\nk-NN\nNothing; uses labeled reference images\nFast test of feature quality\n\n\nLinear probe\nA small prediction head\nFrozen encoder; features can be cached\n\n\nPartial fine-tuning\nSelected encoder layers + head\nEncoder becomes task-specific\n\n\nFull fine-tuning\nEntire encoder + head\nMaximum flexibility; higher training cost\n\n\nLoRA\nLow-rank updates to selected weights + head\nFew trainable parameters, but backprop still passes through the encoder",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
     ]
   },
   {
-    "objectID": "pages/slides/downstream_adaptation.html#k-nn-no-training",
-    "href": "pages/slides/downstream_adaptation.html#k-nn-no-training",
+    "objectID": "pages/slides/downstream_adaptation.html#k-nn-no-gradient-based-training",
+    "href": "pages/slides/downstream_adaptation.html#k-nn-no-gradient-based-training",
     "title": "6 - Adapting Models",
-    "section": "k-NN — No Training",
-    "text": "k-NN — No Training\n\nEmbed labeled images with a frozen encoder\nStore embeddings and labels\nFor a new image, retrieve nearest neighbours in embedding space\nPredict by majority vote or similarity-weighted vote\n\n\nWhat it tells you: whether the pretrained representation already separates your target data.\n\n\nIf k-NN works well, further adaptation may be unnecessary.",
+    "section": "k-NN — No Gradient-Based Training",
+    "text": "k-NN — No Gradient-Based Training\n\nEmbed labeled reference images with a frozen encoder\nFor a new image, retrieve the \\(k\\) closest reference embeddings\nPredict from their labels (majority or similarity-weighted vote)\nHyperparameters: \\(k\\), distance metric, weighting rule\n\n\nWhat it tells you: whether the pretrained representation already separates your target data.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
@@ -826,18 +925,7 @@
     "href": "pages/slides/downstream_adaptation.html#linear-probe-freeze-encoder-train-head",
     "title": "6 - Adapting Models",
     "section": "Linear Probe — Freeze Encoder, Train Head",
-    "text": "Linear Probe — Freeze Encoder, Train Head\n\nKeep the pretrained encoder frozen\nExtract one embedding per image\nTrain only a small classification head\nUsually a single linear layer: \\(\\text{Linear}(d, K)\\)\n\n\nIf a linear boundary works, the embedding already contains task-relevant structure.\n\n\nCheap, stable, and a strong baseline for limited labeled data.",
-    "crumbs": [
-      "Slides",
-      "6 - Adapting Models"
-    ]
-  },
-  {
-    "objectID": "pages/slides/downstream_adaptation.html#lora-adapters-parameter-efficient-adaptation",
-    "href": "pages/slides/downstream_adaptation.html#lora-adapters-parameter-efficient-adaptation",
-    "title": "6 - Adapting Models",
-    "section": "LoRA / Adapters — Parameter-Efficient Adaptation",
-    "text": "LoRA / Adapters — Parameter-Efficient Adaptation\n\nInsert small trainable modules into the pretrained model\nKeep most original weights frozen\nTrain only adapters and the task head\nUseful when a linear probe is not flexible enough\n\n\nGood default for moderate data or mild domain shift.",
+    "text": "Linear Probe — Freeze Encoder, Train Head\n\nKeep the pretrained encoder frozen\nTrain only a linear classifier on the embeddings: \\(\\text{Linear}(d, K)\\)\nEmbeddings can be cached: the encoder does not run every epoch\n\n\nGood performance: the labels are linearly accessible from the representation.\n\n\nA poor result does not prove the features are useless: the information may be nonlinear, or the feature extraction unsuitable.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
@@ -848,51 +936,73 @@
     "href": "pages/slides/downstream_adaptation.html#partial-fine-tuning",
     "title": "6 - Adapting Models",
     "section": "Partial Fine-Tuning",
-    "text": "Partial Fine-Tuning\n\nFreeze lower layers\nUnfreeze the last few encoder blocks and the task head\nLower layers retain generic features\nHigher layers adapt to the target task\n\n\nUseful when the target task needs more task-specific high-level features.",
+    "text": "Partial Fine-Tuning\n\nFreeze most of the backbone\nUnfreeze selected blocks (e.g. the last two) and the task head\nThe representation can change, with fewer trainable parameters\n\n\nWhich layers to tune depends on architecture, pretraining objective and task: an experimental choice.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
     ]
   },
   {
-    "objectID": "pages/slides/downstream_adaptation.html#full-fine-tuning-last-resort",
-    "href": "pages/slides/downstream_adaptation.html#full-fine-tuning-last-resort",
+    "objectID": "pages/slides/downstream_adaptation.html#full-fine-tuning",
+    "href": "pages/slides/downstream_adaptation.html#full-fine-tuning",
     "title": "6 - Adapting Models",
-    "section": "Full Fine-Tuning — Last Resort",
-    "text": "Full Fine-Tuning — Last Resort\n\nTrain all model weights\nMost flexible strategy\nHighest compute cost\nHighest overfitting risk with small datasets\n\n\nUse only when simpler approaches plateau and data + compute justify it.",
+    "section": "Full Fine-Tuning",
+    "text": "Full Fine-Tuning\n\nUpdate the encoder and the new head jointly\nMost flexible strategy\nMore training memory, higher risk of overfitting or losing pretrained behavior\nUse a smaller learning rate for the encoder than for the head\n\n\nNot inherently a last resort: fine-tuning a small model can work with modest data. Measure on held-out data.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
     ]
   },
   {
-    "objectID": "pages/slides/downstream_adaptation.html#dataset-size-domain",
-    "href": "pages/slides/downstream_adaptation.html#dataset-size-domain",
+    "objectID": "pages/slides/downstream_adaptation.html#lora-low-rank-updates",
+    "href": "pages/slides/downstream_adaptation.html#lora-low-rank-updates",
     "title": "6 - Adapting Models",
-    "section": "Dataset Size × Domain",
-    "text": "Dataset Size × Domain\n\n\n\n\n\n\n\n\nDataset Size\nSimilar to Pretraining Data\nDifferent Domain\n\n\n\n\n&lt; 500\nk-NN / linear probe\nk-NN, then LoRA if needed\n\n\n500–5K\nLinear probe / LoRA\nLoRA / partial FT\n\n\n5K–50K\nPartial FT\nPartial / full FT\n\n\n&gt; 50K\nFull FT possible\nFull FT possible\n\n\n\n\nThe stronger the domain shift, the more adaptation you usually need.",
+    "section": "LoRA — Low-Rank Updates",
+    "text": "LoRA — Low-Rank Updates\n\\[\nW' = W + \\frac{\\alpha}{r}BA, \\qquad\nB \\in \\mathbb{R}^{d_{out}\\times r},\\quad\nA \\in \\mathbb{R}^{r\\times d_{in}}\n\\]\n\n\\(W\\) stays frozen; only \\(A\\), \\(B\\) and the head are trained\n\\(r(d_{in}+d_{out})\\) instead of \\(d_{out}d_{in}\\) parameters; rank \\(r\\) controls capacity\nUnlike adapters, LoRA inserts no new layer: it changes existing weights\nBackprop still passes through the whole encoder",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
     ]
   },
   {
-    "objectID": "pages/slides/downstream_adaptation.html#practical-rule-of-thumb",
-    "href": "pages/slides/downstream_adaptation.html#practical-rule-of-thumb",
+    "objectID": "pages/slides/downstream_adaptation.html#demo-lora-rank",
+    "href": "pages/slides/downstream_adaptation.html#demo-lora-rank",
     "title": "6 - Adapting Models",
-    "section": "Practical Rule of Thumb",
-    "text": "Practical Rule of Thumb\n\nStart with k-NN to test representation quality\nTry a linear probe as the first trained baseline\nUse LoRA / adapters when the head is not flexible enough\nUse partial fine-tuning for stronger domain shift\nUse full fine-tuning only when data and compute justify it\n\n\nEach step should improve enough to justify the added complexity.",
+    "section": "Demo: LoRA Rank",
+    "text": "Demo: LoRA Rank\n\n\n\n\nAt which rank does LoRA train as many parameters as full fine-tuning? Open in new tab",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
     ]
   },
   {
-    "objectID": "pages/slides/downstream_adaptation.html#scenario-1-small-similar-dataset",
-    "href": "pages/slides/downstream_adaptation.html#scenario-1-small-similar-dataset",
+    "objectID": "pages/slides/downstream_adaptation.html#what-limits-your-baseline",
+    "href": "pages/slides/downstream_adaptation.html#what-limits-your-baseline",
     "title": "6 - Adapting Models",
-    "section": "Scenario 1: Small Similar Dataset",
-    "text": "Scenario 1: Small Similar Dataset\nScenario\n\n300 labeled product images\nClasses: shoes, bags, jackets, furniture\nSimilar to common web images\n\n\nRecommended start: k-NN or linear probe\n\n\nWhy: small dataset, similar domain, pretrained visual features are likely useful.\n\n\nAvoid full fine-tuning unless simple baselines clearly fail.",
+    "section": "What Limits Your Baseline?",
+    "text": "What Limits Your Baseline?\n\n\n\n\n\n\n\nQuestion\nWhat to try or check\n\n\n\n\nAre the features already useful?\nCompare k-NN and linear probe\n\n\nIs the encoder right for this domain?\nCompare general, vision-language and domain-specific encoders\n\n\nDoes the task need spatial predictions?\nPatch / feature-map outputs and a decoder or detection head\n\n\nDoes the probe underfit?\nMore capable head, partial FT, LoRA or full FT\n\n\nIs the model overfitting?\nValidation design, regularization, augmentation, less capacity\n\n\nIs training expensive?\nCache frozen features, smaller backbone, parameter-efficient methods\n\n\nIs inference expensive?\nBackbone, input size, precision; freezing alone does not help\n\n\n\n\nEstablish a reliable baseline, then investigate what limits it.",
+    "crumbs": [
+      "Slides",
+      "6 - Adapting Models"
+    ]
+  },
+  {
+    "objectID": "pages/slides/downstream_adaptation.html#three-questions-before-fine-tuning",
+    "href": "pages/slides/downstream_adaptation.html#three-questions-before-fine-tuning",
+    "title": "6 - Adapting Models",
+    "section": "Three Questions Before Fine-Tuning",
+    "text": "Three Questions Before Fine-Tuning\n\nAre the pretrained features already useful for the target task?\nDoes the task require an image-level vector, spatial features, or a similarity embedding?\nDoes updating the encoder improve held-out performance enough to justify the cost?\n\n\nThere is no universal dataset-size threshold that determines the best strategy.",
+    "crumbs": [
+      "Slides",
+      "6 - Adapting Models"
+    ]
+  },
+  {
+    "objectID": "pages/slides/downstream_adaptation.html#scenario-1-camera-trap-species",
+    "href": "pages/slides/downstream_adaptation.html#scenario-1-camera-trap-species",
+    "title": "6 - Adapting Models",
+    "section": "Scenario 1: Camera-Trap Species",
+    "text": "Scenario 1: Camera-Trap Species\nScenario\n\n500 labeled camera-trap images\nTask: species classification\n\n\nRecommended start: global embeddings + k-NN or linear probe, with a split that separates cameras or sites.\n\n\nCompare fine-tuning if the baseline is insufficient. In the lecture’s experiment on unseen sites, frozen features reach 0.57 macro-F1, adapted backbones 0.85–0.87.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
@@ -903,43 +1013,21 @@
     "href": "pages/slides/downstream_adaptation.html#scenario-2-medical-domain-shift",
     "title": "6 - Adapting Models",
     "section": "Scenario 2: Medical Domain Shift",
-    "text": "Scenario 2: Medical Domain Shift\nScenario\n\n800 labeled chest X-rays\nTask: pneumonia classification\nBackbone: DINOv2 pretrained on natural images\n\n\nRecommended start: linear probe, then LoRA if needed.\n\n\nWhy: small dataset, but strong domain shift.\n\n\nFull fine-tuning is risky with 800 images unless strongly regularized.",
+    "text": "Scenario 2: Medical Domain Shift\nScenario\n\n800 labeled chest X-rays\nTwo encoders: a general-purpose DINO model and a medical-image model\n\n\nRecommended start: linear probe (optionally k-NN) on both encoders, with a patient-level split.\n\n\nEvaluate AUROC and sensitivity. If both frozen baselines are inadequate, compare fine-tuning starting from the better encoder.\n\n\nThe number of images alone does not decide the method.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
     ]
   },
   {
-    "objectID": "pages/slides/downstream_adaptation.html#scenario-3-larger-domain-specific-dataset",
-    "href": "pages/slides/downstream_adaptation.html#scenario-3-larger-domain-specific-dataset",
+    "objectID": "pages/slides/downstream_adaptation.html#scenario-3-land-cover-segmentation",
+    "href": "pages/slides/downstream_adaptation.html#scenario-3-land-cover-segmentation",
     "title": "6 - Adapting Models",
-    "section": "Scenario 3: Larger Domain-Specific Dataset",
-    "text": "Scenario 3: Larger Domain-Specific Dataset\nScenario\n\n30,000 labeled satellite images\nStrong domain shift from natural images\n\n\nRecommended start: LoRA or partial fine-tuning\n\n\nWhy: enough data to adapt more parameters, but full fine-tuning should still be justified by validation.",
+    "section": "Scenario 3: Land-Cover Segmentation",
+    "text": "Scenario 3: Land-Cover Segmentation\nScenario\n\nSatellite images with pixel-level annotations\nStrong domain shift from ground-level photos\n\n\nRecommended start: spatial features + a trainable segmentation decoder on a frozen encoder.\n\n\nThen evaluate encoder fine-tuning. A global embedding loses the spatial detail this task needs.",
     "crumbs": [
       "Slides",
       "6 - Adapting Models"
-    ]
-  },
-  {
-    "objectID": "pages/slides/downstream_adaptation.html#key-takeaways",
-    "href": "pages/slides/downstream_adaptation.html#key-takeaways",
-    "title": "6 - Adapting Models",
-    "section": "Key Takeaways",
-    "text": "Key Takeaways\n\nAdaptation is a hierarchy: k-NN → linear probe → LoRA → partial FT → full FT\nStart with the simplest method that answers the question\nWith little data, keep most of the encoder frozen\nLarger domain shift usually requires more adaptation\nFull fine-tuning is powerful, but data-hungry and easier to overfit\n\n\nFinal rule: start frozen, train more only when the data demands it.",
-    "crumbs": [
-      "Slides",
-      "6 - Adapting Models"
-    ]
-  },
-  {
-    "objectID": "pages/slides/classification.html#overview",
-    "href": "pages/slides/classification.html#overview",
-    "title": "4 - Image Classification",
-    "section": "Overview",
-    "text": "Overview\n\nThe Classification Task\nModelling: Softmax & Cross-Entropy\nArchitecture Overview",
-    "crumbs": [
-      "Slides",
-      "4 - Image Classification"
     ]
   },
   {
@@ -1002,7 +1090,7 @@
     "href": "pages/slides/classification.html#softmax-classifier",
     "title": "4 - Image Classification",
     "section": "Softmax Classifier",
-    "text": "Softmax Classifier\nA classifier outputs one logit per class:\n\\[\n\\mathbf{z} = f_\\theta(\\mathbf{x}), \\qquad \\mathbf{z} \\in \\mathbb{R}^K\n\\]\nSoftmax converts logits into class probabilities:\n\\[\nP(Y = k \\mid X = \\mathbf{x}^{(i)}) = \\sigma(\\mathbf{z})_k = \\frac{e^{z_k}}{\\sum_{j=1}^K e^{z_j}}\n\\]\n\n\n\\(\\mathbf{z}\\) logits: unbounded class scores\n\\(\\sigma(\\mathbf{z})\\) probabilities: positive and sum to 1\nLarger logits receive larger probabilities",
+    "text": "Softmax Classifier\nSoftmax converts logits into class probabilities:\n\\[\nP(Y = k \\mid X = \\mathbf{x}^{(i)}) = \\sigma(\\mathbf{z})_k = \\frac{e^{z_k}}{\\sum_{j=1}^K e^{z_j}}\n\\]\n\n\n\\(\\mathbf{z}\\) logits: unbounded class scores\n\\(\\sigma(\\mathbf{z})\\) probabilities: positive and sum to 1\nLarger logits receive larger probabilities",
     "crumbs": [
       "Slides",
       "4 - Image Classification"
@@ -1014,6 +1102,17 @@
     "title": "4 - Image Classification",
     "section": "Logits → Probabilities",
     "text": "Logits → Probabilities\n\n\n\n\n\n\n\n\nFigure 3: Logits are arbitrary real-valued scores. Softmax converts them into probabilities.\n\n\n\n\n\n\nLogits can be any real number — softmax always produces a valid probability distribution.",
+    "crumbs": [
+      "Slides",
+      "4 - Image Classification"
+    ]
+  },
+  {
+    "objectID": "pages/slides/classification.html#demo-softmax",
+    "href": "pages/slides/classification.html#demo-softmax",
+    "title": "4 - Image Classification",
+    "section": "Demo: Softmax",
+    "text": "Demo: Softmax\n\n\n\n\nRaise one logit by 1, then by 5: how do the probabilities change? Open in new tab",
     "crumbs": [
       "Slides",
       "4 - Image Classification"
@@ -1079,7 +1178,84 @@
     "href": "pages/slides/classification.html#alexnet-2012",
     "title": "4 - Image Classification",
     "section": "AlexNet (2012)",
-    "text": "AlexNet (2012)\n\nPrince (2023)\nThe network had to be split across GPUs due to memory limits.",
+    "text": "AlexNet (2012)\n\n\nFigure 4: 5 conv + 3 FC layers, 1000-way softmax. Trained on two GTX 580 GPUs (3 GB each). Source: Prince (2023)\n\nThe network had to be split across GPUs due to memory limits.",
+    "crumbs": [
+      "Slides",
+      "4 - Image Classification"
+    ]
+  },
+  {
+    "objectID": "pages/slides/classification.html#which-architecture",
+    "href": "pages/slides/classification.html#which-architecture",
+    "title": "4 - Image Classification",
+    "section": "Which Architecture?",
+    "text": "Which Architecture?\n\nDon’t be a hero.\n\n\nStart with a proven pretrained backbone:\n\n\nResNet-50 / ResNet-101: reliable baseline\nEfficientNet: good when size or speed matters\nConvNeXt: strong modern CNN backbone\nVision Transformer / Swin / DINO-style features: strong when data and compute allow\n\n\nChoose based on accuracy, speed, memory, available data, and deployment constraints.",
+    "crumbs": [
+      "Slides",
+      "4 - Image Classification"
+    ]
+  },
+  {
+    "objectID": "pages/slides/classification.html#why-augment",
+    "href": "pages/slides/classification.html#why-augment",
+    "title": "4 - Image Classification",
+    "section": "Why Augment?",
+    "text": "Why Augment?\nA classifier should give the same label under nuisance transformations: position, size, orientation, lighting, occlusion.\n\nConvolutions are only translation equivariant. Robustness to rotation, zoom or brightness must be learned from data.",
+    "crumbs": [
+      "Slides",
+      "4 - Image Classification"
+    ]
+  },
+  {
+    "objectID": "pages/slides/classification.html#data-augmentation-1",
+    "href": "pages/slides/classification.html#data-augmentation-1",
+    "title": "4 - Image Classification",
+    "section": "Data Augmentation",
+    "text": "Data Augmentation\n\nOne training image, many augmented variants.\nRandom, label-preserving transformations, applied on the fly during training.",
+    "crumbs": [
+      "Slides",
+      "4 - Image Classification"
+    ]
+  },
+  {
+    "objectID": "pages/slides/classification.html#augmentation-families",
+    "href": "pages/slides/classification.html#augmentation-families",
+    "title": "4 - Image Classification",
+    "section": "Augmentation Families",
+    "text": "Augmentation Families\n\nGeometric: random crops and rescaling, horizontal flips, small rotations\nPhotometric: brightness, contrast, saturation, grayscale\nOcclusion and mixing: Cutout, Mixup, CutMix\n\n\nAn augmentation must not change the label: a flip is harmless for animals, but not for text or a sign pointing left.",
+    "crumbs": [
+      "Slides",
+      "4 - Image Classification"
+    ]
+  },
+  {
+    "objectID": "pages/slides/classification.html#demo-augmentation-stability",
+    "href": "pages/slides/classification.html#demo-augmentation-stability",
+    "title": "4 - Image Classification",
+    "section": "Demo: Augmentation Stability",
+    "text": "Demo: Augmentation Stability\n\n\n\n\nRotate, crop or darken the image: when does the prediction of the pretrained CNN change? Open in new tab",
+    "crumbs": [
+      "Slides",
+      "4 - Image Classification"
+    ]
+  },
+  {
+    "objectID": "pages/slides/classification.html#quiz-camera-trap-augmentations",
+    "href": "pages/slides/classification.html#quiz-camera-trap-augmentations",
+    "title": "4 - Image Classification",
+    "section": "Quiz: Camera-Trap Augmentations",
+    "text": "Quiz: Camera-Trap Augmentations\nClasses: empty, deer, fox, badger, bird. Which augmentations would you use, which avoid?\n\nUseful: horizontal flips, moderate crops, brightness/contrast, grayscale (night IR images)\n\n\nAvoid: vertical flips and large rotations: camera traps are mounted upright\n\n\nCareful: aggressive crops can cut the animal out, an “empty” image labelled “deer”",
+    "crumbs": [
+      "Slides",
+      "4 - Image Classification"
+    ]
+  },
+  {
+    "objectID": "pages/slides/classification.html#key-takeaways",
+    "href": "pages/slides/classification.html#key-takeaways",
+    "title": "4 - Image Classification",
+    "section": "Key Takeaways",
+    "text": "Key Takeaways\n\nImage classification maps an image to class logits.\nSoftmax converts logits into class probabilities.\nCross-entropy penalizes low probability assigned to the true class.\nMost classifiers use a backbone plus a small classification head.\nArchitecture evolution: AlexNet → VGG → ResNet → ConvNeXt / ViT.\nStart with a proven pretrained backbone; only customize when needed.\nData augmentation teaches invariances the architecture does not provide; it must preserve the label.",
     "crumbs": [
       "Slides",
       "4 - Image Classification"
@@ -1135,28 +1311,6 @@
     "title": "4 - Image Classification",
     "section": "ConvNeXt (2022)",
     "text": "ConvNeXt (2022)\n\n\n\n\n\n\n\n\n\n\nFigures from Liu et al. (2022).",
-    "crumbs": [
-      "Slides",
-      "4 - Image Classification"
-    ]
-  },
-  {
-    "objectID": "pages/slides/classification.html#which-architecture",
-    "href": "pages/slides/classification.html#which-architecture",
-    "title": "4 - Image Classification",
-    "section": "Which Architecture?",
-    "text": "Which Architecture?\n\nDon’t be a hero.\n\n\nStart with a proven pretrained backbone:\n\n\nResNet-50 / ResNet-101: reliable baseline\nEfficientNet: good when size or speed matters\nConvNeXt: strong modern CNN backbone\nVision Transformer / Swin / DINO-style features: strong when data and compute allow\n\n\nChoose based on accuracy, speed, memory, available data, and deployment constraints.",
-    "crumbs": [
-      "Slides",
-      "4 - Image Classification"
-    ]
-  },
-  {
-    "objectID": "pages/slides/classification.html#key-takeaways",
-    "href": "pages/slides/classification.html#key-takeaways",
-    "title": "4 - Image Classification",
-    "section": "Key Takeaways",
-    "text": "Key Takeaways\n\nImage classification maps an image to class logits.\nSoftmax converts logits into class probabilities.\nCross-entropy penalizes low probability assigned to the true class.\nMost classifiers use a backbone plus a small classification head.\nArchitecture evolution: AlexNet → VGG → ResNet → ConvNeXt / ViT.\nStart with a proven pretrained backbone; only customize when needed.",
     "crumbs": [
       "Slides",
       "4 - Image Classification"
@@ -2470,7 +2624,7 @@
     "href": "pages/lectures/representation_learning.html#what-is-a-representation",
     "title": "5 - Visual Representations",
     "section": "2 What Is a Representation?",
-    "text": "2 What Is a Representation?\nA representation is the output \\(\\mathbf{z} = f(\\mathbf{x})\\) of an encoder \\(f\\) applied to input \\(\\mathbf{x}\\). The encoder \\(f\\) is the mapping; \\(\\mathbf{z} \\in \\mathbb{R}^d\\) is its result. The goal is a semantic coordinate system in which distances \\(\\|\\mathbf{z}_i - \\mathbf{z}_j\\|_2\\) reflect task-relevant relationships.\nTherefore, when we refer to representations we typically mean vector-valued (distributed) representations and not, for example, natural language descriptions. Let’s take a look at the (synthetic) images in Figure 3:\n\n\n\n\n\n\n\n\nElephant - Day 1\n\n\n\n\n\n\n\nElephant - Day 1\n\n\n\n\n\n\n\nElephant - Day 1\n\n\n\n\n\n\n\nElephant - Day 2\n\n\n\n\n\n\n\n\n\nGiraffe - Day\n\n\n\n\n\n\n\nRhino - Night\n\n\n\n\n\n\n\nElephant - Night\n\n\n\n\n\n\n\nCar - Day\n\n\n\n\n\n\nFigure 3: Synthetic images illustrating representation learning challenges.\n\n\n\nImagine you have to represent those in 2-D: \\(\\mathbf{z} \\in \\mathbb{R}^2\\). How would you proceed from a human point of view?\n\n\n\n\n\n\nFigure 4: Empty 2-dimensional representation space for mapping image similarity.\n\n\n\n\n\n\n\n\n\nNoteQuestion: Representing Images\n\n\n\n\n\nHow would you represent the images of Figure 3 in 2 dimensions? Why?\nHint: Similar images should be close to each other. Exact positions do not matter, only distances. How similarity is defined? Up to you!\n\n\nClick for result\n\nKey Considerations:\nThe images demonstrate different types of similarity challenges in representation learning:\n\nSame class, same conditions (Elephant Day 1 & Elephant Day 2): These are most similar - both elephants photographed in daylight. They exhibit intra-class variation while maintaining the same semantic category.\nSame class, different conditions (Elephant Day vs. Elephant Night): Moderate similarity - same animal class but dramatically different lighting conditions. This tests illumination invariance.\nDifferent classes, same conditions (Elephants, Giraffe, Rhino by day): Animals share similar contexts (daytime, natural habitat) but different semantics, requiring inter-class discrimination.\nDifferent domain (Animals vs. Car): Least similar - represents a complete domain shift from wildlife to manufactured objects.\n\nIdeal representation learning: A good model should group the two daytime elephants closely, maintain reasonable similarity between day/night elephants, distinguish between different animal classes, and clearly separate animals from vehicles.\n\n\n\n\nHow does a learned representation solve this task? The following two examples use actual embeddings of a pretrained encoder instead of human intuition.\n\n\n\n\n\n\nNoteExample: A Solution with DINOv3 Embeddings\n\n\n\n\n\nOne potential solution is to let a pretrained encoder decide what is similar. Each image of Figure 3 is mapped to a 768-dimensional embedding with DINOv3 (Siméoni et al. (2025)), a self-supervised model introduced later in this lecture. Since we cannot inspect 768 dimensions, the embeddings are reduced to \\(\\mathbf{z} \\in \\mathbb{R}^2\\) with t-SNE ((maaten_visualizing_2008?)), a method that places points with similar embeddings close to each other. The result is illustrated in Figure 5.\n\n\n\n\n\n\nFigure 5: DINOv3 embeddings (ViT-B/16, [CLS] token) of the example images, reduced to two dimensions with t-SNE.\n\n\n\nKey insights:\n\nNuisance transforms barely matter: The original, the flipped, and the brighter elephant image lie almost on top of each other. Their cosine similarity in the 768-dimensional space is about 0.96 or higher.\nSame class, different image: The second daytime elephant (cosine similarity of about 0.87 to the first one) lies right next to this group.\nLighting conditions leave a trace: The elephant at night is still similar to the daytime elephants (about 0.77), but lies between them and the rhino at night.\nDifferent classes are separated: Giraffe and car lie apart from all other images. The car has a cosine similarity below 0.1 to every animal image.\n\nNotably, this matches the considerations above without a single label: the model was never told what an elephant is.\nKeep in mind that t-SNE only preserves which images are neighbours. The axes \\(z_1\\) and \\(z_2\\) have no meaning, and large distances cannot be compared: the car is far less similar to the elephants than the giraffe is (below 0.1 versus about 0.3), which the 2-dimensional map does not convey.\n\n\n\n\n\n\n\n\n\nNoteExample: How Stable Is This Solution?\n\n\n\n\n\nt-SNE starts from a random arrangement and optimizes it iteratively. With only eight images the result depends noticeably on this starting point. Figure 6 demonstrates this for six different random seeds, using exactly the same embeddings.\n\n\n\n\n\n\nFigure 6: The same DINOv3 embeddings reduced to two dimensions with six different random seeds.\n\n\n\nThe maps are rotated, mirrored, and stretched differently, but the structure is the same in every run: the daytime elephants form a group, the two night images lie next to each other, and giraffe and car lie apart. This is exactly the hint of the question: exact positions do not matter, only the relative distances.\nThere is thus not one correct 2-dimensional representation. The reliable source for similarities is the original embedding space, which we compare across models in Figure 19.\n\n\n\n\n2.1 Invariance and Selectivity\nGood representations represent a semantic coordinate system where distances \\(\\|\\mathbf{z}_i - \\mathbf{z}_j\\|_2\\) reflect meaningful relationships.\n\n\n\n\n\n\nFigure 7: Data Space vs Representation Space: The encoder \\(f\\) transforms high-dimensional input samples \\(\\mathbf{x}_i\\) from data space into compact representations \\(\\mathbf{z}_i\\) in representation space, where semantic relationships become explicit through distances and clustering.\n\n\n\nGood representations balance two competing objectives:\n\nInvariance: \\(\\|f(\\mathbf{x}) - f(g(\\mathbf{x}))\\|_2 &lt; \\epsilon\\) for nuisance transforms \\(g\\) such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.\nSelectivity: \\(\\|f(\\mathbf{x}_i) - f(\\mathbf{x}_j)\\|_2 &gt; \\delta\\) for semantically distinct inputs. The representation must distinguish images that differ in ways that matter.\n\nThe critical point is that “nuisance” is task-dependent. For product retrieval, color is discriminative: a color-invariant embedding would make a red shoe and a white shoe indistinguishable. For medical imaging, orientation is often meaningful: a rotation-invariant embedding could destroy diagnostic information. A good representation discards only what the downstream task truly does not need.\nCrucially, the goal of representation learning differs from classification: rather than predicting a fixed label, the aim is to learn a reusable embedding that transfers to many tasks without retraining the encoder.\n\n\n\n\n\n\nNoteDesireable Properties of Representations\n\n\n\n\n\nHere is an overview of desirable properties:\nInvariance & Selectivity Balance\n\nInvariance: \\(\\|f(\\mathbf{x}) - f(g(\\mathbf{x}))\\|_2 &lt; \\epsilon\\) for nuisance transform \\(g\\) (lighting, pose)\nSelectivity: \\(\\|f(\\mathbf{x}_i) - f(\\mathbf{x}_j)\\|_2 &gt; \\delta\\) for semantically different \\(\\mathbf{x}_i, \\mathbf{x}_j\\)\nTrade-off: Too much invariance → loss of discriminative details\nSweet spot: Preserve task-relevant variations, discard irrelevant ones\n\nGeometric Structure Preservation\n\nSmooth manifold: Similar semantic concepts cluster in representation space\nComposability: \\(f(\\mathbf{x}_1) \\oplus f(\\mathbf{x}_2) \\approx f(\\text{combine}(\\mathbf{x}_1, \\mathbf{x}_2))\\) for vector operations\nInterpolability: Linear interpolation \\(\\alpha f(\\mathbf{x}_1) + (1-\\alpha) f(\\mathbf{x}_2)\\) yields meaningful intermediate concepts\n\nTransfer Efficiency\n\nLow sample complexity: Few examples needed for downstream adaptation\nBroad applicability: Same \\(f(\\cdot)\\) works across multiple tasks/domains\nGraceful degradation: Performance degrades slowly with domain shift\n\n\n2.1.1 Computational Practicality\n\nCompact dimensionality: \\(\\text{dim}(\\mathbf{z}) \\ll \\text{dim}(\\mathbf{x})\\) while preserving information\nFast computation: Forward pass \\(f(\\mathbf{x})\\) efficient for real-time applications\nStable training: Representation learning converges reliably",
+    "text": "2 What Is a Representation?\nA representation is the output \\(\\mathbf{z} = f(\\mathbf{x})\\) of an encoder \\(f\\) applied to input \\(\\mathbf{x}\\). The encoder \\(f\\) is the mapping; \\(\\mathbf{z} \\in \\mathbb{R}^d\\) is its result. The goal is a semantic coordinate system in which distances \\(\\|\\mathbf{z}_i - \\mathbf{z}_j\\|_2\\) reflect task-relevant relationships.\nTherefore, when we refer to representations we typically mean vector-valued (distributed) representations and not, for example, natural language descriptions. Let’s take a look at the (synthetic) images in Figure 3:\n\n\n\n\n\n\n\n\nElephant - Day 1\n\n\n\n\n\n\n\nElephant - Day 1\n\n\n\n\n\n\n\nElephant - Day 1\n\n\n\n\n\n\n\nElephant - Day 2\n\n\n\n\n\n\n\n\n\nGiraffe - Day\n\n\n\n\n\n\n\nRhino - Night\n\n\n\n\n\n\n\nElephant - Night\n\n\n\n\n\n\n\nCar - Day\n\n\n\n\n\n\nFigure 3: Synthetic images illustrating representation learning challenges.\n\n\n\nImagine you have to represent those in 2-D: \\(\\mathbf{z} \\in \\mathbb{R}^2\\). How would you proceed from a human point of view?\n\n\n\n\n\n\nFigure 4: Empty 2-dimensional representation space for mapping image similarity.\n\n\n\n\n\n\n\n\n\nNoteQuestion: Representing Images\n\n\n\n\n\nHow would you represent the images of Figure 3 in 2 dimensions? Why?\nHint: Similar images should be close to each other. Exact positions do not matter, only distances. How similarity is defined? Up to you!\n\n\nClick for result\n\nKey Considerations:\nThe images demonstrate different types of similarity challenges in representation learning:\n\nSame class, same conditions (Elephant Day 1 & Elephant Day 2): These are most similar - both elephants photographed in daylight. They exhibit intra-class variation while maintaining the same semantic category.\nSame class, different conditions (Elephant Day vs. Elephant Night): Moderate similarity - same animal class but dramatically different lighting conditions. This tests illumination invariance.\nDifferent classes, same conditions (Elephants, Giraffe, Rhino by day): Animals share similar contexts (daytime, natural habitat) but different semantics, requiring inter-class discrimination.\nDifferent domain (Animals vs. Car): Least similar - represents a complete domain shift from wildlife to manufactured objects.\n\nIdeal representation learning: A good model should group the two daytime elephants closely, maintain reasonable similarity between day/night elephants, distinguish between different animal classes, and clearly separate animals from vehicles.\n\n\n\n\nHow does a learned representation solve this task? The following two examples use actual embeddings of a pretrained encoder instead of human intuition.\n\n\n\n\n\n\nNoteExample: A Solution with DINOv3 Embeddings\n\n\n\n\n\nOne potential solution is to let a pretrained encoder decide what is similar. Each image of Figure 3 is mapped to a 768-dimensional embedding with DINOv3 (Siméoni et al. (2025)), a self-supervised model introduced later in this lecture. Since we cannot inspect 768 dimensions, the embeddings are reduced to \\(\\mathbf{z} \\in \\mathbb{R}^2\\) with t-SNE (Maaten and Hinton (2008)), a method that places points with similar embeddings close to each other. The result is illustrated in Figure 5.\n\n\n\n\n\n\nFigure 5: DINOv3 embeddings (ViT-B/16, [CLS] token) of the example images, reduced to two dimensions with t-SNE.\n\n\n\nKey insights:\n\nNuisance transforms barely matter: The original, the flipped, and the brighter elephant image lie almost on top of each other. Their cosine similarity in the 768-dimensional space is about 0.96 or higher.\nSame class, different image: The second daytime elephant (cosine similarity of about 0.87 to the first one) lies right next to this group.\nLighting conditions leave a trace: The elephant at night is still similar to the daytime elephants (about 0.77), but lies between them and the rhino at night.\nDifferent classes are separated: Giraffe and car lie apart from all other images. The car has a cosine similarity below 0.1 to every animal image.\n\nNotably, this matches the considerations above without a single label: the model was never told what an elephant is.\nKeep in mind that t-SNE only preserves which images are neighbours. The axes \\(z_1\\) and \\(z_2\\) have no meaning, and large distances cannot be compared: the car is far less similar to the elephants than the giraffe is (below 0.1 versus about 0.3), which the 2-dimensional map does not convey.\n\n\n\n\n\n\n\n\n\nNoteExample: How Stable Is This Solution?\n\n\n\n\n\nt-SNE starts from a random arrangement and optimizes it iteratively. With only eight images the result depends noticeably on this starting point. Figure 6 demonstrates this for six different random seeds, using exactly the same embeddings.\n\n\n\n\n\n\nFigure 6: The same DINOv3 embeddings reduced to two dimensions with six different random seeds.\n\n\n\nThe maps are rotated, mirrored, and stretched differently, but the structure is the same in every run: the daytime elephants form a group, the two night images lie next to each other, and giraffe and car lie apart. This is exactly the hint of the question: exact positions do not matter, only the relative distances.\nThere is thus not one correct 2-dimensional representation. The reliable source for similarities is the original embedding space, which we compare across models in Figure 19.\n\n\n\n\n2.1 Invariance and Selectivity\nGood representations represent a semantic coordinate system where distances \\(\\|\\mathbf{z}_i - \\mathbf{z}_j\\|_2\\) reflect meaningful relationships.\n\n\n\n\n\n\nFigure 7: Data Space vs Representation Space: The encoder \\(f\\) transforms high-dimensional input samples \\(\\mathbf{x}_i\\) from data space into compact representations \\(\\mathbf{z}_i\\) in representation space, where semantic relationships become explicit through distances and clustering.\n\n\n\nGood representations balance two competing objectives:\n\nInvariance: \\(\\|f(\\mathbf{x}) - f(g(\\mathbf{x}))\\|_2 &lt; \\epsilon\\) for nuisance transforms \\(g\\) such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.\nSelectivity: \\(\\|f(\\mathbf{x}_i) - f(\\mathbf{x}_j)\\|_2 &gt; \\delta\\) for semantically distinct inputs. The representation must distinguish images that differ in ways that matter.\n\nThe critical point is that “nuisance” is task-dependent. For product retrieval, color is discriminative: a color-invariant embedding would make a red shoe and a white shoe indistinguishable. For medical imaging, orientation is often meaningful: a rotation-invariant embedding could destroy diagnostic information. A good representation discards only what the downstream task truly does not need.\nCrucially, the goal of representation learning differs from classification: rather than predicting a fixed label, the aim is to learn a reusable embedding that transfers to many tasks without retraining the encoder.\n\n\n\n\n\n\nNoteDesireable Properties of Representations\n\n\n\n\n\nHere is an overview of desirable properties:\nInvariance & Selectivity Balance\n\nInvariance: \\(\\|f(\\mathbf{x}) - f(g(\\mathbf{x}))\\|_2 &lt; \\epsilon\\) for nuisance transform \\(g\\) (lighting, pose)\nSelectivity: \\(\\|f(\\mathbf{x}_i) - f(\\mathbf{x}_j)\\|_2 &gt; \\delta\\) for semantically different \\(\\mathbf{x}_i, \\mathbf{x}_j\\)\nTrade-off: Too much invariance → loss of discriminative details\nSweet spot: Preserve task-relevant variations, discard irrelevant ones\n\nGeometric Structure Preservation\n\nSmooth manifold: Similar semantic concepts cluster in representation space\nComposability: \\(f(\\mathbf{x}_1) \\oplus f(\\mathbf{x}_2) \\approx f(\\text{combine}(\\mathbf{x}_1, \\mathbf{x}_2))\\) for vector operations\nInterpolability: Linear interpolation \\(\\alpha f(\\mathbf{x}_1) + (1-\\alpha) f(\\mathbf{x}_2)\\) yields meaningful intermediate concepts\n\nTransfer Efficiency\n\nLow sample complexity: Few examples needed for downstream adaptation\nBroad applicability: Same \\(f(\\cdot)\\) works across multiple tasks/domains\nGraceful degradation: Performance degrades slowly with domain shift\n\n\n2.1.1 Computational Practicality\n\nCompact dimensionality: \\(\\text{dim}(\\mathbf{z}) \\ll \\text{dim}(\\mathbf{x})\\) while preserving information\nFast computation: Forward pass \\(f(\\mathbf{x})\\) efficient for real-time applications\nStable training: Representation learning converges reliably",
     "crumbs": [
       "Lectures",
       "5 - Visual Representations"
@@ -2536,7 +2690,7 @@
     "href": "pages/lectures/representation_learning.html#references",
     "title": "5 - Visual Representations",
     "section": "8 References",
-    "text": "8 References\n\n\nCaron, Mathilde, Hugo Touvron, Ishan Misra, et al. 2021. Emerging Properties in Self-Supervised Vision Transformers. https://doi.org/10.48550/arXiv.2104.14294.\n\n\nChen, Ting, Simon Kornblith, Mohammad Norouzi, and Geoffrey Hinton. 2020. A Simple Framework for Contrastive Learning of Visual Representations. arXiv. https://doi.org/10.48550/arXiv.2002.05709.\n\n\nHe, Kaiming, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Dollár, and Ross Girshick. 2021. Masked Autoencoders Are Scalable Vision Learners. arXiv. https://doi.org/10.48550/arXiv.2111.06377.\n\n\nOquab, Maxime, Timothée Darcet, Théo Moutakanni, et al. 2024. DINOv2: Learning Robust Visual Features Without Supervision. arXiv. https://doi.org/10.48550/arXiv.2304.07193.\n\n\nRadford, Alec, Jong Wook Kim, Chris Hallacy, et al. 2021. “Learning Transferable Visual Models From Natural Language Supervision.” arXiv:2103.00020 [Cs], February. http://arxiv.org/abs/2103.00020.\n\n\nSiméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. DINOv3. arXiv. https://doi.org/10.48550/arXiv.2508.10104.",
+    "text": "8 References\n\n\nCaron, Mathilde, Hugo Touvron, Ishan Misra, et al. 2021. Emerging Properties in Self-Supervised Vision Transformers. https://doi.org/10.48550/arXiv.2104.14294.\n\n\nChen, Ting, Simon Kornblith, Mohammad Norouzi, and Geoffrey Hinton. 2020. A Simple Framework for Contrastive Learning of Visual Representations. arXiv. https://doi.org/10.48550/arXiv.2002.05709.\n\n\nHe, Kaiming, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Dollár, and Ross Girshick. 2021. Masked Autoencoders Are Scalable Vision Learners. arXiv. https://doi.org/10.48550/arXiv.2111.06377.\n\n\nMaaten, Laurens van der, and Geoffrey Hinton. 2008. “Visualizing Data Using t-SNE.” Journal of Machine Learning Research 9 (86): 2579–605. http://jmlr.org/papers/v9/vandermaaten08a.html.\n\n\nOquab, Maxime, Timothée Darcet, Théo Moutakanni, et al. 2024. DINOv2: Learning Robust Visual Features Without Supervision. arXiv. https://doi.org/10.48550/arXiv.2304.07193.\n\n\nRadford, Alec, Jong Wook Kim, Chris Hallacy, et al. 2021. “Learning Transferable Visual Models From Natural Language Supervision.” arXiv:2103.00020 [Cs], February. http://arxiv.org/abs/2103.00020.\n\n\nSiméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. DINOv3. arXiv. https://doi.org/10.48550/arXiv.2508.10104.",
     "crumbs": [
       "Lectures",
       "5 - Visual Representations"
@@ -2580,7 +2734,7 @@
     "href": "pages/background/frameworks.html#tensors",
     "title": "3 - Software & Hardware",
     "section": "2.2 Tensors",
-    "text": "2.2 Tensors\ntorch.Tensor is the central data structure in PyTorch. Essentially very similar to numpy.array, it can be easily loaded onto GPUs.\nTensors can be created in various ways. For example, from lists:\n\ndata = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)\nprint(x_data)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from numpy.ndarray:\n\nnp_array = np.array(data)\nx_np = torch.from_numpy(np_array)\nprint(x_np)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from other tensors:\n\nx_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")\n\nOnes Tensor: \n tensor([[1, 1],\n        [1, 1]]) \n\nRandom Tensor: \n tensor([[0.4294, 0.3646],\n        [0.3071, 0.8028]]) \n\n\n\nOr with randomly generated numbers or constants:\n\nshape = (2,3,)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")\n\nRandom Tensor: \n tensor([[0.1453, 0.6711, 0.4568],\n        [0.2548, 0.6072, 0.6338]]) \n\nOnes Tensor: \n tensor([[1., 1., 1.],\n        [1., 1., 1.]]) \n\nZeros Tensor: \n tensor([[0., 0., 0.],\n        [0., 0., 0.]])\n\n\nTensor attributes:\n\ntensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")\n\nShape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu\n\n\nThere are over 100 operations that can be performed on a tensor. The full list is available here.\nIndexing and Slicing:\n\ntensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[:, -1]}\")\ntensor[:,1] = 0\nprint(tensor)\n\nFirst row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\n\nJoining tensors:\n\nt1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)\n\ntensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n\n\nArithmetic operations:\n\n# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)\n\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
+    "text": "2.2 Tensors\ntorch.Tensor is the central data structure in PyTorch. Essentially very similar to numpy.array, it can be easily loaded onto GPUs.\nTensors can be created in various ways. For example, from lists:\n\ndata = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)\nprint(x_data)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from numpy.ndarray:\n\nnp_array = np.array(data)\nx_np = torch.from_numpy(np_array)\nprint(x_np)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from other tensors:\n\nx_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")\n\nOnes Tensor: \n tensor([[1, 1],\n        [1, 1]]) \n\nRandom Tensor: \n tensor([[0.1486, 0.1367],\n        [0.4887, 0.3701]]) \n\n\n\nOr with randomly generated numbers or constants:\n\nshape = (2,3,)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")\n\nRandom Tensor: \n tensor([[0.5082, 0.5146, 0.8042],\n        [0.3407, 0.6832, 0.9226]]) \n\nOnes Tensor: \n tensor([[1., 1., 1.],\n        [1., 1., 1.]]) \n\nZeros Tensor: \n tensor([[0., 0., 0.],\n        [0., 0., 0.]])\n\n\nTensor attributes:\n\ntensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")\n\nShape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu\n\n\nThere are over 100 operations that can be performed on a tensor. The full list is available here.\nIndexing and Slicing:\n\ntensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[:, -1]}\")\ntensor[:,1] = 0\nprint(tensor)\n\nFirst row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\n\nJoining tensors:\n\nt1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)\n\ntensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n\n\nArithmetic operations:\n\n# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)\n\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
     "crumbs": [
       "Background & Preparation",
       "3 - Software & Hardware"
@@ -2591,7 +2745,7 @@
     "href": "pages/background/frameworks.html#autograd",
     "title": "3 - Software & Hardware",
     "section": "2.3 Autograd",
-    "text": "2.3 Autograd\nTo train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an auto-diff functionality: torch.autograd. This can automatically compute gradients for a computational graph.\n\n\n\n\n\n\nTipAutograd Key Points\n\n\n\n\nSet requires_grad=True on tensors you want to track for gradient computation\nCall .backward() on a scalar loss to compute all gradients\nAccess gradients via .grad attribute of tensors\nUse torch.no_grad() context for inference to save memory and speed up computation\n\n\n\nThe following is an example using a 1-layer neural network (see Figure 4 ):\n\n\n\n\n\n\nFigure 4: Source: PyTorch\n\n\n\nThe network from Figure 4 is defined in PyTorch code in Listing 4.\n\n\n\n\nListing 4: Example computational graph.\n\n\nimport torch\n\nx = torch.ones(5)  # input tensor\ny = torch.zeros(3)  # expected output\nw = torch.randn(5, 3, requires_grad=True)\nb = torch.randn(3, requires_grad=True)\nz = torch.matmul(x, w)+b\nloss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)\n\n\n\n\nWe can now use Autograd to compute the gradient:\n\nloss.backward()\nprint(w.grad)\nprint(b.grad)\n\ntensor([[0.3201, 0.3262, 0.0508],\n        [0.3201, 0.3262, 0.0508],\n        [0.3201, 0.3262, 0.0508],\n        [0.3201, 0.3262, 0.0508],\n        [0.3201, 0.3262, 0.0508]])\ntensor([0.3201, 0.3262, 0.0508])",
+    "text": "2.3 Autograd\nTo train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an auto-diff functionality: torch.autograd. This can automatically compute gradients for a computational graph.\n\n\n\n\n\n\nTipAutograd Key Points\n\n\n\n\nSet requires_grad=True on tensors you want to track for gradient computation\nCall .backward() on a scalar loss to compute all gradients\nAccess gradients via .grad attribute of tensors\nUse torch.no_grad() context for inference to save memory and speed up computation\n\n\n\nThe following is an example using a 1-layer neural network (see Figure 4 ):\n\n\n\n\n\n\nFigure 4: Source: PyTorch\n\n\n\nThe network from Figure 4 is defined in PyTorch code in Listing 4.\n\n\n\n\nListing 4: Example computational graph.\n\n\nimport torch\n\nx = torch.ones(5)  # input tensor\ny = torch.zeros(3)  # expected output\nw = torch.randn(5, 3, requires_grad=True)\nb = torch.randn(3, requires_grad=True)\nz = torch.matmul(x, w)+b\nloss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)\n\n\n\n\nWe can now use Autograd to compute the gradient:\n\nloss.backward()\nprint(w.grad)\nprint(b.grad)\n\ntensor([[0.0909, 0.0375, 0.2199],\n        [0.0909, 0.0375, 0.2199],\n        [0.0909, 0.0375, 0.2199],\n        [0.0909, 0.0375, 0.2199],\n        [0.0909, 0.0375, 0.2199]])\ntensor([0.0909, 0.0375, 0.2199])",
     "crumbs": [
       "Background & Preparation",
       "3 - Software & Hardware"
@@ -2602,7 +2756,7 @@
     "href": "pages/background/frameworks.html#torch.nn",
     "title": "3 - Software & Hardware",
     "section": "2.4 torch.nn",
-    "text": "2.4 torch.nn\nPyTorch provides various building blocks for creating neural networks. These are available in torch.nn. Additionally, you can define any compositions of such building blocks that inherit from torch.nn.Module. A neural network is typically a torch.nn.Module. Each module implements the forward() method to define how data is processed.\n\n\n\n\n\n\nTipBuilding Blocks in torch.nn\n\n\n\nCommon layers:\n\nnn.Linear: Fully connected layer\nnn.Conv2d: 2D convolutional layer\nnn.MaxPool2d: Max pooling layer\nnn.Dropout: Regularization via random dropout\nnn.BatchNorm2d: Batch normalization\n\nCommon activations:\n\nnn.ReLU(), nn.LeakyReLU(), nn.GELU()\nnn.Sigmoid(), nn.Softmax()\n\nLoss functions:\n\nnn.CrossEntropyLoss(): Classification\nnn.BCEWithLogitsLoss(): Binary classification\nnn.MSELoss(): Regression\n\n\n\nListing 5 depicts an example of a class that inherits from torch.nn.Module.\n\n\n\n\nListing 5: Example nn.Module.\n\n\nfrom torch import nn\n\nclass NeuralNetwork(nn.Module):\n    def __init__(self):\n        super(NeuralNetwork, self).__init__()\n        self.flatten = nn.Flatten()\n        self.linear_relu_stack = nn.Sequential(\n            nn.Linear(28*28, 512),\n            nn.ReLU(),\n            nn.Linear(512, 512),\n            nn.ReLU(),\n            nn.Linear(512, 10),\n        )\n\n    def forward(self, x):\n        x = self.flatten(x)\n        logits = self.linear_relu_stack(x)\n        return logits\n\n\n\n\nYou can also visualize the model:\n\nmodel = NeuralNetwork()\nprint(model)\n\nNeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)\n\n\nTo use the model, you can pass input data. This will execute the forward() method, along with background operations.\n\nX = torch.rand(1, 28, 28)\nlogits = model(X)\npred_probab = nn.Softmax(dim=1)(logits)\ny_pred = pred_probab.argmax(1)\nprint(f\"Predicted class: {y_pred}\")\n\nPredicted class: tensor([7])\n\n\nThe executed operations will look like this:\n\nfrom torchviz import make_dot\nmake_dot(logits)\n\n\n\n\n\n\n\n\nFor more in-depth information about the model you can use the external library torchinfo as seen in Listing 6.\n\n\n\n\nListing 6: Example output of torchinfo.\n\n\nfrom torchinfo import summary\nmodel = NeuralNetwork()\nsummary(model, input_size=(128, 1, 28, 28))\n\n\n\n\n==========================================================================================\nLayer (type:depth-idx)                   Output Shape              Param #\n==========================================================================================\nNeuralNetwork                            [128, 10]                 --\n├─Flatten: 1-1                           [128, 784]                --\n├─Sequential: 1-2                        [128, 10]                 --\n│    └─Linear: 2-1                       [128, 512]                401,920\n│    └─ReLU: 2-2                         [128, 512]                --\n│    └─Linear: 2-3                       [128, 512]                262,656\n│    └─ReLU: 2-4                         [128, 512]                --\n│    └─Linear: 2-5                       [128, 10]                 5,130\n==========================================================================================\nTotal params: 669,706\nTrainable params: 669,706\nNon-trainable params: 0\nTotal mult-adds (Units.MEGABYTES): 85.72\n==========================================================================================\nInput size (MB): 0.40\nForward/backward pass size (MB): 1.06\nParams size (MB): 2.68\nEstimated Total Size (MB): 4.14\n==========================================================================================",
+    "text": "2.4 torch.nn\nPyTorch provides various building blocks for creating neural networks. These are available in torch.nn. Additionally, you can define any compositions of such building blocks that inherit from torch.nn.Module. A neural network is typically a torch.nn.Module. Each module implements the forward() method to define how data is processed.\n\n\n\n\n\n\nTipBuilding Blocks in torch.nn\n\n\n\nCommon layers:\n\nnn.Linear: Fully connected layer\nnn.Conv2d: 2D convolutional layer\nnn.MaxPool2d: Max pooling layer\nnn.Dropout: Regularization via random dropout\nnn.BatchNorm2d: Batch normalization\n\nCommon activations:\n\nnn.ReLU(), nn.LeakyReLU(), nn.GELU()\nnn.Sigmoid(), nn.Softmax()\n\nLoss functions:\n\nnn.CrossEntropyLoss(): Classification\nnn.BCEWithLogitsLoss(): Binary classification\nnn.MSELoss(): Regression\n\n\n\nListing 5 depicts an example of a class that inherits from torch.nn.Module.\n\n\n\n\nListing 5: Example nn.Module.\n\n\nfrom torch import nn\n\nclass NeuralNetwork(nn.Module):\n    def __init__(self):\n        super(NeuralNetwork, self).__init__()\n        self.flatten = nn.Flatten()\n        self.linear_relu_stack = nn.Sequential(\n            nn.Linear(28*28, 512),\n            nn.ReLU(),\n            nn.Linear(512, 512),\n            nn.ReLU(),\n            nn.Linear(512, 10),\n        )\n\n    def forward(self, x):\n        x = self.flatten(x)\n        logits = self.linear_relu_stack(x)\n        return logits\n\n\n\n\nYou can also visualize the model:\n\nmodel = NeuralNetwork()\nprint(model)\n\nNeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)\n\n\nTo use the model, you can pass input data. This will execute the forward() method, along with background operations.\n\nX = torch.rand(1, 28, 28)\nlogits = model(X)\npred_probab = nn.Softmax(dim=1)(logits)\ny_pred = pred_probab.argmax(1)\nprint(f\"Predicted class: {y_pred}\")\n\nPredicted class: tensor([6])\n\n\nThe executed operations will look like this:\n\nfrom torchviz import make_dot\nmake_dot(logits)\n\n\n\n\n\n\n\n\nFor more in-depth information about the model you can use the external library torchinfo as seen in Listing 6.\n\n\n\n\nListing 6: Example output of torchinfo.\n\n\nfrom torchinfo import summary\nmodel = NeuralNetwork()\nsummary(model, input_size=(128, 1, 28, 28))\n\n\n\n\n==========================================================================================\nLayer (type:depth-idx)                   Output Shape              Param #\n==========================================================================================\nNeuralNetwork                            [128, 10]                 --\n├─Flatten: 1-1                           [128, 784]                --\n├─Sequential: 1-2                        [128, 10]                 --\n│    └─Linear: 2-1                       [128, 512]                401,920\n│    └─ReLU: 2-2                         [128, 512]                --\n│    └─Linear: 2-3                       [128, 512]                262,656\n│    └─ReLU: 2-4                         [128, 512]                --\n│    └─Linear: 2-5                       [128, 10]                 5,130\n==========================================================================================\nTotal params: 669,706\nTrainable params: 669,706\nNon-trainable params: 0\nTotal mult-adds (Units.MEGABYTES): 85.72\n==========================================================================================\nInput size (MB): 0.40\nForward/backward pass size (MB): 1.06\nParams size (MB): 2.68\nEstimated Total Size (MB): 4.14\n==========================================================================================",
     "crumbs": [
       "Background & Preparation",
       "3 - Software & Hardware"
@@ -3105,7 +3259,7 @@
     "href": "pages/slides/cnns.html#properties-of-image-data",
     "title": "3 - Convolutional Neural Networks",
     "section": "Properties of Image Data",
-    "text": "Properties of Image Data\n\nImage Source\nHigh-Dimensional: An RGB image of size \\(224 \\times 224\\) has \\(224 \\times 224 \\times 3 = 150{,}528\\) values\nLocality: Nearby pixels are statistically related (edges, textures, objects)\nStability under transformations: A cat should be recognized regardless of position\nHierarchical Structure: Features at multiple scales (pixels → edges → textures → objects)",
+    "text": "Properties of Image Data\n\nThree regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. Image Source\nHigh-Dimensional: An RGB image of size \\(224 \\times 224\\) has \\(224 \\times 224 \\times 3 = 150{,}528\\) values\nLocality: Nearby pixels are statistically related (edges, textures, objects)\nStability under transformations: A cow should be recognized regardless of position\nHierarchical Structure: Features at multiple scales (pixels → edges → textures → objects)",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3123,22 +3277,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#mlps-and-high-dimensional-inputs",
-    "href": "pages/slides/cnns.html#mlps-and-high-dimensional-inputs",
+    "objectID": "pages/slides/cnns.html#demo-an-mlp-reads-digits",
+    "href": "pages/slides/cnns.html#demo-an-mlp-reads-digits",
     "title": "3 - Convolutional Neural Networks",
-    "section": "MLPs and High-Dimensional Inputs",
-    "text": "MLPs and High-Dimensional Inputs\n\n\nWeight matrix \\(\\mathbf{W} \\in \\mathbb{R}^{d \\times k}\\) scales with input size (\\(d\\) = input dimensionality, \\(k\\) = number of neurons)\n\n\nColumns of \\(\\mathbf{W}\\) can be visualized as images to show what patterns each neuron learns",
+    "section": "Demo: An MLP Reads Digits",
+    "text": "Demo: An MLP Reads Digits\n\n\nDraw a digit in the centre, then draw it small in a corner. Does the prediction hold? Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#mlps-and-translations",
-    "href": "pages/slides/cnns.html#mlps-and-translations",
+    "objectID": "pages/slides/cnns.html#demo-a-cnn-reads-digits",
+    "href": "pages/slides/cnns.html#demo-a-cnn-reads-digits",
     "title": "3 - Convolutional Neural Networks",
-    "section": "MLPs and Translations",
-    "text": "MLPs and Translations\n\n\nPatterns or objects often occur at different positions -&gt; need to recognize them everywhere!\n\n\nHow do MLPs deal with this?",
+    "section": "Demo: A CNN Reads Digits",
+    "text": "Demo: A CNN Reads Digits\n\n\nSame test. What is different inside the network? Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3149,18 +3303,7 @@
     "href": "pages/slides/cnns.html#mlps-and-how-they-learn",
     "title": "3 - Convolutional Neural Networks",
     "section": "MLPs and How they Learn",
-    "text": "MLPs and How they Learn\n\n\nQuestion: Can an MLP successfully learn patterns in images \\(\\mathbf{x}\\) that are permuted with a fixed permutation matrix \\(\\mathbf{P}\\), i.e. \\(f(P(\\mathbf{x}))\\)?",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#mlps-and-images-often-not-the-best-choice",
-    "href": "pages/slides/cnns.html#mlps-and-images-often-not-the-best-choice",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "MLPs and Images: Often Not the Best Choice",
-    "text": "MLPs and Images: Often Not the Best Choice\n\nHigh-Dimensional: MLP size scales with input dimensionality → memory/compute issues\nNo Locality: MLPs can’t exploit spatial relationships in images\nInefficient Translation Handling: Must learn position-dependent patterns separately\n\n\nInteractive Demo: https://adamharley.com/nn_vis/mlp/2d.html\n-&gt; explore for yourself!\n\n\nSolution? → Need architecture with inductive biases for images!",
+    "text": "MLPs and How they Learn\n\n\nQuestion: Can an MLP learn from images whose pixels are shuffled with a fixed permutation \\(\\mathbf{P}\\), i.e. \\(f(\\mathbf{P}\\mathbf{x})\\)?\n\n\nYes, equally well: an MLP does not use the neighbourhood of pixels. We need an architecture with inductive biases for images.",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3211,33 +3354,11 @@
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#visual-cortex",
-    "href": "pages/slides/cnns.html#visual-cortex",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Visual Cortex",
-    "text": "Visual Cortex\n\nRepresentation of transformations in the visual cortex. Source: Kubilius (2017)",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
     "objectID": "pages/slides/cnns.html#the-cnn-idea",
     "href": "pages/slides/cnns.html#the-cnn-idea",
     "title": "3 - Convolutional Neural Networks",
     "section": "The CNN Idea",
-    "text": "The CNN Idea\n\nLocal connectivity: neuron sees a small spatial region\nParameter sharing: same filter at every position\nTranslation equivariance: input shifts → output shifts\n\n\nThese encode our prior knowledge about images.",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#local-connectivity",
-    "href": "pages/slides/cnns.html#local-connectivity",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Local Connectivity",
-    "text": "Local Connectivity\n\nSource: Johnson (2019)\nResult: fewer parameters, preserved structure, position-agnostic detectors.",
+    "text": "The CNN Idea\n\nSource: Johnson (2019)\nLocal connectivity: a neuron sees a small spatial region\nParameter sharing: the same filter at every position\nTranslation equivariance: input shifts → output shifts",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3259,62 +3380,29 @@
     "href": "pages/slides/cnns.html#convolution-on-rgb-images",
     "title": "3 - Convolutional Neural Networks",
     "section": "Convolution on RGB Images",
-    "text": "Convolution on RGB Images\n\nSource: Prince (2023)\n\\[\\begin{equation}\nS(i, j) = (K * I)(i, j) = \\sum_m \\sum_n I(i + m, j + n) K(m, n) + b\n\\end{equation}\\]\n\n\\(I\\): Input (e.g., image)\n\\(K\\): Kernel (typically smaller than \\(I\\))\nBias term \\(b\\) added to weighted sum",
+    "text": "Convolution on RGB Images\n\nSource: Prince (2023)\n\\[\\begin{equation}\nS(i, j) = (K * I)(i, j) = \\sum_m \\sum_n I(i + m, j + n) K(m, n) + b\n\\end{equation}\\]\n\\(I\\): input, \\(K\\): kernel (smaller than \\(I\\)), \\(b\\): bias",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#convolutional-layers",
-    "href": "pages/slides/cnns.html#convolutional-layers",
+    "objectID": "pages/slides/cnns.html#demo-convolution",
+    "href": "pages/slides/cnns.html#demo-convolution",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Convolutional Layers",
-    "text": "Convolutional Layers\n\nSource: Johnson (2019)",
+    "section": "Demo: Convolution",
+    "text": "Demo: Convolution\n\n\n\n\nFind a kernel that detects horizontal edges. Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#convolutional-layers-1",
-    "href": "pages/slides/cnns.html#convolutional-layers-1",
+    "objectID": "pages/slides/cnns.html#many-filters-many-activation-maps",
+    "href": "pages/slides/cnns.html#many-filters-many-activation-maps",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Convolutional Layers",
-    "text": "Convolutional Layers\n\nSource: Johnson (2019)",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#convolutional-layers-2",
-    "href": "pages/slides/cnns.html#convolutional-layers-2",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Convolutional Layers",
-    "text": "Convolutional Layers\n\nSource: Johnson (2019)",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#convolutional-layers-3",
-    "href": "pages/slides/cnns.html#convolutional-layers-3",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Convolutional Layers",
-    "text": "Convolutional Layers\n\nSource: Johnson (2019)",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#convolutional-layers-4",
-    "href": "pages/slides/cnns.html#convolutional-layers-4",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Convolutional Layers",
-    "text": "Convolutional Layers\n\n\nSource: Johnson (2019)",
+    "section": "Many Filters, Many Activation Maps",
+    "text": "Many Filters, Many Activation Maps\n\n\nEach filter produces one activation map; \\(C_{out}\\) filters → \\(C_{out}\\) channels.",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3336,106 +3424,29 @@
     "href": "pages/slides/cnns.html#convolution-hyperparameters",
     "title": "3 - Convolutional Neural Networks",
     "section": "Convolution Hyperparameters",
-    "text": "Convolution Hyperparameters\nKey parameters to configure a convolutional layer:\n\nPadding (\\(p\\)): Zero-padding added to input borders\nStride (\\(s\\)): Step size when moving the kernel\nKernel Size (\\(k\\)): Spatial extent (typically \\(3\\times3\\) or \\(5\\times5\\))\nDilation (\\(d\\)): Spacing between kernel elements",
+    "text": "Convolution Hyperparameters\nKey parameters to configure a convolutional layer:\n\nKernel Size (\\(k\\)): Spatial extent (typically \\(3\\times3\\) or \\(5\\times5\\))\nPadding (\\(p\\)): Zero-padding added to input borders\nStride (\\(s\\)): Step size when moving the kernel\nDilation (\\(d\\)): Spacing between kernel elements",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#padding",
-    "href": "pages/slides/cnns.html#padding",
+    "objectID": "pages/slides/cnns.html#demo-convolution-parameters",
+    "href": "pages/slides/cnns.html#demo-convolution-parameters",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Padding",
-    "text": "Padding\n\nQuestion: Output size when convolving with \\(3\\times3\\) kernel?\n\n\n\n\nWithout padding:\n\n\n\n\nWith zero-padding:",
+    "section": "Demo: Convolution Parameters",
+    "text": "Demo: Convolution Parameters\n\n\n\n\nTask “Reduce the resolution”: 3 × 3 kernel, output 5 × 5. Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#padding-effect",
-    "href": "pages/slides/cnns.html#padding-effect",
+    "objectID": "pages/slides/cnns.html#formulas",
+    "href": "pages/slides/cnns.html#formulas",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Padding Effect",
-    "text": "Padding Effect\n\nLeft: Input (Yellow) with Zero-Padding (white border), Middle: Filter, Right: Output.\nKey Use: Preserve spatial dimensions → essential for segmentation!",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#stride-1",
-    "href": "pages/slides/cnns.html#stride-1",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Stride = 1",
-    "text": "Stride = 1\n\nConvolution with stride \\((1, 1)\\)\nKernel moves 1 pixel at a time → preserves spatial resolution",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#stride-2",
-    "href": "pages/slides/cnns.html#stride-2",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Stride = 2",
-    "text": "Stride = 2\n\nConvolution with stride \\((2, 2)\\)\nKernel moves 2 pixels at a time → downsamples by factor of 2\n\n\nAdvantage: Learned downsampling (vs. fixed pooling)",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#kernel-size",
-    "href": "pages/slides/cnns.html#kernel-size",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Kernel-Size",
-    "text": "Kernel-Size",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#kernel-size-1",
-    "href": "pages/slides/cnns.html#kernel-size-1",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Kernel-Size",
-    "text": "Kernel-Size\n\n\nWhat is the difference between using 3x3 vs 5x5 kernels? What is the same?",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#dilation",
-    "href": "pages/slides/cnns.html#dilation",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Dilation",
-    "text": "Dilation\n\n\nWhy would we use dilation \\(d \\gt 1\\)?",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#calculations-spatial-dimensionality-of-activation-maps",
-    "href": "pages/slides/cnns.html#calculations-spatial-dimensionality-of-activation-maps",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Calculations: Spatial Dimensionality of Activation Maps",
-    "text": "Calculations: Spatial Dimensionality of Activation Maps\nYou can calculate the dimensionality of the activation maps with the following formulas:\n\n\\(i\\): Side length of the input activations (assumption: square inputs)\n\\(k\\): Kernel size (assumption: square kernel)\n\\(o\\): Side length of the output activation maps\n\\(s\\): Stride (assumption: same stride along spatial dimensions)\n\\(p\\): Number of paddings on each side (assumption: same number of paddings along spatial dimensions)\n\\(d\\): Dilation rate.\n\n\n\\[\\begin{equation}\no = \\left\\lfloor \\frac{i + 2p - d\\cdot(k-1) - 1}{s} + 1 \\right\\rfloor\n\\end{equation}\\]",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#calculations-number-of-weights-in-a-convolutional-layer",
-    "href": "pages/slides/cnns.html#calculations-number-of-weights-in-a-convolutional-layer",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Calculations: Number of Weights in a Convolutional Layer",
-    "text": "Calculations: Number of Weights in a Convolutional Layer\nYou can calculate the total number of weights in a convolutional layer with the following formula:\n\n\\(k\\): Kernel size (assumption: square kernel, so kernel has dimensions \\(k \\times k\\))\n\\(C_{in}\\): Number of input channels\n\\(C_{out}\\): Number of output channels\n\n\n\\[\\begin{equation}\n\\text{Total Weights} = (k \\times k) \\times C_{in} \\times C_{out}\n\\end{equation}\\]\n\n\nEach filter has a size of \\(k \\times k \\times C_{in}\\), and there are \\(C_{out}\\) filters in total, resulting in \\((k \\times k \\times C_{in}) \\times C_{out}\\) weights.\n\n\nBiases: If each output channel has a bias term, add an additional \\(C_{out}\\) weights for the biases.\n\\[\\begin{equation}\n\\text{Total Parameters} = (k \\times k \\times C_{in} \\times C_{out}) + C_{out}\n\\end{equation}\\]",
+    "section": "Formulas",
+    "text": "Formulas\nOutput size (\\(i\\): input size, \\(k\\): kernel, \\(p\\): padding, \\(s\\): stride, \\(d\\): dilation):\n\\[\\begin{equation}\no = \\left\\lfloor \\frac{i + 2p - d\\cdot(k-1) - 1}{s} + 1 \\right\\rfloor\n\\end{equation}\\]\n\nNumber of parameters (\\(C_{in}\\) input channels, \\(C_{out}\\) filters, one bias per filter):\n\\[\\begin{equation}\n\\text{Total Parameters} = (k \\times k \\times C_{in} \\times C_{out}) + C_{out}\n\\end{equation}\\]",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3446,51 +3457,18 @@
     "href": "pages/slides/cnns.html#quiz-output-shape-parameters",
     "title": "3 - Convolutional Neural Networks",
     "section": "Quiz: Output Shape & Parameters",
-    "text": "Quiz: Output Shape & Parameters\nScenario:\n\nInput: \\(3 \\times 32 \\times 32\\) (C, H, W)\nConvolution: 10 filters, kernel \\(5 \\times 5\\), stride=1, pad=2\n\n\nQuestions:\n\nWhat is the size of the output activation map?\nHow many parameters does this operation have?",
+    "text": "Quiz: Output Shape & Parameters\n\nInput: \\(3 \\times 32 \\times 32\\) (C, H, W)\nConvolution: 10 filters, kernel \\(5 \\times 5\\), stride=1, pad=2\n\n1. Output size? 2. Number of parameters?\n\n1. \\(o = \\lfloor \\frac{32 + 4 - 4 - 1}{1} + 1 \\rfloor = 32\\) → output \\(10 \\times 32 \\times 32\\)\n\n\n2. \\((5 \\times 5 \\times 3 \\times 10) + 10 = 760\\) parameters\n\n\nPadding 2 preserves the spatial size with kernel 5.",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#quiz-output-shape-parameters-1",
-    "href": "pages/slides/cnns.html#quiz-output-shape-parameters-1",
+    "objectID": "pages/slides/cnns.html#translation-equivariance",
+    "href": "pages/slides/cnns.html#translation-equivariance",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Quiz: Output Shape & Parameters",
-    "text": "Quiz: Output Shape & Parameters\nFormulas:\n\n\\[\\begin{equation}\no = \\left\\lfloor \\frac{i + 2p - d\\cdot(k-1) - 1}{s} + 1 \\right\\rfloor\n\\end{equation}\\]\n\n\n\\[\\begin{equation}\n\\text{Total Parameters} = (k \\times k \\times C_{in} \\times C_{out}) + C_{out}\n\\end{equation}\\]",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#quiz-solutions",
-    "href": "pages/slides/cnns.html#quiz-solutions",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Quiz: Solutions",
-    "text": "Quiz: Solutions\n\n1. Output size:\n\\(o = \\lfloor \\frac{32 + 2(2) - 1(5-1) - 1}{1} + 1 \\rfloor = \\lfloor \\frac{32 + 4 - 4 - 1}{1} + 1 \\rfloor = 32\\)\n\n\nOutput shape: \\(10 \\times 32 \\times 32\\)\n\n\n2. Parameters:\n\\((5 \\times 5 \\times 3 \\times 10) + 10 = 750 + 10 = 760\\) parameters\n\n\nKey Insight: Padding=2 preserves spatial dimensions with kernel=5!",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#think-about-it",
-    "href": "pages/slides/cnns.html#think-about-it",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Think About It",
-    "text": "Think About It\n\nCan we recognize cats with a one-layer CNN?\nCan we recognize cats anywhere in an image with a CNN?",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#translation-invariance-equivariance",
-    "href": "pages/slides/cnns.html#translation-invariance-equivariance",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Translation Invariance / Equivariance",
-    "text": "Translation Invariance / Equivariance\nGiven a translation \\(g()\\), which spatially shifts inputs:\n\nTranslation invariance: \\(f(g(x))=f(x)\\)\nTranslation equivariance: \\(f(g(x))=g(f(x))\\)\n\n\nAre convolutions translation invariant, equivariant, or both?",
+    "section": "Translation Equivariance",
+    "text": "Translation Equivariance\nAre convolutions translation invariant, equivariant, or both?",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3508,44 +3486,11 @@
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#receptive-field",
-    "href": "pages/slides/cnns.html#receptive-field",
+    "objectID": "pages/slides/cnns.html#demo-receptive-field",
+    "href": "pages/slides/cnns.html#demo-receptive-field",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Receptive Field",
-    "text": "Receptive Field\n\nUsing a 5x5 kernel",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#receptive-field-1",
-    "href": "pages/slides/cnns.html#receptive-field-1",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Receptive Field",
-    "text": "Receptive Field\n\nUsing a 5x5 kernel and two layers",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#receptive-field-2",
-    "href": "pages/slides/cnns.html#receptive-field-2",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Receptive Field",
-    "text": "Receptive Field",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#receptive-field-3",
-    "href": "pages/slides/cnns.html#receptive-field-3",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Receptive Field",
-    "text": "Receptive Field",
+    "section": "Demo: Receptive Field",
+    "text": "Demo: Receptive Field\n\n\n\n\nSelect an activation in the last layer: which inputs can influence it? Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3556,7 +3501,7 @@
     "href": "pages/slides/cnns.html#receptive-field-formula",
     "title": "3 - Convolutional Neural Networks",
     "section": "Receptive Field: Formula",
-    "text": "Receptive Field: Formula\nThe receptive field of a CNN \\(r_0\\):\n\n\\[\\begin{equation}\nr_0 = \\sum_{l=1}^L \\left( (k_l - 1) \\prod_{i=1}^{l-1} s_i \\right) + 1\n\\end{equation}\\]\n\n\n\n\\(L\\): Total number of layers\n\\(k_l\\): Kernel size at layer \\(l\\)\n\\(s_i\\): Stride at layer \\(i\\), from layer 1 up to \\(l-1\\)\n\n\n\nSpecial case: If all strides \\(s_i=1\\), receptive field = \\(\\sum (k_l - 1) + 1\\)",
+    "text": "Receptive Field: Formula\nThe receptive field of a CNN \\(r_0\\):\n\\[\\begin{equation}\nr_0 = \\sum_{l=1}^L \\left( (k_l - 1) \\prod_{i=1}^{l-1} s_i \\right) + 1\n\\end{equation}\\]\n\n\\(L\\): Total number of layers\n\\(k_l\\): Kernel size at layer \\(l\\)\n\\(s_i\\): Stride at layer \\(i\\), from layer 1 up to \\(l-1\\)",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3567,29 +3512,7 @@
     "href": "pages/slides/cnns.html#quiz-receptive-field",
     "title": "3 - Convolutional Neural Networks",
     "section": "Quiz: Receptive Field",
-    "text": "Quiz: Receptive Field\nNetwork Architecture:\n\nLayer 1: \\(k_1 = 3\\), \\(s_1 = 1\\)\nLayer 2: \\(k_2 = 3\\), \\(s_2 = 1\\)\nLayer 3: \\(k_3 = 3\\), \\(s_3 = 1\\)\n\n\nQuestion: What is the receptive field \\(r_0\\)?",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#quiz-receptive-field-solution",
-    "href": "pages/slides/cnns.html#quiz-receptive-field-solution",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Quiz: Receptive Field Solution",
-    "text": "Quiz: Receptive Field Solution\n\nUsing formula: \\(r_0 = \\sum_{l=1}^L \\left( (k_l - 1) \\prod_{i=1}^{l-1} s_i \\right) + 1\\)\n\n\nSince all \\(s_i = 1\\): \\[r_0 = (3-1) + (3-1) + (3-1) + 1 = 2 + 2 + 2 + 1 = 7\\]\n\n\nKey Insight: Stacking three \\(3\\times3\\) convs gives \\(7\\times7\\) receptive field!\n\n\nEfficiency: Three \\(3\\times3\\) = \\(3 \\times 9 = 27\\) params vs one \\(7\\times7\\) = 49 params",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#architecture",
-    "href": "pages/slides/cnns.html#architecture",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Architecture",
-    "text": "Architecture\nSequence of layers and their hyper-parameters defines an architecture.\n\n\n\n\nVGG - Source: Prince (2023)",
+    "text": "Quiz: Receptive Field\nThree layers, each \\(k = 3\\), \\(s = 1\\). What is the receptive field \\(r_0\\)?\n\n\\[r_0 = (3-1) + (3-1) + (3-1) + 1 = 7\\]\n\n\nThree \\(3\\times3\\) convs see \\(7\\times7\\), with \\(3 \\times 9 = 27\\) weights instead of \\(49\\) for one \\(7\\times7\\) (per channel pair).",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3600,7 +3523,7 @@
     "href": "pages/slides/cnns.html#learned-filters",
     "title": "3 - Convolutional Neural Networks",
     "section": "Learned Filters",
-    "text": "Learned Filters\n\nSource: Krizhevsky et al. (2012)",
+    "text": "Learned Filters\n\nSource: Krizhevsky et al. (2012)\nFirst-layer filters learn edges, colours and textures, without being told to.",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3610,8 +3533,8 @@
     "objectID": "pages/slides/cnns.html#lets-test-it",
     "href": "pages/slides/cnns.html#lets-test-it",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Let’s test it!",
-    "text": "Let’s test it!\nLet’s train a CNN.\nHere is an interesting demo: https://poloclub.github.io/cnn-explainer/",
+    "section": "Let’s Test It!",
+    "text": "Let’s Test It!\nTrain a CNN in your browser: https://poloclub.github.io/cnn-explainer/",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3622,7 +3545,7 @@
     "href": "pages/slides/cnns.html#downsampling",
     "title": "3 - Convolutional Neural Networks",
     "section": "Downsampling",
-    "text": "Downsampling\n\nSpatial downsampling reduces resolution (H×W → H’×W’)\n\n\nOptions:\n\nStride \\(&gt; 1\\) (learned downsampling)\nPooling layers (fixed operation)\n\n\n\n\n\n\na) Sub-Sampling, b) Max Pooling, c) Average Pooling. Source: Prince (2023)",
+    "text": "Downsampling\nSpatial downsampling reduces resolution (H×W → H’×W’): stride \\(&gt; 1\\) (learned) or pooling (fixed).\n\na) Sub-Sampling, b) Max Pooling, c) Average Pooling. Source: Prince (2023)",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3633,29 +3556,7 @@
     "href": "pages/slides/cnns.html#upsampling",
     "title": "3 - Convolutional Neural Networks",
     "section": "Upsampling",
-    "text": "Upsampling\n\nNeed to increase spatial dimensions (H×W → H’×W’)\n\n\nExample use case?\n\n\nImage Segmentation - need pixel-level predictions!",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#upsampling-methods",
-    "href": "pages/slides/cnns.html#upsampling-methods",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Upsampling Methods",
-    "text": "Upsampling Methods\n\na) Duplicate, b) Max-Unpooling, c) Bilinear Interpolation. Source: Prince (2023)\nAlso: Transposed Convolutions (learnable upsampling)",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#upsampling-with-transposed-convolutions",
-    "href": "pages/slides/cnns.html#upsampling-with-transposed-convolutions",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Upsampling with Transposed Convolutions",
-    "text": "Upsampling with Transposed Convolutions\n\nMore details in image segmentation!",
+    "text": "Upsampling\nNeeded when the output must have pixel resolution, e.g. segmentation.\n\na) Duplicate, b) Max-Unpooling, c) Bilinear Interpolation. Source: Prince (2023)\nAlso: transposed convolutions (learnable upsampling).",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3666,7 +3567,7 @@
     "href": "pages/slides/cnns.html#convolutions",
     "title": "3 - Convolutional Neural Networks",
     "section": "1×1 Convolutions",
-    "text": "1×1 Convolutions\n\nPurpose: Change number of channels without spatial mixing\n\n\n\\((C_{in} \\times H \\times W) \\rightarrow (C_{out} \\times H \\times W)\\)\n\n\nUse cases:\n\nDimensionality reduction (bottleneck layers)\nIncrease model depth without parameters explosion\nCross-channel information mixing\n\n\n\n\nSource: Prince (2023)",
+    "text": "1×1 Convolutions\n\\((C_{in} \\times H \\times W) \\rightarrow (C_{out} \\times H \\times W)\\): change the number of channels, no spatial mixing.\n\nSource: Prince (2023)",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3677,18 +3578,7 @@
     "href": "pages/slides/cnns.html#global-average-pooling",
     "title": "3 - Convolutional Neural Networks",
     "section": "Global Average Pooling",
-    "text": "Global Average Pooling\nGlobal Average Pooling is often an important component. It computes the average of the activations along the depth dimension, reducing activation maps from (C x H x W) to (C x 1 x 1). This is useful for directly modeling logits in a classification problem with C classes, enabling architectures that completely eliminate fully-connected layers.\n\nGlobal Average pooling, input (left) and output (right).",
-    "crumbs": [
-      "Slides",
-      "3 - Convolutional Neural Networks"
-    ]
-  },
-  {
-    "objectID": "pages/slides/cnns.html#other-layers",
-    "href": "pages/slides/cnns.html#other-layers",
-    "title": "3 - Convolutional Neural Networks",
-    "section": "Other Layers",
-    "text": "Other Layers\n\nMany other layer types exist:\n\n\nDepthwise separable convolutions (efficiency)\nDilated convolutions (large receptive fields)\nGrouped convolutions (parameter reduction)\nBatch normalization (training stability)\nDropout (regularization)",
+    "text": "Global Average Pooling\nAverages each activation map: \\((C \\times H \\times W) \\rightarrow (C \\times 1 \\times 1)\\). Often used right before the classifier.\n\nGlobal Average pooling, input (left) and output (right).",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3706,8 +3596,8 @@
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#quiz-solutions-1",
-    "href": "pages/slides/cnns.html#quiz-solutions-1",
+    "objectID": "pages/slides/cnns.html#quiz-solutions",
+    "href": "pages/slides/cnns.html#quiz-solutions",
     "title": "3 - Convolutional Neural Networks",
     "section": "Quiz: Solutions",
     "text": "Quiz: Solutions\n\nMLP first layer:\n\\((32 \\times 32 \\times 3) \\times 256 = 3{,}072 \\times 256 = 786{,}432\\) parameters\n\n\nCNN first layer:\n\\((3 \\times 3 \\times 3 \\times 16) + 16 = 432 + 16 = 448\\) parameters\n\n\nCNN uses 1,755× fewer parameters! 🚀\n\n\nWhy? Local connectivity + parameter sharing = massive efficiency!",
@@ -3992,6 +3882,17 @@
     ]
   },
   {
+    "objectID": "pages/slides/genai_intro.html#fidelity-and-coverage",
+    "href": "pages/slides/genai_intro.html#fidelity-and-coverage",
+    "title": "8 - Generative AI for Computer Vision",
+    "section": "Fidelity and Coverage",
+    "text": "Fidelity and Coverage\n\n\nFidelity: samples look like real data\nCoverage: samples show the full variety of real data, in the right proportions",
+    "crumbs": [
+      "Slides",
+      "8 - Generative AI for Computer Vision"
+    ]
+  },
+  {
     "objectID": "pages/slides/genai_intro.html#two-approaches",
     "href": "pages/slides/genai_intro.html#two-approaches",
     "title": "8 - Generative AI for Computer Vision",
@@ -4025,6 +3926,17 @@
     ]
   },
   {
+    "objectID": "pages/slides/genai_intro.html#demo-learning-a-1d-distribution",
+    "href": "pages/slides/genai_intro.html#demo-learning-a-1d-distribution",
+    "title": "8 - Generative AI for Computer Vision",
+    "section": "Demo: Learning a 1D Distribution",
+    "text": "Demo: Learning a 1D Distribution\n\n\nCan a single Gaussian reach high fidelity and high coverage? Open in new tab",
+    "crumbs": [
+      "Slides",
+      "8 - Generative AI for Computer Vision"
+    ]
+  },
+  {
     "objectID": "pages/slides/genai_intro.html#density-generation",
     "href": "pages/slides/genai_intro.html#density-generation",
     "title": "8 - Generative AI for Computer Vision",
@@ -4039,41 +3951,41 @@
     "objectID": "pages/slides/genai_intro.html#efficient-sampling",
     "href": "pages/slides/genai_intro.html#efficient-sampling",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "1. Efficient Sampling",
-    "text": "1. Efficient Sampling\n\nGenerate new samples quickly\nCritical for real-time and large-scale use\nExcel: GANs, normalizing flows (single forward pass)\nStruggle: autoregressive, diffusion (sequential steps)",
+    "section": "Efficient Sampling",
+    "text": "Efficient Sampling\n\n\nGANs and VAEs: one forward pass. Diffusion and flow matching: tens of steps. Autoregressive: one step per token.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#high-quality-sampling",
-    "href": "pages/slides/genai_intro.html#high-quality-sampling",
+    "objectID": "pages/slides/genai_intro.html#coverage-mode-collapse",
+    "href": "pages/slides/genai_intro.html#coverage-mode-collapse",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "2. High-Quality Sampling",
-    "text": "2. High-Quality Sampling\n\nRealistic, detailed, indistinguishable from real\nExcel: modern GANs, diffusion, large autoregressive models\nOften paid for with compute or training complexity",
+    "section": "Coverage: Mode Collapse",
+    "text": "Coverage: Mode Collapse\n\n\nRealistic samples, but only of a few modes: a well-known problem of GANs.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#coverage-diversity",
-    "href": "pages/slides/genai_intro.html#coverage-diversity",
+    "objectID": "pages/slides/genai_intro.html#fidelity-vs.-coverage-guidance",
+    "href": "pages/slides/genai_intro.html#fidelity-vs.-coverage-guidance",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "3. Coverage (Diversity)",
-    "text": "3. Coverage (Diversity)\n\nGenerate the full diversity of training data\nFailure mode: mode collapse (GANs) — limited variety\nExcel: VAEs (often at the cost of sample quality)",
+    "section": "Fidelity vs. Coverage: Guidance",
+    "text": "Fidelity vs. Coverage: Guidance\n\n\nTechniques that increase fidelity often reduce coverage, e.g. guidance in diffusion models (Ho and Salimans 2022).",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#well-behaved-latent-space",
-    "href": "pages/slides/genai_intro.html#well-behaved-latent-space",
+    "objectID": "pages/slides/genai_intro.html#smooth-latent-space",
+    "href": "pages/slides/genai_intro.html#smooth-latent-space",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "4. Well-Behaved Latent Space",
-    "text": "4. Well-Behaved Latent Space\n\nSmooth, meaningful structure\nSimilar \\(\\mathbf{z}\\) → similar outputs\nEnables interpolation and controlled generation\nExcel: VAEs (explicit training objective)",
+    "section": "Smooth Latent Space",
+    "text": "Smooth Latent Space\n\nVAE with a 2D latent space, trained on MNIST.\nSimilar \\(\\mathbf{z}\\) → similar outputs: interpolation morphs one digit into another.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4083,19 +3995,19 @@
     "objectID": "pages/slides/genai_intro.html#disentangled-latent-space",
     "href": "pages/slides/genai_intro.html#disentangled-latent-space",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "5. Disentangled Latent Space",
-    "text": "5. Disentangled Latent Space\n\nDifferent dimensions → independent factors\ne.g. separate controls for pose, lighting, color\nEnables fine-grained, interpretable control\nHard without explicit architectural design",
+    "section": "Disentangled Latent Space",
+    "text": "Disentangled Latent Space\n\n\nNot required for control: modern models are controlled through conditioning (text, masks, reference images).",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#efficient-likelihood-computation",
-    "href": "pages/slides/genai_intro.html#efficient-likelihood-computation",
+    "objectID": "pages/slides/genai_intro.html#likelihood-computation",
+    "href": "pages/slides/genai_intro.html#likelihood-computation",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "6. Efficient Likelihood Computation",
-    "text": "6. Efficient Likelihood Computation\n\nEvaluate \\(p_{\\theta}(\\mathbf{x})\\) for any sample\nEnables direct optimization, anomaly detection, model comparison\nHave: autoregressive, flows, VAEs (approx)\nLack: GANs, many diffusion models",
+    "section": "Likelihood Computation",
+    "text": "Likelihood Computation\n\n\nExact: autoregressive, normalizing flows. Bound or expensive: VAEs, diffusion, flow matching. None: GANs.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4106,7 +4018,7 @@
     "href": "pages/slides/genai_intro.html#why-evaluation-is-hard",
     "title": "8 - Generative AI for Computer Vision",
     "section": "Why Evaluation Is Hard",
-    "text": "Why Evaluation Is Hard\n\nUsually no single correct output. Many outputs may be valid for one input.\n\n\nBetter question than “is it correct?”:\n\nIs the generated image plausible, diverse, useful, and faithful to the condition?",
+    "text": "Why Evaluation Is Hard\n\nUsually no single correct output. Many outputs may be valid for one input.\n\n\nBetter question than “is it correct?”:\n\nAre the generated images realistic and varied, do they follow the condition, and are they useful?",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4117,7 +4029,7 @@
     "href": "pages/slides/genai_intro.html#likelihood",
     "title": "8 - Generative AI for Computer Vision",
     "section": "Likelihood",
-    "text": "Likelihood\n\n\\[\\frac{1}{N} \\sum_{i=1}^{N} \\log p_{\\theta}(\\mathbf{x}^{(i)})\\]\n\n\nHigh likelihood → model assigns high probability to real data.\n\n\nNot available for GANs (no explicit density)\nHigh likelihood ≠ perceptually good samples",
+    "text": "Likelihood\n\n\\[\\frac{1}{N} \\sum_{i=1}^{N} \\log p_{\\theta}(\\mathbf{x}^{(i)})\\]\n\n\nHigh likelihood → model assigns high probability to real data.\n\n\nNot available for GANs (no explicit density)\nLikelihood and sample quality are largely independent (Theis et al. 2016)",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4128,18 +4040,29 @@
     "href": "pages/slides/genai_intro.html#human-evaluation",
     "title": "8 - Generative AI for Computer Vision",
     "section": "Human Evaluation",
-    "text": "Human Evaluation\n\nWhich image looks more realistic?\nWhich better matches the prompt?\nWhich has fewer artifacts?\nWhich would you prefer to use?\n\n\nMost meaningful for visual quality — but slow, subjective, expensive.",
+    "text": "Human Evaluation\n\nWhich image looks more realistic?\nWhich better matches the prompt?\nWhich has fewer artifacts?\nWhich would you prefer to use?\n\n\nMost meaningful for visual quality — but slow, subjective, expensive.\n\n\nPreference leaderboards: blind pairwise comparisons, aggregated into a ranking.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#distribution-level-metrics",
-    "href": "pages/slides/genai_intro.html#distribution-level-metrics",
+    "objectID": "pages/slides/genai_intro.html#distribution-level-metrics-fid",
+    "href": "pages/slides/genai_intro.html#distribution-level-metrics-fid",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "Distribution-Level Metrics",
-    "text": "Distribution-Level Metrics\n\n\nInception Score (IS) (Salimans et al. 2016): classifier-based — confident per-image + diverse across set.",
+    "section": "Distribution-Level Metrics: FID",
+    "text": "Distribution-Level Metrics: FID\n\n\nFID (Heusel et al. 2018): Fréchet distance between Gaussians fitted to Inception features of real and generated images. Lower is better.",
+    "crumbs": [
+      "Slides",
+      "8 - Generative AI for Computer Vision"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_intro.html#demo-fid-precision-and-recall",
+    "href": "pages/slides/genai_intro.html#demo-fid-precision-and-recall",
+    "title": "8 - Generative AI for Computer Vision",
+    "section": "Demo: FID, Precision and Recall",
+    "text": "Demo: FID, Precision and Recall\n\n\nCompare Shifted and Mode collapse: which metric tells them apart? Open in new tab",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4150,7 +4073,7 @@
     "href": "pages/slides/genai_intro.html#limitations-of-distribution-metrics",
     "title": "8 - Generative AI for Computer Vision",
     "section": "Limitations of Distribution Metrics",
-    "text": "Limitations of Distribution Metrics\n\nDepend on a pretrained classifier\nMost meaningful for class-balanced data (e.g. ImageNet)\nDon’t compare generated images directly to real images\nDon’t evaluate prompt adherence or input fidelity\nCan hide failures on rare classes, spatial relations, text rendering",
+    "text": "Limitations of Distribution Metrics\n\nOne FID value does not say whether fidelity or coverage is the problem: precision and recall (Kynkäänniemi et al. 2019) separate them\nFID depends on the number of samples and on ImageNet features\nDon’t evaluate prompt adherence or input fidelity\nCan hide failures on rare classes, spatial relations, text rendering",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4190,66 +4113,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#diffusion-in-pixel-space",
-    "href": "pages/slides/genai_practical.html#diffusion-in-pixel-space",
+    "objectID": "pages/slides/genai_practical.html#why-pixel-space-diffusion-is-expensive",
+    "href": "pages/slides/genai_practical.html#why-pixel-space-diffusion-is-expensive",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Diffusion in Pixel Space",
-    "text": "Diffusion in Pixel Space\n\nStart from random noise, iteratively denoise:\n\\[\\mathbf{x}_T \\sim \\mathcal{N}(\\mathbf{0}, \\mathbf{I}) \\rightarrow \\mathbf{x}_{T-1} \\rightarrow \\cdots \\rightarrow \\mathbf{x}_0\\]\n\n\n\nHow do we make diffusion efficient enough for high-resolution images?",
+    "section": "Why Pixel-Space Diffusion Is Expensive",
+    "text": "Why Pixel-Space Diffusion Is Expensive\n\n\n\n\nResolution\nRGB values\n\n\n\n\n512 × 512\n786,432\n\n\n1024 × 1024\n3,145,728\n\n\n\n\nThe denoiser processes this full representation at every step.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#practical-workflows-demand-speed",
-    "href": "pages/slides/genai_practical.html#practical-workflows-demand-speed",
+    "objectID": "pages/slides/genai_practical.html#compress-images-into-latents",
+    "href": "pages/slides/genai_practical.html#compress-images-into-latents",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Practical Workflows Demand Speed",
-    "text": "Practical Workflows Demand Speed\n\nHigh-resolution images\nMany candidate images\nRepeated prompt iteration\nImage edits and variations",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#the-pixel-space-bottleneck",
-    "href": "pages/slides/genai_practical.html#the-pixel-space-bottleneck",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "The Pixel-Space Bottleneck",
-    "text": "The Pixel-Space Bottleneck\n\nA \\(512 \\times 512\\) RGB image has: \\[512 \\times 512 \\times 3 = 786{,}432 \\text{ values}\\]\n\n\nAnd diffusion processes this representation many times: \\[\\text{image size} \\times \\text{denoising steps} \\times \\text{denoiser cost}\\]",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#resolution-makes-it-worse",
-    "href": "pages/slides/genai_practical.html#resolution-makes-it-worse",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Resolution Makes It Worse",
-    "text": "Resolution Makes It Worse\n\n\n\nResolution\nRGB values\n\n\n\n\n256 × 256\n196,608\n\n\n512 × 512\n786,432\n\n\n1024 × 1024\n3,145,728\n\n\n\n\n1024² has 4× the values of 512². And every step processes them.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#the-idea",
-    "href": "pages/slides/genai_practical.html#the-idea",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "The Idea",
-    "text": "The Idea\n\nDon’t run diffusion on pixels if a smaller representation is enough.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#stable-diffusion-examples",
-    "href": "pages/slides/genai_practical.html#stable-diffusion-examples",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Stable Diffusion Examples",
-    "text": "Stable Diffusion Examples\n\n\nStable Diffusion (Rombach et al. (2022)) — canonical latent diffusion system.",
+    "section": "Compress Images into Latents",
+    "text": "Compress Images into Latents\n\n\nSD-XL VAE: the latent keeps what the denoiser needs, the decoder restores the pixels.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
@@ -4260,161 +4139,95 @@
     "href": "pages/slides/genai_practical.html#latent-diffusion-architecture",
     "title": "10 - GenAI: Modern Systems",
     "section": "Latent Diffusion Architecture",
-    "text": "Latent Diffusion Architecture\n\n\nText encoded → diffusion runs in VAE latent space → VAE decoder produces image.",
+    "text": "Latent Diffusion Architecture\n\n\nTraining: \\(\\mathbf{x} \\xrightarrow{\\text{encoder}} \\mathbf{z}\\), add noise, learn to denoise \\(\\mathbf{z}\\)\n\n\nGeneration: \\(\\mathbf{z}_T \\rightarrow \\cdots \\rightarrow \\mathbf{z}_0 \\xrightarrow{\\text{decoder}} \\hat{\\mathbf{x}}\\). For editing, the encoder runs at inference too.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#training-encode-first",
-    "href": "pages/slides/genai_practical.html#training-encode-first",
+    "objectID": "pages/slides/genai_practical.html#why-it-works-and-what-it-costs",
+    "href": "pages/slides/genai_practical.html#why-it-works-and-what-it-costs",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Training: Encode First",
-    "text": "Training: Encode First\n\n\\[\\mathbf{x} \\xrightarrow{\\text{VAE encoder}} \\mathbf{z}\\]\n\n\nThe diffusion model is trained to denoise noisy versions of latents \\(\\mathbf{z}\\) — never pixels.",
+    "section": "Why It Works, and What It Costs",
+    "text": "Why It Works, and What It Costs\n\n\nNot 48× faster: cost also depends on the network, attention grows with tokens², plus one decoder pass.\n\n\nFine detail (small text, faces) is limited by what the VAE can reconstruct.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#sampling-diffuse-in-latent-space",
-    "href": "pages/slides/genai_practical.html#sampling-diffuse-in-latent-space",
+    "objectID": "pages/slides/genai_practical.html#what-latent-diffusion-can-do",
+    "href": "pages/slides/genai_practical.html#what-latent-diffusion-can-do",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Sampling: Diffuse in Latent Space",
-    "text": "Sampling: Diffuse in Latent Space\n\n\\[\\mathbf{z}_T \\rightarrow \\mathbf{z}_{T-1} \\rightarrow \\cdots \\rightarrow \\mathbf{z}_0 \\xrightarrow{\\text{VAE decoder}} \\hat{\\mathbf{x}}\\]\n\n\nFor image-to-image / inpainting / editing, VAE encoder runs at inference time too.",
+    "section": "What Latent Diffusion Can Do",
+    "text": "What Latent Diffusion Can Do\n\n\nStable Diffusion 3.5 Large: diverse styles and legible text, still generated in a VAE latent space (Esser et al. (2024)).",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#division-of-labor",
-    "href": "pages/slides/genai_practical.html#division-of-labor",
+    "objectID": "pages/slides/genai_practical.html#quiz-who-does-what",
+    "href": "pages/slides/genai_practical.html#quiz-who-does-what",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Division of Labor",
-    "text": "Division of Labor\n\n\n\nComponent\nRole\n\n\n\n\nText encoder\nsemantic conditioning from prompt\n\n\nVAE encoder\ncompress images to latents\n\n\nVAE decoder\nlatents back to pixels\n\n\nDiffusion model\ndenoise / generate in latent space\n\n\nSampler\ncontrols iterative denoising",
+    "section": "Quiz: Who Does What?",
+    "text": "Quiz: Who Does What?\nWhich component generates the image content, and which turns it into pixels?\n\nThe denoiser generates a latent. The VAE decoder turns it into pixels.\n\n\nAnd to edit an existing photo, which component is needed in addition?\n\n\nThe VAE encoder: the input image has to enter latent space first.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#why-it-works",
-    "href": "pages/slides/genai_practical.html#why-it-works",
+    "objectID": "pages/slides/genai_practical.html#from-u-net-to-diffusion-transformer",
+    "href": "pages/slides/genai_practical.html#from-u-net-to-diffusion-transformer",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Why It Works",
-    "text": "Why It Works\n\nSmaller denoising representation\nLess memory\nCheaper sampling\nPractical at high resolution\nEasier to adapt and experiment\n\n\n\nStable Diffusion doesn’t draw pixels — it generates latents, then decodes.",
+    "section": "From U-Net to Diffusion Transformer",
+    "text": "From U-Net to Diffusion Transformer\n\n\nLatent → sequence of patch tokens, denoised with self-attention (Peebles and Xie (2023)).\n\n\nSD3 / FLUX: diffusion transformer + flow matching. Architecture and objective are separate choices.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#beyond-stable-diffusion",
-    "href": "pages/slides/genai_practical.html#beyond-stable-diffusion",
+    "objectID": "pages/slides/genai_practical.html#how-language-conditions-the-image",
+    "href": "pages/slides/genai_practical.html#how-language-conditions-the-image",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Beyond Stable Diffusion",
-    "text": "Beyond Stable Diffusion\n\nThe denoiser itself is evolving (U-Net → Transformer)\nImage generation is integrated into multimodal assistants\nMany commercial systems aren’t fully disclosed — focus on the ideas",
+    "section": "How Language Conditions the Image",
+    "text": "How Language Conditions the Image\n\n\nCross-attention: image tokens read fixed text tokens. Joint attention: text and image tokens update each other.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#u-net-diffusion-transformer",
-    "href": "pages/slides/genai_practical.html#u-net-diffusion-transformer",
+    "objectID": "pages/slides/genai_practical.html#three-ways-to-build-multimodal-generators",
+    "href": "pages/slides/genai_practical.html#three-ways-to-build-multimodal-generators",
     "title": "10 - GenAI: Modern Systems",
-    "section": "U-Net → Diffusion Transformer",
-    "text": "U-Net → Diffusion Transformer\n\n\nImage / latent → sequence of patch tokens. Self-attention denoises them (Peebles and Xie (2023)).",
+    "section": "Three Ways to Build Multimodal Generators",
+    "text": "Three Ways to Build Multimodal Generators\n\n\nAll three still generate the image with diffusion or flow matching in a VAE latent space.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#u-net-vs.-diffusion-transformer",
-    "href": "pages/slides/genai_practical.html#u-net-vs.-diffusion-transformer",
+    "objectID": "pages/slides/genai_practical.html#qwen-image-2.0",
+    "href": "pages/slides/genai_practical.html#qwen-image-2.0",
     "title": "10 - GenAI: Modern Systems",
-    "section": "U-Net vs. Diffusion Transformer",
-    "text": "U-Net vs. Diffusion Transformer\n\n\n\nAspect\nU-Net\nDiffusion Transformer\n\n\n\n\nRepresentation\nspatial feature maps\ntoken sequence\n\n\nMain op\nconv + attention\nself-attention + MLP\n\n\nInductive bias\nstrong image locality\ngeneral sequence modeling\n\n\nConditioning\ncross-attention\ncross-attn / conditioning tokens\n\n\nMultimodal\npossible\nmore natural\n\n\n\n\nU-Nets remain effective — but transformers fit a broader trend.",
+    "section": "Qwen-Image 2.0",
+    "text": "Qwen-Image 2.0\n\n\nQwen3-VL (frozen) reads instruction + input image: what to change. VAE of the input image: how it looks.\n\n\nA multimodal diffusion transformer denoises the target latents jointly with all condition tokens (Zhao et al. (2026)).",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#tokens-as-a-common-interface",
-    "href": "pages/slides/genai_practical.html#tokens-as-a-common-interface",
+    "objectID": "pages/slides/genai_practical.html#generation-vs.-editing",
+    "href": "pages/slides/genai_practical.html#generation-vs.-editing",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Tokens as a Common Interface",
-    "text": "Tokens as a Common Interface\n\n\\[\\text{text} \\rightarrow \\text{text tokens}\\]\n\n\n\\[\\text{image / latent} \\rightarrow \\text{visual tokens}\\]\n\n\n\\[\\text{reference image} \\rightarrow \\text{reference tokens}\\]\n\n\nAll can interact through attention in a unified architecture.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#multimodal-diffusion-systems",
-    "href": "pages/slides/genai_practical.html#multimodal-diffusion-systems",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Multimodal Diffusion Systems",
-    "text": "Multimodal Diffusion Systems\n\nConditioning isn’t only text — also images, masks, reference subjects, editing instructions, prior outputs.\n\n\nChange only the background\nPreserve product identity across scenes\nIteratively refine in a chat",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#example-interactive-editing",
-    "href": "pages/slides/genai_practical.html#example-interactive-editing",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Example: Interactive Editing",
-    "text": "Example: Interactive Editing\n\nSource\nStarting image of a living room (Unsplash).",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#step-1-remove-object",
-    "href": "pages/slides/genai_practical.html#step-1-remove-object",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Step 1: Remove Object",
-    "text": "Step 1: Remove Object\n\n\n“Remove the book on the floor, replace with clean floor”",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#step-2-recolor",
-    "href": "pages/slides/genai_practical.html#step-2-recolor",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Step 2: Recolor",
-    "text": "Step 2: Recolor\n\n\n“Recolor sofa and ottoman to vibrant turquoise”",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#step-3-match-style",
-    "href": "pages/slides/genai_practical.html#step-3-match-style",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Step 3: Match Style",
-    "text": "Step 3: Match Style\n\n\n“Change the carpet color to match the turquoise sofa” (Nano Banana 2, Raisinghani (2026))",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#whats-inside-a-modern-assistant",
-    "href": "pages/slides/genai_practical.html#whats-inside-a-modern-assistant",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "What’s Inside a Modern Assistant?",
-    "text": "What’s Inside a Modern Assistant?\n\nUnderstanding text instructions\nUnderstanding uploaded images\nMaintaining conversational context\nPlanning the edit / generation\nCalling a specialized image generator\nCalling an editor\nChecking safety constraints\nReturning a unified response",
+    "section": "Generation vs. Editing",
+    "text": "Generation vs. Editing\n\n\n\n\n\n\n\n\nInput photo (Unsplash)\n\n\n“Remove the book on the floor, replace it with clean floor”\n\n\n“Recolor the sofa and ottoman to a vibrant turquoise”\n\n\n“Change the carpet color to match the turquoise sofa” (Nano Banana 2, Raisinghani (2026))",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
@@ -4425,29 +4238,205 @@
     "href": "pages/slides/genai_practical.html#model-vs.-system",
     "title": "10 - GenAI: Modern Systems",
     "section": "Model vs. System",
-    "text": "Model vs. System\n\nModern multimodal generation is not one model — it’s a system for understanding, planning, generating, editing, and iterating.",
+    "text": "Model vs. System\n\nTool-orchestrated: a language model writes a prompt and calls a separate image model\nNatively multimodal: one model understands and generates (pattern 3)\n\n\n\nThe user sees one assistant. Inside, it is a system for understanding, planning, generating and editing.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#two-questions",
-    "href": "pages/slides/genai_practical.html#two-questions",
+    "objectID": "pages/slides/genai_practical.html#same-edit-two-models",
+    "href": "pages/slides/genai_practical.html#same-edit-two-models",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Two Questions",
-    "text": "Two Questions\n\nCan the model generate good images?\n\n\nAnd:\nCan it generate the right images, consistently, for this use case?",
+    "section": "Same Edit, Two Models",
+    "text": "Same Edit, Two Models\n\n\nFLUX Kontext Pro (top) vs. Nano Banana 2 (bottom): who keeps the car’s identity?",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#subject-consistency",
-    "href": "pages/slides/genai_practical.html#subject-consistency",
+    "objectID": "pages/slides/genai_practical.html#quiz-why-a-vision-language-model",
+    "href": "pages/slides/genai_practical.html#quiz-why-a-vision-language-model",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Subject Consistency",
-    "text": "Subject Consistency\n\n\nSame person across different scenes — requires more than a prompt.",
+    "section": "Quiz: Why a Vision-Language Model?",
+    "text": "Quiz: Why a Vision-Language Model?\nWhy might an editing model benefit from a vision-language model rather than only a text encoder?\n\nA text encoder sees only the words. A VLM reads the instruction together with the input image, so it can resolve “the two trees” or “match the sofa”.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#exercise-pretrained-generative-models-and-apis",
+    "href": "pages/slides/genai_practical.html#exercise-pretrained-generative-models-and-apis",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Exercise: Pretrained Generative Models and APIs",
+    "text": "Exercise: Pretrained Generative Models and APIs\nGenerate and edit images yourself with hosted models.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#the-right-image-consistently",
+    "href": "pages/slides/genai_practical.html#the-right-image-consistently",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "The Right Image, Consistently",
+    "text": "The Right Image, Consistently\n\n\nGood images are not enough: can it produce the right subject consistently for this use case?",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#choosing-an-adaptation-strategy",
+    "href": "pages/slides/genai_practical.html#choosing-an-adaptation-strategy",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Choosing an Adaptation Strategy",
+    "text": "Choosing an Adaptation Strategy\n\n\n\nFine-tune only when the same failure repeats and simpler controls are not enough.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#quiz-pick-the-method",
+    "href": "pages/slides/genai_practical.html#quiz-pick-the-method",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Quiz: Pick the Method",
+    "text": "Quiz: Pick the Method\n\nOne advertising visual of your product on a beach\nYour company mascot in 200 different scenes\nSwap the background of an existing product photo\n\n\n1 → prompt + reference image · 2 → LoRA · 3 → inpainting / editing",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#when-realism-isnt-enough",
+    "href": "pages/slides/genai_practical.html#when-realism-isnt-enough",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "When Realism Isn’t Enough",
+    "text": "When Realism Isn’t Enough\n\n\nMRI → CT with a ResViT GAN (Schärer (2023)): a plausible CT is not enough, anatomy and dose-relevant structure must be correct.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#accessing-image-models",
+    "href": "pages/slides/genai_practical.html#accessing-image-models",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Accessing Image Models",
+    "text": "Accessing Image Models\n\n\n\nPattern\nStrength\nLimit\n\n\n\n\nHosted API\nfast, strong models\nopaque, vendor dependency\n\n\nEnterprise platform\nIAM, logging, compliance\nsetup, lock-in\n\n\nOpen-weight\ncontrol, privacy, adapters\noperations, GPU cost\n\n\n\n\nStart hosted. Move when governance, control or adaptation matter.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#plausible-but-wrong",
+    "href": "pages/slides/genai_practical.html#plausible-but-wrong",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Plausible but Wrong",
+    "text": "Plausible but Wrong\n\n\nThe electric Ferrari Luce, with an exhaust pipe? Visually convincing ≠ correct.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#synthetic-data",
+    "href": "pages/slides/genai_practical.html#synthetic-data",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Synthetic Data",
+    "text": "Synthetic Data\n\n\nReplacing real data with synthetic data degrades models (Alemohammad et al. (2023)). Accumulating alongside real data avoids it (Gerstgrasser et al. (2024)).\n\n\nTest: does it improve performance on the real target distribution?",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#bias-in-generated-images",
+    "href": "pages/slides/genai_practical.html#bias-in-generated-images",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Bias in Generated Images",
+    "text": "Bias in Generated Images\n\n\nStereotyped associations (Source: Washington Post). The risk depends on the use case.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#quiz-real-or-not",
+    "href": "pages/slides/genai_practical.html#quiz-real-or-not",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Quiz: Real or Not?",
+    "text": "Quiz: Real or Not?\n\n\nIncreasingly hard to tell from the image alone. (Source: Spiegel.)",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#fake-in-a-familiar-interface",
+    "href": "pages/slides/genai_practical.html#fake-in-a-familiar-interface",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Fake in a Familiar Interface",
+    "text": "Fake in a Familiar Interface\n\nFake crater next to the Washington Monument, made with Google Earth’s AI image feature. Source\nThe image carried an invisible watermark, but a phone photo of the screen was no longer detected.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#provenance-no-single-fix",
+    "href": "pages/slides/genai_practical.html#provenance-no-single-fix",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Provenance: No Single Fix",
+    "text": "Provenance: No Single Fix\n\n\nProvenance is a system-level problem.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#copyright-licensing",
+    "href": "pages/slides/genai_practical.html#copyright-licensing",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Copyright & Licensing",
+    "text": "Copyright & Licensing\n\nWhich data trained the model?\nDo model and adapter licenses allow your use?\nWho owns the reference images, and can outputs be used commercially?",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#before-you-use-a-generated-image",
+    "href": "pages/slides/genai_practical.html#before-you-use-a-generated-image",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Before You Use a Generated Image",
+    "text": "Before You Use a Generated Image\n\nHow risky is the use case?\nCould it mislead?\nConsent, identity, privacy?\nLicense constraints?\nCould it reinforce stereotypes?",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#where-the-model-uses-each-word",
+    "href": "pages/slides/genai_practical.html#where-the-model-uses-each-word",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "Where the Model Uses Each Word",
+    "text": "Where the Model Uses Each Word\n\nCross-attention maps of Stable Diffusion 1.5, averaged over heads, layers and sampling steps.",
+    "crumbs": [
+      "Slides",
+      "10 - GenAI: Modern Systems"
+    ]
+  },
+  {
+    "objectID": "pages/slides/genai_practical.html#u-net-vs.-diffusion-transformer",
+    "href": "pages/slides/genai_practical.html#u-net-vs.-diffusion-transformer",
+    "title": "10 - GenAI: Modern Systems",
+    "section": "U-Net vs. Diffusion Transformer",
+    "text": "U-Net vs. Diffusion Transformer\n\n\n\nAspect\nU-Net\nDiffusion Transformer\n\n\n\n\nRepresentation\nspatial feature maps\ntoken sequence\n\n\nMain op\nconv + attention\nself-attention + MLP\n\n\nInductive bias\nstrong image locality\ngeneral sequence modeling\n\n\nConditioning\ncross-attention\ncross-attn / joint attention\n\n\nMultimodal\npossible\nmore natural",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
@@ -4465,110 +4454,11 @@
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#the-rule",
-    "href": "pages/slides/genai_practical.html#the-rule",
+    "objectID": "pages/slides/genai_practical.html#adaptation-tooling",
+    "href": "pages/slides/genai_practical.html#adaptation-tooling",
     "title": "10 - GenAI: Modern Systems",
-    "section": "The Rule",
-    "text": "The Rule\n\nDon’t fine-tune because the model is imperfect. Fine-tune when the same failure appears repeatedly and simpler controls aren’t enough.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#prompting-first",
-    "href": "pages/slides/genai_practical.html#prompting-first",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Prompting First",
-    "text": "Prompting First\na studio product photo of a hiking backpack,\nwhite background, softbox lighting,\nhigh detail, commercial photography\n\nCheapest control over subject, style, camera, lighting, composition, mood, format.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#a-typical-workflow",
-    "href": "pages/slides/genai_practical.html#a-typical-workflow",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "A Typical Workflow",
-    "text": "A Typical Workflow\nprompt\n → inspect result\n → add reference image or mask\n → edit locally\n → only then consider training\n\nModern models can do a lot without any training.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#when-lora-still-makes-sense",
-    "href": "pages/slides/genai_practical.html#when-lora-still-makes-sense",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "When LoRA Still Makes Sense",
-    "text": "When LoRA Still Makes Sense\n\nFreeze base weights, learn a small low-rank update:\n\\[\\Delta W = BA\\]\n\n\nSmall adapter, loadable on top of a base model.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#good-lora-use-cases",
-    "href": "pages/slides/genai_practical.html#good-lora-use-cases",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Good LoRA Use Cases",
-    "text": "Good LoRA Use Cases\n\nRecurring character or mascot\nSpecific product / object\nConsistent brand or illustration style\nSpecialized domain (fashion, architecture, microscopy, industrial)\nLocal / private deployment with open weights\nMany lightweight variants from one base",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#tooling",
-    "href": "pages/slides/genai_practical.html#tooling",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Tooling",
-    "text": "Tooling\n\nHF Diffusers — LoRA / DreamBooth-LoRA training\nHF FLUX QLoRA — quantized LoRA example\nReplicate — hosted FLUX fine-tuning, UI or API",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#where-general-models-struggle",
-    "href": "pages/slides/genai_practical.html#where-general-models-struggle",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Where General Models Struggle",
-    "text": "Where General Models Struggle\n\n\n\n\n\n\n\n\nDomain\nTask\nMain risk\n\n\n\n\nMRI → CT (Schärer (2023))\nimage-to-image translation\nwrong anatomy / dose-relevant structure\n\n\nSolar flares (Ramunno et al. (2024))\nconditional / temporal synthesis\nimplausible flare patterns\n\n\nIndustrial defects\nrare-defect generation\nsynthetic artifacts mismatch real",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#how-will-you-actually-use-this",
-    "href": "pages/slides/genai_practical.html#how-will-you-actually-use-this",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "How Will You Actually Use This?",
-    "text": "How Will You Actually Use This?\nThree main access patterns:\n\nHosted API — fastest, opaque\nEnterprise platform — governance, integrated cloud\nOpen-weight model — control, operational responsibility",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#three-access-patterns",
-    "href": "pages/slides/genai_practical.html#three-access-patterns",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Three Access Patterns",
-    "text": "Three Access Patterns\n\n\n\n\n\n\n\n\n\nPattern\nExamples\nStrengths\nLimits\n\n\n\n\nHosted API\nOpenAI, Google, Replicate, fal.ai\nfast, strong models, no GPUs\nopaque, vendor dependency\n\n\nEnterprise platform\nVertex AI, Azure, Bedrock\nIAM, logging, quotas, compliance\nsetup, lock-in\n\n\nOpen-weight\nHF Diffusers, ComfyUI, self-host\ncontrol, reproducibility, privacy, adapters\nops burden, GPU cost",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#a-practical-rule",
-    "href": "pages/slides/genai_practical.html#a-practical-rule",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "A Practical Rule",
-    "text": "A Practical Rule\n\nStart with a hosted API. Move to an enterprise platform when governance matters. Use open-weight models when you need control, reproducibility, privacy, or adaptation.",
+    "section": "Adaptation Tooling",
+    "text": "Adaptation Tooling\n\nHF Diffusers LoRA\nHF FLUX QLoRA\nReplicate FLUX fine-tuning",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
@@ -4579,128 +4469,18 @@
     "href": "pages/slides/genai_practical.html#replicate",
     "title": "10 - GenAI: Modern Systems",
     "section": "Replicate",
-    "text": "Replicate\n\n\nHosted access to both proprietary and open-weight models.",
+    "text": "Replicate\n\nHosted access to both proprietary and open-weight models.",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
     ]
   },
   {
-    "objectID": "pages/slides/genai_practical.html#image-models-hallucinate-too",
-    "href": "pages/slides/genai_practical.html#image-models-hallucinate-too",
+    "objectID": "pages/slides/genai_practical.html#bias-the-washington-post-analysis",
+    "href": "pages/slides/genai_practical.html#bias-the-washington-post-analysis",
     "title": "10 - GenAI: Modern Systems",
-    "section": "Image Models Hallucinate Too",
-    "text": "Image Models Hallucinate Too\n\nInvented objects, text, logos, identities\nWrong physical relationships\nWrong medical / technical details\nImpossible geometry\nMisleading context\n\n\nVisually convincing ≠ factually correct.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#plausible-but-wrong",
-    "href": "pages/slides/genai_practical.html#plausible-but-wrong",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Plausible but Wrong",
-    "text": "Plausible but Wrong\n\n\nThe new electric Ferrari Luce — with a visible exhaust pipe?",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#synthetic-data-useful",
-    "href": "pages/slides/genai_practical.html#synthetic-data-useful",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Synthetic Data: Useful",
-    "text": "Synthetic Data: Useful\n\nGenerate rare object poses\nAugment defect-detection datasets\nSimulate unusual lighting\nPrivacy-preserving demo examples\nEarly prototype training",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#synthetic-data-risky",
-    "href": "pages/slides/genai_practical.html#synthetic-data-risky",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Synthetic Data: Risky",
-    "text": "Synthetic Data: Risky\n\n\nQuality degrades under synthetic-data pollution / model collapse (Alemohammad et al. (2023)).\n\n\nQuestion is not good or bad? but: does it improve performance on the real target distribution?",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#bias-in-generated-images",
-    "href": "pages/slides/genai_practical.html#bias-in-generated-images",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Bias in Generated Images",
-    "text": "Bias in Generated Images\n\n\nModels inherit the biases of their training data. (Source: Washington Post.)",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#bias-examples",
-    "href": "pages/slides/genai_practical.html#bias-examples",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Bias Examples",
-    "text": "Bias Examples\n\n\nStereotyped associations across occupations, beauty, wealth, culture, dignity.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#risk-depends-on-use-case",
-    "href": "pages/slides/genai_practical.html#risk-depends-on-use-case",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Risk Depends on Use Case",
-    "text": "Risk Depends on Use Case\n\nCreative toy app vs. hiring tool\nEducational content vs. public campaign\nInternal demo vs. medical assistant\nTreat outputs critically — not as neutral",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#real-or-not",
-    "href": "pages/slides/genai_practical.html#real-or-not",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Real or Not?",
-    "text": "Real or Not?\n\n\nIncreasingly hard to tell. (Source: Spiegel.)",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#provenance-approaches",
-    "href": "pages/slides/genai_practical.html#provenance-approaches",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Provenance Approaches",
-    "text": "Provenance Approaches\n\nVisible / invisible watermarks\nMetadata-based provenance\nCryptographic signatures\nSynthetic-image detectors\nContent credentials\n\n\nNone is perfect. Provenance is a system-level problem.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#copyright-licensing",
-    "href": "pages/slides/genai_practical.html#copyright-licensing",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Copyright & Licensing",
-    "text": "Copyright & Licensing\n\nWhat data trained the model?\nIs the model license compatible with your use?\nCan outputs be used commercially?\nCould outputs resemble protected examples?\nAdapters / fine-tunes licensed separately?\nReference images licensed by you?\n\n\nLicensing is part of model selection, not an afterthought.",
-    "crumbs": [
-      "Slides",
-      "10 - GenAI: Modern Systems"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_practical.html#responsibility-checklist",
-    "href": "pages/slides/genai_practical.html#responsibility-checklist",
-    "title": "10 - GenAI: Modern Systems",
-    "section": "Responsibility Checklist",
-    "text": "Responsibility Checklist\n\nWhat’s the risk level of the use case?\nCould the image mislead people?\nIdentity / privacy / consent issues?\nCopyright / licensing constraints?\nCould output reinforce stereotypes or biased associations?",
+    "section": "Bias: The Washington Post Analysis",
+    "text": "Bias: The Washington Post Analysis",
     "crumbs": [
       "Slides",
       "10 - GenAI: Modern Systems"
@@ -5048,17 +4828,6 @@
     ]
   },
   {
-    "objectID": "pages/slides/vision_transformers.html#overview",
-    "href": "pages/slides/vision_transformers.html#overview",
-    "title": "7 - Modern Vision Backbones",
-    "section": "Overview",
-    "text": "Overview\n\nFrom Sequences to Patches\nSelf-Attention on Patches\nCNNs vs. ViTs\nPractical Architecture Selection",
-    "crumbs": [
-      "Slides",
-      "7 - Modern Vision Backbones"
-    ]
-  },
-  {
     "objectID": "pages/slides/vision_transformers.html#transformers-in-vision",
     "href": "pages/slides/vision_transformers.html#transformers-in-vision",
     "title": "7 - Modern Vision Backbones",
@@ -5103,22 +4872,11 @@
     ]
   },
   {
-    "objectID": "pages/slides/vision_transformers.html#patchifying",
-    "href": "pages/slides/vision_transformers.html#patchifying",
-    "title": "7 - Modern Vision Backbones",
-    "section": "Patchifying",
-    "text": "Patchifying\n\n\nFigure 2: Split the image into fixed-size, non-overlapping patches.\n\n\\(224 \\times 224\\) image, \\(16 \\times 16\\) patches → 196 patches.",
-    "crumbs": [
-      "Slides",
-      "7 - Modern Vision Backbones"
-    ]
-  },
-  {
     "objectID": "pages/slides/vision_transformers.html#quiz-patch-size-32-32",
     "href": "pages/slides/vision_transformers.html#quiz-patch-size-32-32",
     "title": "7 - Modern Vision Backbones",
     "section": "Quiz: Patch Size 32 × 32",
-    "text": "Quiz: Patch Size 32 × 32\nWhat changes if patch size goes from 16 to 32?\n\n\nNumber of patches: \\(\\frac{224}{32}^2 = \\mathbf{49}\\) — 4× fewer\n\n\n\n\nFaster — self-attention is quadratic in sequence length\nLess detail — each patch covers a larger area\nTrade-off — same as resolution choice in CNNs",
+    "text": "Quiz: Patch Size 32 × 32\nA \\(224 \\times 224\\) image with \\(16 \\times 16\\) patches gives 196 patches. What changes if patch size goes from 16 to 32?\n\n\nNumber of patches: \\((224/32)^2 = 7^2 = \\mathbf{49}\\) — 4× fewer\n\n\n\n\nFaster — self-attention is quadratic in sequence length\nLess detail — each patch covers a larger area\nTrade-off — same as resolution choice in CNNs",
     "crumbs": [
       "Slides",
       "7 - Modern Vision Backbones"
@@ -5180,6 +4938,17 @@
     ]
   },
   {
+    "objectID": "pages/slides/vision_transformers.html#demo-attention-explorer",
+    "href": "pages/slides/vision_transformers.html#demo-attention-explorer",
+    "title": "7 - Modern Vision Backbones",
+    "section": "Demo: Attention Explorer",
+    "text": "Demo: Attention Explorer\n\n\nClick a patch on a cow, then on the sky; step through the layers. Open in new tab",
+    "crumbs": [
+      "Slides",
+      "7 - Modern Vision Backbones"
+    ]
+  },
+  {
     "objectID": "pages/slides/vision_transformers.html#cnns-vs.-vits-at-a-glance",
     "href": "pages/slides/vision_transformers.html#cnns-vs.-vits-at-a-glance",
     "title": "7 - Modern Vision Backbones",
@@ -5196,6 +4965,17 @@
     "title": "7 - Modern Vision Backbones",
     "section": "Inductive Biases — Help or Hindrance?",
     "text": "Inductive Biases — Help or Hindrance?\n\nCNNs build in locality and translation equivariance.\n\n\nThese assumptions are often useful for natural images, especially with limited data.\n\n\nViTs have weaker image-specific priors and rely more on data and pretraining.\n\n\n\nSmall data: strong priors can help\nMassive pretraining: weaker priors can become an advantage",
+    "crumbs": [
+      "Slides",
+      "7 - Modern Vision Backbones"
+    ]
+  },
+  {
+    "objectID": "pages/slides/vision_transformers.html#inductive-biases-in-practice",
+    "href": "pages/slides/vision_transformers.html#inductive-biases-in-practice",
+    "title": "7 - Modern Vision Backbones",
+    "section": "Inductive Biases in Practice",
+    "text": "Inductive Biases in Practice\n\n\nA trained ViT learns some locality from data: wide in layer 1, more local in middle layers, then increasingly global.",
     "crumbs": [
       "Slides",
       "7 - Modern Vision Backbones"
@@ -5240,17 +5020,6 @@
     "title": "7 - Modern Vision Backbones",
     "section": "Beyond Classification — Multimodal ViTs",
     "text": "Beyond Classification — Multimodal ViTs\n\nBLIP-2 (Li et al. (2023)) — frozen ViT + LLM via Q-Former → visual QA\nFlamingo (Alayrac et al. (2022)) — few-shot multimodal across image-text sequences\n\n\nThe patch-embedding approach has become a universal interface between visual and language representations.",
-    "crumbs": [
-      "Slides",
-      "7 - Modern Vision Backbones"
-    ]
-  },
-  {
-    "objectID": "pages/slides/vision_transformers.html#key-takeaways",
-    "href": "pages/slides/vision_transformers.html#key-takeaways",
-    "title": "7 - Modern Vision Backbones",
-    "section": "Key Takeaways",
-    "text": "Key Takeaways\n\nViTs treat images as sequences of patches — works with the standard transformer encoder\nGlobal receptive field from layer 1 — strength and weakness\nCNNs: strong priors, data-efficient · ViTs: flexible, scale-hungry\nHybrids (FastViT, EfficientViT) combine the strengths\nPretraining + adaptation strategy often matter more than the backbone",
     "crumbs": [
       "Slides",
       "7 - Modern Vision Backbones"

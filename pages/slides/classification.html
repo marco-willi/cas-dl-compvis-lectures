@@ -179,14 +179,6 @@ Marco Willi
 </div>
 
 </section>
-<section id="overview" class="slide level2 center">
-<h2>Overview</h2>
-<ul>
-<li>The Classification Task</li>
-<li>Modelling: Softmax &amp; Cross-Entropy</li>
-<li>Architecture Overview</li>
-</ul>
-</section>
 <section>
 <section id="the-classification-task" class="title-slide slide level1 center">
 <h1>The Classification Task</h1>
@@ -236,10 +228,6 @@ Figure&nbsp;2: Different variants of classification.
 </section>
 <section id="softmax-classifier" class="slide level2">
 <h2>Softmax Classifier</h2>
-<p>A classifier outputs one <strong>logit</strong> per class:</p>
-<p><span class="math display">\[
-\mathbf{z} = f_\theta(\mathbf{x}), \qquad \mathbf{z} \in \mathbb{R}^K
-\]</span></p>
 <p>Softmax converts logits into class probabilities:</p>
 <p><span class="math display">\[
 P(Y = k \mid X = \mathbf{x}^{(i)}) = \sigma(\mathbf{z})_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}
@@ -271,6 +259,14 @@ Figure&nbsp;3: Logits are arbitrary real-valued scores. Softmax converts them in
 <div class="fragment">
 <p>Logits can be any real number — softmax always produces a valid probability distribution.</p>
 </div>
+</section>
+<section id="demo-softmax" class="slide level2">
+<h2>Demo: Softmax</h2>
+<div style="height: 835px;">
+<iframe data-src="../../demos/classification/softmax_explorer/index.html" width="1460" height="705" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.18); transform-origin: top left;" title="Interactive demo: from logits to probabilities with the softmax">
+</iframe>
+</div>
+<p>Raise one logit by 1, then by 5: how do the probabilities change? <a href="../../demos/classification/softmax_explorer/index.html" target="_blank">Open in new tab</a></p>
 </section>
 <section id="cross-entropy-the-idea" class="slide level2">
 <h2>Cross-Entropy: The Idea</h2>
@@ -339,6 +335,11 @@ CE = -\log(0.4) \approx 0.92
 <div class="fragment">
 <p>Training uses logits + labels to compute cross-entropy loss.</p>
 </div>
+</section></section>
+<section>
+<section id="architecture-overview" class="title-slide slide level1 center">
+<h1>Architecture Overview</h1>
+
 </section>
 <section id="architecture-progression" class="slide level2 center">
 <h2>Architecture Progression</h2>
@@ -355,55 +356,11 @@ CE = -\log(0.4) \approx 0.92
 <section id="alexnet-2012" class="slide level2">
 <h2>AlexNet (2012)</h2>
 
-<img data-src="../../assets/images/classification/alexnet_illustration.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-alexnet2"><p class="caption"><span class="citation" data-cites="prince_understanding_2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span></p><div class="fragment">
+<img data-src="../../assets/images/classification/alexnet_illustration.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-alexnet2"><p class="caption">
+Figure&nbsp;4: 5 conv + 3 FC layers, 1000-way softmax. Trained on <strong>two</strong> GTX 580 GPUs (3 GB each). Source: <span class="citation" data-cites="prince_understanding_2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>
+</p><div class="fragment">
 <p>The network had to be <strong>split across GPUs</strong> due to memory limits.</p>
 </div>
-</section>
-<section id="vgg-2014" class="slide level2">
-<h2>VGG (2014)</h2>
-
-<img data-src="../../assets/images/classification/vgg_illustration.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-vgg-arch"><p class="caption"><span class="citation" data-cites="prince_understanding_2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span></p><div class="fragment">
-<p><strong>Design rule:</strong> when spatial size halves, double the number of filters (preserves time complexity).</p>
-</div>
-</section>
-<section id="resnet-the-problem" class="slide level2">
-<h2>ResNet — The Problem</h2>
-
-<img data-src="../../assets/images/classification/resnet_test_error.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-resnet-motivation1"><p class="caption">Source: <span class="citation" data-cites="He2016">He et al. (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span></p><div class="fragment">
-<p>Not overfitting — an <strong>optimization problem</strong>.</p>
-</div>
-</section>
-<section id="residual-connections" class="slide level2">
-<h2>Residual Connections</h2>
-
-<img data-src="../../assets/images/classification/residual_connection.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-residual-connection"><p class="caption">Source: <span class="citation" data-cites="johnson_eecs_2019">Johnson (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p><p><span class="math display">\[
-\mathbf{x}_{l+1} = \mathbf{x}_l + F(\mathbf{x}_l)
-\]</span></p>
-<div class="fragment">
-<p>Learn the <strong>change</strong>, not the full transformation.</p>
-<p>If a layer has nothing to add: <span class="math inline">\(F(\mathbf{x}_l) \approx 0\)</span> → identity.</p>
-</div>
-</section>
-<section id="why-residuals-work" class="slide level2">
-<h2>Why Residuals Work</h2>
-
-<img data-src="../../assets/images/classification/loss_landscape_skip.png" style="width:70.0%" class="r-stretch quarto-figure-center" id="fig-classification-skip-loss-landscape"><p class="caption">Source: <span class="citation" data-cites="li_visualizing_2018">Li et al. (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span></p><div class="fragment">
-<p>Skip connections <strong>smooth the loss surface</strong> → optimization works.</p>
-</div>
-</section>
-<section id="convnext-2022" class="slide level2">
-<h2>ConvNeXt (2022)</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="fragment">
-<p><img data-src="../../assets/images/classification/convnext_part1.jpg"></p>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="fragment">
-<p><img data-src="../../assets/images/classification/convnext_part2.jpg"></p>
-</div>
-</div></div>
-<p>Figures from <span class="citation" data-cites="liu_convnet_2022">Liu et al. (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>.</p>
 </section>
 <section id="which-architecture" class="slide level2 center">
 <h2>Which Architecture?</h2>
@@ -424,6 +381,57 @@ CE = -\log(0.4) \approx 0.92
 </div>
 </section></section>
 <section>
+<section id="data-augmentation" class="title-slide slide level1 center">
+<h1>Data Augmentation</h1>
+
+</section>
+<section id="why-augment" class="slide level2">
+<h2>Why Augment?</h2>
+<p>A classifier should give the same label under <strong>nuisance transformations</strong>: position, size, orientation, lighting, occlusion.</p>
+<div class="fragment">
+<p>Convolutions are only <strong>translation</strong> equivariant. Robustness to rotation, zoom or brightness must be <strong>learned from data</strong>.</p>
+</div>
+</section>
+<section id="data-augmentation-1" class="slide level2">
+<h2>Data Augmentation</h2>
+
+<img data-src="../../assets/images/practical/augmentation_rhino.png" style="width:75.0%" class="r-stretch quarto-figure-center"><p class="caption">One training image, many augmented variants.</p><div class="fragment">
+<p>Random, <strong>label-preserving</strong> transformations, applied on the fly during training.</p>
+</div>
+</section>
+<section id="augmentation-families" class="slide level2">
+<h2>Augmentation Families</h2>
+<ul>
+<li class="fragment"><strong>Geometric</strong>: random crops and rescaling, horizontal flips, small rotations</li>
+<li class="fragment"><strong>Photometric</strong>: brightness, contrast, saturation, grayscale</li>
+<li class="fragment"><strong>Occlusion and mixing</strong>: Cutout, Mixup, CutMix</li>
+</ul>
+<div class="fragment">
+<p>An augmentation must <strong>not change the label</strong>: a flip is harmless for animals, but not for text or a sign pointing left.</p>
+</div>
+</section>
+<section id="demo-augmentation-stability" class="slide level2">
+<h2>Demo: Augmentation Stability</h2>
+<div style="height: 835px;">
+<iframe data-src="../../demos/cnns/augmentation_stability/index.html" width="1460" height="705" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.18); transform-origin: top left;" title="Interactive demo: augmentation stability of a pretrained CNN">
+</iframe>
+</div>
+<p>Rotate, crop or darken the image: when does the prediction of the pretrained CNN change? <a href="../../demos/cnns/augmentation_stability/index.html" target="_blank">Open in new tab</a></p>
+</section>
+<section id="quiz-camera-trap-augmentations" class="slide level2">
+<h2>Quiz: Camera-Trap Augmentations</h2>
+<p>Classes: empty, deer, fox, badger, bird. Which augmentations would you use, which avoid?</p>
+<div class="fragment">
+<p><strong>Useful:</strong> horizontal flips, moderate crops, brightness/contrast, grayscale (night IR images)</p>
+</div>
+<div class="fragment">
+<p><strong>Avoid:</strong> vertical flips and large rotations: camera traps are mounted upright</p>
+</div>
+<div class="fragment">
+<p><strong>Careful:</strong> aggressive crops can cut the animal out, an “empty” image labelled “deer”</p>
+</div>
+</section></section>
+<section>
 <section id="summary" class="title-slide slide level1 center">
 <h1>Summary</h1>
 
@@ -437,328 +445,8 @@ CE = -\log(0.4) \approx 0.92
 <li class="fragment">Most classifiers use a <strong>backbone</strong> plus a small classification head.</li>
 <li class="fragment">Architecture evolution: <strong>AlexNet → VGG → ResNet → ConvNeXt / ViT</strong>.</li>
 <li class="fragment">Start with a proven pretrained backbone; only customize when needed.</li>
+<li class="fragment"><strong>Data augmentation</strong> teaches invariances the architecture does not provide; it must preserve the label.</li>
 </ul>
-<!--
-## Parametric Approach
-
-A model with parameters $\theta$ outputs a score $\hat{y}^{(i)}$:
-
-$$
-\hat{y}^{(i)} = f(\theta, \vect{x}^{(i)})
-$$
-
-::: {.fragment}
-$\theta$ — all learnable parameters (conv filters, FC weights, biases, …).
-:::
-
-
-## Softmax Classifier
-
-Interpret outputs as **class probabilities**:
-
-$$
-P(Y = k \mid X = \vect{x}^{(i)}) = \sigma(\vect{z})_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}
-$$
-
-::: {.fragment}
-- $\vect{z}$ — **logits** (unbounded, real-valued)
-- $\sigma(\vect{z})$ — valid probability distribution (sums to 1, all in $[0, 1]$)
-:::
-
-
-## Logits → Probabilities
-
-::: {#cell-fig-classification-logits-to-probs-old .cell fig-height='4.5' fig-width='11' execution_count=2}
-
-::: {.cell-output .cell-output-display}
-![Logits (left) → probabilities via softmax (right).](classification_files/figure-revealjs/fig-classification-logits-to-probs-old-output-1.png){#fig-classification-logits-to-probs-old width=1048 height=422}
-:::
-:::
-
-
-::: {.fragment}
-Logits can be any real number — softmax always produces a valid distribution.
-:::
-
-
-## Probabilities
-
-![Image classifier with confidences.](/assets/images/classification/confidences.jpg){width=80%}
-
-
-## Cross-Entropy: The Idea
-
-::: {.fragment}
-A good model assigns **high probability to the correct class**.
-:::
-
-::: {.fragment}
-- True class "deer", $P(\text{deer}) = 0.95$ → small loss
-- True class "deer", $P(\text{deer}) = 0.02$ → very large loss (confidently wrong)
-:::
-
-
-## Cross-Entropy Formula
-
-For one sample with one-hot label $\vect{y}$ and prediction $\hat{\vect{y}}$:
-
-$$
-CE = -\sum_{j=1}^K y_j \log \hat{y}_j
-$$
-
-::: {.fragment}
-Since $\vect{y}$ is one-hot (only true class $c$ has $y_c = 1$):
-
-$$
-CE = -\log \hat{y}_c
-$$
-:::
-
-::: {.fragment}
-Just the **negative log-probability of the correct class**.
-:::
-
-
-## Cross-Entropy: Full Dataset
-
-$$
-L(\m{X}, \vect{y}, \theta) = -\frac{1}{N} \sum_{i=1}^N \sum_{j=1}^K y_j^{(i)} \log \hat{y}_j^{(i)}
-$$
-
-::: {.fragment}
-Equivalent to **maximum likelihood** under the categorical model.
-:::
-
-
-## True vs. Predicted
-
-::: {#cell-fig-classification-cross-entropy .cell execution_count=3}
-
-::: {.cell-output .cell-output-display}
-![True distribution (left) vs. predicted (right). CE measures the mismatch.](classification_files/figure-revealjs/fig-classification-cross-entropy-output-1.png){#fig-classification-cross-entropy width=856 height=278}
-:::
-:::
-
-
-## Asymmetric Penalty {.center}
-
-::: {.incremental}
-- **Confident & correct** ($\hat{y}_c \to 1$) → loss $\to 0$
-- **Uncertain** ($\hat{y}_c = 0.5$) → loss $\approx 0.69$
-- **Confident & wrong** ($\hat{y}_c \to 0$) → loss $\to \infty$
-:::
-
-::: {.fragment}
-Drives models to be both **accurate** and **well-calibrated**.
-:::
-
-
-## Quiz: Which Loss is Higher?
-
-A model predicts:
-
-- $P(\text{deer}) = 0.4$ for an image that **is** a deer
-- $P(\text{deer}) = 0.6$ for an image that is a **fox**
-
-Which prediction gives the higher cross-entropy?
-
-::: {.fragment}
-**The first.** $-\log(0.4) \approx 0.92$ — low probability assigned to the true class.
-:::
-
-::: {.fragment}
-For the second image, the true class is *fox* — only $P(\text{fox})$ matters, not $P(\text{deer})$.
-:::
-
-
-## Maximum Likelihood Connection
-
-::: {.fragment}
-Likelihood of the dataset:
-$$
-P(\vect{y} \mid \theta, \m{X}) = \prod_{i=1}^N \prod_{j=1}^K P(Y = j \mid X = \vect{x}^{(i)})^{y_j^{(i)}}
-$$
-:::
-
-::: {.fragment}
-Take $-\log$ → minimize → identical to cross-entropy.
-:::
-
-::: {.fragment}
-**Minimizing CE = maximizing likelihood.**
-:::
-
-
-# Architecture Overview
-
-
-## The CNN Pipeline
-
-::: {.fragment}
-A CNN backbone extracts hierarchical features.
-:::
-
-::: {.fragment}
-A classification head (e.g. an FC layer) maps features → $K$ logits.
-:::
-
-::: {.fragment}
-Softmax + cross-entropy turn logits into a learnable classifier.
-:::
-
-
-## Architecture Progression {.center}
-
-::: {.incremental}
-- **AlexNet (2012)** — 8 layers, GPU-trained, won ImageNet
-- **VGG (2014)** — 16–19 layers, all $3 \times 3$ kernels
-- **ResNet (2015)** — 50–152+ layers via residual connections
-- **ConvNeXt (2022)** — modernized CNN, competitive with Vision Transformers
-:::
-
-
-## AlexNet (2012)
-
-::: {#fig-classification-alexnet2}
-![@prince_understanding_2023](/assets/images/classification/alexnet_illustration.jpg){width=55%}
-
-5 conv + 3 FC layers, 1000-way softmax. Trained on **two** GTX 580 GPUs (3 GB each).
-:::
-
-::: {.fragment}
-The network had to be **split across GPUs** due to memory limits.
-:::
-
-
-## AlexNet — Loading via torchvision
-
-::: {#2e9aed11 .cell execution_count=4}
-``` {.python .cell-code}
-import torch
-import torchvision.models as models
-import torchinfo
-
-alexnet = models.alexnet()
-x = torch.zeros(1, 3, 224, 224)
-yhat = alexnet(x)
-
-print(torchinfo.summary(alexnet, input_size=(1, 3, 224, 224)))
-```
-:::
-
-
-## VGG (2014)
-
-::: {#fig-classification-vgg-arch}
-![@prince_understanding_2023](/assets/images/classification/vgg_illustration.jpg){width=55%}
-
-16–19 layers using only $3 \times 3$ kernels.
-:::
-
-::: {.fragment}
-**Design rule:** when spatial size halves, double the number of filters (preserves time complexity).
-:::
-
-
-## ResNet — The Problem
-
-::: {#fig-classification-resnet-motivation1}
-![Source: @He2016](/assets/images/classification/resnet_test_error.jpg){width=55%}
-
-A 56-layer net is **worse** than a 20-layer net — on **train and test**.
-:::
-
-::: {.fragment}
-Not overfitting — an **optimization problem**.
-:::
-
-
-## Residual Connections
-
-::: {#fig-classification-residual-connection}
-![Source: @johnson_eecs_2019](/assets/images/classification/residual_connection.jpg){width=55%}
-:::
-
-$$
-\vect{x}_{l+1} = \vect{x}_l + F(\vect{x}_l)
-$$
-
-::: {.fragment}
-Learn the **change**, not the full transformation.
-
-If a layer has nothing to add: $F(\vect{x}_l) \approx 0$ → identity.
-:::
-
-
-## Why Residuals Work
-
-::: {#fig-classification-skip-loss-landscape}
-![Source: @li_visualizing_2018](/assets/images/classification/loss_landscape_skip.png){width=70%}
-
-Loss landscape: without (left) vs. with (right) skip connections.
-:::
-
-::: {.fragment}
-Skip connections **smooth the loss surface** → optimization works.
-:::
-
-
-## ConvNeXt (2022)
-
-:::: {.columns}
-
-::: {.column width="50%"}
-
-::: {.fragment}
-![ ](/assets/images/classification/convnext_part1.jpg)
-:::
-
-:::
-
-::: {.column width="50%"}
-::: {.fragment}
-![ ](/assets/images/classification/convnext_part2.jpg)
-:::
-:::
-
-::::
-
-Figures from @liu_convnet_2022.
-
-
-
-## Which Architecture? {.center}
-
-::: {.fragment .highlight-red}
-**Don't be a hero.**
-:::
-
-::: {.fragment}
-Use proven, off-the-shelf architectures:
-:::
-
-::: {.incremental}
-- **ResNet-50 / ResNet-101** — reliable baseline (slightly dated)
-- **EfficientNet** — when size or speed matters
-- **ConvNeXt** — SOTA CNN, competitive with ViTs
-:::
-
-::: {.fragment}
-Choose based on accuracy, FLOPs, memory, available data.
-::: -->
-<!-- # Summary {.center}
-
-
-## Key Takeaways
-
-::: {.incremental}
-- Classification has variants — **multi-class, binary, multi-label, multi-task**
-- **Softmax** turns logits into a valid probability distribution
-- **Cross-entropy** = $-\log \hat{y}_c$ — punishes confident wrong predictions hard
-- Architecture trend: **AlexNet → VGG → ResNet → ConvNeXt**
-- **Residual connections** smooth the loss landscape, enable depth
-- **Don't be a hero** — start with a proven backbone
-::: -->
 </section></section>
 <section id="references" class="title-slide slide level1 smaller scrollable">
 <h1>References</h1>
@@ -784,9 +472,61 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 </div>
 </div>
 </div>
+</section>
 
+<section>
+<section id="backup-architectures" class="title-slide slide level1 center" data-visibility="uncounted">
+<h1>Backup: Architectures</h1>
 
 </section>
+<section id="vgg-2014" class="slide level2" data-visibility="uncounted">
+<h2>VGG (2014)</h2>
+
+<img data-src="../../assets/images/classification/vgg_illustration.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-vgg-arch"><p class="caption"><span class="citation" data-cites="prince_understanding_2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span></p><div class="fragment">
+<p><strong>Design rule:</strong> when spatial size halves, double the number of filters (preserves time complexity).</p>
+</div>
+</section>
+<section id="resnet-the-problem" class="slide level2" data-visibility="uncounted">
+<h2>ResNet — The Problem</h2>
+
+<img data-src="../../assets/images/classification/resnet_test_error.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-resnet-motivation1"><p class="caption">Source: <span class="citation" data-cites="He2016">He et al. (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span></p><div class="fragment">
+<p>Not overfitting — an <strong>optimization problem</strong>.</p>
+</div>
+</section>
+<section id="residual-connections" class="slide level2" data-visibility="uncounted">
+<h2>Residual Connections</h2>
+
+<img data-src="../../assets/images/classification/residual_connection.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-residual-connection"><p class="caption">Source: <span class="citation" data-cites="johnson_eecs_2019">Johnson (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p><p><span class="math display">\[
+\mathbf{x}_{l+1} = \mathbf{x}_l + F(\mathbf{x}_l)
+\]</span></p>
+<div class="fragment">
+<p>Learn the <strong>change</strong>, not the full transformation.</p>
+<p>If a layer has nothing to add: <span class="math inline">\(F(\mathbf{x}_l) \approx 0\)</span> → identity.</p>
+</div>
+</section>
+<section id="why-residuals-work" class="slide level2" data-visibility="uncounted">
+<h2>Why Residuals Work</h2>
+
+<img data-src="../../assets/images/classification/loss_landscape_skip.png" style="width:70.0%" class="r-stretch quarto-figure-center" id="fig-classification-skip-loss-landscape"><p class="caption">Source: <span class="citation" data-cites="li_visualizing_2018">Li et al. (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span></p><div class="fragment">
+<p>Skip connections <strong>smooth the loss surface</strong> → optimization works.</p>
+</div>
+</section>
+<section id="convnext-2022" class="slide level2" data-visibility="uncounted">
+<h2>ConvNeXt (2022)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="fragment">
+<p><img data-src="../../assets/images/classification/convnext_part1.jpg"></p>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="fragment">
+<p><img data-src="../../assets/images/classification/convnext_part2.jpg"></p>
+</div>
+</div></div>
+<p>Figures from <span class="citation" data-cites="liu_convnet_2022">Liu et al. (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>.</p>
+
+
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/fhnw_logo.png" class="slide-logo"></p>

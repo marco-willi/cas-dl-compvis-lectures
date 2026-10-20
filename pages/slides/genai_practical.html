@@ -35,72 +35,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #767676;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #767676;  padding-left: 4px; }
-    div.sourceCode
-      { color: #545454; background-color: #fefefe; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #545454; } /* Normal */
-    code span.al { color: #7928a1; } /* Alert */
-    code span.an { color: #696969; } /* Annotation */
-    code span.at { color: #a55a00; } /* Attribute */
-    code span.bn { color: #7928a1; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #d91e18; } /* ControlFlow */
-    code span.ch { color: #008000; } /* Char */
-    code span.cn { color: #d91e18; } /* Constant */
-    code span.co { color: #696969; } /* Comment */
-    code span.cv { color: #696969; font-style: italic; } /* CommentVar */
-    code span.do { color: #696969; font-style: italic; } /* Documentation */
-    code span.dt { color: #7928a1; } /* DataType */
-    code span.dv { color: #7928a1; } /* DecVal */
-    code span.er { color: #7928a1; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #a55a00; } /* Float */
-    code span.fu { color: #06287e; } /* Function */
-    code span.im { } /* Import */
-    code span.in { color: #696969; } /* Information */
-    code span.kw { color: #d91e18; } /* Keyword */
-    code span.op { color: #00769e; } /* Operator */
-    code span.ot { color: #d91e18; } /* Other */
-    code span.pp { color: #7928a1; } /* Preprocessor */
-    code span.sc { color: #00769e; } /* SpecialChar */
-    code span.ss { color: #008000; } /* SpecialString */
-    code span.st { color: #008000; } /* String */
-    code span.va { color: #a55a00; } /* Variable */
-    code span.vs { color: #008000; } /* VerbatimString */
-    code span.wa { color: #696969; font-style: italic; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -246,42 +180,13 @@ Marco Willi
 
 </section>
 <section>
-<section id="motivation" class="title-slide slide level1 center">
-<h1>Motivation</h1>
+<section id="from-pixels-to-latents" class="title-slide slide level1 center">
+<h1>From Pixels to Latents</h1>
 
 </section>
-<section id="diffusion-in-pixel-space" class="slide level2">
-<h2>Diffusion in Pixel Space</h2>
-<div class="fragment">
-<p>Start from random noise, iteratively denoise:</p>
-<p><span class="math display">\[\mathbf{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbf{I}) \rightarrow \mathbf{x}_{T-1} \rightarrow \cdots \rightarrow \mathbf{x}_0\]</span></p>
-</div>
-<div class="fragment">
-<blockquote>
-<p>How do we make diffusion <strong>efficient enough</strong> for high-resolution images?</p>
-</blockquote>
-</div>
-</section>
-<section id="practical-workflows-demand-speed" class="slide level2">
-<h2>Practical Workflows Demand Speed</h2>
-<ul>
-<li class="fragment">High-resolution images</li>
-<li class="fragment">Many candidate images</li>
-<li class="fragment">Repeated prompt iteration</li>
-<li class="fragment">Image edits and variations</li>
-</ul>
-</section>
-<section id="the-pixel-space-bottleneck" class="slide level2">
-<h2>The Pixel-Space Bottleneck</h2>
-<div class="fragment">
-<p>A <span class="math inline">\(512 \times 512\)</span> RGB image has: <span class="math display">\[512 \times 512 \times 3 = 786{,}432 \text{ values}\]</span></p>
-</div>
-<div class="fragment">
-<p>And diffusion processes this representation <strong>many times</strong>: <span class="math display">\[\text{image size} \times \text{denoising steps} \times \text{denoiser cost}\]</span></p>
-</div>
-</section>
-<section id="resolution-makes-it-worse" class="slide level2">
-<h2>Resolution Makes It Worse</h2>
+<section id="why-pixel-space-diffusion-is-expensive" class="slide level2">
+<h2>Why Pixel-Space Diffusion Is Expensive</h2>
+<!-- TODO fig: pixel_vs_latent_size.png (pixel grid vs. SD-XL latent, to scale, "x N steps") -->
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -291,112 +196,64 @@ Marco Willi
 </thead>
 <tbody>
 <tr class="odd">
-<td>256 × 256</td>
-<td>196,608</td>
-</tr>
-<tr class="even">
 <td>512 × 512</td>
 <td>786,432</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>1024 × 1024</td>
 <td>3,145,728</td>
 </tr>
 </tbody>
 </table>
 <div class="fragment">
-<p>1024² has <strong>4×</strong> the values of 512². And every step processes them.</p>
+<p>The denoiser processes this full representation at <strong>every</strong> step.</p>
 </div>
 </section>
-<section id="the-idea" class="slide level2 center">
-<h2>The Idea</h2>
-<div class="r-fit-text">
-<p><strong>Don’t run diffusion on pixels if a smaller representation is enough.</strong></p>
-</div>
-</section></section>
-<section>
-<section id="latent-diffusion" class="title-slide slide level1 center">
-<h1>Latent Diffusion</h1>
-
-</section>
-<section id="stable-diffusion-examples" class="slide level2">
-<h2>Stable Diffusion Examples</h2>
-<img data-src="../../assets/images/genai_modern/pract_sd35_large_examples.png" class="r-stretch">
+<section id="compress-images-into-latents" class="slide level2">
+<h2>Compress Images into Latents</h2>
+<img data-src="../../assets/images/genai_modern/vae_roundtrip.png" class="r-stretch">
 <div class="fragment">
-<p>Stable Diffusion (<span class="citation" data-cites="rombach_high-resolution_2022">Rombach et al. (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>) — canonical latent diffusion system.</p>
+<p>SD-XL VAE: the latent keeps what the denoiser needs, the decoder restores the pixels.</p>
 </div>
 </section>
 <section id="latent-diffusion-architecture" class="slide level2">
 <h2>Latent Diffusion Architecture</h2>
 <img data-src="../../assets/images/genai_modern/diffusion_sd_architecture_genbook.png" class="r-stretch">
 <div class="fragment">
-<p>Text encoded → diffusion runs in <strong>VAE latent space</strong> → VAE decoder produces image.</p>
+<p><strong>Training:</strong> <span class="math inline">\(\mathbf{x} \xrightarrow{\text{encoder}} \mathbf{z}\)</span>, add noise, learn to denoise <span class="math inline">\(\mathbf{z}\)</span></p>
+</div>
+<div class="fragment">
+<p><strong>Generation:</strong> <span class="math inline">\(\mathbf{z}_T \rightarrow \cdots \rightarrow \mathbf{z}_0 \xrightarrow{\text{decoder}} \hat{\mathbf{x}}\)</span>. For editing, the encoder runs at inference too.</p>
 </div>
 </section>
-<section id="training-encode-first" class="slide level2">
-<h2>Training: Encode First</h2>
+<section id="why-it-works-and-what-it-costs" class="slide level2">
+<h2>Why It Works, and What It Costs</h2>
+<img data-src="../../assets/images/genai_modern/pixel_vs_latent_size.png" class="r-stretch">
 <div class="fragment">
-<p><span class="math display">\[\mathbf{x} \xrightarrow{\text{VAE encoder}} \mathbf{z}\]</span></p>
+<p>Not 48× faster: cost also depends on the network, attention grows with tokens², plus one decoder pass.</p>
 </div>
 <div class="fragment">
-<p>The diffusion model is trained to denoise noisy versions of latents <span class="math inline">\(\mathbf{z}\)</span> — never pixels.</p>
-</div>
-</section>
-<section id="sampling-diffuse-in-latent-space" class="slide level2">
-<h2>Sampling: Diffuse in Latent Space</h2>
-<div class="fragment">
-<p><span class="math display">\[\mathbf{z}_T \rightarrow \mathbf{z}_{T-1} \rightarrow \cdots \rightarrow \mathbf{z}_0 \xrightarrow{\text{VAE decoder}} \hat{\mathbf{x}}\]</span></p>
-</div>
-<div class="fragment">
-<p>For image-to-image / inpainting / editing, VAE encoder runs at inference time too.</p>
+<p>Fine detail (small text, faces) is limited by what the VAE can reconstruct.</p>
 </div>
 </section>
-<section id="division-of-labor" class="slide level2">
-<h2>Division of Labor</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Component</th>
-<th>Role</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Text encoder</td>
-<td>semantic conditioning from prompt</td>
-</tr>
-<tr class="even">
-<td>VAE encoder</td>
-<td>compress images to latents</td>
-</tr>
-<tr class="odd">
-<td>VAE decoder</td>
-<td>latents back to pixels</td>
-</tr>
-<tr class="even">
-<td>Diffusion model</td>
-<td>denoise / generate in latent space</td>
-</tr>
-<tr class="odd">
-<td>Sampler</td>
-<td>controls iterative denoising</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="why-it-works" class="slide level2">
-<h2>Why It Works</h2>
-<ul>
-<li class="fragment">Smaller denoising representation</li>
-<li class="fragment">Less memory</li>
-<li class="fragment">Cheaper sampling</li>
-<li class="fragment">Practical at high resolution</li>
-<li class="fragment">Easier to adapt and experiment</li>
-</ul>
+<section id="what-latent-diffusion-can-do" class="slide level2">
+<h2>What Latent Diffusion Can Do</h2>
+<img data-src="../../assets/images/genai_modern/pract_sd35_large_examples.png" class="r-stretch">
 <div class="fragment">
-<blockquote>
-<p>Stable Diffusion doesn’t draw pixels — it generates <strong>latents</strong>, then decodes.</p>
-</blockquote>
+<p>Stable Diffusion 3.5 Large: diverse styles and legible text, still generated in a VAE latent space (<span class="citation" data-cites="esser_scaling_2024">Esser et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>).</p>
+</div>
+</section>
+<section id="quiz-who-does-what" class="slide level2">
+<h2>Quiz: Who Does What?</h2>
+<p>Which component <strong>generates the image content</strong>, and which turns it into <strong>pixels</strong>?</p>
+<div class="fragment">
+<p>The <strong>denoiser</strong> generates a latent. The <strong>VAE decoder</strong> turns it into pixels.</p>
+</div>
+<div class="fragment">
+<p>And to <strong>edit</strong> an existing photo, which component is needed in addition?</p>
+</div>
+<div class="fragment">
+<p>The <strong>VAE encoder</strong>: the input image has to enter latent space first.</p>
 </div>
 </section></section>
 <section>
@@ -404,22 +261,276 @@ Marco Willi
 <h1>Modern Architectures</h1>
 
 </section>
-<section id="beyond-stable-diffusion" class="slide level2">
-<h2>Beyond Stable Diffusion</h2>
-<ul>
-<li class="fragment">The <strong>denoiser</strong> itself is evolving (U-Net → Transformer)</li>
-<li class="fragment">Image generation is <strong>integrated</strong> into multimodal assistants</li>
-<li class="fragment">Many commercial systems aren’t fully disclosed — focus on the <strong>ideas</strong></li>
-</ul>
-</section>
-<section id="u-net-diffusion-transformer" class="slide level2">
-<h2>U-Net → Diffusion Transformer</h2>
+<section id="from-u-net-to-diffusion-transformer" class="slide level2">
+<h2>From U-Net to Diffusion Transformer</h2>
 <img data-src="../../assets/images/genai_modern/diffusion_transformer.jpg" class="r-stretch">
 <div class="fragment">
-<p>Image / latent → sequence of patch tokens. Self-attention denoises them (<span class="citation" data-cites="peebles_scalable_2023">Peebles and Xie (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>).</p>
+<p>Latent → sequence of patch tokens, denoised with self-attention (<span class="citation" data-cites="peebles_scalable_2023">Peebles and Xie (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>).</p>
+</div>
+<div class="fragment">
+<p>SD3 / FLUX: diffusion transformer <strong>+</strong> flow matching. Architecture and objective are separate choices.</p>
 </div>
 </section>
-<section id="u-net-vs.-diffusion-transformer" class="slide level2">
+<section id="how-language-conditions-the-image" class="slide level2">
+<h2>How Language Conditions the Image</h2>
+
+<img data-src="../../assets/images/genai_modern/cross_vs_joint_attention.svg" style="width:85.0%" class="r-stretch"><div class="fragment">
+<p>Cross-attention: image tokens read fixed text tokens. Joint attention: text and image tokens update each other.</p>
+</div>
+</section>
+<section id="three-ways-to-build-multimodal-generators" class="slide level2">
+<h2>Three Ways to Build Multimodal Generators</h2>
+
+<img data-src="../../assets/images/genai_modern/multimodal_patterns.svg" style="width:90.0%" class="r-stretch"><div class="fragment">
+<p>All three still generate the image with diffusion or flow matching in a VAE latent space.</p>
+</div>
+</section>
+<section id="qwen-image-2.0" class="slide level2">
+<h2>Qwen-Image 2.0</h2>
+<img data-src="../../assets/images/genai_modern/qwen2-image-architecture.png" class="r-stretch">
+<div class="fragment">
+<p><strong>Qwen3-VL</strong> (frozen) reads instruction + input image: <em>what</em> to change. <strong>VAE</strong> of the input image: <em>how</em> it looks.</p>
+</div>
+<div class="fragment">
+<p>A multimodal diffusion transformer denoises the target latents jointly with all condition tokens (<span class="citation" data-cites="zhao_qwen-image-20_2026">Zhao et al. (<a href="#/references" role="doc-biblioref" onclick="">2026</a>)</span>).</p>
+</div>
+</section>
+<section id="generation-vs.-editing" class="slide level2">
+<h2>Generation vs.&nbsp;Editing</h2>
+<div class="r-stack">
+<p><img data-src="../../assets/images/genai_modern/dada_design-9KGB4HspwsM-unsplash.jpg" height="858"></p>
+<p><img data-src="../../assets/images/genai_modern/room_step1_no_books.jpg" class="fragment" data-fragment-index="1" height="858"></p>
+<p><img data-src="../../assets/images/genai_modern/room_step2_turquoise_sofa.jpg" class="fragment" data-fragment-index="2" height="858"></p>
+<p><img data-src="../../assets/images/genai_modern/room_step3_matching_carpet.jpg" class="fragment" data-fragment-index="3" height="858"></p>
+</div>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="1">
+<p>Input photo (<a href="https://unsplash.com/photos/a-living-room-with-a-couch-and-a-table-9KGB4HspwsM">Unsplash</a>)</p>
+</div>
+<div class="fragment fade-in-then-out" data-fragment-index="1">
+<p><em>“Remove the book on the floor, replace it with clean floor”</em></p>
+</div>
+<div class="fragment fade-in-then-out" data-fragment-index="2">
+<p><em>“Recolor the sofa and ottoman to a vibrant turquoise”</em></p>
+</div>
+<div class="fragment" data-fragment-index="3">
+<p><em>“Change the carpet color to match the turquoise sofa”</em> (Nano Banana 2, <span class="citation" data-cites="raisinghani_nano_2026">Raisinghani (<a href="#/references" role="doc-biblioref" onclick="">2026</a>)</span>)</p>
+</div>
+</div>
+</section>
+<section id="model-vs.-system" class="slide level2">
+<h2>Model vs.&nbsp;System</h2>
+<ul>
+<li class="fragment"><strong>Tool-orchestrated:</strong> a language model writes a prompt and calls a separate image model</li>
+<li class="fragment"><strong>Natively multimodal:</strong> one model understands and generates (pattern 3)</li>
+</ul>
+<div class="fragment">
+<blockquote>
+<p>The user sees one assistant. Inside, it is a <strong>system</strong> for understanding, planning, generating and editing.</p>
+</blockquote>
+</div>
+</section>
+<section id="same-edit-two-models" class="slide level2">
+<h2>Same Edit, Two Models</h2>
+<img data-src="../../assets/images/genai_modern/ferrari_comparison.jpg" class="r-stretch">
+<div class="fragment">
+<p>FLUX Kontext Pro (top) vs.&nbsp;Nano Banana 2 (bottom): who keeps the car’s identity?</p>
+</div>
+</section>
+<section id="quiz-why-a-vision-language-model" class="slide level2">
+<h2>Quiz: Why a Vision-Language Model?</h2>
+<p>Why might an <strong>editing</strong> model benefit from a vision-language model rather than only a text encoder?</p>
+<div class="fragment">
+<p>A text encoder sees only the words. A VLM reads the instruction <strong>together with the input image</strong>, so it can resolve <em>“the two trees”</em> or <em>“match the sofa”</em>.</p>
+</div>
+</section>
+<section id="exercise-pretrained-generative-models-and-apis" class="slide level2 center">
+<h2>Exercise: Pretrained Generative Models and APIs</h2>
+<p>Generate and edit images yourself with hosted models.</p>
+</section></section>
+<section>
+<section id="part-2-adapting-and-using-generative-models" class="title-slide slide level1 center">
+<h1>Part 2: Adapting and Using Generative Models</h1>
+
+</section>
+<section id="the-right-image-consistently" class="slide level2">
+<h2>The Right Image, Consistently</h2>
+<img data-src="../../assets/images/genai_modern/person_comparison.jpg" class="r-stretch">
+<div class="fragment">
+<p>Good images are not enough: can it produce the <strong>right</strong> subject <strong>consistently</strong> for this use case?</p>
+</div>
+</section>
+<section id="choosing-an-adaptation-strategy" class="slide level2">
+<h2>Choosing an Adaptation Strategy</h2>
+<p><img data-src="../../assets/images/genai_modern/adaptation_ladder.svg" class="" style="width:85.0%"></p>
+<div class="fragment">
+<blockquote>
+<p>Fine-tune only when the <strong>same</strong> failure repeats and simpler controls are not enough.</p>
+</blockquote>
+</div>
+</section>
+<section id="quiz-pick-the-method" class="slide level2">
+<h2>Quiz: Pick the Method</h2>
+<ol type="1">
+<li class="fragment">One advertising visual of your product on a beach</li>
+<li class="fragment">Your company mascot in 200 different scenes</li>
+<li class="fragment">Swap the background of an existing product photo</li>
+</ol>
+<div class="fragment">
+<p>1 → prompt + reference image · 2 → LoRA · 3 → inpainting / editing</p>
+</div>
+</section></section>
+<section>
+<section id="novel-domains" class="title-slide slide level1 center">
+<h1>Novel Domains</h1>
+
+</section>
+<section id="when-realism-isnt-enough" class="slide level2">
+<h2>When Realism Isn’t Enough</h2>
+<img data-src="../../assets/images/genai/mri_to_ct.png" class="r-stretch">
+<div class="fragment">
+<p>MRI → CT with a ResViT GAN (<span class="citation" data-cites="scharer_improved_2023">Schärer (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>): a plausible CT is not enough, anatomy and dose-relevant structure must be <strong>correct</strong>.</p>
+</div>
+</section></section>
+<section>
+<section id="deployment-responsible-use" class="title-slide slide level1 center">
+<h1>Deployment &amp; Responsible Use</h1>
+
+</section>
+<section id="accessing-image-models" class="slide level2">
+<h2>Accessing Image Models</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th>Strength</th>
+<th>Limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hosted API</td>
+<td>fast, strong models</td>
+<td>opaque, vendor dependency</td>
+</tr>
+<tr class="even">
+<td>Enterprise platform</td>
+<td>IAM, logging, compliance</td>
+<td>setup, lock-in</td>
+</tr>
+<tr class="odd">
+<td>Open-weight</td>
+<td>control, privacy, adapters</td>
+<td>operations, GPU cost</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>Start hosted. Move when governance, control or adaptation matter.</p>
+</div>
+</section>
+<section id="plausible-but-wrong" class="slide level2">
+<h2>Plausible but Wrong</h2>
+<img data-src="../../assets/images/genai_modern/ferrari_rear_nanob2.jpg" class="r-stretch">
+<div class="fragment">
+<p>The electric Ferrari Luce, with an exhaust pipe? <strong>Visually convincing ≠ correct.</strong></p>
+</div>
+</section>
+<section id="synthetic-data" class="slide level2">
+<h2>Synthetic Data</h2>
+<img data-src="../../assets/images/genai_modern/deterioration_on_pollution.png" class="r-stretch">
+<div class="fragment">
+<p>Replacing real data with synthetic data degrades models (<span class="citation" data-cites="alemohammad_self-consuming_2023">Alemohammad et al. (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>). Accumulating alongside real data avoids it (<span class="citation" data-cites="gerstgrasser_is_2024">Gerstgrasser et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>).</p>
+</div>
+<div class="fragment">
+<p>Test: does it improve performance on the <strong>real</strong> target distribution?</p>
+</div>
+</section>
+<section id="bias-in-generated-images" class="slide level2">
+<h2>Bias in Generated Images</h2>
+<img data-src="../../assets/images/genai_modern/ai_bias_wp_examples.png" class="r-stretch">
+<div class="fragment">
+<p>Stereotyped associations (Source: Washington Post). The risk depends on the use case.</p>
+</div>
+</section>
+<section id="quiz-real-or-not" class="slide level2">
+<h2>Quiz: Real or Not?</h2>
+<img data-src="../../assets/images/genai_modern/real_or_not_musk.png" class="r-stretch">
+<div class="fragment">
+<p>Increasingly hard to tell from the image alone. (Source: Spiegel.)</p>
+</div>
+</section>
+<section id="fake-in-a-familiar-interface" class="slide level2">
+<h2>Fake in a Familiar Interface</h2>
+
+<img data-src="../../assets/images/genai_modern/google_earth_fake_monument.jpg" class="r-stretch quarto-figure-center"><p class="caption">Fake crater next to the Washington Monument, made with Google Earth’s AI image feature. <a href="https://www.washingtonpost.com/technology/2026/07/31/see-how-google-earth-let-people-make-fake-scenes-bombings-riots-destruction/">Source</a></p><div class="fragment">
+<p>The image carried an invisible watermark, but a phone photo of the screen was no longer detected.</p>
+</div>
+</section>
+<section id="provenance-no-single-fix" class="slide level2">
+<h2>Provenance: No Single Fix</h2>
+<p><img data-src="../../assets/images/genai_modern/provenance_layers.svg" class="" style="width:85.0%"></p>
+<div class="fragment">
+<p>Provenance is a <strong>system-level</strong> problem.</p>
+</div>
+</section>
+<section id="copyright-licensing" class="slide level2">
+<h2>Copyright &amp; Licensing</h2>
+<ul>
+<li class="fragment">Which data trained the model?</li>
+<li class="fragment">Do model <strong>and</strong> adapter licenses allow your use?</li>
+<li class="fragment">Who owns the reference images, and can outputs be used commercially?</li>
+</ul>
+</section>
+<section id="before-you-use-a-generated-image" class="slide level2">
+<h2>Before You Use a Generated Image</h2>
+<ol type="1">
+<li class="fragment">How <strong>risky</strong> is the use case?</li>
+<li class="fragment">Could it <strong>mislead</strong>?</li>
+<li class="fragment"><strong>Consent</strong>, identity, privacy?</li>
+<li class="fragment"><strong>License</strong> constraints?</li>
+<li class="fragment">Could it reinforce <strong>stereotypes</strong>?</li>
+</ol>
+</section></section>
+<section id="references" class="title-slide slide level1 smaller scrollable">
+<h1>References</h1>
+<div style="font-size: 50%;">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-alemohammad_self-consuming_2023" class="csl-entry" role="listitem">
+Alemohammad, Sina, Josue Casco-Rodriguez, Lorenzo Luzi, et al. 2023. <em>Self-<span>Consuming</span> <span>Generative</span> <span>Models</span> <span>Go</span> <span>MAD</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2307.01850">https://doi.org/10.48550/arXiv.2307.01850</a>.
+</div>
+<div id="ref-esser_scaling_2024" class="csl-entry" role="listitem">
+Esser, Patrick, Sumith Kulal, Andreas Blattmann, et al. 2024. <span>“Scaling <span>Rectified</span> <span>Flow</span> <span>Transformers</span> for <span>High</span>-<span>Resolution</span> <span>Image</span> <span>Synthesis</span>.”</span> <em>Forty-First <span>International</span> <span>Conference</span> on <span>Machine</span> <span>Learning</span></em>. <a href="https://openreview.net/forum?id=FPnUhsQJ5B">https://openreview.net/forum?id=FPnUhsQJ5B</a>.
+</div>
+<div id="ref-gerstgrasser_is_2024" class="csl-entry" role="listitem">
+Gerstgrasser, Matthias, Rylan Schaeffer, Apratim Dey, et al. 2024. <em>Is <span>Model</span> <span>Collapse</span> <span>Inevitable</span>? <span>Breaking</span> the <span>Curse</span> of <span>Recursion</span> by <span>Accumulating</span> <span>Real</span> and <span>Synthetic</span> <span>Data</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2404.01413">https://doi.org/10.48550/arXiv.2404.01413</a>.
+</div>
+<div id="ref-peebles_scalable_2023" class="csl-entry" role="listitem">
+Peebles, William, and Saining Xie. 2023. <em>Scalable <span>Diffusion</span> <span>Models</span> with <span>Transformers</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2212.09748">https://doi.org/10.48550/arXiv.2212.09748</a>.
+</div>
+<div id="ref-raisinghani_nano_2026" class="csl-entry" role="listitem">
+Raisinghani, Naina. 2026. <em>Nano <span>Banana</span> 2: <span>Combining</span> <span>Pro</span> Capabilities with Lightning-Fast Speed</em>. <a href="https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/">https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/</a>.
+</div>
+<div id="ref-scharer_improved_2023" class="csl-entry" role="listitem">
+Schärer, Florian. 2023. <span>“Improved <span>Evaluation</span> and <span>Assessment</span> of <span>Performance</span> for <span>MR</span> <span>Based</span> <span>CT</span> <span>Synthesis</span> <span>Models</span>.”</span> {MSc} in {Engineering} {P8} {Report}, FHNW.
+</div>
+<div id="ref-zhao_qwen-image-20_2026" class="csl-entry" role="listitem">
+Zhao, Bing, Chenfei Wu, Deqing Li, et al. 2026. <em>Qwen-<span>Image</span>-2.0 <span>Technical</span> <span>Report</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2605.10730">https://doi.org/10.48550/arXiv.2605.10730</a>.
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<section id="backup" class="title-slide slide level1 center" data-visibility="uncounted">
+<h1>Backup</h1>
+
+</section>
+<section id="where-the-model-uses-each-word" class="slide level2" data-visibility="uncounted">
+<h2>Where the Model Uses Each Word</h2>
+
+<img data-src="../../assets/images/genai_modern/cross_attention_maps.png" style="width:90.0%" class="r-stretch quarto-figure-center"><p class="caption">Cross-attention maps of Stable Diffusion 1.5, averaged over heads, layers and sampling steps.</p></section>
+<section id="u-net-vs.-diffusion-transformer" class="slide level2" data-visibility="uncounted">
 <h2>U-Net vs.&nbsp;Diffusion Transformer</h2>
 <table class="caption-top">
 <thead>
@@ -448,7 +559,7 @@ Marco Willi
 <tr class="even">
 <td>Conditioning</td>
 <td>cross-attention</td>
-<td>cross-attn / conditioning tokens</td>
+<td>cross-attn / joint attention</td>
 </tr>
 <tr class="odd">
 <td>Multimodal</td>
@@ -457,106 +568,8 @@ Marco Willi
 </tr>
 </tbody>
 </table>
-<div class="fragment">
-<p>U-Nets remain effective — but transformers fit a <strong>broader trend</strong>.</p>
-</div>
 </section>
-<section id="tokens-as-a-common-interface" class="slide level2">
-<h2>Tokens as a Common Interface</h2>
-<div class="fragment">
-<p><span class="math display">\[\text{text} \rightarrow \text{text tokens}\]</span></p>
-</div>
-<div class="fragment">
-<p><span class="math display">\[\text{image / latent} \rightarrow \text{visual tokens}\]</span></p>
-</div>
-<div class="fragment">
-<p><span class="math display">\[\text{reference image} \rightarrow \text{reference tokens}\]</span></p>
-</div>
-<div class="fragment">
-<p>All can interact through <strong>attention</strong> in a unified architecture.</p>
-</div>
-</section>
-<section id="multimodal-diffusion-systems" class="slide level2">
-<h2>Multimodal Diffusion Systems</h2>
-<div class="fragment">
-<p>Conditioning isn’t only text — also images, masks, reference subjects, editing instructions, prior outputs.</p>
-</div>
-<ul>
-<li class="fragment">Change only the background</li>
-<li class="fragment">Preserve product identity across scenes</li>
-<li class="fragment">Iteratively refine in a chat</li>
-</ul>
-</section>
-<section id="example-interactive-editing" class="slide level2">
-<h2>Example: Interactive Editing</h2>
-
-<img data-src="../../assets/images/genai_modern/dada_design-9KGB4HspwsM-unsplash.jpg" style="width:45.0%" class="r-stretch quarto-figure-center"><p class="caption">Source</p><div class="fragment">
-<p>Starting image of a living room (Unsplash).</p>
-</div>
-</section>
-<section id="step-1-remove-object" class="slide level2">
-<h2>Step 1: Remove Object</h2>
-
-<img data-src="../../assets/images/genai_modern/room_step1_no_books.jpg" style="width:45.0%" class="r-stretch"><div class="fragment">
-<p><em>“Remove the book on the floor, replace with clean floor”</em></p>
-</div>
-</section>
-<section id="step-2-recolor" class="slide level2">
-<h2>Step 2: Recolor</h2>
-
-<img data-src="../../assets/images/genai_modern/room_step2_turquoise_sofa.jpg" style="width:45.0%" class="r-stretch"><div class="fragment">
-<p><em>“Recolor sofa and ottoman to vibrant turquoise”</em></p>
-</div>
-</section>
-<section id="step-3-match-style" class="slide level2">
-<h2>Step 3: Match Style</h2>
-
-<img data-src="../../assets/images/genai_modern/room_step3_matching_carpet.jpg" style="width:45.0%" class="r-stretch"><div class="fragment">
-<p><em>“Change the carpet color to match the turquoise sofa”</em> (Nano Banana 2, <span class="citation" data-cites="raisinghani_nano_2026">Raisinghani (<a href="#/references" role="doc-biblioref" onclick="">2026</a>)</span>)</p>
-</div>
-</section>
-<section id="whats-inside-a-modern-assistant" class="slide level2">
-<h2>What’s Inside a Modern Assistant?</h2>
-<ul>
-<li class="fragment">Understanding text instructions</li>
-<li class="fragment">Understanding uploaded images</li>
-<li class="fragment">Maintaining conversational context</li>
-<li class="fragment">Planning the edit / generation</li>
-<li class="fragment">Calling a specialized image generator</li>
-<li class="fragment">Calling an editor</li>
-<li class="fragment">Checking safety constraints</li>
-<li class="fragment">Returning a unified response</li>
-</ul>
-</section>
-<section id="model-vs.-system" class="slide level2 center">
-<h2>Model vs.&nbsp;System</h2>
-<div class="r-fit-text">
-<p><strong>Modern multimodal generation is not one model — it’s a system for understanding, planning, generating, editing, and iterating.</strong></p>
-</div>
-</section></section>
-<section>
-<section id="adapting-generative-models" class="title-slide slide level1 center">
-<h1>Adapting Generative Models</h1>
-
-</section>
-<section id="two-questions" class="slide level2">
-<h2>Two Questions</h2>
-<div class="fragment">
-<p><strong>Can the model generate good images?</strong></p>
-</div>
-<div class="fragment">
-<p>And:</p>
-<p><strong>Can it generate the <em>right</em> images, <em>consistently</em>, for <em>this</em> use case?</strong></p>
-</div>
-</section>
-<section id="subject-consistency" class="slide level2">
-<h2>Subject Consistency</h2>
-<img data-src="../../assets/images/genai_modern/person_comparison.jpg" class="r-stretch">
-<div class="fragment">
-<p>Same person across different scenes — requires more than a prompt.</p>
-</div>
-</section>
-<section id="the-adaptation-spectrum" class="slide level2">
+<section id="the-adaptation-spectrum" class="slide level2" data-visibility="uncounted">
 <h2>The Adaptation Spectrum</h2>
 <table class="caption-top">
 <colgroup>
@@ -593,7 +606,7 @@ Marco Willi
 <td>lightweight concept</td>
 </tr>
 <tr class="odd">
-<td><strong>LoRA / DreamBooth-LoRA</strong></td>
+<td>LoRA / DreamBooth-LoRA</td>
 <td>small adapter weights</td>
 <td>persistent specialization</td>
 </tr>
@@ -605,300 +618,25 @@ Marco Willi
 </tbody>
 </table>
 </section>
-<section id="the-rule" class="slide level2 center">
-<h2>The Rule</h2>
-<div class="r-fit-text">
-<p><strong>Don’t fine-tune because the model is imperfect.</strong> <strong>Fine-tune when the same failure appears repeatedly and simpler controls aren’t enough.</strong></p>
-</div>
-</section>
-<section id="prompting-first" class="slide level2">
-<h2>Prompting First</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a aria-label="1"></a>a studio product photo of a hiking backpack,</span>
-<span id="cb1-2"><a aria-label="2"></a>white background, softbox lighting,</span>
-<span id="cb1-3"><a aria-label="3"></a>high detail, commercial photography</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="fragment">
-<p>Cheapest control over subject, style, camera, lighting, composition, mood, format.</p>
-</div>
-</section>
-<section id="a-typical-workflow" class="slide level2">
-<h2>A Typical Workflow</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a aria-label="1"></a>prompt</span>
-<span id="cb2-2"><a aria-label="2"></a> → inspect result</span>
-<span id="cb2-3"><a aria-label="3"></a> → add reference image or mask</span>
-<span id="cb2-4"><a aria-label="4"></a> → edit locally</span>
-<span id="cb2-5"><a aria-label="5"></a> → only then consider training</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="fragment">
-<p>Modern models can do a lot <strong>without any training</strong>.</p>
-</div>
-</section>
-<section id="when-lora-still-makes-sense" class="slide level2">
-<h2>When LoRA Still Makes Sense</h2>
-<div class="fragment">
-<p>Freeze base weights, learn a small low-rank update:</p>
-<p><span class="math display">\[\Delta W = BA\]</span></p>
-</div>
-<div class="fragment">
-<p>Small adapter, loadable on top of a base model.</p>
-</div>
-</section>
-<section id="good-lora-use-cases" class="slide level2">
-<h2>Good LoRA Use Cases</h2>
+<section id="adaptation-tooling" class="slide level2" data-visibility="uncounted">
+<h2>Adaptation Tooling</h2>
 <ul>
-<li class="fragment">Recurring character or mascot</li>
-<li class="fragment">Specific product / object</li>
-<li class="fragment">Consistent brand or illustration style</li>
-<li class="fragment">Specialized domain (fashion, architecture, microscopy, industrial)</li>
-<li class="fragment">Local / private deployment with open weights</li>
-<li class="fragment">Many lightweight variants from one base</li>
+<li><a href="https://huggingface.co/docs/diffusers/en/training/lora">HF Diffusers LoRA</a></li>
+<li><a href="https://huggingface.co/blog/flux-qlora">HF FLUX QLoRA</a></li>
+<li><a href="https://replicate.com/docs/get-started/fine-tune-with-flux">Replicate FLUX fine-tuning</a></li>
 </ul>
 </section>
-<section id="tooling" class="slide level2">
-<h2>Tooling</h2>
-<ul>
-<li class="fragment"><strong>HF Diffusers</strong> — LoRA / DreamBooth-LoRA training</li>
-<li class="fragment"><strong>HF FLUX QLoRA</strong> — quantized LoRA example</li>
-<li class="fragment"><strong>Replicate</strong> — hosted FLUX fine-tuning, UI or API</li>
-</ul>
-</section></section>
-<section>
-<section id="case-study-novel-domains" class="title-slide slide level1 center">
-<h1>Case Study: Novel Domains</h1>
-
-</section>
-<section id="where-general-models-struggle" class="slide level2">
-<h2>Where General Models Struggle</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Domain</th>
-<th>Task</th>
-<th>Main risk</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>MRI → CT (<span class="citation" data-cites="scharer_improved_2023">Schärer (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>)</td>
-<td>image-to-image translation</td>
-<td>wrong anatomy / dose-relevant structure</td>
-</tr>
-<tr class="even">
-<td>Solar flares (<span class="citation" data-cites="ramunno_solar_2024">Ramunno et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>)</td>
-<td>conditional / temporal synthesis</td>
-<td>implausible flare patterns</td>
-</tr>
-<tr class="odd">
-<td>Industrial defects</td>
-<td>rare-defect generation</td>
-<td>synthetic artifacts mismatch real</td>
-</tr>
-</tbody>
-</table>
-</section></section>
-<section>
-<section id="deployment-responsible-use" class="title-slide slide level1 center">
-<h1>Deployment &amp; Responsible Use</h1>
-
-</section>
-<section id="how-will-you-actually-use-this" class="slide level2 center">
-<h2>How Will You Actually Use This?</h2>
-<p>Three main access patterns:</p>
-<ul>
-<li class="fragment"><strong>Hosted API</strong> — fastest, opaque</li>
-<li class="fragment"><strong>Enterprise platform</strong> — governance, integrated cloud</li>
-<li class="fragment"><strong>Open-weight model</strong> — control, operational responsibility</li>
-</ul>
-</section>
-<section id="three-access-patterns" class="slide level2">
-<h2>Three Access Patterns</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Pattern</th>
-<th>Examples</th>
-<th>Strengths</th>
-<th>Limits</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Hosted API</td>
-<td>OpenAI, Google, Replicate, fal.ai</td>
-<td>fast, strong models, no GPUs</td>
-<td>opaque, vendor dependency</td>
-</tr>
-<tr class="even">
-<td>Enterprise platform</td>
-<td>Vertex AI, Azure, Bedrock</td>
-<td>IAM, logging, quotas, compliance</td>
-<td>setup, lock-in</td>
-</tr>
-<tr class="odd">
-<td>Open-weight</td>
-<td>HF Diffusers, ComfyUI, self-host</td>
-<td>control, reproducibility, privacy, adapters</td>
-<td>ops burden, GPU cost</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="a-practical-rule" class="slide level2 center">
-<h2>A Practical Rule</h2>
-<div class="r-fit-text">
-<p>Start with a <strong>hosted API</strong>. Move to an <strong>enterprise platform</strong> when governance matters. Use <strong>open-weight models</strong> when you need control, reproducibility, privacy, or adaptation.</p>
-</div>
-</section>
-<section id="replicate" class="slide level2">
+<section id="replicate" class="slide level2" data-visibility="uncounted">
 <h2>Replicate</h2>
 <img data-src="../../assets/images/genai_modern/replicate.jpg" class="r-stretch">
-<div class="fragment">
 <p>Hosted access to both proprietary and open-weight models.</p>
-</div>
 </section>
-<section id="image-models-hallucinate-too" class="slide level2">
-<h2>Image Models Hallucinate Too</h2>
-<ul>
-<li class="fragment">Invented objects, text, logos, identities</li>
-<li class="fragment">Wrong physical relationships</li>
-<li class="fragment">Wrong medical / technical details</li>
-<li class="fragment">Impossible geometry</li>
-<li class="fragment">Misleading context</li>
-</ul>
-<div class="fragment">
-<p><strong>Visually convincing ≠ factually correct.</strong></p>
-</div>
-</section>
-<section id="plausible-but-wrong" class="slide level2">
-<h2>Plausible but Wrong</h2>
-<img data-src="../../assets/images/genai_modern/ferrari_rear_nanob2.jpg" class="r-stretch">
-<div class="fragment">
-<p>The new electric Ferrari Luce — with a visible exhaust pipe?</p>
-</div>
-</section>
-<section id="synthetic-data-useful" class="slide level2">
-<h2>Synthetic Data: Useful</h2>
-<ul>
-<li class="fragment">Generate rare object poses</li>
-<li class="fragment">Augment defect-detection datasets</li>
-<li class="fragment">Simulate unusual lighting</li>
-<li class="fragment">Privacy-preserving demo examples</li>
-<li class="fragment">Early prototype training</li>
-</ul>
-</section>
-<section id="synthetic-data-risky" class="slide level2">
-<h2>Synthetic Data: Risky</h2>
-<img data-src="../../assets/images/genai_modern/deterioration_on_pollution.png" class="r-stretch">
-<div class="fragment">
-<p>Quality degrades under synthetic-data pollution / model collapse (<span class="citation" data-cites="alemohammad_self-consuming_2023">Alemohammad et al. (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>).</p>
-</div>
-<div class="fragment">
-<p>Question is not <em>good or bad?</em> but: <strong>does it improve performance on the real target distribution?</strong></p>
-</div>
-</section>
-<section id="bias-in-generated-images" class="slide level2">
-<h2>Bias in Generated Images</h2>
+<section id="bias-the-washington-post-analysis" class="slide level2" data-visibility="uncounted">
+<h2>Bias: The Washington Post Analysis</h2>
 <img data-src="../../assets/images/genai_modern/ai_bias_wp_front.png" class="r-stretch">
-<div class="fragment">
-<p>Models inherit the biases of their training data. (Source: Washington Post.)</p>
-</div>
-</section>
-<section id="bias-examples" class="slide level2">
-<h2>Bias Examples</h2>
-<img data-src="../../assets/images/genai_modern/ai_bias_wp_examples.png" class="r-stretch">
-<div class="fragment">
-<p>Stereotyped associations across occupations, beauty, wealth, culture, dignity.</p>
-</div>
-</section>
-<section id="risk-depends-on-use-case" class="slide level2">
-<h2>Risk Depends on Use Case</h2>
-<ul>
-<li class="fragment">Creative toy app vs.&nbsp;hiring tool</li>
-<li class="fragment">Educational content vs.&nbsp;public campaign</li>
-<li class="fragment">Internal demo vs.&nbsp;medical assistant</li>
-<li class="fragment">Treat outputs <strong>critically</strong> — not as neutral</li>
-</ul>
-</section>
-<section id="real-or-not" class="slide level2">
-<h2>Real or Not?</h2>
-<img data-src="../../assets/images/genai_modern/real_or_not_musk.png" class="r-stretch">
-<div class="fragment">
-<p>Increasingly hard to tell. (Source: Spiegel.)</p>
-</div>
-</section>
-<section id="provenance-approaches" class="slide level2">
-<h2>Provenance Approaches</h2>
-<ul>
-<li class="fragment">Visible / invisible watermarks</li>
-<li class="fragment">Metadata-based provenance</li>
-<li class="fragment">Cryptographic signatures</li>
-<li class="fragment">Synthetic-image detectors</li>
-<li class="fragment">Content credentials</li>
-</ul>
-<div class="fragment">
-<p><strong>None is perfect.</strong> Provenance is a <strong>system-level</strong> problem.</p>
-</div>
-</section>
-<section id="copyright-licensing" class="slide level2">
-<h2>Copyright &amp; Licensing</h2>
-<ul>
-<li class="fragment">What data trained the model?</li>
-<li class="fragment">Is the model license compatible with your use?</li>
-<li class="fragment">Can outputs be used commercially?</li>
-<li class="fragment">Could outputs resemble protected examples?</li>
-<li class="fragment">Adapters / fine-tunes licensed separately?</li>
-<li class="fragment">Reference images licensed by you?</li>
-</ul>
-<div class="fragment">
-<p>Licensing is part of <strong>model selection</strong>, not an afterthought.</p>
-</div>
-</section>
-<section id="responsibility-checklist" class="slide level2">
-<h2>Responsibility Checklist</h2>
-<ol type="1">
-<li class="fragment">What’s the <strong>risk level</strong> of the use case?</li>
-<li class="fragment">Could the image <strong>mislead</strong> people?</li>
-<li class="fragment">Identity / privacy / consent issues?</li>
-<li class="fragment">Copyright / licensing constraints?</li>
-<li class="fragment">Could output reinforce <strong>stereotypes</strong> or biased associations?</li>
-</ol>
+
+
 </section></section>
-<section id="references" class="title-slide slide level1 smaller scrollable">
-<h1>References</h1>
-<div style="font-size: 50%;">
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-alemohammad_self-consuming_2023" class="csl-entry" role="listitem">
-Alemohammad, Sina, Josue Casco-Rodriguez, Lorenzo Luzi, et al. 2023. <em>Self-<span>Consuming</span> <span>Generative</span> <span>Models</span> <span>Go</span> <span>MAD</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2307.01850">https://doi.org/10.48550/arXiv.2307.01850</a>.
-</div>
-<div id="ref-peebles_scalable_2023" class="csl-entry" role="listitem">
-Peebles, William, and Saining Xie. 2023. <em>Scalable <span>Diffusion</span> <span>Models</span> with <span>Transformers</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2212.09748">https://doi.org/10.48550/arXiv.2212.09748</a>.
-</div>
-<div id="ref-raisinghani_nano_2026" class="csl-entry" role="listitem">
-Raisinghani, Naina. 2026. <em>Nano <span>Banana</span> 2: <span>Combining</span> <span>Pro</span> Capabilities with Lightning-Fast Speed</em>. <a href="https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/">https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/</a>.
-</div>
-<div id="ref-ramunno_solar_2024" class="csl-entry" role="listitem">
-Ramunno, Francesco P., S. Hackstein, V. Kinakh, et al. 2024. <em>Solar Synthetic Imaging: <span>Introducing</span> Denoising Diffusion Probabilistic Models on <span>SDO</span>/<span>AIA</span> Data</em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2404.02552">https://doi.org/10.48550/arXiv.2404.02552</a>.
-</div>
-<div id="ref-rombach_high-resolution_2022" class="csl-entry" role="listitem">
-Rombach, Robin, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Björn Ommer. 2022. <em>High-<span>Resolution</span> <span>Image</span> <span>Synthesis</span> with <span>Latent</span> <span>Diffusion</span> <span>Models</span></em>. arXiv. <a href="http://arxiv.org/abs/2112.10752">http://arxiv.org/abs/2112.10752</a>.
-</div>
-<div id="ref-scharer_improved_2023" class="csl-entry" role="listitem">
-Schärer, Florian. 2023. <span>“Improved <span>Evaluation</span> and <span>Assessment</span> of <span>Performance</span> for <span>MR</span> <span>Based</span> <span>CT</span> <span>Synthesis</span> <span>Models</span>.”</span> {MSc} in {Engineering} {P8} {Report}, FHNW.
-</div>
-</div>
-</div>
-
-
-</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/fhnw_logo.png" class="slide-logo"></p>

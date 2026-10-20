@@ -594,7 +594,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 </figure>
 </div>
 <p>It is easy for humans to describe the image. For example:</p>
-<div id="c4047845" class="cell" data-execution_count="1">
+<div id="122dae91" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">A photograph of an elephant facing the camera.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">The elephant has large tusks and ears and is standing in a flat savannah.</span></span>
@@ -621,7 +621,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 <li>Channels: 3 (RGB)</li>
 <li>Bits per pixel: 8 bits per channel</li>
 </ul>
-<div id="41d34778" class="cell" data-execution_count="2">
+<div id="e25d6659" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="dataframe table table-sm table-striped align-middle caption-top small">
 <thead>
@@ -807,7 +807,7 @@ Click for result
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>One potential solution is to let a pretrained encoder decide what is similar. Each image of <a href="#fig-rl-examples" class="quarto-xref">Figure&nbsp;3</a> is mapped to a 768-dimensional embedding with DINOv3 (<span class="citation" data-cites="simeoni_dinov3_2025">Siméoni et al. (<a href="#ref-simeoni_dinov3_2025" role="doc-biblioref">2025</a>)</span>), a self-supervised model introduced later in this lecture. Since we cannot inspect 768 dimensions, the embeddings are reduced to <span class="math inline">\(\mathbf{z} \in \mathbb{R}^2\)</span> with t-SNE (<span class="citation" data-cites="maaten_visualizing_2008">(<a href="#ref-maaten_visualizing_2008" role="doc-biblioref"><strong>maaten_visualizing_2008?</strong></a>)</span>), a method that places points with similar embeddings close to each other. The result is illustrated in <a href="#fig-rl-tsne-dinov3" class="quarto-xref">Figure&nbsp;5</a>.</p>
+<p>One potential solution is to let a pretrained encoder decide what is similar. Each image of <a href="#fig-rl-examples" class="quarto-xref">Figure&nbsp;3</a> is mapped to a 768-dimensional embedding with DINOv3 (<span class="citation" data-cites="simeoni_dinov3_2025">Siméoni et al. (<a href="#ref-simeoni_dinov3_2025" role="doc-biblioref">2025</a>)</span>), a self-supervised model introduced later in this lecture. Since we cannot inspect 768 dimensions, the embeddings are reduced to <span class="math inline">\(\mathbf{z} \in \mathbb{R}^2\)</span> with t-SNE (<span class="citation" data-cites="maaten_visualizing_2008">Maaten and Hinton (<a href="#ref-maaten_visualizing_2008" role="doc-biblioref">2008</a>)</span>), a method that places points with similar embeddings close to each other. The result is illustrated in <a href="#fig-rl-tsne-dinov3" class="quarto-xref">Figure&nbsp;5</a>.</p>
 <div id="fig-rl-tsne-dinov3" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Eight example images placed in two dimensions according to their DINOv3 embeddings: the daytime elephants form a group, the two night images lie next to each other, car and giraffe lie apart">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rl-tsne-dinov3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1618,6 +1618,9 @@ Chen, Ting, Simon Kornblith, Mohammad Norouzi, and Geoffrey Hinton. 2020. <em>A 
 </div>
 <div id="ref-he_masked_2021" class="csl-entry" role="listitem">
 He, Kaiming, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Dollár, and Ross Girshick. 2021. <em>Masked <span>Autoencoders</span> <span>Are</span> <span>Scalable</span> <span>Vision</span> <span>Learners</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2111.06377">https://doi.org/10.48550/arXiv.2111.06377</a>.
+</div>
+<div id="ref-maaten_visualizing_2008" class="csl-entry" role="listitem">
+Maaten, Laurens van der, and Geoffrey Hinton. 2008. <span>“Visualizing <span>Data</span> Using t-<span>SNE</span>.”</span> <em>Journal of Machine Learning Research</em> 9 (86): 2579–605. <a href="http://jmlr.org/papers/v9/vandermaaten08a.html">http://jmlr.org/papers/v9/vandermaaten08a.html</a>.
 </div>
 <div id="ref-oquab_dinov2_2024" class="csl-entry" role="listitem">
 Oquab, Maxime, Timothée Darcet, Théo Moutakanni, et al. 2024. <em><span>DINOv2</span>: <span>Learning</span> <span>Robust</span> <span>Visual</span> <span>Features</span> Without <span>Supervision</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2304.07193">https://doi.org/10.48550/arXiv.2304.07193</a>.

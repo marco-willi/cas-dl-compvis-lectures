@@ -532,8 +532,8 @@ Marco Willi
 </div>
 </section></section>
 <section>
-<section id="learning-generative-models" class="title-slide slide level1 center">
-<h1>Learning Generative Models</h1>
+<section id="how-generative-models-learn" class="title-slide slide level1 center">
+<h1>How Generative Models Learn</h1>
 
 </section>
 <section id="the-objective" class="slide level2">
@@ -542,6 +542,14 @@ Marco Willi
 <div class="fragment">
 <p>Generated <span class="math inline">\(\hat{\mathbf{x}}\)</span> should have <strong>high probability</strong> under the real data distribution <span class="math inline">\(p_{\text{data}}(\mathbf{x})\)</span>.</p>
 </div>
+</section>
+<section id="fidelity-and-coverage" class="slide level2">
+<h2>Fidelity and Coverage</h2>
+
+<img data-src="../../assets/images/genai/intro_figures/fidelity_coverage.svg" style="width:90.0%" class="r-stretch"><ul>
+<li class="fragment"><strong>Fidelity</strong>: samples look like real data</li>
+<li class="fragment"><strong>Coverage</strong>: samples show the full variety of real data, in the right proportions</li>
+</ul>
 </section>
 <section id="two-approaches" class="slide level2">
 <h2>Two Approaches</h2>
@@ -597,6 +605,12 @@ Marco Willi
 <p>The model adapts to place high probability where training data lies.</p>
 </div>
 </section>
+<section id="demo-learning-a-1d-distribution" class="slide level2">
+<h2>Demo: Learning a 1D Distribution</h2>
+<iframe data-src="../../demos/genai_intro/distribution_fitting/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: learning a 1D distribution">
+</iframe>
+<p>Can a single Gaussian reach high fidelity <em>and</em> high coverage? <a href="../../demos/genai_intro/distribution_fitting/index.html" target="_blank">Open in new tab</a></p>
+</section>
 <section id="density-generation" class="slide level2">
 <h2>Density ≠ Generation</h2>
 <div class="fragment">
@@ -607,61 +621,51 @@ Marco Willi
 </div>
 </section></section>
 <section>
-<section id="desirable-properties" class="title-slide slide level1 center">
-<h1>Desirable Properties</h1>
+<section id="properties-and-trade-offs" class="title-slide slide level1 center">
+<h1>Properties and Trade-offs</h1>
 
 </section>
 <section id="efficient-sampling" class="slide level2">
-<h2>1. Efficient Sampling</h2>
-<ul>
-<li class="fragment">Generate new samples quickly</li>
-<li class="fragment">Critical for real-time and large-scale use</li>
-<li class="fragment"><strong>Excel:</strong> GANs, normalizing flows (single forward pass)</li>
-<li class="fragment"><strong>Struggle:</strong> autoregressive, diffusion (sequential steps)</li>
-</ul>
+<h2>Efficient Sampling</h2>
+
+<img data-src="../../assets/images/genai/intro_figures/sampling_cost.svg" style="width:80.0%" class="r-stretch"><div class="fragment">
+<p>GANs and VAEs: one forward pass. Diffusion and flow matching: tens of steps. Autoregressive: one step per token.</p>
+</div>
 </section>
-<section id="high-quality-sampling" class="slide level2">
-<h2>2. High-Quality Sampling</h2>
-<ul>
-<li class="fragment">Realistic, detailed, indistinguishable from real</li>
-<li class="fragment"><strong>Excel:</strong> modern GANs, diffusion, large autoregressive models</li>
-<li class="fragment">Often paid for with compute or training complexity</li>
-</ul>
+<section id="coverage-mode-collapse" class="slide level2">
+<h2>Coverage: Mode Collapse</h2>
+
+<img data-src="../../assets/images/genai/intro_figures/coverage_mode_collapse.svg" style="width:90.0%" class="r-stretch"><div class="fragment">
+<p>Realistic samples, but only of a few modes: a well-known problem of GANs.</p>
+</div>
 </section>
-<section id="coverage-diversity" class="slide level2">
-<h2>3. Coverage (Diversity)</h2>
-<ul>
-<li class="fragment">Generate the full diversity of training data</li>
-<li class="fragment"><strong>Failure mode:</strong> mode collapse (GANs) — limited variety</li>
-<li class="fragment"><strong>Excel:</strong> VAEs (often at the cost of sample quality)</li>
-</ul>
+<section id="fidelity-vs.-coverage-guidance" class="slide level2">
+<h2>Fidelity vs.&nbsp;Coverage: Guidance</h2>
+
+<img data-src="../../assets/images/genai/intro_figures/guidance_tradeoff.svg" style="width:90.0%" class="r-stretch"><div class="fragment">
+<p>Techniques that increase fidelity often reduce coverage, e.g.&nbsp;guidance in diffusion models <span class="citation" data-cites="ho_classifier-free_2022">(<a href="#/references" role="doc-biblioref" onclick="">Ho and Salimans 2022</a>)</span>.</p>
+</div>
 </section>
-<section id="well-behaved-latent-space" class="slide level2">
-<h2>4. Well-Behaved Latent Space</h2>
-<ul>
-<li class="fragment">Smooth, meaningful structure</li>
-<li class="fragment">Similar <span class="math inline">\(\mathbf{z}\)</span> → similar outputs</li>
-<li class="fragment">Enables interpolation and controlled generation</li>
-<li class="fragment"><strong>Excel:</strong> VAEs (explicit training objective)</li>
-</ul>
+<section id="smooth-latent-space" class="slide level2">
+<h2>Smooth Latent Space</h2>
+
+<img data-src="../../assets/images/genai/intro_figures/vae_latent_grid.png" style="width:40.0%" class="r-stretch quarto-figure-center"><p class="caption">VAE with a 2D latent space, trained on MNIST.</p><div class="fragment">
+<p>Similar <span class="math inline">\(\mathbf{z}\)</span> → similar outputs: interpolation morphs one digit into another.</p>
+</div>
 </section>
 <section id="disentangled-latent-space" class="slide level2">
-<h2>5. Disentangled Latent Space</h2>
-<ul>
-<li class="fragment">Different dimensions → independent factors</li>
-<li class="fragment">e.g.&nbsp;separate controls for pose, lighting, color</li>
-<li class="fragment">Enables fine-grained, interpretable control</li>
-<li class="fragment">Hard without explicit architectural design</li>
-</ul>
+<h2>Disentangled Latent Space</h2>
+
+<img data-src="../../assets/images/genai/intro_figures/disentanglement.svg" style="width:85.0%" class="r-stretch"><div class="fragment">
+<p>Not required for control: modern models are controlled through conditioning (text, masks, reference images).</p>
+</div>
 </section>
-<section id="efficient-likelihood-computation" class="slide level2">
-<h2>6. Efficient Likelihood Computation</h2>
-<ul>
-<li class="fragment">Evaluate <span class="math inline">\(p_{\theta}(\mathbf{x})\)</span> for any sample</li>
-<li class="fragment">Enables direct optimization, anomaly detection, model comparison</li>
-<li class="fragment"><strong>Have:</strong> autoregressive, flows, VAEs (approx)</li>
-<li class="fragment"><strong>Lack:</strong> GANs, many diffusion models</li>
-</ul>
+<section id="likelihood-computation" class="slide level2">
+<h2>Likelihood Computation</h2>
+
+<img data-src="../../assets/images/genai/intro_figures/likelihood_explicit_implicit.svg" style="width:85.0%" class="r-stretch"><div class="fragment">
+<p><strong>Exact:</strong> autoregressive, normalizing flows. <strong>Bound or expensive:</strong> VAEs, diffusion, flow matching. <strong>None:</strong> GANs.</p>
+</div>
 </section></section>
 <section>
 <section id="evaluating-generative-models" class="title-slide slide level1 center">
@@ -676,7 +680,7 @@ Marco Willi
 <div class="fragment">
 <p>Better question than <em>“is it correct?”</em>:</p>
 <blockquote>
-<p>Is the generated image <strong>plausible, diverse, useful, and faithful</strong> to the condition?</p>
+<p>Are the generated images <strong>realistic and varied</strong>, do they <strong>follow the condition</strong>, and are they <strong>useful</strong>?</p>
 </blockquote>
 </div>
 </section>
@@ -690,7 +694,7 @@ Marco Willi
 </div>
 <ul>
 <li class="fragment">Not available for GANs (no explicit density)</li>
-<li class="fragment">High likelihood ≠ perceptually good samples</li>
+<li class="fragment">Likelihood and sample quality are largely independent <span class="citation" data-cites="theis_note_2016">(<a href="#/references" role="doc-biblioref" onclick="">Theis et al. 2016</a>)</span></li>
 </ul>
 </section>
 <section id="human-evaluation" class="slide level2">
@@ -704,20 +708,28 @@ Marco Willi
 <div class="fragment">
 <p>Most meaningful for visual quality — but slow, subjective, expensive.</p>
 </div>
-</section>
-<section id="distribution-level-metrics" class="slide level2">
-<h2>Distribution-Level Metrics</h2>
-<img data-src="../../assets/images/genai/evaluating_genai.png" class="r-stretch">
 <div class="fragment">
-<p><strong>Inception Score (IS)</strong> <span class="citation" data-cites="salimans_improved_2016">(<a href="#/references" role="doc-biblioref" onclick="">Salimans et al. 2016</a>)</span>: classifier-based — confident per-image + diverse across set.</p>
+<p><strong>Preference leaderboards</strong>: blind pairwise comparisons, aggregated into a ranking.</p>
 </div>
+</section>
+<section id="distribution-level-metrics-fid" class="slide level2">
+<h2>Distribution-Level Metrics: FID</h2>
+
+<img data-src="../../assets/images/genai/intro_figures/fid_pipeline.svg" style="width:75.0%" class="r-stretch"><div class="fragment">
+<p><strong>FID</strong> <span class="citation" data-cites="heusel_gans_2018">(<a href="#/references" role="doc-biblioref" onclick="">Heusel et al. 2018</a>)</span>: Fréchet distance between Gaussians fitted to Inception features of real and generated images. Lower is better.</p>
+</div>
+</section>
+<section id="demo-fid-precision-and-recall" class="slide level2">
+<h2>Demo: FID, Precision and Recall</h2>
+<iframe data-src="../../demos/genai_intro/fid_precision_recall/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: FID, precision and recall">
+</iframe>
+<p>Compare <em>Shifted</em> and <em>Mode collapse</em>: which metric tells them apart? <a href="../../demos/genai_intro/fid_precision_recall/index.html" target="_blank">Open in new tab</a></p>
 </section>
 <section id="limitations-of-distribution-metrics" class="slide level2">
 <h2>Limitations of Distribution Metrics</h2>
 <ul>
-<li class="fragment">Depend on a pretrained classifier</li>
-<li class="fragment">Most meaningful for class-balanced data (e.g.&nbsp;ImageNet)</li>
-<li class="fragment">Don’t compare generated images directly to real images</li>
+<li class="fragment">One FID value does not say whether fidelity or coverage is the problem: <strong>precision</strong> and <strong>recall</strong> <span class="citation" data-cites="kynkaanniemi_improved_2019">(<a href="#/references" role="doc-biblioref" onclick="">Kynkäänniemi et al. 2019</a>)</span> separate them</li>
+<li class="fragment">FID depends on the number of samples and on ImageNet features</li>
 <li class="fragment">Don’t evaluate prompt adherence or input fidelity</li>
 <li class="fragment">Can hide failures on rare classes, spatial relations, text rendering</li>
 </ul>
@@ -816,14 +828,23 @@ Marco Willi
 <div id="ref-foster_generative_2023" class="csl-entry" role="listitem">
 Foster, David. 2023. <em>Generative <span>Deep</span> <span>Learning</span></em>. 2nd ed. O’Reilly Media, Inc.
 </div>
+<div id="ref-heusel_gans_2018" class="csl-entry" role="listitem">
+Heusel, Martin, Hubert Ramsauer, Thomas Unterthiner, Bernhard Nessler, and Sepp Hochreiter. 2018. <em><span>GANs</span> <span>Trained</span> by a <span>Two</span> <span>Time</span>-<span>Scale</span> <span>Update</span> <span>Rule</span> <span>Converge</span> to a <span>Local</span> <span>Nash</span> <span>Equilibrium</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.1706.08500">https://doi.org/10.48550/arXiv.1706.08500</a>.
+</div>
+<div id="ref-ho_classifier-free_2022" class="csl-entry" role="listitem">
+Ho, Jonathan, and Tim Salimans. 2022. <em>Classifier-<span>Free</span> <span>Diffusion</span> <span>Guidance</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2207.12598">https://doi.org/10.48550/arXiv.2207.12598</a>.
+</div>
+<div id="ref-kynkaanniemi_improved_2019" class="csl-entry" role="listitem">
+Kynkäänniemi, Tuomas, Tero Karras, Samuli Laine, Jaakko Lehtinen, and Timo Aila. 2019. <em>Improved <span>Precision</span> and <span>Recall</span> <span>Metric</span> for <span>Assessing</span> <span>Generative</span> <span>Models</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.1904.06991">https://doi.org/10.48550/arXiv.1904.06991</a>.
+</div>
 <div id="ref-ramunno_solar_2024" class="csl-entry" role="listitem">
 Ramunno, Francesco P., S. Hackstein, V. Kinakh, et al. 2024. <em>Solar Synthetic Imaging: <span>Introducing</span> Denoising Diffusion Probabilistic Models on <span>SDO</span>/<span>AIA</span> Data</em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2404.02552">https://doi.org/10.48550/arXiv.2404.02552</a>.
 </div>
-<div id="ref-salimans_improved_2016" class="csl-entry" role="listitem">
-Salimans, Tim, Ian Goodfellow, Wojciech Zaremba, Vicki Cheung, Alec Radford, and Xi Chen. 2016. <em>Improved <span>Techniques</span> for <span>Training</span> <span>GANs</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.1606.03498">https://doi.org/10.48550/arXiv.1606.03498</a>.
-</div>
 <div id="ref-scharer_improved_2023" class="csl-entry" role="listitem">
 Schärer, Florian. 2023. <span>“Improved <span>Evaluation</span> and <span>Assessment</span> of <span>Performance</span> for <span>MR</span> <span>Based</span> <span>CT</span> <span>Synthesis</span> <span>Models</span>.”</span> {MSc} in {Engineering} {P8} {Report}, FHNW.
+</div>
+<div id="ref-theis_note_2016" class="csl-entry" role="listitem">
+Theis, Lucas, Aäron van den Oord, and Matthias Bethge. 2016. <em>A Note on the Evaluation of Generative Models</em>. arXiv. <a href="https://doi.org/10.48550/arXiv.1511.01844">https://doi.org/10.48550/arXiv.1511.01844</a>.
 </div>
 </div>
 </div>

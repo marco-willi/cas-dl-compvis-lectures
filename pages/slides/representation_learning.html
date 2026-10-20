@@ -213,7 +213,7 @@ Marco Willi
 </blockquote>
 </div>
 <div class="fragment">
-<div id="482178f4" class="cell" data-execution_count="1">
+<div id="d550ced6" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="dataframe table table-sm table-striped align-middle caption-top">
 <thead>
@@ -256,7 +256,7 @@ Marco Willi
 <h2>The Vastness of Image Space</h2>
 
 <img data-src="../../assets/images/representation_learning/set_of_images.png" class="r-stretch quarto-figure-center"><p class="caption">Illustrated are the set of all possible images and the subset of natural images</p><div class="fragment">
-<p>Total possible <span class="math inline">\(256\times256\)</span> RGB images: <span class="math inline">\(255^{256 \times 256 \times 3}\)</span> ≈ <strong>infinite</strong></p>
+<p>Total possible <span class="math inline">\(256\times256\)</span> RGB images: <span class="math inline">\(256^{256 \times 256 \times 3}\)</span> ≈ <strong>infinite</strong></p>
 </div>
 <div class="fragment">
 <p>Natural images: (<em>relatively</em>) <strong>tiny subset</strong> of this space</p>
@@ -401,6 +401,13 @@ Marco Willi
 </div>
 </div>
 </section>
+<section id="one-answer-dinov3" class="slide level2">
+<h2>One Answer: DINOv3</h2>
+
+<img data-src="../../assets/images/representation_learning/tsne_dinov3.png" style="width:70.0%" class="r-stretch quarto-figure-center"><p class="caption">DINOv3 embeddings of the example images, reduced to 2D with t-SNE.</p><div class="fragment">
+<p>Augmented copies and other elephants land close together; the car is far away.</p>
+</div>
+</section>
 <section id="what-makes-good-representations" class="slide level2">
 <h2>What Makes Good Representations?</h2>
 <h3 id="invariance-selectivity-balance">Invariance &amp; Selectivity Balance</h3>
@@ -437,8 +444,7 @@ Marco Willi
 
 <img data-src="../../assets/images/representation_learning/supervised_learning_representations.png" class="r-stretch"><div class="fragment">
 <ul>
-<li>Encoder + classifier trained with labeled data</li>
-<li>Train on labeled data (e.g., ImageNet 1000 classes)</li>
+<li>Encoder + classifier trained on labeled data (e.g., ImageNet, 1000 classes)</li>
 <li>Cross-entropy loss on human-provided labels</li>
 <li>Penultimate layer embeddings = transferable features</li>
 </ul>
@@ -479,7 +485,7 @@ Shared embedding space for images and text
 
 <img data-src="../../assets/images/representation_learning/masked_auto_encoder.png" class="r-stretch quarto-figure-center"><p class="caption">From <span class="citation" data-cites="he_masked_2021">He et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></p><div class="fragment">
 <ul>
-<li>Mask 75% of image patches random</li>
+<li>Mask 75% of image patches at random</li>
 <li>Encode only visible patches (efficient!)</li>
 <li>Decode with mask tokens inserted and reconstruct original pixels</li>
 </ul>
@@ -523,10 +529,9 @@ Shared embedding space for images and text
 
 <img data-src="../../assets/images/representation_learning/dino_principle.png" class="r-stretch quarto-figure-center"><p class="caption">From <span class="citation" data-cites="caron_emerging_2021">Caron et al. (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></p><div class="fragment">
 <ul>
-<li>No explicit negatives needed</li>
-<li>Works with smaller batches</li>
-<li>Emergent semantic clustering</li>
-<li>Produces high-quality local features (patch tokens)</li>
+<li>A <strong>student</strong> sees different crops of an image and must match the <strong>teacher</strong> (a slow average of the student)</li>
+<li>Different views of the same image → same output: nuisance changes are ignored</li>
+<li>Centering and sharpening keep outputs from becoming identical for all images</li>
 </ul>
 </div>
 </section>
@@ -647,94 +652,33 @@ Shared embedding space for images and text
 </div>
 </div>
 </section>
-<section id="comparisons" class="slide level2">
-<h2>Comparisons</h2>
-<img data-src="../../assets/images/representation_learning/images_overview.png" class="r-stretch">
-<div id="fig-similarity-comparison-models" class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Pixel Space</a></li><li><a href="#tabset-1-2">ResNet-50</a></li><li><a href="#tabset-1-3">CLIP</a></li><li><a href="#tabset-1-4">DINOv3</a></li></ul>
-<div id="fig-similarity-comparison-models" class="tab-content">
-<div id="tabset-1-1">
-<div id="fig-rl-similarity-pixel-space" class="quarto-float quarto-figure quarto-figure-center" alt="Pixel-space similarity matrix">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-rl-similarity-pixel-space-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="../../assets/images/representation_learning/similarity_pixel_space.png" alt="Pixel-space similarity matrix" width="600">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rl-similarity-pixel-space-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Raw pixel-level similarity fails to capture semantic relationships.
-</figcaption>
-</figure>
-</div>
-</div>
-<div id="tabset-1-2">
-<div id="fig-rl-similarity-resnet" class="quarto-float quarto-figure quarto-figure-center" alt="ResNet-50 supervised representation similarity">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-rl-similarity-resnet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="../../assets/images/representation_learning/similarity_resnet50.png" alt="ResNet-50 supervised representation similarity" width="600">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rl-similarity-resnet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Supervised CNN representations group semantically similar images.
-</figcaption>
-</figure>
-</div>
-</div>
-<div id="tabset-1-3">
-<div id="fig-rl-similarity-clip" class="quarto-float quarto-figure quarto-figure-center" alt="CLIP multimodal representation similarity">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-rl-similarity-clip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="../../assets/images/representation_learning/similarity_clip.png" alt="CLIP multimodal representation similarity" width="600">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rl-similarity-clip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Language-aligned embeddings from CLIP show text-driven semantic structure.
-</figcaption>
-</figure>
-</div>
-</div>
-<div id="tabset-1-4">
-<div id="fig-rl-similarity-dinov3" class="quarto-float quarto-figure quarto-figure-center" alt="DINOv3 self-supervised representation similarity">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-rl-similarity-dinov3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="../../assets/images/representation_learning/similarity_dinov3.png" alt="DINOv3 self-supervised representation similarity" width="600">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rl-similarity-dinov3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Self-distilled DINOv3 features reveal fine-grained semantic clusters.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<!--
-## Pixel Space Similarity
+<section id="pixel-space-similarity" class="slide level2">
+<h2>Pixel Space Similarity</h2>
 
-![](/assets/images/representation_learning/similarity_pixel_space.png)
+<img data-src="../../assets/images/representation_learning/similarity_pixel_space.png" class="r-stretch"><div class="fragment">
+<p>Problem: Lighting variations dominate, semantic relationships hidden!</p>
+</div>
+</section>
+<section id="resnet-supervised-similarity" class="slide level2">
+<h2>ResNet (Supervised) Similarity</h2>
 
-::: {.fragment}
-Problem: Lighting variations dominate, semantic relationships hidden!
-:::
+<img data-src="../../assets/images/representation_learning/similarity_resnet50.png" class="r-stretch"><div class="fragment">
+<p>Better semantic grouping, but still affected by brightness</p>
+</div>
+</section>
+<section id="clip-similarity" class="slide level2">
+<h2>CLIP Similarity</h2>
 
-## ResNet (Supervised) Similarity
+<img data-src="../../assets/images/representation_learning/similarity_clip.png" class="r-stretch"><div class="fragment">
+<p>Strong vision-language alignment, robust to appearance changes</p>
+</div>
+</section>
+<section id="dinov3-similarity" class="slide level2">
+<h2>DINOv3 Similarity</h2>
 
-![](/assets/images/representation_learning/similarity_resnet50.png)
-
-::: {.fragment}
-Better semantic grouping, but still affected by brightness
-:::
-
-## CLIP Similarity
-
-![](/assets/images/representation_learning/similarity_clip.png)
-
-::: {.fragment}
-Strong vision-language alignment, robust to appearance changes
-:::
-
-## DINOv3 Similarity
-
-![](/assets/images/representation_learning/similarity_dinov3.png)
-
-::: {.fragment}
-Best semantic discrimination, excellent invariance to nuisance factors
-::: -->
+<img data-src="../../assets/images/representation_learning/similarity_dinov3.png" class="r-stretch"><div class="fragment">
+<p>Best semantic discrimination, excellent invariance to nuisance factors</p>
+</div>
 </section>
 <section id="comparison-summary" class="slide level2">
 <h2>Comparison Summary</h2>
@@ -820,6 +764,13 @@ Best semantic discrimination, excellent invariance to nuisance factors
 </div>
 <div class="fragment">
 <p>No classifier. No labels. No fine-tuning.</p>
+</div>
+</section>
+<section id="image-search-example" class="slide level2">
+<h2>Image Search: Example</h2>
+
+<img data-src="../../assets/images/representation_learning/image_search_map_dinov3.png" style="width:75.0%" class="r-stretch quarto-figure-center"><p class="caption">DINOv3 embeddings of furniture photos (<a href="https://amazon-berkeley-objects.s3.amazonaws.com/index.html">ABO</a>) in 2D; query in black, neighbours in red.</p><div class="fragment">
+<p>Neighbours share shape and style (hairpin legs), without any labels.</p>
 </div>
 </section>
 <section id="next-exercise-visual-image-search" class="slide level2">

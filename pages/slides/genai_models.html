@@ -439,6 +439,78 @@ Marco Willi
 </div>
 </section></section>
 <section>
+<section id="flow-matching" class="title-slide slide level1 center">
+<h1>Flow Matching</h1>
+
+</section>
+<section id="from-noise-to-data-continuously" class="slide level2">
+<h2>From Noise to Data, Continuously</h2>
+
+<img data-src="../../assets/images/genai_models/flow_matching_image_path.png" style="width:95.0%" class="r-stretch quarto-figure-center"><p class="caption">Noise turns into an image as a <strong>continuous process</strong> over time <span class="math inline">\(t \in [0, 1]\)</span> (frames interpolated from a photo, not model outputs).</p><div class="fragment">
+<p>A network <span class="math inline">\(v_\theta(\mathbf{x}_t, t)\)</span> predicts a <strong>velocity</strong>: where should <span class="math inline">\(\mathbf{x}_t\)</span> move? <span class="math inline">\(\quad \frac{d\mathbf{x}_t}{dt} = v_\theta(\mathbf{x}_t, t)\)</span></p>
+</div>
+<div class="fragment">
+<p>Note: here <span class="math inline">\(t = 0\)</span> is <strong>noise</strong> and <span class="math inline">\(t = 1\)</span> is <strong>data</strong> (opposite to diffusion).</p>
+</div>
+</section>
+<section id="training-straight-lines" class="slide level2">
+<h2>Training: Straight Lines</h2>
+<div class="fragment">
+<p>Pair a training image <span class="math inline">\(\mathbf{x}_1\)</span> with noise <span class="math inline">\(\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})\)</span>, connect them with a line:</p>
+<p><span class="math display">\[\mathbf{x}_t = (1 - t)\, \mathbf{\epsilon} + t\, \mathbf{x}_1\]</span></p>
+</div>
+<div class="fragment">
+<p>Predict the constant velocity along the line <span class="citation" data-cites="lipman_flow_2023 liu_flow_2022">(<a href="#/references" role="doc-biblioref" onclick="">Lipman et al. 2023</a>; <a href="#/references" role="doc-biblioref" onclick="">Liu et al. 2022</a>)</span>:</p>
+<p><span class="math display">\[\mathcal{L} = \mathbb{E}_{t, \mathbf{x}_1, \mathbf{\epsilon}}\left[\, \| (\mathbf{x}_1 - \mathbf{\epsilon}) - v_\theta(\mathbf{x}_t, t) \|^2 \,\right]\]</span></p>
+</div>
+<div class="fragment">
+<p>Like diffusion: mix image and noise, simple regression loss. But the target is the <strong>direction from noise to data</strong>.</p>
+</div>
+</section>
+<section id="flow-matching-in-1d" class="slide level2">
+<h2>Flow Matching in 1D</h2>
+<img data-src="../../assets/images/genai_models/flow_matching_paths_1d.png" class="r-stretch">
+<div class="fragment">
+<p>Training lines cross; the network learns their <strong>average</strong> direction. The learned trajectories never cross.</p>
+</div>
+</section>
+<section id="sampling" class="slide level2">
+<h2>Sampling</h2>
+<div class="fragment">
+<p>Start from noise <span class="math inline">\(\mathbf{x}_0 \sim \mathcal{N}(\mathbf{0}, \mathbf{I})\)</span> and follow the velocity (Euler steps):</p>
+<p><span class="math display">\[\mathbf{x}_{t + \Delta t} = \mathbf{x}_t + \Delta t \, v_\theta(\mathbf{x}_t, t)\]</span></p>
+</div>
+<div class="fragment">
+<p>No fresh noise is injected: given the initial noise, sampling is <strong>deterministic</strong>.</p>
+</div>
+</section>
+<section id="in-practice" class="slide level2">
+<h2>In Practice</h2>
+<ul>
+<li class="fragment"><strong>Stable Diffusion 3</strong> <span class="citation" data-cites="esser_scaling_2024">(<a href="#/references" role="doc-biblioref" onclick="">Esser et al. 2024</a>)</span>: transformer trained with a flow matching objective in latent space</li>
+<li class="fragment"><strong>FLUX.1 Kontext</strong> <span class="citation" data-cites="labs_flux1_2025">(<a href="#/references" role="doc-biblioref" onclick="">Labs et al. 2025</a>)</span>: flow matching for generation and instruction-based editing</li>
+</ul>
+</section>
+<section id="pros-cons-4" class="slide level2">
+<h2>Pros &amp; Cons</h2>
+<div class="fragment">
+<p><strong>Pros</strong></p>
+<ul>
+<li>High-quality, diverse outputs</li>
+<li>Simple, stable training (regression loss, no simulation)</li>
+<li>Deterministic sampling, often with fewer steps than diffusion</li>
+</ul>
+</div>
+<div class="fragment">
+<p><strong>Cons</strong></p>
+<ul>
+<li>Sampling still needs multiple network evaluations</li>
+<li>High compute cost (training <strong>and</strong> inference)</li>
+<li>Likelihood possible, but expensive</li>
+</ul>
+</div>
+</section></section>
+<section>
 <section id="conditioning-across-families" class="title-slide slide level1 center">
 <h1>Conditioning Across Families</h1>
 
@@ -481,21 +553,15 @@ Marco Willi
 <td>Diffusion</td>
 <td>condition the <strong>denoising network</strong> on <span class="math inline">\(\mathbf{c}\)</span></td>
 </tr>
+<tr class="odd">
+<td>Flow matching</td>
+<td>condition the <strong>velocity network</strong> on <span class="math inline">\(\mathbf{c}\)</span></td>
+</tr>
 </tbody>
 </table>
 <div class="fragment">
 <p>Modern text-to-image and image-editing systems use these mechanisms extensively.</p>
 </div>
-</section>
-<section id="recap" class="slide level2 center">
-<h2>Recap</h2>
-<ul>
-<li class="fragment"><strong>Autoregressive</strong> — exact likelihood, slow sequential sampling</li>
-<li class="fragment"><strong>GAN</strong> — fast &amp; sharp, unstable, mode collapse risk</li>
-<li class="fragment"><strong>VAE</strong> — structured latent, stable, blurrier</li>
-<li class="fragment"><strong>Diffusion</strong> — SOTA quality, iterative &amp; costly</li>
-<li class="fragment"><strong>Conditioning</strong> — applies to <em>all</em> of them</li>
-</ul>
 </section></section>
 <section id="references" class="title-slide slide level1 smaller scrollable">
 <h1>References</h1>
@@ -504,11 +570,23 @@ Marco Willi
 <div id="ref-bansal_cold_2022" class="csl-entry" role="listitem">
 Bansal, Arpit, Eitan Borgnia, Hong-Min Chu, et al. 2022. <em>Cold <span>Diffusion</span>: <span>Inverting</span> <span>Arbitrary</span> <span>Image</span> <span>Transforms</span> <span>Without</span> <span>Noise</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2208.09392">https://doi.org/10.48550/arXiv.2208.09392</a>.
 </div>
+<div id="ref-esser_scaling_2024" class="csl-entry" role="listitem">
+Esser, Patrick, Sumith Kulal, Andreas Blattmann, et al. 2024. <span>“Scaling <span>Rectified</span> <span>Flow</span> <span>Transformers</span> for <span>High</span>-<span>Resolution</span> <span>Image</span> <span>Synthesis</span>.”</span> <em>Forty-First <span>International</span> <span>Conference</span> on <span>Machine</span> <span>Learning</span></em>. <a href="https://openreview.net/forum?id=FPnUhsQJ5B">https://openreview.net/forum?id=FPnUhsQJ5B</a>.
+</div>
 <div id="ref-foster_generative_2023" class="csl-entry" role="listitem">
 Foster, David. 2023. <em>Generative <span>Deep</span> <span>Learning</span></em>. 2nd ed. O’Reilly Media, Inc.
 </div>
 <div id="ref-goodfellow_generative_2014" class="csl-entry" role="listitem">
 Goodfellow, Ian J., Jean Pouget-Abadie, Mehdi Mirza, et al. 2014. <em>Generative <span>Adversarial</span> <span>Networks</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.1406.2661">https://doi.org/10.48550/arXiv.1406.2661</a>.
+</div>
+<div id="ref-labs_flux1_2025" class="csl-entry" role="listitem">
+Labs, Black Forest, Stephen Batifol, Andreas Blattmann, et al. 2025. <em><span>FLUX</span>.1 <span>Kontext</span>: <span>Flow</span> <span>Matching</span> for <span>In</span>-<span>Context</span> <span>Image</span> <span>Generation</span> and <span>Editing</span> in <span>Latent</span> <span>Space</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2506.15742">https://doi.org/10.48550/arXiv.2506.15742</a>.
+</div>
+<div id="ref-lipman_flow_2023" class="csl-entry" role="listitem">
+Lipman, Yaron, Ricky T. Q. Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le. 2023. <em>Flow <span>Matching</span> for <span>Generative</span> <span>Modeling</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2210.02747">https://doi.org/10.48550/arXiv.2210.02747</a>.
+</div>
+<div id="ref-liu_flow_2022" class="csl-entry" role="listitem">
+Liu, Xingchao, Chengyue Gong, and Qiang Liu. 2022. <em>Flow <span>Straight</span> and <span>Fast</span>: <span>Learning</span> to <span>Generate</span> and <span>Transfer</span> <span>Data</span> with <span>Rectified</span> <span>Flow</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2209.03003">https://doi.org/10.48550/arXiv.2209.03003</a>.
 </div>
 <div id="ref-prince_understanding_2023" class="csl-entry" role="listitem">
 Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</span></em>. MIT Press. <a href="https://udlbook.github.io/udlbook/">https://udlbook.github.io/udlbook/</a>.

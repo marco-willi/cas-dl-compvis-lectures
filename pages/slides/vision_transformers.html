@@ -179,15 +179,6 @@ Marco Willi
 </div>
 
 </section>
-<section id="overview" class="slide level2 center">
-<h2>Overview</h2>
-<ul>
-<li>From Sequences to Patches</li>
-<li>Self-Attention on Patches</li>
-<li>CNNs vs.&nbsp;ViTs</li>
-<li>Practical Architecture Selection</li>
-</ul>
-</section>
 <section>
 <section id="motivation" class="title-slide slide level1 center">
 <h1>Motivation</h1>
@@ -239,21 +230,12 @@ Marco Willi
 <h2>ViT Architecture</h2>
 
 <img data-src="../../assets/images/vision_transformers/vit.png" style="width:70.0%" class="r-stretch quarto-figure-center" id="fig-vit-paper"><p class="caption">Source: <span class="citation" data-cites="dosovitskiy_image_2020">Dosovitskiy et al. (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span></p></section>
-<section id="patchifying" class="slide level2">
-<h2>Patchifying</h2>
-
-<img data-src="../../assets/images/vision_transformers/patchify.png" style="width:60.0%" class="r-stretch quarto-figure-center" id="fig-vit-patch-embedding"><p class="caption">
-Figure&nbsp;2: Split the image into fixed-size, non-overlapping patches.
-</p><div class="fragment">
-<p><span class="math inline">\(224 \times 224\)</span> image, <span class="math inline">\(16 \times 16\)</span> patches → <strong>196 patches</strong>.</p>
-</div>
-</section>
 <section id="quiz-patch-size-32-32" class="slide level2">
 <h2>Quiz: Patch Size 32 × 32</h2>
-<p>What changes if patch size goes from 16 to 32?</p>
+<p>A <span class="math inline">\(224 \times 224\)</span> image with <span class="math inline">\(16 \times 16\)</span> patches gives <strong>196 patches</strong>. What changes if patch size goes from 16 to 32?</p>
 <div class="fragment">
 <ul>
-<li>Number of patches: <span class="math inline">\(\frac{224}{32}^2 = \mathbf{49}\)</span> — <strong>4× fewer</strong></li>
+<li>Number of patches: <span class="math inline">\((224/32)^2 = 7^2 = \mathbf{49}\)</span> — <strong>4× fewer</strong></li>
 </ul>
 </div>
 <div class="fragment">
@@ -312,7 +294,13 @@ Figure&nbsp;2: Split the image into fixed-size, non-overlapping patches.
 <section id="what-attention-learns-1" class="slide level2">
 <h2>What Attention Learns</h2>
 
-<img data-src="../../assets/images/vision_transformers/attention_spatial.png" class="r-stretch quarto-figure-center" id="fig-vit-attention-maps2"><p class="caption">Spatial attention maps overlaid on the image.</p></section></section>
+<img data-src="../../assets/images/vision_transformers/attention_spatial.png" class="r-stretch quarto-figure-center" id="fig-vit-attention-maps2"><p class="caption">Spatial attention maps overlaid on the image.</p></section>
+<section id="demo-attention-explorer" class="slide level2">
+<h2>Demo: Attention Explorer</h2>
+<iframe data-src="../../demos/vision_transformers/attention_explorer/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: ViT attention explorer">
+</iframe>
+<p>Click a patch on a cow, then on the sky; step through the layers. <a href="../../demos/vision_transformers/attention_explorer/index.html" target="_blank">Open in new tab</a></p>
+</section></section>
 <section>
 <section id="cnns-vs.-vision-transformers" class="title-slide slide level1 center">
 <h1>CNNs vs.&nbsp;Vision Transformers</h1>
@@ -385,6 +373,13 @@ Figure&nbsp;2: Split the image into fixed-size, non-overlapping patches.
 </ul>
 </div>
 </section>
+<section id="inductive-biases-in-practice" class="slide level2">
+<h2>Inductive Biases in Practice</h2>
+
+<img data-src="../../assets/images/vision_transformers/inductive_biases.png" style="width:100.0%" class="r-stretch"><div class="fragment">
+<p>A trained ViT learns some locality from data: wide in layer 1, more local in middle layers, then increasingly global.</p>
+</div>
+</section>
 <section id="quiz-when-can-locality-hurt" class="slide level2">
 <h2>Quiz: When Can Locality Hurt?</h2>
 <p>Where might a strong local bias become limiting?</p>
@@ -446,21 +441,6 @@ Figure&nbsp;2: Split the image into fixed-size, non-overlapping patches.
 <div class="fragment">
 <p>The patch-embedding approach has become a <strong>universal interface</strong> between visual and language representations.</p>
 </div>
-</section></section>
-<section>
-<section id="summary" class="title-slide slide level1 center">
-<h1>Summary</h1>
-
-</section>
-<section id="key-takeaways" class="slide level2">
-<h2>Key Takeaways</h2>
-<ul>
-<li class="fragment">ViTs treat images as <strong>sequences of patches</strong> — works with the standard transformer encoder</li>
-<li class="fragment"><strong>Global receptive field</strong> from layer 1 — strength <em>and</em> weakness</li>
-<li class="fragment">CNNs: strong priors, data-efficient · ViTs: flexible, scale-hungry</li>
-<li class="fragment"><strong>Hybrids</strong> (FastViT, EfficientViT) combine the strengths</li>
-<li class="fragment">Pretraining + adaptation strategy often matter more than the backbone</li>
-</ul>
 </section></section>
 <section id="references" class="title-slide slide level1 smaller scrollable">
 <h1>References</h1>
