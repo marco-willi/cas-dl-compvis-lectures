@@ -51,11 +51,12 @@ $$
 
 ## Motivation
 
-AI coding assistants have evolved rapidly: from autocompleting a single line, to generating whole functions from a comment, to **agents** that work autonomously on an entire codebase. An agent receives a task in natural language ("fine-tune a DINOv2 model on my camera trap images"), inspects the repository and the data, writes code, runs it, reads error messages and outputs, and iterates.
+AI coding assistants have evolved rapidly: from autocompleting a single line, to generating whole functions from a comment, to **agents** that work autonomously on an entire codebase. An agent might receive a complex task in natural language ("fine-tune a DINOv3 model on my camera trap images"), inspects the repository and the data, writes code, runs it, reads error messages and outputs, and iterates.
 
-For a course like this one, this creates a tension. AI tools can help you learn faster, explore more, and build far more ambitious projects than would otherwise fit into the available time. At the same time, an agent can produce a complete, working project without you having understood any of it. **Accomplishing more does not automatically mean learning more.** Effective use depends on which cognitive activities you delegate and which you keep.
+Using AI tools in education obviously has benefits and risks. AI tools can help learn faster, explore more, and build far more ambitious projects than would otherwise be possible given the available time. At the same time, an agent can produce a complete, working project without any understanding.
+**Accomplishing more does not automatically mean learning more.** Effective use depends on which cognitive activities you delegate and which you keep.
 
-The tools also change **where expertise is needed**. Writing a data loader from scratch becomes less central for many tasks; problem formulation, experimental design, evaluation, and critical interpretation become more important. Implementation skills do not become obsolete: understanding software and model internals remains essential to diagnose subtle failures. As discussed in the [Training Guide](../lectures/practical.qmd), training neural networks **fails silently** — and recognizing such failures requires exactly the knowledge this course aims to build.
+In practice AI tools also change **where expertise is needed**. Writing a data loader from scratch becomes less important; problem formulation, experimental design, evaluation, and critical interpretation however remain cruicial. Implementation skills do not become obsolete: understanding software and model internals is essential to diagnose subtle failures. As discussed in the [Training Guide](../lectures/practical.qmd), training neural networks **fails silently** — and recognizing such failures requires exactly the knowledge this course aims to teach.
 
 This page first focuses on how to use AI for learning, then on how to use coding agents in applied projects, and finally on how to verify results — your own and the agent's.
 
@@ -75,7 +76,7 @@ An agent can support three different activities:
 - **Agentic software engineering**: navigating a repository, making changes, running checks, and iterating toward a goal ("add mixed-precision training and make sure all tests pass").
 - **Agent-assisted scientific work**: helping to formulate hypotheses, design experiments, identify methodological risks, and interpret results ("investigate whether the dataset contains correlated observations and recommend a split").
 
-The same tool can also act as a tutor that explains, asks questions, and gives hints — which leads to the central question of this page: what role should AI play when the goal is learning?
+The same tool can also act as a tutor that explains, asks questions, and gives hints. This leads to the central question: what role should AI play when the goal is learning?
 
 
 ## AI for Learning
@@ -85,9 +86,11 @@ The same tool can also act as a tutor that explains, asks questions, and gives h
 Consider two ways of spending 40 minutes:
 
 - Debugging a tensor shape mismatch in a PyTorch training loop.
-- Investigating why a model trained on randomly split camera trap images fails at a new camera location.
+- Investigating why a model trained on camera trap images fails at a new camera location.
 
-It is tempting to call the first "incidental" and the second "productive" effort. But debugging a shape mismatch can be an excellent learning experience: it reveals how convolutional layers transform spatial dimensions, how batches are represented, or how broadcasting works. Whether effort is productive is **not a property of the task, but of the learning objective**:
+It is tempting to call the first a waste of time and the second a "productive" effort. But debugging a shape mismatch can be a good learning experience: it reveals how convolutional layers transform spatial dimensions, how batches are represented, or how broadcasting works. Personally, I used to write comments in the code to document input and output shapes which helped me understand and debug the flow of data through a neural network.
+
+ Whether effort is productive is **not a property of the task, but of the learning objective**:
 
 | Task | If the learning goal is… | Appropriate AI assistance |
 |---|---|---|
@@ -114,7 +117,7 @@ These are best read as a framework for designing good learning practices — not
 
 Universities worldwide face this tension ([The New York Times, 2026](https://www.nytimes.com/2026/09/15/us/universities-ai-warnings-enthusiasm.html)): AI proficiency is increasingly seen as a professional necessity, yet education aims to develop exactly the reasoning that can be delegated. The same reporting cites a study of 26,000 secondary-school students in which AI adoption raised homework scores by 18% but lowered scores on secure exams by 20% — performing well *with* AI is not the same as having learned. Ohio State's president frames the central question as "What is OK to offload to A.I., and what is not? The answer to that depends on the field and depends on your stage of learning." The University of Sydney's "two-lane approach" responds by combining both: some assessments under secure conditions without AI, others that *require* AI use.
 
-This course follows the same idea: you should learn both to solve selected problems on your own and to solve more ambitious problems effectively with AI.
+My recommendation is to strike a balance: learn both to solve selected problems on your own and to solve more ambitious problems effectively with AI.
 
 ### Choosing the Level of AI Assistance
 

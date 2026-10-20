@@ -20,6 +20,10 @@ project:
     - demos/genai_intro/fid_precision_recall/**
     - "!demos/genai_intro/*/tests/**"
     - "!demos/genai_intro/*/README.md"
+    - demos/genai_models/generative_paths/**
+    - "!demos/genai_models/*/tests/**"
+    - "!demos/genai_models/*/tools/**"
+    - "!demos/genai_models/*/README.md"
     - demos/vision_transformers/attention_explorer/**
     - "!demos/vision_transformers/*/tools/**"
     - "!demos/vision_transformers/*/README.md"

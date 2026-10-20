@@ -15,7 +15,7 @@ $$
 
 After this lecture you should be able to:
 
-- Explain the core mechanisms of the major generative model families: autoregressive models, GANs, VAEs, diffusion models, and flow-based models (normalizing flows and flow matching)
+- Explain the core mechanisms of the major generative model families: autoregressive models, GANs, VAEs, diffusion models, and flow matching
 - Compare the tradeoffs of each family across sampling speed, output quality, coverage, and likelihood computation
 - Identify the key strengths and limitations of each family
 - Understand how conditional generation can be applied within each model family
@@ -64,6 +64,8 @@ How different model families produce a sample. The images are computed from a re
 Generative models share a common goal: $p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})$. They differ in **what they optimize** to reach it and in **how they generate samples**.
 :::
 
+To compare the families on equal terms, each of the following sections contains an interactive demo (in a collapsed box) built on the same toy problem: generating samples of the one-dimensional distribution from the demo in [Generative AI for Computer Vision](genai_intro.qmd#sec-genai-intro-learning), a mixture of two Gaussians with modes at 2 and 7. In one dimension, the complete generative process can be plotted: where a sample starts, how it is transformed, and where it ends. All demos share the same layout, with the value $x$ on the vertical axis and the target distribution on the right. Notably, most of the models in the demos are not trained networks but exact formulas derived from the known target, so that any remaining error comes from the sampling procedure itself. Only the GAN and the VAE are small networks, trained on 1,000 samples.
+
 
 ## Autoregressive Models
 
@@ -106,6 +108,33 @@ Autoregressive ideas are still very important. Many modern multimodal systems us
 
 A prominent example of autoregressive models is PixelCNN [@oord_conditional_2016], which uses masked convolutions to ensure the autoregressive property. More recently, transformer-based autoregressive models (e.g., Parti @yu_scaling_2022) have shown strong performance by modeling images as sequences of discrete tokens. Also, OpenAI's GPT Image / 4o image generation is described by OpenAI as an autoregressive, natively multimodal image generation model, in contrast to DALL·E-style diffusion models. The exact image tokenization and decoder architecture are not publicly specified.
 
+:::: {.callout-note title="Interactive Demo: Autoregressive Generation" collapse="true"}
+
+The following demo applies the factorization above to the toy problem. In the default view, a point $(x_1, x_2)$ is generated in two steps: first $x_1 \sim p(x_1)$, then $x_2 \sim p(x_2 \mid x_1)$. The view *Sequence* generates eight values one after the other, similar to a row of pixels, and *1D: two tokens* writes a single value as two discrete tokens.
+
+```{=html}
+<iframe name="generative-paths-ar" loading="lazy" data-auto-height src="../../demos/genai_models/generative_paths/index.html?family=ar&embed=1" width="100%" height="840" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: autoregressive generation"></iframe>
+```
+
+::: {.callout-note title="Explore the demo" collapse="true"}
+
+1. Drag $x_1$ from the left mode to the right one. How does $p(x_2 \mid x_1)$ change?
+2. Switch to *Sequence* and draw several sequences to the end. After how many values is the direction of a sequence decided? Why can the first value not decide it?
+3. Switch to *1D: two tokens*, open *Advanced* and set the temperature to 0.5. How do the generated values change?
+
+<details>
+<summary>Click for possible answers</summary>
+
+1. Near the left mode, $x_2$ is concentrated in a narrow range; near the right mode, it spreads out. Within each mode, the position of $x_2$ also shifts with $x_1$. The second value is drawn from a distribution that depends on the first.
+2. Typically after three to five values, when the model is more than 85% sure about the direction. All sequences start near the same value, so $x_1$ carries no information about the direction. Early random choices decide where a sequence goes; later values follow them.
+3. Likely tokens become even more likely: each mode gets narrower, and values in the tails and between the modes become rare. The smaller mode does not disappear, since it is also the narrower one.
+
+</details>
+:::
+
+The demo illustrates the defining property of autoregressive models: every value is drawn from a distribution that depends on all previously generated values. The same principle generates a row of pixels, a sequence of image tokens, or a sentence.
+
+::::
 
 ::: {.callout-note title="Pros and Cons of Autoregressive Models"}
 
@@ -155,6 +184,34 @@ In practice, training alternates between:
 
 GAN learning process: As training progresses, the generator's distribution (green) moves closer to the real data distribution (black dots). The discriminator's decision boundary (blue) adapts accordingly. From @foster_generative_2023
 :::
+
+:::: {.callout-note title="Interactive Demo: A GAN in 1D" collapse="true"}
+
+In the following demo, a small GAN has been trained on 1,000 samples of the toy distribution. The generator maps a one-dimensional noise value $z$ to a value $x = g(z)$, so the complete generator can be plotted as a curve. The view *Training dynamics* (under *Advanced*) shows how this curve changes during training.
+
+```{=html}
+<iframe name="generative-paths-gan" loading="lazy" data-auto-height src="../../demos/genai_models/generative_paths/index.html?family=gan&embed=1" width="100%" height="840" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: a GAN in 1D"></iframe>
+```
+
+::: {.callout-note title="Explore the demo" collapse="true"}
+
+1. Drag $z$ slowly through the steep part of the curve. What happens to $x$? Why do few samples end up between the modes?
+2. Open *Advanced*, switch to *Training dynamics* and play the standard run. Does the generator improve steadily?
+3. Switch to the unstable run and look at the training steps 25 to 100. Which failure from the Pros and Cons below appears?
+
+<details>
+<summary>Click for possible answers</summary>
+
+1. $x$ jumps from the left mode to the right one. The steep part maps a small range of $z$ to a wide range of $x$, so few samples land there. Flat parts collect many values of $z$ into a small range of $x$: a mode.
+2. No. The distance to the target fluctuates between training steps; it is lower after 3,000 steps than after 6,000. The final generator finds both modes with roughly the right weights, but squeezes each mode into a few narrow spikes.
+3. Mode collapse: at steps 25 and 50, the generator only produces the right mode. Shortly after, almost all samples have the same value, and the generator then oscillates.
+
+</details>
+:::
+
+Notably, a continuous generator can represent this distribution exactly: flow matching below computes such a mapping. The remaining errors are problems of the adversarial training, not limits of the architecture.
+
+::::
 
 ::: {.callout-note title="Pros and Cons of GANs"}
 
@@ -216,6 +273,34 @@ This balance is key to VAE behavior: the reconstruction loss wants to use the la
 
 VAE latent space: Traversing the latent space produces smooth interpolations between faces, demonstrating the structured representation learned by the model. From @prince_understanding_2023.
 :::
+
+:::: {.callout-note title="Interactive Demo: A VAE in 1D" collapse="true"}
+
+The following demo shows a small VAE with a one-dimensional latent space, trained on 1,000 samples of the toy distribution. For a selected latent value $z$, the decoder outputs a Gaussian distribution $p_{\theta}(x \mid z) = \mathcal{N}(\mu_{\theta}(z), \sigma_{\theta}(z)^2)$, from which $x$ is drawn.
+
+```{=html}
+<iframe name="generative-paths-vae" loading="lazy" data-auto-height src="../../demos/genai_models/generative_paths/index.html?family=vae&embed=1" width="100%" height="860" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: a VAE in 1D"></iframe>
+```
+
+::: {.callout-note title="Explore the demo" collapse="true"}
+
+1. Keep $z$ fixed and press *Sample x again* several times. Where does the variation of $x$ come from?
+2. Drag $z$ through the prior. Which values of $z$ produce the left mode?
+3. Open *Advanced* and turn off the decoder noise. Does the model still produce both modes?
+
+<details>
+<summary>Click for possible answers</summary>
+
+1. From the decoder's own distribution: $z$ only determines the mean $\mu_{\theta}(z)$ and the spread $\sigma_{\theta}(z)$, and $x$ is drawn from $\mathcal{N}(\mu_{\theta}(z), \sigma_{\theta}(z)^2)$.
+2. Values below about $z = -0.3$, i.e. about 38% of the prior. This is close to the weight of the left mode (40%): the decoder splits the prior between the modes according to their weights.
+3. Yes. The decoder mean alone already places the samples in both modes; the decoder noise only adds spread around $\mu_{\theta}(z)$. Blurry VAE images are usually explained by the decoder mean averaging over details it cannot predict, not by this noise.
+
+</details>
+:::
+
+The demo illustrates the two random steps of VAE generation: drawing $z$ from the prior and drawing $x$ from the decoder. The encoder is only needed for training and inference; the view *Inference* (under *Advanced*) shows how it maps an observed $x$ to a distribution $q_{\psi}(z \mid x)$.
+
+::::
 
 ::: {.callout-note title="Pros and Cons of VAEs"}
 
@@ -334,6 +419,34 @@ The denoising network typically uses a **U-Net architecture**—a convolutional 
 U-Net architecture for diffusion models: Downsampling path (left) captures context, upsampling path (right) enables precise localization, and skip connections (horizontal) preserve spatial details. Timestep embeddings condition the network on noise level. From @prince_understanding_2023.
 :::
 
+:::: {.callout-note title="Interactive Demo: Diffusion in 1D" collapse="true"}
+
+The following demo applies the reverse process to the toy problem. Instead of a trained network, it uses the exact denoiser, which can be computed because the target distribution is known. Differences between settings therefore come from the sampling procedure alone.
+
+```{=html}
+<iframe name="generative-paths-diffusion" loading="lazy" data-auto-height src="../../demos/genai_models/generative_paths/index.html?family=diffusion&embed=1" width="100%" height="920" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: diffusion in 1D"></iframe>
+```
+
+::: {.callout-note title="Explore the demo" collapse="true"}
+
+1. Press *Play* and follow the highlighted sample. When does it decide on a mode?
+2. Open *Advanced* and press *Re-run sampler* a few times. The starting noise stays the same. Why does the end point change?
+3. Switch to the deterministic sampler (DDIM) and reduce the number of steps to 2. What happens to the samples?
+
+<details>
+<summary>Click for possible answers</summary>
+
+1. Late: for most of the process, the sample wanders around in the noise. Only in the last third of the process (from about $t = 0.3\,T$) do almost all samples stay on the side of their final mode.
+2. The stochastic sampler (DDPM) adds fresh noise in every step. Even for the same starting noise $\vect{x}_T$, the result is random.
+3. About 40% of the samples end between the two modes. In the first step, the denoiser can only predict the average of the data, which lies between the modes; with only two steps, the samples cannot recover. Diffusion models need many steps for this reason.
+
+</details>
+:::
+
+The demo illustrates why diffusion sampling is slow: the reverse process consists of many small steps, and each step requires one evaluation of the denoising network.
+
+::::
+
 ::: {.callout-note title="Pros and Cons of Diffusion Models"}
 
 **Pros**
@@ -383,48 +496,10 @@ $$ {#eq-genai-models-change-of-variables}
 
 The first term measures how likely the corresponding latent vector is under the Gaussian. The second term, the log-determinant of the Jacobian, accounts for how much the transformation stretches or compresses space: a region that is compressed into a small volume must receive a higher density. The model is trained by maximizing @eq-genai-models-change-of-variables on the training data, i.e. by maximum likelihood.
 
-@fig-genai-models-nf-layers shows a normalizing flow trained on a 2D toy dataset. Each layer bends and stretches the plane a little, until the Gaussian has turned into two moons. Because the mapping is invertible and the stretching is tracked, the model also provides the exact density of every point.
-
-::: {#fig-genai-models-nf-layers}
-
-![]({{< meta params.images_path >}}flow_nf_layers.png)
-
-A normalizing flow with 8 coupling layers, trained on 2D data (two moons). Gaussian samples $\vect{z}$ and a regular grid are pushed through the flow, layer by layer (axes of the intermediate panels are rescaled). Colors encode the position in the Gaussian and show where each region ends up. The grid shows how space is stretched: where grid cells get squeezed together, the density increases. The right panel shows the exact density $p_\theta(\vect{x})$, computed with @eq-genai-models-change-of-variables.
-:::
-
-For a general neural network, computing the determinant of the $d \times d$ Jacobian is prohibitively expensive (for a $256 \times 256 \times 3$ image, $d \approx 200{,}000$). Normalizing flows therefore restrict the architecture to layers that are invertible and have a cheap determinant. A prominent example is the **affine coupling layer** of RealNVP [@dinh_density_2017]. The input is split into two halves $\vect{x}_a$ and $\vect{x}_b$:
-
-$$
-\vect{y}_a = \vect{x}_a, \qquad \vect{y}_b = \vect{x}_b \odot \exp\left(s(\vect{x}_a)\right) + t(\vect{x}_a)
-$$
-
-where $s$ and $t$ are arbitrary neural networks. The layer is easy to invert, since $\vect{x}_a = \vect{y}_a$ is known, and its Jacobian is triangular: the log-determinant is simply the sum of the entries of $s(\vect{x}_a)$. Stacking many such layers, and alternating which half is transformed, yields a flexible model. Glow [@kingma_glow_2018] extended this design and generated realistic faces at high resolution.
-
-::: {#fig-genai-models-coupling-layer}
-
-![]({{< meta params.images_path >}}flow_coupling_layer.svg)
-
-Affine coupling layer. One half $\vect{x}_a$ is copied unchanged. From it, a neural network computes a scale $s$ and a shift $t$, which transform the other half $\vect{x}_b$ element-wise. The networks $s$ and $t$ never have to be inverted, so they can be arbitrarily complex: since $\vect{y}_a = \vect{x}_a$, the same $s$ and $t$ can be recomputed during the inverse pass.
-:::
+The price is a restricted architecture. For a general neural network, computing the determinant of the $d \times d$ Jacobian is prohibitively expensive (for a $256 \times 256 \times 3$ image, $d \approx 200{,}000$). Normalizing flows therefore only use layers that are invertible and have a cheap determinant, such as the coupling layers of RealNVP [@dinh_density_2017] and Glow [@kingma_glow_2018]. Sampling requires a single pass through the network, but the sample quality of normalizing flows lags behind GANs and diffusion models.
 
 ::: {.callout-note title="Key Idea"}
 Normalizing flows trade architectural flexibility for exact likelihoods: every layer must be invertible and have a cheap Jacobian determinant.
-:::
-
-::: {.callout-note title="Pros and Cons of Normalizing Flows"}
-
-**Pros**
-
-- Exact likelihood computation
-- Exact inference: every image has exactly one latent vector
-- Fast sampling: one pass through the network
-
-**Cons**
-
-- Restricted architectures (invertible layers, cheap determinants)
-- Latent space as large as the data
-- Sample quality lags behind GANs and diffusion models
-
 :::
 
 ### Flow Matching {#sec-genai-models-flow-matching}
@@ -498,6 +573,30 @@ Few-step sampling on 2D data. Top: flow matching. The trajectories are curved, s
 </details>
 :::
 
+:::: {.callout-note title="Interactive Demo: Flow Matching in 1D" collapse="true"}
+
+The following demo extends @fig-genai-models-flow-matching-paths with the exact velocity field of the toy problem. In the view *Training*, a probe (circle) shows the training lines that pass close to a point $(x, t)$ and the average of their directions. The view *Sampling* integrates the velocity field.
+
+```{=html}
+<iframe name="generative-paths-fm" loading="lazy" data-auto-height src="../../demos/genai_models/generative_paths/index.html?family=fm&embed=1" width="100%" height="1100" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: flow matching in 1D"></iframe>
+```
+
+::: {.callout-note title="Explore the demo" collapse="true"}
+
+1. In the view *Training*, compare the default probe at $(x, t) = (1.5, 0.3)$ with a point close to the right mode late in time, e.g. $(6, 0.8)$. How do the directions of the training lines differ?
+2. Switch to *Sampling*, open *Advanced* and reduce the number of Euler steps to 1. Where do the samples end up? Compare with @fig-genai-models-flow-matching-steps.
+
+<details>
+<summary>Click for possible answers</summary>
+
+1. At $(1.5, 0.3)$, the directions split into two groups, towards the left and towards the right mode; their average lies in between, a direction that hardly any single training line has. At $(6, 0.8)$, all lines head towards the right mode, and the average points there as well.
+2. All samples end up at the mean of the data ($x \approx 5$), between the modes: at $t = 0$, the average direction of all training lines points to the mean.
+
+</details>
+:::
+
+::::
+
 Flow matching has become the basis of many modern text-to-image models. Stable Diffusion 3 [@esser_scaling_2024] trains a transformer with a rectified flow objective in the latent space of an autoencoder, and FLUX.1 Kontext [@labs_flux1_2025] uses flow matching for both image generation and instruction-based editing.
 
 ::: {.callout-note title="Pros and Cons of Flow Matching"}
@@ -527,6 +626,18 @@ The model families make different trade-offs with respect to the desirable prope
 
 Coarse summary of the desirable properties per model family. Ratings are qualitative and simplify: modern variants narrow many gaps, e.g. distillation for diffusion sampling or large-scale autoregressive models with high fidelity. Disentanglement is omitted, since no family achieves it without additional inductive biases.
 :::
+
+:::: {.callout-note title="Interactive Demo: Where Do the Errors Come From?" collapse="true"}
+
+The following demo compares the final distributions of three settings from the demos above: flow matching with an accurate ODE solver, flow matching with only four Euler steps, and the trained GAN.
+
+```{=html}
+<iframe name="generative-paths-compare" loading="lazy" data-auto-height src="../../demos/genai_models/generative_paths/index.html?view=compare&embed=1" width="100%" height="800" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: comparing final distributions"></iframe>
+```
+
+The three panels show three sources of error. Flow matching with an accurate solver has none, apart from sampling noise. With four steps, the same velocity field is integrated too coarsely: a numerical error. The GAN has only seen 1,000 training samples and was trained with an adversarial objective that is hard to optimize: a learning error. Note that this is not a ranking of the model families, since the exact models know the true target distribution.
+
+::::
 
 ## Conditioning Across Model Families
 
