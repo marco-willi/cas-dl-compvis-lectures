@@ -299,6 +299,90 @@ Success comes from the **gradual, multi-step inversion**, not the noise itself.
 :::
 
 
+# Flow Matching
+
+## From Noise to Data, Continuously
+
+![Noise turns into an image as a **continuous process** over time $t \in [0, 1]$ (frames interpolated from a photo, not model outputs).]({{< meta params.images_path >}}flow_matching_image_path.png){width=95%}
+
+::: {.fragment}
+A network $v_\theta(\vect{x}_t, t)$ predicts a **velocity**: where should $\vect{x}_t$ move?
+$\quad \frac{d\vect{x}_t}{dt} = v_\theta(\vect{x}_t, t)$
+:::
+
+::: {.fragment}
+Note: here $t = 0$ is **noise** and $t = 1$ is **data** (opposite to diffusion).
+:::
+
+
+## Training: Straight Lines
+
+::: {.fragment}
+Pair a training image $\vect{x}_1$ with noise $\vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$, connect them with a line:
+
+$$\vect{x}_t = (1 - t)\, \vect{\epsilon} + t\, \vect{x}_1$$
+:::
+
+::: {.fragment}
+Predict the constant velocity along the line [@lipman_flow_2023; @liu_flow_2022]:
+
+$$\mathcal{L} = \mathbb{E}_{t, \vect{x}_1, \vect{\epsilon}}\left[\, \| (\vect{x}_1 - \vect{\epsilon}) - v_\theta(\vect{x}_t, t) \|^2 \,\right]$$
+:::
+
+::: {.fragment}
+Like diffusion: mix image and noise, simple regression loss. But the target is the **direction from noise to data**.
+:::
+
+
+## Flow Matching in 1D
+
+![]({{< meta params.images_path >}}flow_matching_paths_1d.png){.r-stretch}
+
+::: {.fragment}
+Training lines cross; the network learns their **average** direction. The learned trajectories never cross.
+:::
+
+
+## Sampling
+
+::: {.fragment}
+Start from noise $\vect{x}_0 \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ and follow the velocity (Euler steps):
+
+$$\vect{x}_{t + \Delta t} = \vect{x}_t + \Delta t \, v_\theta(\vect{x}_t, t)$$
+:::
+
+::: {.fragment}
+No fresh noise is injected: given the initial noise, sampling is **deterministic**.
+:::
+
+
+## In Practice
+
+::: {.incremental}
+- **Stable Diffusion 3** [@esser_scaling_2024]: transformer trained with a flow matching objective in latent space
+- **FLUX.1 Kontext** [@labs_flux1_2025]: flow matching for generation and instruction-based editing
+:::
+
+
+## Pros & Cons
+
+::: {.fragment}
+**Pros**
+
+- High-quality, diverse outputs
+- Simple, stable training (regression loss, no simulation)
+- Deterministic sampling, often with fewer steps than diffusion
+:::
+
+::: {.fragment}
+**Cons**
+
+- Sampling still needs multiple network evaluations
+- High compute cost (training **and** inference)
+- Likelihood possible, but expensive
+:::
+
+
 # Conditioning Across Families
 
 ## From $p(\vect{x})$ to $p(\vect{x} \mid \vect{c})$
@@ -325,21 +409,12 @@ $\vect{c}$ — class label, text prompt, source image, mask, layout, depth, refe
 | VAEs | condition encoder and/or decoder on $\vect{c}$ |
 | GANs | condition generator (and often discriminator) on $\vect{c}$ |
 | Diffusion | condition the **denoising network** on $\vect{c}$ |
+| Flow matching | condition the **velocity network** on $\vect{c}$ |
 
 ::: {.fragment}
 Modern text-to-image and image-editing systems use these mechanisms extensively.
 :::
 
-
-## Recap {.center}
-
-::: {.incremental}
-- **Autoregressive** — exact likelihood, slow sequential sampling
-- **GAN** — fast & sharp, unstable, mode collapse risk
-- **VAE** — structured latent, stable, blurrier
-- **Diffusion** — SOTA quality, iterative & costly
-- **Conditioning** — applies to *all* of them
-:::
 
 
 # References

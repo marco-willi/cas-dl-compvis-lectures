@@ -110,7 +110,7 @@ HTML(table_html)
 ![Illustrated are the set of all possible images and the subset of natural images]({{< meta params.images_path >}}set_of_images.png){.r-stretch}
 
 ::: {.fragment}
-Total possible $256\times256$ RGB images: $255^{256 \times 256 \times 3}$ ≈ **infinite**
+Total possible $256\times256$ RGB images: $256^{256 \times 256 \times 3}$ ≈ **infinite**
 :::
 
 ::: {.fragment}
@@ -201,6 +201,15 @@ We focus on **vector-valued** (distributed) representations, not symbolic descri
 
 :::
 
+## One Answer: DINOv3
+
+![DINOv3 embeddings of the example images, reduced to 2D with t-SNE.]({{< meta params.images_path >}}tsne_dinov3.png){width=70%}
+
+::: {.fragment}
+Augmented copies and other elephants land close together; the car is far away.
+:::
+
+
 ## What Makes Good Representations?
 
 
@@ -245,8 +254,7 @@ We focus on **vector-valued** (distributed) representations, not symbolic descri
 ![]({{< meta params.images_path >}}supervised_learning_representations.png)
 
 ::: {.fragment}
-- Encoder + classifier trained with labeled data
-- Train on labeled data (e.g., ImageNet 1000 classes)
+- Encoder + classifier trained on labeled data (e.g., ImageNet, 1000 classes)
 - Cross-entropy loss on human-provided labels
 - Penultimate layer embeddings = transferable features
 :::
@@ -287,7 +295,7 @@ Shared embedding space for images and text
 ![From @he_masked_2021]({{< meta params.images_path >}}masked_auto_encoder.png)
 
 ::: {.fragment}
-- Mask 75% of image patches random
+- Mask 75% of image patches at random
 - Encode only visible patches (efficient!)
 - Decode with mask tokens inserted and reconstruct original pixels
 :::
@@ -317,10 +325,9 @@ Shared embedding space for images and text
 ![From @caron_emerging_2021]({{< meta params.images_path >}}dino_principle.png)
 
 ::: {.fragment}
-- No explicit negatives needed
-- Works with smaller batches
-- Emergent semantic clustering
-- Produces high-quality local features (patch tokens)
+- A **student** sees different crops of an image and must match the **teacher** (a slow average of the student)
+- Different views of the same image → same output: nuisance changes are ignored
+- Centering and sharpening keep outputs from becoming identical for all images
 :::
 
 ##  Self-Supervised Learning: Self-Distillation
@@ -401,50 +408,6 @@ What are the consequences if model training uses random left-right flips?
 :::
 
 
-## Comparisons
-
-![]({{< meta params.images_path >}}images_overview.png){.r-stretch}
-
-::: {.panel-tabset #fig-similarity-comparison-models}
-
-### Pixel Space
-
-::: {#fig-rl-similarity-pixel-space}
-
-![]({{< meta params.images_path >}}similarity_pixel_space.png){fig-alt="Pixel-space similarity matrix" width=600}
-
-Raw pixel-level similarity fails to capture semantic relationships.
-:::
-
-### ResNet-50
-
-::: {#fig-rl-similarity-resnet}
-
-![]({{< meta params.images_path >}}similarity_resnet50.png){fig-alt="ResNet-50 supervised representation similarity" width=600}
-
-Supervised CNN representations group semantically similar images.
-:::
-
-### CLIP
-
-::: {#fig-rl-similarity-clip}
-
-![]({{< meta params.images_path >}}similarity_clip.png){fig-alt="CLIP multimodal representation similarity" width=600}
-
-Language-aligned embeddings from CLIP show text-driven semantic structure.
-:::
-
-### DINOv3
-
-::: {#fig-rl-similarity-dinov3}
-
-![]({{< meta params.images_path >}}similarity_dinov3.png){fig-alt="DINOv3 self-supervised representation similarity" width=600}
-
-Self-distilled DINOv3 features reveal fine-grained semantic clusters.
-:::
-
-:::
-<!--
 ## Pixel Space Similarity
 
 ![]({{< meta params.images_path >}}similarity_pixel_space.png)
@@ -475,7 +438,8 @@ Strong vision-language alignment, robust to appearance changes
 
 ::: {.fragment}
 Best semantic discrimination, excellent invariance to nuisance factors
-::: -->
+:::
+
 
 ## Comparison Summary
 
@@ -533,6 +497,15 @@ $$
 
 ::: {.fragment}
 No classifier. No labels. No fine-tuning.
+:::
+
+
+## Image Search: Example
+
+![DINOv3 embeddings of furniture photos ([ABO](https://amazon-berkeley-objects.s3.amazonaws.com/index.html)) in 2D; query in black, neighbours in red.]({{< meta params.images_path >}}image_search_map_dinov3.png){width=75%}
+
+::: {.fragment}
+Neighbours share shape and style (hairpin legs), without any labels.
 :::
 
 

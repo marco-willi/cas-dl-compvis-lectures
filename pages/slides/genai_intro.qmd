@@ -343,7 +343,7 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
 
 
 
-# Learning Generative Models
+# How Generative Models Learn
 
 ## The Objective
 
@@ -351,6 +351,16 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
 
 ::: {.fragment}
 Generated $\hat{\vect{x}}$ should have **high probability** under the real data distribution $p_{\text{data}}(\vect{x})$.
+:::
+
+
+## Fidelity and Coverage
+
+![]({{< meta params.images_path >}}intro_figures/fidelity_coverage.svg){width=90%}
+
+::: {.incremental}
+- **Fidelity**: samples look like real data
+- **Coverage**: samples show the full variety of real data, in the right proportions
 :::
 
 
@@ -408,6 +418,13 @@ The model adapts to place high probability where training data lies.
 :::
 
 
+## Demo: Learning a 1D Distribution
+
+<iframe data-src="../../demos/genai_intro/distribution_fitting/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: learning a 1D distribution"></iframe>
+
+Can a single Gaussian reach high fidelity *and* high coverage? [Open in new tab](../../demos/genai_intro/distribution_fitting/index.html){target="_blank"}
+
+
 ## Density ≠ Generation
 
 ::: {.fragment}
@@ -419,63 +436,59 @@ To **generate**, we additionally need a sampling mechanism.
 :::
 
 
-# Desirable Properties
+# Properties and Trade-offs
 
-## 1. Efficient Sampling
+## Efficient Sampling
 
-::: {.incremental}
-- Generate new samples quickly
-- Critical for real-time and large-scale use
-- **Excel:** GANs, normalizing flows (single forward pass)
-- **Struggle:** autoregressive, diffusion (sequential steps)
+![]({{< meta params.images_path >}}intro_figures/sampling_cost.svg){width=80%}
+
+::: {.fragment}
+GANs and VAEs: one forward pass. Diffusion and flow matching: tens of steps. Autoregressive: one step per token.
 :::
 
 
-## 2. High-Quality Sampling
+## Coverage: Mode Collapse
 
-::: {.incremental}
-- Realistic, detailed, indistinguishable from real
-- **Excel:** modern GANs, diffusion, large autoregressive models
-- Often paid for with compute or training complexity
+![]({{< meta params.images_path >}}intro_figures/coverage_mode_collapse.svg){width=90%}
+
+::: {.fragment}
+Realistic samples, but only of a few modes: a well-known problem of GANs.
 :::
 
 
-## 3. Coverage (Diversity)
+## Fidelity vs. Coverage: Guidance
 
-::: {.incremental}
-- Generate the full diversity of training data
-- **Failure mode:** mode collapse (GANs) — limited variety
-- **Excel:** VAEs (often at the cost of sample quality)
+![]({{< meta params.images_path >}}intro_figures/guidance_tradeoff.svg){width=90%}
+
+::: {.fragment}
+Techniques that increase fidelity often reduce coverage, e.g. guidance in diffusion models [@ho_classifier-free_2022].
 :::
 
 
-## 4. Well-Behaved Latent Space
+## Smooth Latent Space
 
-::: {.incremental}
-- Smooth, meaningful structure
-- Similar $\vect{z}$ → similar outputs
-- Enables interpolation and controlled generation
-- **Excel:** VAEs (explicit training objective)
+![VAE with a 2D latent space, trained on MNIST.]({{< meta params.images_path >}}intro_figures/vae_latent_grid.png){width=40%}
+
+::: {.fragment}
+Similar $\vect{z}$ → similar outputs: interpolation morphs one digit into another.
 :::
 
 
-## 5. Disentangled Latent Space
+## Disentangled Latent Space
 
-::: {.incremental}
-- Different dimensions → independent factors
-- e.g. separate controls for pose, lighting, color
-- Enables fine-grained, interpretable control
-- Hard without explicit architectural design
+![]({{< meta params.images_path >}}intro_figures/disentanglement.svg){width=85%}
+
+::: {.fragment}
+Not required for control: modern models are controlled through conditioning (text, masks, reference images).
 :::
 
 
-## 6. Efficient Likelihood Computation
+## Likelihood Computation
 
-::: {.incremental}
-- Evaluate $p_{\theta}(\vect{x})$ for any sample
-- Enables direct optimization, anomaly detection, model comparison
-- **Have:** autoregressive, flows, VAEs (approx)
-- **Lack:** GANs, many diffusion models
+![]({{< meta params.images_path >}}intro_figures/likelihood_explicit_implicit.svg){width=85%}
+
+::: {.fragment}
+**Exact:** autoregressive, normalizing flows. **Bound or expensive:** VAEs, diffusion, flow matching. **None:** GANs.
 :::
 
 
@@ -491,7 +504,7 @@ Usually no single correct output. Many outputs may be valid for one input.
 ::: {.fragment}
 Better question than *"is it correct?"*:
 
-> Is the generated image **plausible, diverse, useful, and faithful** to the condition?
+> Are the generated images **realistic and varied**, do they **follow the condition**, and are they **useful**?
 :::
 
 
@@ -507,7 +520,7 @@ High likelihood → model assigns high probability to real data.
 
 ::: {.incremental}
 - Not available for GANs (no explicit density)
-- High likelihood ≠ perceptually good samples
+- Likelihood and sample quality are largely independent [@theis_note_2016]
 :::
 
 
@@ -524,22 +537,32 @@ High likelihood → model assigns high probability to real data.
 Most meaningful for visual quality — but slow, subjective, expensive.
 :::
 
+::: {.fragment}
+**Preference leaderboards**: blind pairwise comparisons, aggregated into a ranking.
+:::
 
-## Distribution-Level Metrics
 
-![]({{< meta params.images_path >}}evaluating_genai.png){.r-stretch}
+## Distribution-Level Metrics: FID
+
+![]({{< meta params.images_path >}}intro_figures/fid_pipeline.svg){width=75%}
 
 ::: {.fragment}
-**Inception Score (IS)** [@salimans_improved_2016]: classifier-based — confident per-image + diverse across set.
+**FID** [@heusel_gans_2018]: Fréchet distance between Gaussians fitted to Inception features of real and generated images. Lower is better.
 :::
+
+
+## Demo: FID, Precision and Recall
+
+<iframe data-src="../../demos/genai_intro/fid_precision_recall/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: FID, precision and recall"></iframe>
+
+Compare *Shifted* and *Mode collapse*: which metric tells them apart? [Open in new tab](../../demos/genai_intro/fid_precision_recall/index.html){target="_blank"}
 
 
 ## Limitations of Distribution Metrics
 
 ::: {.incremental}
-- Depend on a pretrained classifier
-- Most meaningful for class-balanced data (e.g. ImageNet)
-- Don't compare generated images directly to real images
+- One FID value does not say whether fidelity or coverage is the problem: **precision** and **recall** [@kynkaanniemi_improved_2019] separate them
+- FID depends on the number of samples and on ImageNet features
 - Don't evaluate prompt adherence or input fidelity
 - Can hide failures on rare classes, spatial relations, text rendering
 :::

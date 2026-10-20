@@ -91,6 +91,12 @@ demos/downstream_adaptation/*
 demos/genai_intro/*
 !demos/genai_intro/distribution_fitting/
 !demos/genai_intro/fid_precision_recall/
+!demos/genai_models/
+demos/genai_models/*
+!demos/genai_models/generative_paths/
+!demos/genai_models/
+demos/genai_models/*
+!demos/genai_models/generative_paths/
 !demos/vision_transformers/
 demos/vision_transformers/*
 !demos/vision_transformers/attention_explorer/

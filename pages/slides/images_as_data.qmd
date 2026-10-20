@@ -24,7 +24,18 @@ Imbalance, noisy labels, hidden shortcuts, leakage, wrong tensor assumptions.
 # Image Representations
 
 
-## Images as Tensors
+## Images as Tensors (1/2)
+
+::: {#fig-iad-tensor-anatomy}
+![]({{< meta params.images_path >}}tensor_anatomy.png){width=100%}
+
+An image as a tensor of shape **H × W × C**.
+:::
+
+
+
+
+## Images as Tensors (2/2)
 
 ::: {#fig-iad-tensor-anatomy}
 ![]({{< meta params.images_path >}}tensor_anatomy.png){width=55%}
@@ -62,7 +73,7 @@ RGB (3 channels) vs. grayscale (1 channel).
 :::
 
 ::: {.fragment}
-For ordinary 2-D images, only **C** changes , the tensor structure stays H × W × C.
+For ordinary 2-D images, only **C** changes; the tensor structure stays H × W × C.
 For volumes or time series, we add additional axes.
 :::
 
@@ -88,7 +99,7 @@ What is the tensor shape?
 :::
 
 ::: {.fragment}
-The batch dimension is always **first** in PyTorch, enables parallel GPU computation.
+The batch dimension is always **first** in PyTorch; it enables parallel GPU computation.
 :::
 
 
@@ -129,14 +140,14 @@ Is it still H × W × C?
 
 How would an MRI scan be represented?
 
-::: {#fig-iad-mri}
+::: {#fig-iad-mri-volume}
 ![]({{< meta params.images_path >}}mri.png){width=100%}
 
 MRI scans.
 :::
 
 ::: {.fragment}
-The H × W × C abstraction generalizes, sequences/depth become extra axes.
+The H × W × C abstraction generalizes: sequences and depth become extra axes.
 :::
 
 
@@ -164,20 +175,20 @@ The H × W × C abstraction generalizes, sequences/depth become extra axes.
 :::
 
 ::: {.fragment}
-**Question**: What makes this dataset difficult for image classification?
+**Question**: What could be the challenge for classification, looking at these examples?
 :::
 
 
 ## Class Imbalance
 
 ::: {#fig-iad-class-distribution}
-![]({{< meta params.images_path >}}cam_trap_dist2.jpg)
+![]({{< meta params.images_path >}}kga_class_distribution.png){width=80%}
 
-Class imbalances are common in real-world datsets.
+Captures per class in the Kalahari dataset (log scale).
 :::
 
 ::: {.fragment}
-**Question**: What makes this dataset challenging for image classification?
+74% of captures are empty; many species appear only once.
 :::
 
 
@@ -210,7 +221,7 @@ Same animal, different background: different prediction. The **background**, not
 
 ::: {.incremental}
 - **Geographic**: limited regional diversity (architecture, vegetation, clothing)
-- **Selection**:internet-sourced images overrepresent certain demographics/styles
+- **Selection**: internet-sourced images overrepresent certain demographics/styles
 - **Watermark / source artifacts**: visual quirks correlate with labels
 :::
 
@@ -249,16 +260,18 @@ Same animal, different background: different prediction. The **background**, not
 
 
 
-## Data Leakage {.center}
+## Data Leakage
 
-Data leakage means the model receives information during training that would not be available at deployment.
+The model sees information during training that it will not have at deployment.
 
-Result: validation/test metrics look good, but real-world performance collapses.
+::: {#fig-iad-leakage-gap}
+![]({{< meta params.images_path >}}kga_leakage_gap.png){width=50%}
 
-::: {.incremental}
-- **Near-duplicates** across splits (camera-trap bursts, video frames)
-- **Same subject / location** in multiple splits
-- **Preprocessing stats** computed over the *full* dataset (not just training)
+Same images and model, different splits: the score drops as the split gets stricter.
+:::
+
+::: {.fragment}
+Causes: near-duplicates, same site in train and test, statistics computed on all data.
 :::
 
 
@@ -283,23 +296,6 @@ The model may learn patient-specific cues instead of lesion-specific cues.
 **Fix:** split at the **patient** level.
 :::
 
-
-# Summary {.center}
-
-
-## Key Takeaways
-
-::: {.incremental}
-- Images are tensors: usually H × W × C, but volumes/time series add axes.
-- Shape conventions matter: NumPy/PIL use H × W × C; PyTorch uses C × H × W.
-- Resolution is a trade-off between detail, memory, and compute.
-- Dataset quality matters: imbalance, noisy labels, hidden bias, and leakage can dominate performance.
-- Splits must respect the data structure: group related samples together.
-:::
-
-::: {.fragment}
-**The model can only be as good as the data it learns from.**
-:::
 
 
 # References

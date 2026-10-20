@@ -11,14 +11,6 @@ $$
 :::
 
 
-## Overview {.center}
-
-- Motivation
-- The adaptation hierarchy
-- Choosing a strategy
-- Worked scenarios
-
-
 # Motivation
 
 
@@ -39,66 +31,97 @@ You have a task with **limited labeled data**.
 
 
 
-## Three Tensions {.center}
+## What Decides? {.center}
 
 ::: {.incremental}
-- **Labeled data**: how much supervision do you have?
-- **Domain similarity**: how close is the target task to pretraining?
-- **Compute budget**: how much training and tuning can you afford?
+- **Representation**: what does the pretrained encoder already contain?
+- **Task**: what does the downstream task require (vector, spatial features, similarity)?
+- **Data**: what can the target data support (labels, domain shift)?
 :::
 
 ::: {.fragment}
-These factors determine whether you should freeze, adapt, or fine-tune.
+A larger training set helps, but it is not the only deciding factor.
 :::
 
 
-# The Adaptation Hierarchy
+# Adaptation Strategies
 
 
-## Five Strategies, One Hierarchy
+## Five Strategies
 
-::: {#fig-da-hierarchy}
-![]({{< meta params.images_path >}}adaptation_hierarchy.png){width=80%}
+::: {#fig-da-strategies}
 
-Adaptation strategies.
+```{mermaid}
+%%| echo: false
+flowchart LR
+    subgraph K["<div style='width:10em'>k-NN</div>"]
+        direction TB
+        K1["<div style='width:8em'>Early blocks<br/>frozen</div>"] --> K2["<div style='width:8em'>Later blocks<br/>frozen</div>"] --> K3["<div style='width:8em'>k-NN on features<br/>no training</div>"]
+    end
+    subgraph A["<div style='width:10em'>Linear probe</div>"]
+        direction TB
+        A1["<div style='width:8em'>Early blocks<br/>frozen</div>"] --> A2["<div style='width:8em'>Later blocks<br/>frozen</div>"] --> A3["<div style='width:8em'>Head<br/>trainable</div>"]
+    end
+    subgraph B["<div style='width:10em'>Partial fine-tuning</div>"]
+        direction TB
+        B1["<div style='width:8em'>Early blocks<br/>frozen</div>"] --> B2["<div style='width:8em'>Later blocks<br/>trainable</div>"] --> B3["<div style='width:8em'>Head<br/>trainable</div>"]
+    end
+    subgraph D["<div style='width:10em'>LoRA</div>"]
+        direction TB
+        D1["<div style='width:8em'>Early blocks<br/>frozen + LoRA</div>"] --> D2["<div style='width:8em'>Later blocks<br/>frozen + LoRA</div>"] --> D3["<div style='width:8em'>Head<br/>trainable</div>"]
+    end
+    subgraph C["<div style='width:10em'>Full fine-tuning</div>"]
+        direction TB
+        C1["<div style='width:8em'>Early blocks<br/>trainable</div>"] --> C2["<div style='width:8em'>Later blocks<br/>trainable</div>"] --> C3["<div style='width:8em'>Head<br/>trainable</div>"]
+    end
+    K ~~~ A ~~~ B ~~~ D ~~~ C
+    classDef frozen fill:#dbeafe,stroke:#2563eb,color:#172554
+    classDef train fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+    classDef mixed fill:#dbeafe,stroke:#ea580c,color:#172554,stroke-width:2px,stroke-dasharray:6 3
+    classDef none fill:#ffffff,stroke:#6b7280,color:#1f2328,stroke-dasharray:6 3
+    classDef panel fill:#f6f7f9,stroke:#d5d9e0,color:#1f2328
+    class K1,K2,A1,A2,B1 frozen
+    class A3,B2,B3,C1,C2,C3,D3 train
+    class D1,D2 mixed
+    class K3 none
+    class K,A,B,C,D panel
+```
+
+Blue: frozen, orange: trainable, dashed orange: frozen + trainable low-rank update.
 :::
 
 ::: {.fragment .highlight-red}
-**Start simple. Descend only when performance demands it.**
+**Options to compare, not a fixed ranking: start with frozen features.**
 :::
 
 
 ## At a Glance
 
-| Strategy | Trainable Parameters | When to Use |
-|---|---:|---|
-| k-NN | 0 | Quick representation-quality check |
-| Linear probe | Head only | Good embeddings, small dataset |
-| LoRA / adapters | Few parameters | Moderate data or mild domain shift |
-| Partial fine-tune | Top layers + head | Larger data or stronger domain shift |
-| Full fine-tune | All weights | Large data and strong task mismatch |
+| Strategy | What is learned? | Key property |
+|---|---|---|
+| k-NN | Nothing; uses labeled reference images | Fast test of feature quality |
+| Linear probe | A small prediction head | Frozen encoder; features can be cached |
+| Partial fine-tuning | Selected encoder layers + head | Encoder becomes task-specific |
+| Full fine-tuning | Entire encoder + head | Maximum flexibility; higher training cost |
+| LoRA | Low-rank updates to selected weights + head | Few trainable parameters, but backprop still passes through the encoder |
 
-: {tbl-colwidths="[22,23,55]"}
+: {tbl-colwidths="[20,38,42]"}
 
 
 # The Strategies
 
 
-## k-NN — No Training
+## k-NN — No Gradient-Based Training
 
 ::: {.incremental}
-- Embed labeled images with a **frozen encoder**
-- Store embeddings and labels
-- For a new image, retrieve nearest neighbours in embedding space
-- Predict by majority vote or similarity-weighted vote
+- Embed **labeled** reference images with a **frozen encoder**
+- For a new image, retrieve the $k$ closest reference embeddings
+- Predict from their labels (majority or similarity-weighted vote)
+- Hyperparameters: $k$, distance metric, weighting rule
 :::
 
 ::: {.fragment}
 **What it tells you:** whether the pretrained representation already separates your target data.
-:::
-
-::: {.fragment}
-If k-NN works well, further adaptation may be unnecessary.
 :::
 
 
@@ -106,112 +129,122 @@ If k-NN works well, further adaptation may be unnecessary.
 
 ::: {.incremental}
 - Keep the pretrained encoder frozen
-- Extract one embedding per image
-- Train only a small classification head
-- Usually a single linear layer: $\text{Linear}(d, K)$
+- Train only a linear classifier on the embeddings: $\text{Linear}(d, K)$
+- **Embeddings can be cached**: the encoder does not run every epoch
 :::
 
 ::: {.fragment}
-If a linear boundary works, the embedding already contains task-relevant structure.
+Good performance: the labels are **linearly accessible** from the representation.
 :::
 
 ::: {.fragment}
-Cheap, stable, and a strong baseline for limited labeled data.
+A poor result does not prove the features are useless: the information may be nonlinear, or the feature extraction unsuitable.
 :::
 
-## LoRA / Adapters — Parameter-Efficient Adaptation
-
-::: {.incremental}
-- Insert small trainable modules into the pretrained model
-- Keep most original weights frozen
-- Train only adapters and the task head
-- Useful when a linear probe is not flexible enough
-:::
-
-::: {.fragment}
-Good default for moderate data or mild domain shift.
-:::
 
 ## Partial Fine-Tuning
 
 ::: {.incremental}
-- Freeze lower layers
-- Unfreeze the last few encoder blocks and the task head
-- Lower layers retain generic features
-- Higher layers adapt to the target task
+- Freeze most of the backbone
+- Unfreeze selected blocks (e.g. the last two) and the task head
+- The representation can change, with fewer trainable parameters
 :::
 
 ::: {.fragment}
-Useful when the target task needs more task-specific high-level features.
+Which layers to tune depends on architecture, pretraining objective and task: **an experimental choice**.
 :::
 
-## Full Fine-Tuning — Last Resort
+
+## Full Fine-Tuning
 
 ::: {.incremental}
-- Train all model weights
+- Update the encoder and the new head jointly
 - Most flexible strategy
-- Highest compute cost
-- Highest overfitting risk with small datasets
+- More training memory, higher risk of overfitting or losing pretrained behavior
+- Use a smaller learning rate for the encoder than for the head
 :::
 
 ::: {.fragment}
-Use only when simpler approaches plateau and data + compute justify it.
+**Not inherently a last resort**: fine-tuning a small model can work with modest data. Measure on held-out data.
 :::
 
-# Choosing a Strategy
 
+## LoRA — Low-Rank Updates
 
-## Dataset Size × Domain
-
-| Dataset Size | Similar to Pretraining Data | Different Domain |
-|---|---|---|
-| < 500 | k-NN / linear probe | k-NN, then LoRA if needed |
-| 500–5K | Linear probe / LoRA | LoRA / partial FT |
-| 5K–50K | Partial FT | Partial / full FT |
-| > 50K | Full FT possible | Full FT possible |
-
-: {tbl-colwidths="[20,40,40]"}
-
-::: {.fragment}
-The stronger the domain shift, the more adaptation you usually need.
-:::
-
-## Practical Rule of Thumb
+$$
+W' = W + \frac{\alpha}{r}BA, \qquad
+B \in \mathbb{R}^{d_{out}\times r},\quad
+A \in \mathbb{R}^{r\times d_{in}}
+$$
 
 ::: {.incremental}
-1. Start with **k-NN** to test representation quality
-2. Try a **linear probe** as the first trained baseline
-3. Use **LoRA / adapters** when the head is not flexible enough
-4. Use **partial fine-tuning** for stronger domain shift
-5. Use **full fine-tuning** only when data and compute justify it
+- $W$ stays frozen; only $A$, $B$ and the head are trained
+- $r(d_{in}+d_{out})$ instead of $d_{out}d_{in}$ parameters; rank $r$ controls capacity
+- Unlike adapters, LoRA inserts no new layer: it changes existing weights
+- Backprop still passes through the whole encoder
+:::
+
+
+## Demo: LoRA Rank
+
+<div style="height: 835px;">
+<iframe data-src="../../demos/downstream_adaptation/lora_rank_explorer/index.html" width="1600" height="790" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.05); transform-origin: top left;" title="Interactive demo: LoRA rank explorer"></iframe>
+</div>
+
+At which rank does LoRA train as many parameters as full fine-tuning? [Open in new tab](../../demos/downstream_adaptation/lora_rank_explorer/index.html){target="_blank"}
+
+
+# Choosing an Adaptation Strategy
+
+
+## What Limits Your Baseline?
+
+| Question | What to try or check |
+|---|---|
+| Are the features already useful? | Compare k-NN and linear probe |
+| Is the encoder right for this domain? | Compare general, vision-language and domain-specific encoders |
+| Does the task need spatial predictions? | Patch / feature-map outputs and a decoder or detection head |
+| Does the probe underfit? | More capable head, partial FT, LoRA or full FT |
+| Is the model overfitting? | Validation design, regularization, augmentation, less capacity |
+| Is training expensive? | Cache frozen features, smaller backbone, parameter-efficient methods |
+| Is inference expensive? | Backbone, input size, precision; freezing alone does not help |
+
+: {tbl-colwidths="[40,60]"}
+
+::: {.fragment}
+Establish a reliable baseline, then investigate what limits it.
+:::
+
+
+## Three Questions Before Fine-Tuning
+
+::: {.incremental}
+1. Are the pretrained features already useful for the target task?
+2. Does the task require an image-level vector, spatial features, or a similarity embedding?
+3. Does updating the encoder improve **held-out** performance enough to justify the cost?
 :::
 
 ::: {.fragment}
-Each step should improve enough to justify the added complexity.
+There is **no universal dataset-size threshold** that determines the best strategy.
 :::
 
 
 # Worked Scenarios
 
 
-## Scenario 1: Small Similar Dataset
+## Scenario 1: Camera-Trap Species
 
 **Scenario**
 
-- 300 labeled product images
-- Classes: shoes, bags, jackets, furniture
-- Similar to common web images
+- 500 labeled camera-trap images
+- Task: species classification
 
 ::: {.fragment}
-Recommended start: **k-NN or linear probe**
+Recommended start: **global embeddings + k-NN or linear probe**, with a split that separates cameras or sites.
 :::
 
 ::: {.fragment}
-Why: small dataset, similar domain, pretrained visual features are likely useful.
-:::
-
-::: {.fragment}
-Avoid full fine-tuning unless simple baselines clearly fail.
+Compare fine-tuning if the baseline is insufficient. In the lecture's experiment on unseen sites, frozen features reach 0.57 macro-F1, adapted backbones 0.85–0.87.
 :::
 
 
@@ -220,53 +253,34 @@ Avoid full fine-tuning unless simple baselines clearly fail.
 **Scenario**
 
 - 800 labeled chest X-rays
-- Task: pneumonia classification
-- Backbone: DINOv2 pretrained on natural images
+- Two encoders: a general-purpose DINO model and a medical-image model
 
 ::: {.fragment}
-Recommended start: **linear probe**, then **LoRA** if needed.
+Recommended start: **linear probe** (optionally k-NN) on both encoders, with a **patient-level split**.
 :::
 
 ::: {.fragment}
-Why: small dataset, but strong domain shift.
+Evaluate AUROC and sensitivity. If both frozen baselines are inadequate, compare fine-tuning starting from the better encoder.
 :::
 
 ::: {.fragment}
-Full fine-tuning is risky with 800 images unless strongly regularized.
+The number of images alone does not decide the method.
 :::
 
 
-## Scenario 3: Larger Domain-Specific Dataset
+## Scenario 3: Land-Cover Segmentation
 
 **Scenario**
 
-- 30,000 labeled satellite images
-- Strong domain shift from natural images
+- Satellite images with pixel-level annotations
+- Strong domain shift from ground-level photos
 
 ::: {.fragment}
-Recommended start: **LoRA or partial fine-tuning**
+Recommended start: **spatial features + a trainable segmentation decoder** on a frozen encoder.
 :::
 
 ::: {.fragment}
-Why: enough data to adapt more parameters, but full fine-tuning should still be justified by validation.
-:::
-
-
-# Summary
-
-
-## Key Takeaways
-
-::: {.incremental}
-- Adaptation is a hierarchy: **k-NN → linear probe → LoRA → partial FT → full FT**
-- Start with the simplest method that answers the question
-- With little data, keep most of the encoder frozen
-- Larger domain shift usually requires more adaptation
-- Full fine-tuning is powerful, but data-hungry and easier to overfit
-:::
-
-::: {.fragment}
-**Final rule:** start frozen, train more only when the data demands it.
+Then evaluate encoder fine-tuning. A global embedding loses the spatial detail this task needs.
 :::
 
 

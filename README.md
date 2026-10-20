@@ -1,6 +1,6 @@
 # Computer Vision with Deep Learning
 
-Lecture notes, slides, and materials for **Computer Vision mit Deep Learning** — part of the [CAS Deep Learning](https://www.fhnw.ch/de/weiterbildung/informatik/cas-deep-learning) at FHNW. Built with [Quarto](https://quarto.org/) and deployed to GitHub Pages.
+Lecture notes, slides, and materials for **Computer Vision mit Deep Learning** — part of the [CAS Agentic AI & Deep Learning](https://www.fhnw.ch/de/weiterbildung/informatik/cas-deep-learning) at FHNW. Built with [Quarto](https://quarto.org/) and deployed to GitHub Pages.
 
 [Module description](https://www.fhnw.ch/de/weiterbildung/informatik/fachvertiefungsmodule-data-science/computer-vision-mit-deep-learning)
 
