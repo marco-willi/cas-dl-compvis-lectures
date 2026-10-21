@@ -17,7 +17,7 @@ $$
 
 ## Exercises Notebooks
 
-Exercises Day 1 and Day 2 can be found here: [Link](https://github.com/marco-willi/cas-dl-compvis-exercises-hs2026/tree/main)
+Exercises can be found here: [Link](https://github.com/marco-willi/cas-dl-compvis-exercises/tree/main)
 
 
 
@@ -65,6 +65,23 @@ jackalblackbacked. Heavily imbalanced — `empty` accounts for ~78% of the
 
 
 Source: [LILA BC](https://lila.science/)
+
+## Ohio Small Animals
+
+A 16-species subset of the Ohio Small Animals camera-trap dataset (snakes,
+small mammals, lizards and ground birds). The cameras look straight down into
+a bucket that animals are guided into by drift fences. Train, val and test
+come from different sites, so the test score measures how well a model works
+at unseen sites. Classes are imbalanced (133–800 training images) and many
+images are night-time infrared (grayscale).
+
+- **Source:** [LILA BC](https://lila.science/datasets/ohio-small-animals/), Hugging Face (<https://huggingface.co/datasets/marco-willi/camera-trap-osu-small-animals>)
+- **License:** Community Data License Agreement — Permissive 1.0 (CDLA-Permissive-1.0)
+- **Attribution:** Balasubramaniam S. (2024), Master's thesis, The Ohio State University
+- **Split:** by site (43 train / 11 val / 8 test sites), ~70/15/15 of sequences per species
+- **Classes (16):** e.g. eastern_gartersnake, song_sparrow, meadow_vole,
+  white-footed_mouse, masked_shrew, common_five-lined_skink, long-tailed_weasel, virginia_opossum
+- **Total:** ~13,000 images (9,186 / 2,000 / 1,822), max 1024 px (1024x720)
 
 ## Amazon Berkeley Objects (ABO) Furniture
 

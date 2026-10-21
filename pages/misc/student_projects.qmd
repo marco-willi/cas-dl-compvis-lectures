@@ -183,6 +183,34 @@ Source: AMI-Br / TUPAC16 + MIDOG21
 **Difficulty/Effort**: High
 
 
+## Research Projects
+
+These projects test a recent claim from the literature rather than solve an application problem. The outcome is open: a carefully executed negative result is as valuable as a positive one.
+
+### Does MatryoshkaLoRA Transfer to Vision Transformers?
+
+**Goal**: MatryoshkaLoRA ([arXiv:2605.07850](https://arxiv.org/abs/2605.07850)) is a recent variant of LoRA that learns a nested hierarchy of low-rank adapters: after training, the adapter can be truncated to any rank $k \leq R$ without retraining. On LLM benchmarks (Llama 3, GSM-8K, ARC-C, HellaSwag) the authors report not only good accuracy at truncated ranks, but also gains of 1–4 percentage points over standard LoRA at full rank. The method has not been evaluated on vision models. Your task is to find out whether these claims hold when fine-tuning a vision transformer for image classification.
+
+**Background**: Standard LoRA computes $\m{W}_0 + \m{A}\m{B}$ with a fixed rank $R$. MatryoshkaLoRA inserts a fixed diagonal scaling between the adapters, $\m{W}_0 + \m{A}\,\mathrm{diag}(\vect{p})\,\m{B}$, where $\vect{p}$ up-weights the leading rank components (e.g. $\vect{p} = [4,3,2,2,1,1,1,1]$ for $R=8$ and nested ranks $\{1,2,4,8\}$). This way every sub-rank receives a training signal in each step. At inference, $\vect{p}$ is dropped and the first $k$ components are used. Official code: [IST-DASLab/MatryoshkaLoRA](https://github.com/IST-DASLab/MatryoshkaLoRA).
+
+**Approach**: Use a DINOv3 backbone (ViT-S/16 or ViT-B/16, available on HuggingFace after accepting the license) with a linear classification head. Establish a frozen-backbone (linear probe) baseline first. Then compare standard LoRA and MatryoshkaLoRA (and optionally DyLoRA) at a maximum rank of e.g. $R=32$. Evaluate MatryoshkaLoRA truncated to ranks $\{1, 2, 4, 8, 16, 32\}$ and compare against standard LoRA models trained separately at a subset of these ranks.
+
+**Focus**:
+
+- *Fair comparison*: the scaling vector $\vect{p}$ changes the effective learning rate. Tune the learning rate separately for each method (a small grid suffices), otherwise you may measure a learning-rate effect rather than a method effect.
+- *Headroom*: if the linear probe is already close to the ceiling, there is nothing to gain from fine-tuning. Choose a dataset with domain shift (e.g. AMI-Br) or reduce the training set (e.g. 10–50 images per class) to create headroom.
+- *Statistical robustness*: the reported gains are small. Use at least 3 seeds and report mean ± standard deviation.
+- *Rank–accuracy curve*: plot accuracy over rank for both methods. Does a single MatryoshkaLoRA run match separately trained LoRA models at each rank?
+
+**Dataset**: At least two datasets from the table above. AMI-Br (domain shift, small) combined with a natural-image dataset (Food-101 subset, Snapshot Serengeti subset, or CCT20) is a good pairing.
+
+::: {.callout-tip title="AI Assistants"}
+AI coding assistants may be used for the implementation — this keeps the project manageable and shifts the focus to experimental design and analysis. You must, however, be able to explain how the scaling vector $\vect{p}$ is constructed and why it produces a nested rank hierarchy. Keep the experimental grid small and fixed in advance (ranks × methods × seeds × learning rates) to avoid an explosion of runs.
+:::
+
+**Difficulty/Effort**: High
+
+
 <!--
 
 
