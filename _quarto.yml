@@ -5,6 +5,9 @@ project:
     - assets/datasets/**
     - demos/convolution/**
     - demos/cnns/augmentation_stability/**
+    - demos/cnns/cnns_vs_mlp_demo/**
+    - "!demos/cnns/cnns_vs_mlp_demo/archive/**"
+    - "!demos/cnns/cnns_vs_mlp_demo/tools/**"
     - demos/cnns/convolution_parameters/**
     - demos/cnns/receptive_field/**
     - demos/cnns/vendor/**

@@ -196,6 +196,8 @@ Try to draw the same digit at different positions and observe what happens!
 
 - [MLP Demo](https://adamharley.com/nn_vis/mlp/2d.html)
 
+The demo at the end of this lecture (@sec-cnn-recap-demo) compares an MLP and two CNNs on digits that are shifted away from their training position.
+
 :::
 
 
@@ -392,6 +394,8 @@ Illustration of translation equivariance in convolutional layers.
 :::
 
 See @sec-cnn-invariance for the distinction between equivariance and invariance. Notably, CNNs need additional components (like pooling or global average pooling) to achieve translation **invariance** for classification tasks.
+
+The demo in @sec-cnn-recap-demo at the end of this lecture tests this property on trained networks.
 
 But what about other transformations, such as rotation, zoom, or brightness changes? Convolutions provide no guarantee for these: any robustness has to be learned from the training data, typically with data augmentation. The lecture on [Image Classification](classification.qmd#sec-classification-augmentation) discusses data augmentation and contains an interactive demo that tests how stable a pretrained CNN is under such transformations.
 
@@ -774,7 +778,7 @@ $1 \times 1$ convolution. Source: @prince_understanding_2023
 :::
 
 
-**Global Average Pooling** computes the average of each activation map, reducing the tensor from $(C \times H \times W)$ to $(C \times 1 \times 1)$. This is useful for classification — if $C$ equals the number of classes, the network can produce logits without any fully-connected layers. Global average pooling also provides translation **invariance**: since the spatial information is averaged away, the output does not depend on where features appear in the image.
+**Global Average Pooling** computes the average of each activation map, reducing the tensor from $(C \times H \times W)$ to $(C \times 1 \times 1)$. This is useful for classification — if $C$ equals the number of classes, the network can produce logits without any fully-connected layers. Global average pooling also provides translation **invariance**: since the spatial information is averaged away, the output does not depend on where features appear in the image. The demo in @sec-cnn-recap-demo illustrates this: a CNN with global average pooling recognizes digits at positions never seen during training, while the same convolutional layers with a fully connected head fail.
 
 ::: {#fig-cnn-global-avg-pooling}
 
@@ -783,6 +787,38 @@ $1 \times 1$ convolution. Source: @prince_understanding_2023
 Global average pooling: input (left) and output (right).
 :::
 
+## Recap: Translation in MLPs and CNNs {#sec-cnn-recap-demo}
+
+The following demo brings together the main ideas of this lecture: the limitations of MLPs on images, the translation equivariance of convolutions, and translation invariance through global average pooling. Three networks were trained on MNIST digits placed on a $56 \times 56$ canvas: an MLP, a CNN whose activation maps are flattened and passed to fully connected layers (CNN + FC), and a CNN with the same convolutional layers followed by global average pooling (CNN + GAP). Each network was trained on two types of training data, shown at the top of the demo: with "only top-left", all digits are placed in the top-left corner; with "anywhere", digits appear at random positions. Move the digit and observe which networks still recognize it.
+
+::: {.callout-tip title="🎮 Interactive Demo: MLP vs CNN on Shifted Digits" collapse="false"}
+
+```{=html}
+<iframe name="cnns-vs-mlp" loading="lazy" data-auto-height src="../../demos/cnns/cnns_vs_mlp_demo/index.html" width="100%" height="1080" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: MLP vs CNN on shifted MNIST digits"></iframe>
+```
+
+All sections of the demo can be collapsed. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. "Look inside the CNNs" shows activation maps of the first and the last convolutional layer and the input of the classifier. [Open the demo in a new tab](../../demos/cnns/cnns_vs_mlp_demo/index.html){target="_blank"} or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/cnns_vs_mlp_demo).
+:::
+
+::: {.callout-note title="Exercise: Translation Equivariance and Invariance" collapse="true"}
+
+Use the setting "only top-left" for tasks 1–3.
+
+1. **Move the digit**: drag the digit to the bottom-right corner. Which networks fail? Why does the CNN + FC fail, although its convolutions are translation equivariant?
+2. **Look inside**: open "Look inside the CNNs" and move the digit a few pixels. How do the activation maps of conv1 and conv3 change? Which property from @sec-cnn-invariance does this illustrate?
+3. **Compare the heads**: starting from the top-left position, move the digit by 1 pixel and by 4 pixels (arrow keys, with Shift for 4 pixels). Compare the reported change of the classifier input for CNN + FC and CNN + GAP. Why is the change for CNN + GAP small but not exactly zero?
+4. **Train on all positions**: switch to "anywhere". The MLP now recognizes digits everywhere. What is the price?
+
+<details>
+<summary>Click for solutions</summary>
+
+1. The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its $64 \times 14 \times 14$ input. Only the weights for the top-left positions have been trained (see the weight map in "Look inside"); the others still have their random initial values. The MLP has the same problem directly on the pixels.
+2. The activation maps shift together with the input: $f(g(\vect{x})) = g(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.
+3. The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride [@azulay_why_2019; @zhang_making_2019], and because of the zero-padding at the image border.
+4. The MLP has to learn every position from data, i.e. the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.
+
+</details>
+:::
 
 
 ## References

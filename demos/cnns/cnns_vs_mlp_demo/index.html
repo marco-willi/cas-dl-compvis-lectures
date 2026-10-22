@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLP vs CNN: Moving a Digit</title>
+<!--
+  Interactive demo: an MLP, a CNN with a fully connected head and a CNN with global average
+  pooling, trained on MNIST digits placed on a 56 x 56 canvas. Move the digit and compare the
+  predictions; "Look inside the CNNs" shows the feature maps. No backend; the networks run in
+  plain JavaScript (nn.js) and all data is loaded with <script> tags, so the demo works from
+  file:// and on GitHub Pages. Embed in Quarto pages / Reveal.js slides via iframe:
+
+    <iframe src="../../demos/cnns/cnns_vs_mlp_demo/index.html" width="100%" height="1080"
+            style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: MLP vs CNN on shifted digits"></iframe>
+
+  Networks and data: model/ (produced by tools/src/, see tools/EXPORT_README.md).
+  Forward pass: nn.js. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #667085;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    --accent: #e8910c;
+    --good: #2a7f62;
+    --bad: #b2182b;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: clamp(13px, min(1.4vw, 2.2vh), 20px); }
+  html.auto-height { font-size: clamp(13px, 1.4vw, 20px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.35;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.5rem; font-size: 0.8rem; color: var(--muted); }
+
+  button { font: inherit; color: inherit; }
+  button {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1.1rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+  }
+  .control { display: flex; align-items: center; gap: 0.4rem; }
+  .control > span { color: var(--muted); }
+  .stepper { display: flex; align-items: center; gap: 0.3rem; font-variant-numeric: tabular-nums; }
+  .stepper output { min-width: 4.2rem; text-align: center; }
+  .seg { display: flex; }
+  .seg button { border-radius: 0; margin-left: -1px; }
+  .seg button:first-child { border-radius: 0.3rem 0 0 0.3rem; margin-left: 0; }
+  .seg button:last-child { border-radius: 0 0.3rem 0.3rem 0; }
+  .seg button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .controls .spacer { flex: 1; }
+
+  /* Input and model cards */
+  .main { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 2.6fr); gap: 0.8rem; align-items: start; }
+  .input-panel canvas { display: block; width: 100%; aspect-ratio: 1; touch-action: none; cursor: grab; border-radius: 0.3rem; }
+  .input-panel canvas.dragging { cursor: grabbing; }
+  .input-panel canvas:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .caption { margin: 0.3rem 0 0; font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .caption b { color: var(--ink); font-weight: 600; }
+  .swatch { display: inline-block; width: 0.9rem; height: 0.9rem; margin-right: 0.25rem; vertical-align: -0.15rem; border: 2px dashed var(--accent); }
+
+  .models { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+  .card { padding: 0.5rem 0.6rem; border-radius: 0.4rem; background: var(--panel); font-size: 0.8rem; }
+  .card h2 { margin: 0; font-size: 0.95rem; }
+  .card .params { color: var(--muted); font-size: 0.75rem; }
+  .card .verdict { margin: 0.3rem 0 0.2rem; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+  .card .verdict b { font-size: 1.3rem; }
+  .verdict.good b { color: var(--good); }
+  .verdict.bad b { color: var(--bad); }
+  .card canvas { display: block; width: 100%; }
+  .card .bars { aspect-ratio: 2.6; }
+  .card .map { aspect-ratio: 1; margin-top: 0.4rem; cursor: crosshair; image-rendering: pixelated; border-radius: 0.2rem; }
+  .card .map-caption { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+  .card .map-caption b { color: var(--ink); }
+  .scale { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.4rem; font-size: 0.75rem; color: var(--muted); }
+  .scale i { flex: 0 0 8rem; height: 0.6rem; border-radius: 0.2rem; }
+
+  /* Collapsible sections */
+  details { margin-top: 0.6rem; padding: 0.4rem 0.7rem; border: 1px solid var(--line); border-radius: 0.4rem; font-size: 0.85rem; }
+  details[open] { padding-bottom: 0.7rem; }
+  summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+  details[open] > summary { margin-bottom: 0.4rem; }
+  details > .note:first-of-type { margin-top: 0; }
+
+  /* Training data examples */
+  .examples { display: grid; gap: 0.5rem; }
+  .example-row { display: grid; grid-template-columns: 10rem minmax(0, 1fr); column-gap: 0.8rem; align-items: center; }
+  .example-row > span { grid-column: 1; grid-row: 2; align-self: start; font-size: 0.75rem; color: var(--muted); }
+  .example-row > b { grid-column: 1; grid-row: 1; align-self: end; }
+  .thumbs { grid-column: 2; grid-row: 1 / span 2; display: grid; grid-template-columns: repeat(5, minmax(0, 5rem)); gap: 0.4rem; }
+  .thumbs canvas { display: block; width: 100%; aspect-ratio: 1; image-rendering: pixelated; border-radius: 0.2rem; background: #000; }
+
+  /* Look inside */
+  .inside-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.1rem; margin: 0.5rem 0; }
+  .fmaps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.6fr); gap: 0.6rem; align-items: start; }
+  .fmaps figure { margin: 0; }
+  .fmaps canvas { display: block; width: 100%; aspect-ratio: 1; image-rendering: pixelated; border-radius: 0.2rem; background: #000; }
+  .fmaps .head canvas { aspect-ratio: 1.6; background: #fff; border: 1px solid var(--line); image-rendering: auto; }
+  .fmaps .head.square canvas { aspect-ratio: 1; max-width: 62%; border: 0; }
+  .fmaps figcaption { margin-top: 0.2rem; font-size: 0.75rem; color: var(--muted); }
+  .fmaps figcaption b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .note { color: var(--muted); font-size: 0.78rem; }
+  .status { margin: 0.4rem 0; font-size: 0.85rem; }
+  .status.error { color: var(--bad); }
+
+  @media (max-width: 760px) {
+    .example-row { grid-template-columns: 1fr; }
+    .example-row > b, .example-row > span, .thumbs { grid-column: 1; grid-row: auto; }
+    .thumbs { margin-top: 0.2rem; }
+    .main { grid-template-columns: 1fr; }
+    .input-panel { max-width: 22rem; }
+    .models { grid-template-columns: 1fr; }
+    .card { display: grid; grid-template-columns: minmax(0, 1fr) 40%; column-gap: 0.6rem; }
+    .card > :not(.map) { grid-column: 1; }
+    .card .map { grid-column: 2; grid-row: 1 / span 4; margin-top: 0; }
+    .card .map-caption { grid-column: 1 / -1; }
+    .fmaps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .fmaps .head { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MLP vs CNN: Moving a Digit</h1>
+  <p>An MLP and two CNNs, trained on MNIST digits at different positions. Move a digit and
+     compare where each network still recognizes it.</p>
+</header>
+
+<details id="data" open>
+  <summary>Training data</summary>
+  <p class="note">MNIST digits (28 × 28 pixels) placed on a black 56 × 56 canvas. Each network is
+     trained twice, once on each type of training data.</p>
+  <div class="examples">
+    <div class="example-row"><b>only top-left</b><span>every digit at position (dx, dy) = (0, 0)</span><div class="thumbs" id="examples-tl"></div></div>
+    <div class="example-row"><b>anywhere</b><span>random position, dx and dy between 0 and 28</span><div class="thumbs" id="examples-all"></div></div>
+  </div>
+</details>
+
+<details id="demo" open>
+  <summary>Move the digit</summary>
+  <p class="note">Drag the digit across the canvas (or focus the canvas and use the arrow keys;
+     Shift moves by 4 pixels) and compare the predictions of the three networks. Click on an
+     accuracy map to jump to that position.</p>
+<div class="controls">
+  <div class="control"><span>Digit</span>
+    <div class="stepper">
+      <button id="prev" type="button" aria-label="Previous digit">◀</button>
+      <output id="digit-label"></output>
+      <button id="next" type="button" aria-label="Next digit">▶</button>
+    </div>
+  </div>
+  <div class="control"><span id="label-regime">Trained on digits</span>
+    <div class="seg" id="ctl-regime" role="group" aria-labelledby="label-regime">
+      <button type="button" data-value="tl">only top-left</button>
+      <button type="button" data-value="all">anywhere</button>
+    </div>
+  </div>
+  <span class="spacer"></span>
+  <button id="reset" type="button">Back to top-left</button>
+</div>
+
+<p class="status" id="status">Loading networks …</p>
+
+<div class="main">
+  <div class="input-panel">
+    <canvas id="input" tabindex="0" aria-label="Input canvas, 56 by 56 pixels; drag the digit or use the arrow keys"></canvas>
+    <p class="caption" id="position"></p>
+    <p class="caption"><span class="swatch"></span>positions seen during training</p>
+  </div>
+  <div>
+    <div class="models" id="models"></div>
+    <div class="scale"><span>Test accuracy by position:</span><span>0 %</span><i id="scale-bar"></i><span>100 %</span></div>
+  </div>
+</div>
+</details>
+
+<details id="inside">
+  <summary>Look inside the CNNs</summary>
+  <div class="inside-controls">
+    <div class="control"><span id="label-net">Network</span>
+      <div class="seg" id="ctl-net" role="group" aria-labelledby="label-net">
+        <button type="button" data-value="cnn_fc">CNN + FC</button>
+        <button type="button" data-value="cnn_gap">CNN + GAP</button>
+      </div>
+    </div>
+    <div class="control"><span>Channel conv1</span>
+      <div class="stepper"><button type="button" data-step="conv1:-1" aria-label="Previous conv1 channel">◀</button><output id="ch-conv1"></output><button type="button" data-step="conv1:1" aria-label="Next conv1 channel">▶</button></div>
+    </div>
+    <div class="control"><span>Channel conv3</span>
+      <div class="stepper"><button type="button" data-step="conv3:-1" aria-label="Previous conv3 channel">◀</button><output id="ch-conv3"></output><button type="button" data-step="conv3:1" aria-label="Next conv3 channel">▶</button></div>
+    </div>
+  </div>
+  <div class="fmaps">
+    <figure><canvas id="fm-input"></canvas><figcaption>Input <b>56 × 56</b></figcaption></figure>
+    <figure><canvas id="fm-conv1"></canvas><figcaption id="cap-conv1"></figcaption></figure>
+    <figure><canvas id="fm-conv3"></canvas><figcaption id="cap-conv3"></figcaption></figure>
+    <figure class="head"><canvas id="fm-head"></canvas><figcaption id="cap-head"></figcaption></figure>
+  </div>
+  <p class="note">All maps are drawn at the same size, so they line up with the input. Each map is
+     scaled to its own maximum (white). The dashed box marks the digit's position.</p>
+</details>
+
+<details id="verify">
+  <summary>Verification against Python</summary>
+  <p class="note">Recomputes the reference outputs exported from PyTorch (3 inputs per network)
+     in this browser and compares logits and feature maps.</p>
+  <button id="selftest" type="button">Run self-check</button>
+  <p class="status" id="selftest-result"></p>
+</details>
+
+<script src="model/manifest.js"></script>
+<script src="model/samples.js"></script>
+<script src="model/position_maps.js"></script>
+<script src="nn.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
