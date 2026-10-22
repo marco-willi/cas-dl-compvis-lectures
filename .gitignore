@@ -101,6 +101,9 @@ demos/genai_models/*
 !demos/vision_transformers/
 demos/vision_transformers/*
 !demos/vision_transformers/attention_explorer/
+!demos/representation_learning/
+demos/representation_learning/*
+!demos/representation_learning/patch_similarity/
 # Allow actual demo notebooks and qmd
 # !demos/**/*.ipynb
 # !demos/**/*.qmd

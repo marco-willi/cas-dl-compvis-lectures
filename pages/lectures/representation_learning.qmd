@@ -523,6 +523,17 @@ Watch Meta's introduction to DINOv3, explaining the key improvements over DINOv2
 Cosine similarities of DINOv3 patch embeddings at different query points (red crosses). Local tokens capture spatially resolved semantic structure — semantically similar regions cluster together even across different images.
 :::
 
+@fig-dinov3-local-features shows a few fixed query points. With the following demo, any point on the example images of @fig-rl-examples can be selected as query, and its patch embedding is compared to every patch of all 8 images.
+
+::: {.callout-tip title="🎮 Interactive Demo: DINOv3 Patch Similarity"}
+
+```{=html}
+<iframe name="patch-similarity" loading="lazy" data-auto-height src="../../demos/representation_learning/patch_similarity/index.html" width="100%" height="500" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: DINOv3 patch similarity"></iframe>
+```
+
+The patch embeddings were precomputed with DINOv3 (ViT-B/16, 40 × 28 patches per image). Things to try: select the ear of an elephant and compare the elephant at night, the rhino, and the giraffe; select the sky or the grass; select a wheel of the car. The white rings mark the most similar patch in each image. [Open the demo in a new tab](../../demos/representation_learning/patch_similarity/index.html){target="_blank"} or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/representation_learning/patch_similarity).
+:::
+
 
 ::: {.callout-note appearance="simple"}
 

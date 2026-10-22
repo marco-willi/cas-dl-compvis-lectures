@@ -30,6 +30,9 @@ project:
     - demos/vision_transformers/attention_explorer/**
     - "!demos/vision_transformers/*/tools/**"
     - "!demos/vision_transformers/*/README.md"
+    - demos/representation_learning/patch_similarity/**
+    - "!demos/representation_learning/*/tools/**"
+    - "!demos/representation_learning/*/README.md"
   render:
     #- "*.qmd"
     - pages/lectures/*.qmd
