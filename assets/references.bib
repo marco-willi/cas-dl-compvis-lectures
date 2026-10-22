@@ -2697,7 +2697,7 @@
 	month = jun,
 	year = {2026},
 	note = {arXiv:2606.27608 [cs.CV]},
-	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
+	keywords = {Computer Science - Machine Learning, Computer Science - Computer Vision and Pattern Recognition},
 	file = {Preprint PDF:D\:\\Literatur\\Zotero\\storage\\WK4EYD4G\\Xu et al. - 2026 - Qwen-Image-2.0-RL Technical Report.pdf:application/pdf;Snapshot:D\:\\Literatur\\Zotero\\storage\\XXJ8S2DV\\2606.html:text/html},
 }
 
@@ -2713,7 +2713,7 @@
 	month = apr,
 	year = {2024},
 	note = {arXiv:2404.01413 [cs.LG]},
-	keywords = {Computer Science - Artificial Intelligence, Computer Science - Computation and Language, Computer Science - Emerging Technologies, Computer Science - Machine Learning, Statistics - Machine Learning},
+	keywords = {Computer Science - Machine Learning, Computer Science - Artificial Intelligence, Statistics - Machine Learning, Computer Science - Computation and Language, Computer Science - Emerging Technologies},
 	file = {Preprint PDF:D\:\\Literatur\\Zotero\\storage\\TYE2IAVE\\Gerstgrasser et al. - 2024 - Is Model Collapse Inevitable Breaking the Curse of Recursion by Accumulating Real and Synthetic Dat.pdf:application/pdf;Snapshot:D\:\\Literatur\\Zotero\\storage\\A5UV6JZI\\2404.html:text/html},
 }
 
@@ -2733,4 +2733,34 @@
 	author = {Maaten, Laurens van der and Hinton, Geoffrey},
 	year = {2008},
 	pages = {2579--2605},
+}
+
+@misc{zhang_making_2019,
+	title = {Making {Convolutional} {Networks} {Shift}-{Invariant} {Again}},
+	url = {http://arxiv.org/abs/1904.11486},
+	doi = {10.48550/arXiv.1904.11486},
+	abstract = {Modern convolutional networks are not shift-invariant, as small input shifts or translations can cause drastic changes in the output. Commonly used downsampling methods, such as max-pooling, strided-convolution, and average-pooling, ignore the sampling theorem. The well-known signal processing fix is anti-aliasing by low-pass filtering before downsampling. However, simply inserting this module into deep networks degrades performance; as a result, it is seldomly used today. We show that when integrated correctly, it is compatible with existing architectural components, such as max-pooling and strided-convolution. We observe {\textbackslash}textit\{increased accuracy\} in ImageNet classification, across several commonly-used architectures, such as ResNet, DenseNet, and MobileNet, indicating effective regularization. Furthermore, we observe {\textbackslash}textit\{better generalization\}, in terms of stability and robustness to input corruptions. Our results demonstrate that this classical signal processing technique has been undeservingly overlooked in modern deep networks. Code and anti-aliased versions of popular networks are available at https://richzhang.github.io/antialiased-cnns/ .},
+	urldate = {2026-10-22},
+	publisher = {arXiv},
+	author = {Zhang, Richard},
+	month = jun,
+	year = {2019},
+	note = {arXiv:1904.11486 [cs.CV]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
+	file = {Preprint PDF:D\:\\Literatur\\Zotero\\storage\\MWJ35QFD\\Zhang - 2019 - Making Convolutional Networks Shift-Invariant Again.pdf:application/pdf;Snapshot:D\:\\Literatur\\Zotero\\storage\\EH32DHTY\\1904.html:text/html},
+}
+
+@misc{azulay_why_2019,
+	title = {Why do deep convolutional networks generalize so poorly to small image transformations?},
+	url = {http://arxiv.org/abs/1805.12177},
+	doi = {10.48550/arXiv.1805.12177},
+	abstract = {Convolutional Neural Networks (CNNs) are commonly assumed to be invariant to small image transformations: either because of the convolutional architecture or because they were trained using data augmentation. Recently, several authors have shown that this is not the case: small translations or rescalings of the input image can drastically change the network's prediction. In this paper, we quantify this phenomena and ask why neither the convolutional architecture nor data augmentation are sufficient to achieve the desired invariance. Specifically, we show that the convolutional architecture does not give invariance since architectures ignore the classical sampling theorem, and data augmentation does not give invariance because the CNNs learn to be invariant to transformations only for images that are very similar to typical images from the training set. We discuss two possible solutions to this problem: (1) antialiasing the intermediate representations and (2) increasing data augmentation and show that they provide only a partial solution at best. Taken together, our results indicate that the problem of insuring invariance to small image transformations in neural networks while preserving high accuracy remains unsolved.},
+	urldate = {2026-10-22},
+	publisher = {arXiv},
+	author = {Azulay, Aharon and Weiss, Yair},
+	month = dec,
+	year = {2019},
+	note = {arXiv:1805.12177 [cs.CV]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition},
+	file = {Preprint PDF:D\:\\Literatur\\Zotero\\storage\\B8BSMT79\\Azulay and Weiss - 2019 - Why do deep convolutional networks generalize so poorly to small image transformations.pdf:application/pdf;Snapshot:D\:\\Literatur\\Zotero\\storage\\YA2M4M7P\\1805.html:text/html},
 }

@@ -55,7 +55,7 @@ website:
   repo-url: https://github.com/marco-willi/cas-dl-compvis-lectures
   repo-actions: [issue]
 
-  google-analytics: "G-HZKTBW9290"
+  google-analytics: "G-0D0M41JVKL"
 
   page-footer:
     right: "This page is built with [Quarto](https://quarto.org/)."
