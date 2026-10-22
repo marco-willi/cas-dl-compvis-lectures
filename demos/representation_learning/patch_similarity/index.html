@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DINOv3 Patch Similarity</title>
+<!--
+  Interactive demo: cosine similarity between the DINOv3 patch embedding at a query point and
+  every patch of the 8 example images of the representation learning lecture. The features are
+  precomputed (tools/export_features.py) and shipped as a script, so there are no network
+  requests; works from file:// and on GitHub Pages. Embed in Quarto pages via iframe:
+
+    <iframe src="../../demos/representation_learning/patch_similarity/index.html" width="100%"
+            height="500" data-auto-height style="border: 1px solid #ddd; border-radius: 6px;"
+            title="Interactive demo: DINOv3 patch similarity"></iframe>
+
+  Data: data/features.js, data/collage.jpg. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #5b6472;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    --accent: #0891b2;
+    --accent-fill: #cffafe;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { font-size: clamp(14px, 1.55vw, 18px); }
+  body {
+    margin: 0;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+  }
+  header h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 0.1rem 0 0.6rem; font-size: 0.85rem; color: var(--muted); }
+  noscript p, .error { padding: 0.5rem 0.7rem; border: 1px solid #ea580c; border-radius: 0.3rem; background: #ffedd5; }
+
+  button, input { font: inherit; color: inherit; }
+  button {
+    padding: 0.15rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-fill); font-weight: 600; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.2rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.4rem; }
+  .label { color: var(--muted); }
+  .colorbar { display: grid; grid-template-columns: auto minmax(5rem, 12rem) auto; gap: 0.4rem; align-items: center; font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .colorbar span.bar {
+    height: 0.7rem;
+    border-radius: 0.2rem;
+    background: linear-gradient(90deg, #000004, #1b0c41, #4a0c6b, #781c6d, #a52c60, #cf4446, #ed6925, #fb9b06, #fcffa4);
+  }
+  #reset { margin-left: auto; }
+
+  .view { margin: 0; }
+  .view canvas { display: block; width: 100%; border-radius: 0.3rem; cursor: crosshair; touch-action: none; }
+  .view figcaption { margin-top: 0.3rem; font-size: 0.8rem; color: var(--muted); }
+  .fine { margin: 0.5rem 0 0; font-size: 0.78rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>DINOv3 Patch Similarity</h1>
+  <p>Hover over any image to preview, click to select a query point. The overlay shows the cosine
+     similarity between the patch embedding at that point and every patch of all 8 images.</p>
+</header>
+
+<noscript><p>This demo needs JavaScript.</p></noscript>
+<p class="error" id="error" role="alert" hidden></p>
+
+<div id="app" hidden>
+  <div class="controls">
+    <div class="row" role="group" aria-labelledby="scale-label">
+      <span class="label" id="scale-label">Color scale</span>
+      <button type="button" id="scale-fixed" aria-pressed="true">0 to 1</button>
+      <button type="button" id="scale-query" aria-pressed="false">Min to max</button>
+    </div>
+    <div class="colorbar"><span id="scale-min">0</span><span class="bar"></span><span id="scale-max">1</span></div>
+    <label class="row"><input id="smooth" type="checkbox"> smooth</label>
+    <button type="button" id="reset">Reset</button>
+  </div>
+
+  <figure class="view">
+    <canvas id="view" tabindex="0"
+            aria-label="Collage of 8 images with similarity overlay. Arrow keys move the query point."></canvas>
+    <figcaption id="view-caption" aria-live="polite"></figcaption>
+  </figure>
+  <p class="fine" id="fine"></p>
+</div>
+
+<script src="data/features.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

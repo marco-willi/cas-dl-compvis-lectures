@@ -594,7 +594,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 </figure>
 </div>
 <p>It is easy for humans to describe the image. For example:</p>
-<div id="06ffc623" class="cell" data-execution_count="1">
+<div id="92fb083f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">A photograph of an elephant facing the camera.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">The elephant has large tusks and ears and is standing in a flat savannah.</span></span>
@@ -621,7 +621,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 <li>Channels: 3 (RGB)</li>
 <li>Bits per pixel: 8 bits per channel</li>
 </ul>
-<div id="a51eba6e" class="cell" data-execution_count="2">
+<div id="5379cae3" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="dataframe table table-sm table-striped align-middle caption-top small">
 <thead>
@@ -1190,6 +1190,21 @@ Figure&nbsp;14: Cosine similarities of DINOv3 patch embeddings at different quer
 </figcaption>
 </figure>
 </div>
+<p><a href="#fig-dinov3-local-features" class="quarto-xref">Figure&nbsp;14</a> shows a few fixed query points. With the following demo, any point on the example images of <a href="#fig-rl-examples" class="quarto-xref">Figure&nbsp;3</a> can be selected as query, and its patch embedding is compared to every patch of all 8 images.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="🎮 Interactive Demo: DINOv3 Patch Similarity">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>🎮 Interactive Demo: DINOv3 Patch Similarity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<iframe name="patch-similarity" loading="lazy" data-auto-height="" src="../../demos/representation_learning/patch_similarity/index.html" width="100%" height="500" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: DINOv3 patch similarity"></iframe>
+<p>The patch embeddings were precomputed with DINOv3 (ViT-B/16, 40 × 28 patches per image). Things to try: select the ear of an elephant and compare the elephant at night, the rhino, and the giraffe; select the sky or the grass; select a wheel of the car. The white rings mark the most similar patch in each image. <a href="../../demos/representation_learning/patch_similarity/index.html" target="_blank">Open the demo in a new tab</a> or view the <a href="https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/representation_learning/patch_similarity">source code</a>.</p>
+</div>
+</div>
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1224,7 +1239,7 @@ Figure&nbsp;15: Example images used for the representation comparison.
 </div>
 <p>Cosine similarities between normalized representations are shown in <a href="#fig-rl-similarity-resnet" class="quarto-xref">Figure&nbsp;17</a>, <a href="#fig-rl-similarity-clip" class="quarto-xref">Figure&nbsp;18</a>, and <a href="#fig-rl-similarity-dinov3" class="quarto-xref">Figure&nbsp;19</a>, and compared to pixel-space similarity in <a href="#fig-rl-similarity-pixel-space" class="quarto-xref">Figure&nbsp;16</a>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Metrics Definitions">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1233,7 +1248,7 @@ Figure&nbsp;15: Example images used for the representation comparison.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Similarity Metrics:</strong></p>
 <p>For images represented as vectors <span class="math inline">\(\mathbf{z}_i, \mathbf{z}_j \in \mathbb{R}^d\)</span>:</p>
@@ -1337,7 +1352,7 @@ Figure&nbsp;19: Self-distilled DINOv3 features (ViT-B/16, [CLS] token) reveal fi
 </tbody>
 </table>
 <div class="callout callout-style-default callout-note callout-titled" title="Question: Which Representations Do You Favour? And Why?">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1346,7 +1361,7 @@ Figure&nbsp;19: Self-distilled DINOv3 features (ViT-B/16, [CLS] token) reveal fi
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>Looking at the similarity matrices, which representation do you prefer and why?</p>
 <details>
@@ -2627,338 +2642,349 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-527"><a href="#cb2-527" aria-hidden="true" tabindex="-1"></a>Cosine similarities of DINOv3 patch embeddings at different query points (red crosses). Local tokens capture spatially resolved semantic structure — semantically similar regions cluster together even across different images.</span>
 <span id="cb2-528"><a href="#cb2-528" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-529"><a href="#cb2-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-530"><a href="#cb2-530" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-531"><a href="#cb2-531" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
-<span id="cb2-532"><a href="#cb2-532" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-533"><a href="#cb2-533" aria-hidden="true" tabindex="-1"></a>**🤔 Think About It**</span>
-<span id="cb2-534"><a href="#cb2-534" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-535"><a href="#cb2-535" aria-hidden="true" tabindex="-1"></a>What kind of embedding, global or local, would you use to find similar products in a web-shop? For example, to display shoes that are similar to the pair a customer is looking at.</span>
-<span id="cb2-536"><a href="#cb2-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-537"><a href="#cb2-537" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-538"><a href="#cb2-538" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Key considerations<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
-<span id="cb2-539"><a href="#cb2-539" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-540"><a href="#cb2-540" aria-hidden="true" tabindex="-1"></a>For product retrieval, a **global embedding** per image is sufficient: the query is "find me something that looks like this shoe overall," not "find the pixel with the heel." A single <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token enables fast approximate nearest-neighbour search over a catalogue of millions.</span>
+<span id="cb2-530"><a href="#cb2-530" aria-hidden="true" tabindex="-1"></a>@fig-dinov3-local-features shows a few fixed query points. With the following demo, any point on the example images of @fig-rl-examples can be selected as query, and its patch embedding is compared to every patch of all 8 images.</span>
+<span id="cb2-531"><a href="#cb2-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-532"><a href="#cb2-532" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="🎮 Interactive Demo: DINOv3 Patch Similarity"}</span>
+<span id="cb2-533"><a href="#cb2-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-534"><a href="#cb2-534" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb2-535"><a href="#cb2-535" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;iframe name="patch-similarity" loading="lazy" data-auto-height src="../../demos/representation_learning/patch_similarity/index.html" width="100%" height="500" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: DINOv3 patch similarity"&gt;&lt;/iframe&gt;</span></span>
+<span id="cb2-536"><a href="#cb2-536" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-537"><a href="#cb2-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-538"><a href="#cb2-538" aria-hidden="true" tabindex="-1"></a>The patch embeddings were precomputed with DINOv3 (ViT-B/16, 40 × 28 patches per image). Things to try: select the ear of an elephant and compare the elephant at night, the rhino, and the giraffe; select the sky or the grass; select a wheel of the car. The white rings mark the most similar patch in each image. <span class="co">[</span><span class="ot">Open the demo in a new tab</span><span class="co">](../../demos/representation_learning/patch_similarity/index.html)</span>{target="_blank"} or view the <span class="co">[</span><span class="ot">source code</span><span class="co">](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/representation_learning/patch_similarity)</span>.</span>
+<span id="cb2-539"><a href="#cb2-539" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-540"><a href="#cb2-540" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-541"><a href="#cb2-541" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-542"><a href="#cb2-542" aria-hidden="true" tabindex="-1"></a>For tasks requiring spatial understanding — detecting manufacturing defects on a product surface, or identifying a specific region of damage — **local patch tokens** carry the necessary positional detail. Many modern architectures (DINOv2/v3, ViTs) provide both: use the <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token for global retrieval, patch tokens for dense tasks.</span>
+<span id="cb2-542"><a href="#cb2-542" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
 <span id="cb2-543"><a href="#cb2-543" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-544"><a href="#cb2-544" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-545"><a href="#cb2-545" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-546"><a href="#cb2-546" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-547"><a href="#cb2-547" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparing Representations</span></span>
-<span id="cb2-548"><a href="#cb2-548" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-549"><a href="#cb2-549" aria-hidden="true" tabindex="-1"></a>The following illustrates how different representation paradigms handle the same set of images (@fig-images-overview).</span>
+<span id="cb2-544"><a href="#cb2-544" aria-hidden="true" tabindex="-1"></a>**🤔 Think About It**</span>
+<span id="cb2-545"><a href="#cb2-545" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-546"><a href="#cb2-546" aria-hidden="true" tabindex="-1"></a>What kind of embedding, global or local, would you use to find similar products in a web-shop? For example, to display shoes that are similar to the pair a customer is looking at.</span>
+<span id="cb2-547"><a href="#cb2-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-548"><a href="#cb2-548" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-549"><a href="#cb2-549" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Key considerations<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb2-550"><a href="#cb2-550" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-551"><a href="#cb2-551" aria-hidden="true" tabindex="-1"></a>::: {#fig-images-overview}</span>
-<span id="cb2-552"><a href="#cb2-552" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}images_overview.png)</span>{fig-alt="Example images to compare different representations" width=100%}</span>
-<span id="cb2-553"><a href="#cb2-553" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-554"><a href="#cb2-554" aria-hidden="true" tabindex="-1"></a>Example images used for the representation comparison.</span>
-<span id="cb2-555"><a href="#cb2-555" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-556"><a href="#cb2-556" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-557"><a href="#cb2-557" aria-hidden="true" tabindex="-1"></a>Cosine similarities between normalized representations are shown in @fig-rl-similarity-resnet, @fig-rl-similarity-clip, and @fig-rl-similarity-dinov3, and compared to pixel-space similarity in @fig-rl-similarity-pixel-space.</span>
-<span id="cb2-558"><a href="#cb2-558" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-551"><a href="#cb2-551" aria-hidden="true" tabindex="-1"></a>For product retrieval, a **global embedding** per image is sufficient: the query is "find me something that looks like this shoe overall," not "find the pixel with the heel." A single <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token enables fast approximate nearest-neighbour search over a catalogue of millions.</span>
+<span id="cb2-552"><a href="#cb2-552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-553"><a href="#cb2-553" aria-hidden="true" tabindex="-1"></a>For tasks requiring spatial understanding — detecting manufacturing defects on a product surface, or identifying a specific region of damage — **local patch tokens** carry the necessary positional detail. Many modern architectures (DINOv2/v3, ViTs) provide both: use the <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token for global retrieval, patch tokens for dense tasks.</span>
+<span id="cb2-554"><a href="#cb2-554" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-555"><a href="#cb2-555" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-556"><a href="#cb2-556" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-557"><a href="#cb2-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-558"><a href="#cb2-558" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comparing Representations</span></span>
 <span id="cb2-559"><a href="#cb2-559" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-560"><a href="#cb2-560" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Metrics Definitions" collapse="true"}</span>
+<span id="cb2-560"><a href="#cb2-560" aria-hidden="true" tabindex="-1"></a>The following illustrates how different representation paradigms handle the same set of images (@fig-images-overview).</span>
 <span id="cb2-561"><a href="#cb2-561" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-562"><a href="#cb2-562" aria-hidden="true" tabindex="-1"></a>**Similarity Metrics:**</span>
-<span id="cb2-563"><a href="#cb2-563" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-564"><a href="#cb2-564" aria-hidden="true" tabindex="-1"></a>For images represented as vectors $\vect{z}_i, \vect{z}_j \in \mathbb{R}^d$:</span>
-<span id="cb2-565"><a href="#cb2-565" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-566"><a href="#cb2-566" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Euclidean Distance (Pixel Space):**</span>
-<span id="cb2-567"><a href="#cb2-567" aria-hidden="true" tabindex="-1"></a>    $$d_{\text{L2}}(\vect{z}_i, \vect{z}_j) = \|\vect{z}_i - \vect{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_i^{(k)} - z_j^{(k)})^2}$$</span>
-<span id="cb2-568"><a href="#cb2-568" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-569"><a href="#cb2-569" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cosine Similarity:**</span>
-<span id="cb2-570"><a href="#cb2-570" aria-hidden="true" tabindex="-1"></a>    $$\text{sim}_{\cos}(\vect{z}_i, \vect{z}_j) = \frac{\vect{z}_i^\top \vect{z}_j}{\|\vect{z}_i\|_2 \|\vect{z}_j\|_2} = \frac{\sum_{k=1}^d z_i^{(k)} z_j^{(k)}}{\sqrt{\sum_{k=1}^d (z_i^{(k)})^2} \sqrt{\sum_{k=1}^d (z_j^{(k)})^2}}$$</span>
-<span id="cb2-571"><a href="#cb2-571" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-572"><a href="#cb2-572" aria-hidden="true" tabindex="-1"></a>where $\text{sim}_{\cos} \in <span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$ with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.</span>
-<span id="cb2-573"><a href="#cb2-573" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-562"><a href="#cb2-562" aria-hidden="true" tabindex="-1"></a>::: {#fig-images-overview}</span>
+<span id="cb2-563"><a href="#cb2-563" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}images_overview.png)</span>{fig-alt="Example images to compare different representations" width=100%}</span>
+<span id="cb2-564"><a href="#cb2-564" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-565"><a href="#cb2-565" aria-hidden="true" tabindex="-1"></a>Example images used for the representation comparison.</span>
+<span id="cb2-566"><a href="#cb2-566" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-567"><a href="#cb2-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-568"><a href="#cb2-568" aria-hidden="true" tabindex="-1"></a>Cosine similarities between normalized representations are shown in @fig-rl-similarity-resnet, @fig-rl-similarity-clip, and @fig-rl-similarity-dinov3, and compared to pixel-space similarity in @fig-rl-similarity-pixel-space.</span>
+<span id="cb2-569"><a href="#cb2-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-570"><a href="#cb2-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-571"><a href="#cb2-571" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Metrics Definitions" collapse="true"}</span>
+<span id="cb2-572"><a href="#cb2-572" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-573"><a href="#cb2-573" aria-hidden="true" tabindex="-1"></a>**Similarity Metrics:**</span>
 <span id="cb2-574"><a href="#cb2-574" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-575"><a href="#cb2-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-576"><a href="#cb2-576" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset #fig-similarity-comparison-models}</span>
-<span id="cb2-577"><a href="#cb2-577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-578"><a href="#cb2-578" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pixel Space</span></span>
+<span id="cb2-575"><a href="#cb2-575" aria-hidden="true" tabindex="-1"></a>For images represented as vectors $\vect{z}_i, \vect{z}_j \in \mathbb{R}^d$:</span>
+<span id="cb2-576"><a href="#cb2-576" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-577"><a href="#cb2-577" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Euclidean Distance (Pixel Space):**</span>
+<span id="cb2-578"><a href="#cb2-578" aria-hidden="true" tabindex="-1"></a>    $$d_{\text{L2}}(\vect{z}_i, \vect{z}_j) = \|\vect{z}_i - \vect{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_i^{(k)} - z_j^{(k)})^2}$$</span>
 <span id="cb2-579"><a href="#cb2-579" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-580"><a href="#cb2-580" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-similarity-pixel-space}</span>
-<span id="cb2-581"><a href="#cb2-581" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-582"><a href="#cb2-582" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}similarity_pixel_space.png)</span>{fig-alt="Pixel-space similarity matrix" width=600}</span>
-<span id="cb2-583"><a href="#cb2-583" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-584"><a href="#cb2-584" aria-hidden="true" tabindex="-1"></a>Raw pixel-level similarity fails to capture semantic relationships.</span>
-<span id="cb2-585"><a href="#cb2-585" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-580"><a href="#cb2-580" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cosine Similarity:**</span>
+<span id="cb2-581"><a href="#cb2-581" aria-hidden="true" tabindex="-1"></a>    $$\text{sim}_{\cos}(\vect{z}_i, \vect{z}_j) = \frac{\vect{z}_i^\top \vect{z}_j}{\|\vect{z}_i\|_2 \|\vect{z}_j\|_2} = \frac{\sum_{k=1}^d z_i^{(k)} z_j^{(k)}}{\sqrt{\sum_{k=1}^d (z_i^{(k)})^2} \sqrt{\sum_{k=1}^d (z_j^{(k)})^2}}$$</span>
+<span id="cb2-582"><a href="#cb2-582" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-583"><a href="#cb2-583" aria-hidden="true" tabindex="-1"></a>where $\text{sim}_{\cos} \in <span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$ with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.</span>
+<span id="cb2-584"><a href="#cb2-584" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-585"><a href="#cb2-585" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-586"><a href="#cb2-586" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-587"><a href="#cb2-587" aria-hidden="true" tabindex="-1"></a><span class="fu">### ResNet-50</span></span>
+<span id="cb2-587"><a href="#cb2-587" aria-hidden="true" tabindex="-1"></a>::: {.panel-tabset #fig-similarity-comparison-models}</span>
 <span id="cb2-588"><a href="#cb2-588" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-589"><a href="#cb2-589" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-similarity-resnet}</span>
+<span id="cb2-589"><a href="#cb2-589" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pixel Space</span></span>
 <span id="cb2-590"><a href="#cb2-590" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-591"><a href="#cb2-591" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}similarity_resnet50.png)</span>{fig-alt="ResNet-50 supervised representation similarity" width=600}</span>
+<span id="cb2-591"><a href="#cb2-591" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-similarity-pixel-space}</span>
 <span id="cb2-592"><a href="#cb2-592" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-593"><a href="#cb2-593" aria-hidden="true" tabindex="-1"></a>Supervised CNN representations group semantically similar images.</span>
-<span id="cb2-594"><a href="#cb2-594" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-595"><a href="#cb2-595" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-596"><a href="#cb2-596" aria-hidden="true" tabindex="-1"></a><span class="fu">### CLIP</span></span>
+<span id="cb2-593"><a href="#cb2-593" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}similarity_pixel_space.png)</span>{fig-alt="Pixel-space similarity matrix" width=600}</span>
+<span id="cb2-594"><a href="#cb2-594" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-595"><a href="#cb2-595" aria-hidden="true" tabindex="-1"></a>Raw pixel-level similarity fails to capture semantic relationships.</span>
+<span id="cb2-596"><a href="#cb2-596" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-597"><a href="#cb2-597" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-598"><a href="#cb2-598" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-similarity-clip}</span>
+<span id="cb2-598"><a href="#cb2-598" aria-hidden="true" tabindex="-1"></a><span class="fu">### ResNet-50</span></span>
 <span id="cb2-599"><a href="#cb2-599" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-600"><a href="#cb2-600" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}similarity_clip.png)</span>{fig-alt="CLIP multimodal representation similarity" width=600}</span>
+<span id="cb2-600"><a href="#cb2-600" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-similarity-resnet}</span>
 <span id="cb2-601"><a href="#cb2-601" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-602"><a href="#cb2-602" aria-hidden="true" tabindex="-1"></a>Language-aligned embeddings from CLIP show text-driven semantic structure.</span>
-<span id="cb2-603"><a href="#cb2-603" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-604"><a href="#cb2-604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-605"><a href="#cb2-605" aria-hidden="true" tabindex="-1"></a><span class="fu">### DINOv3</span></span>
+<span id="cb2-602"><a href="#cb2-602" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}similarity_resnet50.png)</span>{fig-alt="ResNet-50 supervised representation similarity" width=600}</span>
+<span id="cb2-603"><a href="#cb2-603" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-604"><a href="#cb2-604" aria-hidden="true" tabindex="-1"></a>Supervised CNN representations group semantically similar images.</span>
+<span id="cb2-605"><a href="#cb2-605" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-606"><a href="#cb2-606" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-607"><a href="#cb2-607" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-similarity-dinov3}</span>
+<span id="cb2-607"><a href="#cb2-607" aria-hidden="true" tabindex="-1"></a><span class="fu">### CLIP</span></span>
 <span id="cb2-608"><a href="#cb2-608" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-609"><a href="#cb2-609" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}similarity_dinov3.png)</span>{fig-alt="DINOv3 self-supervised representation similarity" width=600}</span>
+<span id="cb2-609"><a href="#cb2-609" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-similarity-clip}</span>
 <span id="cb2-610"><a href="#cb2-610" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-611"><a href="#cb2-611" aria-hidden="true" tabindex="-1"></a>Self-distilled DINOv3 features (ViT-B/16, <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token) reveal fine-grained semantic clusters.</span>
-<span id="cb2-612"><a href="#cb2-612" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-613"><a href="#cb2-613" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-611"><a href="#cb2-611" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}similarity_clip.png)</span>{fig-alt="CLIP multimodal representation similarity" width=600}</span>
+<span id="cb2-612"><a href="#cb2-612" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-613"><a href="#cb2-613" aria-hidden="true" tabindex="-1"></a>Language-aligned embeddings from CLIP show text-driven semantic structure.</span>
 <span id="cb2-614"><a href="#cb2-614" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-615"><a href="#cb2-615" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-616"><a href="#cb2-616" aria-hidden="true" tabindex="-1"></a>At a glance, the four representations differ in what they are good for:</span>
+<span id="cb2-616"><a href="#cb2-616" aria-hidden="true" tabindex="-1"></a><span class="fu">### DINOv3</span></span>
 <span id="cb2-617"><a href="#cb2-617" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-618"><a href="#cb2-618" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Model <span class="pp">|</span> Strength <span class="pp">|</span> Good For <span class="pp">|</span></span>
-<span id="cb2-619"><a href="#cb2-619" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|----------|----------|</span></span>
-<span id="cb2-620"><a href="#cb2-620" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Pixel** <span class="pp">|</span> Poor semantic similarity <span class="pp">|</span> Exact duplicates <span class="pp">|</span></span>
-<span id="cb2-621"><a href="#cb2-621" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ResNet** <span class="pp">|</span> Efficient supervised features <span class="pp">|</span> Fast baselines <span class="pp">|</span></span>
-<span id="cb2-622"><a href="#cb2-622" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **CLIP** <span class="pp">|</span> Language-aligned semantics <span class="pp">|</span> Text-image search, zero-shot <span class="pp">|</span></span>
-<span id="cb2-623"><a href="#cb2-623" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **DINOv3** <span class="pp">|</span> Fine-grained visual similarity <span class="pp">|</span> Visual search, dense tasks <span class="pp">|</span></span>
+<span id="cb2-618"><a href="#cb2-618" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-similarity-dinov3}</span>
+<span id="cb2-619"><a href="#cb2-619" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-620"><a href="#cb2-620" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}similarity_dinov3.png)</span>{fig-alt="DINOv3 self-supervised representation similarity" width=600}</span>
+<span id="cb2-621"><a href="#cb2-621" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-622"><a href="#cb2-622" aria-hidden="true" tabindex="-1"></a>Self-distilled DINOv3 features (ViT-B/16, <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token) reveal fine-grained semantic clusters.</span>
+<span id="cb2-623"><a href="#cb2-623" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-624"><a href="#cb2-624" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-625"><a href="#cb2-625" aria-hidden="true" tabindex="-1"></a>: Summary of representation paradigms and their typical use cases. {tbl-colwidths="<span class="co">[</span><span class="ot">18,32,50</span><span class="co">]</span>"}</span>
+<span id="cb2-625"><a href="#cb2-625" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-626"><a href="#cb2-626" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-627"><a href="#cb2-627" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-628"><a href="#cb2-628" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question: Which Representations Do You Favour? And Why?" collapse="false"}</span>
-<span id="cb2-629"><a href="#cb2-629" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-630"><a href="#cb2-630" aria-hidden="true" tabindex="-1"></a>Looking at the similarity matrices, which representation do you prefer and why?</span>
-<span id="cb2-631"><a href="#cb2-631" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-632"><a href="#cb2-632" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-633"><a href="#cb2-633" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Discussion<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
-<span id="cb2-634"><a href="#cb2-634" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-635"><a href="#cb2-635" aria-hidden="true" tabindex="-1"></a>**Pixel Space (@fig-rl-similarity-pixel-space):**</span>
-<span id="cb2-636"><a href="#cb2-636" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-637"><a href="#cb2-637" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Not suitable for any semantic task</span>
-<span id="cb2-638"><a href="#cb2-638" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Captures low-level appearance variations (lighting, pose, exact pixel alignment)</span>
-<span id="cb2-639"><a href="#cb2-639" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cannot distinguish semantic categories from superficial similarities</span>
+<span id="cb2-627"><a href="#cb2-627" aria-hidden="true" tabindex="-1"></a>At a glance, the four representations differ in what they are good for:</span>
+<span id="cb2-628"><a href="#cb2-628" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-629"><a href="#cb2-629" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Model <span class="pp">|</span> Strength <span class="pp">|</span> Good For <span class="pp">|</span></span>
+<span id="cb2-630"><a href="#cb2-630" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|----------|----------|</span></span>
+<span id="cb2-631"><a href="#cb2-631" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Pixel** <span class="pp">|</span> Poor semantic similarity <span class="pp">|</span> Exact duplicates <span class="pp">|</span></span>
+<span id="cb2-632"><a href="#cb2-632" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ResNet** <span class="pp">|</span> Efficient supervised features <span class="pp">|</span> Fast baselines <span class="pp">|</span></span>
+<span id="cb2-633"><a href="#cb2-633" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **CLIP** <span class="pp">|</span> Language-aligned semantics <span class="pp">|</span> Text-image search, zero-shot <span class="pp">|</span></span>
+<span id="cb2-634"><a href="#cb2-634" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **DINOv3** <span class="pp">|</span> Fine-grained visual similarity <span class="pp">|</span> Visual search, dense tasks <span class="pp">|</span></span>
+<span id="cb2-635"><a href="#cb2-635" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-636"><a href="#cb2-636" aria-hidden="true" tabindex="-1"></a>: Summary of representation paradigms and their typical use cases. {tbl-colwidths="<span class="co">[</span><span class="ot">18,32,50</span><span class="co">]</span>"}</span>
+<span id="cb2-637"><a href="#cb2-637" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-638"><a href="#cb2-638" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-639"><a href="#cb2-639" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question: Which Representations Do You Favour? And Why?" collapse="false"}</span>
 <span id="cb2-640"><a href="#cb2-640" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-641"><a href="#cb2-641" aria-hidden="true" tabindex="-1"></a>**ResNet-50 Supervised (@fig-rl-similarity-resnet):**</span>
+<span id="cb2-641"><a href="#cb2-641" aria-hidden="true" tabindex="-1"></a>Looking at the similarity matrices, which representation do you prefer and why?</span>
 <span id="cb2-642"><a href="#cb2-642" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-643"><a href="#cb2-643" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Much better than pixel space but still limited</span>
-<span id="cb2-644"><a href="#cb2-644" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Shows semantic grouping (elephants cluster)</span>
-<span id="cb2-645"><a href="#cb2-645" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Trained on ImageNet classes, may not transfer optimally to fine-grained tasks</span>
-<span id="cb2-646"><a href="#cb2-646" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Some sensitivity to lightning (elephant night vs day)</span>
+<span id="cb2-643"><a href="#cb2-643" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-644"><a href="#cb2-644" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Discussion<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb2-645"><a href="#cb2-645" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-646"><a href="#cb2-646" aria-hidden="true" tabindex="-1"></a>**Pixel Space (@fig-rl-similarity-pixel-space):**</span>
 <span id="cb2-647"><a href="#cb2-647" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-648"><a href="#cb2-648" aria-hidden="true" tabindex="-1"></a>**CLIP Multimodal (@fig-rl-similarity-clip):**</span>
-<span id="cb2-649"><a href="#cb2-649" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-650"><a href="#cb2-650" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Good semantic structure aligned with natural language concepts</span>
-<span id="cb2-651"><a href="#cb2-651" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Clear separation between major categories (animals vs. vehicles)</span>
-<span id="cb2-652"><a href="#cb2-652" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Limitation: Lower differentiation within categories</span>
-<span id="cb2-653"><a href="#cb2-653" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Best for: Broad semantic retrieval and zero-shot open-vocabulary tasks</span>
-<span id="cb2-654"><a href="#cb2-654" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Trade-off: Language alignment may sacrifice fine-grained visual distinctions</span>
-<span id="cb2-655"><a href="#cb2-655" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-656"><a href="#cb2-656" aria-hidden="true" tabindex="-1"></a>**DINOv3 Self-Supervised (@fig-rl-similarity-dinov3):**</span>
-<span id="cb2-657"><a href="#cb2-657" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-658"><a href="#cb2-658" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Sharp discrimination between semantic classes (Elephant vs Giraffe, Car vs everything else)</span>
-<span id="cb2-659"><a href="#cb2-659" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Graded similarity between related categories (Rhino is closer to Elephant than Giraffe is)</span>
-<span id="cb2-660"><a href="#cb2-660" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Strong within-category structure (elephant day variants)</span>
-<span id="cb2-661"><a href="#cb2-661" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Clear night/day distinctions while preserving identity</span>
-<span id="cb2-662"><a href="#cb2-662" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Best for: Few-shot learning, fine-grained classification, dense prediction tasks</span>
-<span id="cb2-663"><a href="#cb2-663" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pure vision objective without language bias preserves visual details</span>
-<span id="cb2-664"><a href="#cb2-664" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-665"><a href="#cb2-665" aria-hidden="true" tabindex="-1"></a>**Recommendation hierarchy:**</span>
+<span id="cb2-648"><a href="#cb2-648" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Not suitable for any semantic task</span>
+<span id="cb2-649"><a href="#cb2-649" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Captures low-level appearance variations (lighting, pose, exact pixel alignment)</span>
+<span id="cb2-650"><a href="#cb2-650" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cannot distinguish semantic categories from superficial similarities</span>
+<span id="cb2-651"><a href="#cb2-651" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-652"><a href="#cb2-652" aria-hidden="true" tabindex="-1"></a>**ResNet-50 Supervised (@fig-rl-similarity-resnet):**</span>
+<span id="cb2-653"><a href="#cb2-653" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-654"><a href="#cb2-654" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Much better than pixel space but still limited</span>
+<span id="cb2-655"><a href="#cb2-655" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Shows semantic grouping (elephants cluster)</span>
+<span id="cb2-656"><a href="#cb2-656" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Trained on ImageNet classes, may not transfer optimally to fine-grained tasks</span>
+<span id="cb2-657"><a href="#cb2-657" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Some sensitivity to lightning (elephant night vs day)</span>
+<span id="cb2-658"><a href="#cb2-658" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-659"><a href="#cb2-659" aria-hidden="true" tabindex="-1"></a>**CLIP Multimodal (@fig-rl-similarity-clip):**</span>
+<span id="cb2-660"><a href="#cb2-660" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-661"><a href="#cb2-661" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Good semantic structure aligned with natural language concepts</span>
+<span id="cb2-662"><a href="#cb2-662" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Clear separation between major categories (animals vs. vehicles)</span>
+<span id="cb2-663"><a href="#cb2-663" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Limitation: Lower differentiation within categories</span>
+<span id="cb2-664"><a href="#cb2-664" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Best for: Broad semantic retrieval and zero-shot open-vocabulary tasks</span>
+<span id="cb2-665"><a href="#cb2-665" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Trade-off: Language alignment may sacrifice fine-grained visual distinctions</span>
 <span id="cb2-666"><a href="#cb2-666" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-667"><a href="#cb2-667" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**DINOv3**: Default choice for vision-centric tasks requiring discriminative power</span>
-<span id="cb2-668"><a href="#cb2-668" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**CLIP**: When zero-shot capabilities or text-image alignment is critical</span>
-<span id="cb2-669"><a href="#cb2-669" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Supervised CNN**: When computation is limited and broad categories suffice</span>
-<span id="cb2-670"><a href="#cb2-670" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Pixel space**: Never for semantic tasks (only for exact duplicate detection)</span>
-<span id="cb2-671"><a href="#cb2-671" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-672"><a href="#cb2-672" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-673"><a href="#cb2-673" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-674"><a href="#cb2-674" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-667"><a href="#cb2-667" aria-hidden="true" tabindex="-1"></a>**DINOv3 Self-Supervised (@fig-rl-similarity-dinov3):**</span>
+<span id="cb2-668"><a href="#cb2-668" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-669"><a href="#cb2-669" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Sharp discrimination between semantic classes (Elephant vs Giraffe, Car vs everything else)</span>
+<span id="cb2-670"><a href="#cb2-670" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Graded similarity between related categories (Rhino is closer to Elephant than Giraffe is)</span>
+<span id="cb2-671"><a href="#cb2-671" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Strong within-category structure (elephant day variants)</span>
+<span id="cb2-672"><a href="#cb2-672" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Clear night/day distinctions while preserving identity</span>
+<span id="cb2-673"><a href="#cb2-673" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Best for: Few-shot learning, fine-grained classification, dense prediction tasks</span>
+<span id="cb2-674"><a href="#cb2-674" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pure vision objective without language bias preserves visual details</span>
 <span id="cb2-675"><a href="#cb2-675" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-676"><a href="#cb2-676" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="Task-Relevant Invariance"}</span>
-<span id="cb2-677"><a href="#cb2-677" aria-hidden="true" tabindex="-1"></a>**Critical consideration:** Invariance to task-relevant attributes can render representations useless.</span>
-<span id="cb2-678"><a href="#cb2-678" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-679"><a href="#cb2-679" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Color-invariant features for flower classification:** Distinguishing red from yellow tulips becomes impossible.</span>
-<span id="cb2-680"><a href="#cb2-680" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rotation-invariant features for medical imaging:** Anatomical orientation is often clinically meaningful.</span>
-<span id="cb2-681"><a href="#cb2-681" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Scale-invariant features for size estimation:** Object measurement tasks require preserving size cues.</span>
+<span id="cb2-676"><a href="#cb2-676" aria-hidden="true" tabindex="-1"></a>**Recommendation hierarchy:**</span>
+<span id="cb2-677"><a href="#cb2-677" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-678"><a href="#cb2-678" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**DINOv3**: Default choice for vision-centric tasks requiring discriminative power</span>
+<span id="cb2-679"><a href="#cb2-679" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**CLIP**: When zero-shot capabilities or text-image alignment is critical</span>
+<span id="cb2-680"><a href="#cb2-680" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Supervised CNN**: When computation is limited and broad categories suffice</span>
+<span id="cb2-681"><a href="#cb2-681" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Pixel space**: Never for semantic tasks (only for exact duplicate detection)</span>
 <span id="cb2-682"><a href="#cb2-682" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-683"><a href="#cb2-683" aria-hidden="true" tabindex="-1"></a>**Design principle:** Match your representation's invariances to your task requirements. Preserve information and let the downstream model learn to ignore irrelevant variations.</span>
-<span id="cb2-684"><a href="#cb2-684" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-685"><a href="#cb2-685" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-683"><a href="#cb2-683" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-684"><a href="#cb2-684" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-685"><a href="#cb2-685" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-686"><a href="#cb2-686" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-687"><a href="#cb2-687" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using Representations</span></span>
-<span id="cb2-688"><a href="#cb2-688" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-689"><a href="#cb2-689" aria-hidden="true" tabindex="-1"></a>Once images are mapped to embeddings, many computer vision problems become geometric problems in representation space. Instead of comparing raw pixels, we compare vectors. A handful of recurring use cases cover most of what an image encoder is good for:</span>
-<span id="cb2-690"><a href="#cb2-690" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-691"><a href="#cb2-691" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Image search / retrieval:** find visually similar images by nearest-neighbour search.</span>
-<span id="cb2-692"><a href="#cb2-692" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classification on frozen embeddings:** train a small linear or shallow classifier on top of $f(\vect{x})$ without fine-tuning the encoder.</span>
-<span id="cb2-693"><a href="#cb2-693" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Clustering:** group images by similarity to discover visual structure when no labels are available.</span>
-<span id="cb2-694"><a href="#cb2-694" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Outlier and duplicate detection:** flag images that are far from any cluster, or pairs that are unusually close.</span>
-<span id="cb2-695"><a href="#cb2-695" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dense prediction:** use *local* patch tokens for segmentation, detection, or finding correspondences across images.</span>
+<span id="cb2-687"><a href="#cb2-687" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="Task-Relevant Invariance"}</span>
+<span id="cb2-688"><a href="#cb2-688" aria-hidden="true" tabindex="-1"></a>**Critical consideration:** Invariance to task-relevant attributes can render representations useless.</span>
+<span id="cb2-689"><a href="#cb2-689" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-690"><a href="#cb2-690" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Color-invariant features for flower classification:** Distinguishing red from yellow tulips becomes impossible.</span>
+<span id="cb2-691"><a href="#cb2-691" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rotation-invariant features for medical imaging:** Anatomical orientation is often clinically meaningful.</span>
+<span id="cb2-692"><a href="#cb2-692" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Scale-invariant features for size estimation:** Object measurement tasks require preserving size cues.</span>
+<span id="cb2-693"><a href="#cb2-693" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-694"><a href="#cb2-694" aria-hidden="true" tabindex="-1"></a>**Design principle:** Match your representation's invariances to your task requirements. Preserve information and let the downstream model learn to ignore irrelevant variations.</span>
+<span id="cb2-695"><a href="#cb2-695" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-696"><a href="#cb2-696" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-697"><a href="#cb2-697" aria-hidden="true" tabindex="-1"></a>The first four use a single global embedding per image; the last requires the spatially-resolved patch tokens discussed in the previous section.</span>
-<span id="cb2-698"><a href="#cb2-698" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-699"><a href="#cb2-699" aria-hidden="true" tabindex="-1"></a><span class="fu">### Image search</span></span>
-<span id="cb2-700"><a href="#cb2-700" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-701"><a href="#cb2-701" aria-hidden="true" tabindex="-1"></a>Image search is the canonical example. Each image in a catalogue is encoded once:</span>
-<span id="cb2-702"><a href="#cb2-702" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-703"><a href="#cb2-703" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
-<span id="cb2-704"><a href="#cb2-704" aria-hidden="true" tabindex="-1"></a>\vect{z}_i = f(\vect{x}_i)</span>
-<span id="cb2-705"><a href="#cb2-705" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
-<span id="cb2-706"><a href="#cb2-706" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-707"><a href="#cb2-707" aria-hidden="true" tabindex="-1"></a>A query image is encoded in the same way:</span>
-<span id="cb2-708"><a href="#cb2-708" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-709"><a href="#cb2-709" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
-<span id="cb2-710"><a href="#cb2-710" aria-hidden="true" tabindex="-1"></a>\vect{z}_q = f(\vect{x}_q)</span>
-<span id="cb2-711"><a href="#cb2-711" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
-<span id="cb2-712"><a href="#cb2-712" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-713"><a href="#cb2-713" aria-hidden="true" tabindex="-1"></a>The most similar images are then retrieved by nearest-neighbour search, commonly using cosine similarity:</span>
-<span id="cb2-714"><a href="#cb2-714" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-715"><a href="#cb2-715" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
-<span id="cb2-716"><a href="#cb2-716" aria-hidden="true" tabindex="-1"></a>\text{sim}_{\cos}(\vect{z}_q, \vect{z}_i)</span>
-<span id="cb2-717"><a href="#cb2-717" aria-hidden="true" tabindex="-1"></a>=</span>
-<span id="cb2-718"><a href="#cb2-718" aria-hidden="true" tabindex="-1"></a>\frac{\vect{z}_q^\top \vect{z}_i}</span>
-<span id="cb2-719"><a href="#cb2-719" aria-hidden="true" tabindex="-1"></a>{<span class="sc">\|</span>\vect{z}_q<span class="sc">\|</span>_2 <span class="sc">\|</span>\vect{z}_i<span class="sc">\|</span>_2}</span>
-<span id="cb2-720"><a href="#cb2-720" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
-<span id="cb2-721"><a href="#cb2-721" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-722"><a href="#cb2-722" aria-hidden="true" tabindex="-1"></a>This requires no labels and no classifier. The quality of the search results depends directly on the quality of the representation. If the embedding preserves product shape, style, colour, and texture, nearest neighbours in embedding space correspond to visually similar products.</span>
+<span id="cb2-697"><a href="#cb2-697" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-698"><a href="#cb2-698" aria-hidden="true" tabindex="-1"></a><span class="fu">## Using Representations</span></span>
+<span id="cb2-699"><a href="#cb2-699" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-700"><a href="#cb2-700" aria-hidden="true" tabindex="-1"></a>Once images are mapped to embeddings, many computer vision problems become geometric problems in representation space. Instead of comparing raw pixels, we compare vectors. A handful of recurring use cases cover most of what an image encoder is good for:</span>
+<span id="cb2-701"><a href="#cb2-701" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-702"><a href="#cb2-702" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Image search / retrieval:** find visually similar images by nearest-neighbour search.</span>
+<span id="cb2-703"><a href="#cb2-703" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classification on frozen embeddings:** train a small linear or shallow classifier on top of $f(\vect{x})$ without fine-tuning the encoder.</span>
+<span id="cb2-704"><a href="#cb2-704" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Clustering:** group images by similarity to discover visual structure when no labels are available.</span>
+<span id="cb2-705"><a href="#cb2-705" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Outlier and duplicate detection:** flag images that are far from any cluster, or pairs that are unusually close.</span>
+<span id="cb2-706"><a href="#cb2-706" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dense prediction:** use *local* patch tokens for segmentation, detection, or finding correspondences across images.</span>
+<span id="cb2-707"><a href="#cb2-707" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-708"><a href="#cb2-708" aria-hidden="true" tabindex="-1"></a>The first four use a single global embedding per image; the last requires the spatially-resolved patch tokens discussed in the previous section.</span>
+<span id="cb2-709"><a href="#cb2-709" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-710"><a href="#cb2-710" aria-hidden="true" tabindex="-1"></a><span class="fu">### Image search</span></span>
+<span id="cb2-711"><a href="#cb2-711" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-712"><a href="#cb2-712" aria-hidden="true" tabindex="-1"></a>Image search is the canonical example. Each image in a catalogue is encoded once:</span>
+<span id="cb2-713"><a href="#cb2-713" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-714"><a href="#cb2-714" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
+<span id="cb2-715"><a href="#cb2-715" aria-hidden="true" tabindex="-1"></a>\vect{z}_i = f(\vect{x}_i)</span>
+<span id="cb2-716"><a href="#cb2-716" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
+<span id="cb2-717"><a href="#cb2-717" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-718"><a href="#cb2-718" aria-hidden="true" tabindex="-1"></a>A query image is encoded in the same way:</span>
+<span id="cb2-719"><a href="#cb2-719" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-720"><a href="#cb2-720" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
+<span id="cb2-721"><a href="#cb2-721" aria-hidden="true" tabindex="-1"></a>\vect{z}_q = f(\vect{x}_q)</span>
+<span id="cb2-722"><a href="#cb2-722" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
 <span id="cb2-723"><a href="#cb2-723" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-724"><a href="#cb2-724" aria-hidden="true" tabindex="-1"></a>@fig-rl-image-search-map illustrates this with product photos from the Amazon Berkeley Objects (ABO) dataset, a catalogue of furniture such as beds, chairs, lamps, sofas, storage, and tables. Each image is encoded with DINOv3 and the embeddings are reduced to two dimensions for display.</span>
+<span id="cb2-724"><a href="#cb2-724" aria-hidden="true" tabindex="-1"></a>The most similar images are then retrieved by nearest-neighbour search, commonly using cosine similarity:</span>
 <span id="cb2-725"><a href="#cb2-725" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-726"><a href="#cb2-726" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-image-search-map}</span>
-<span id="cb2-727"><a href="#cb2-727" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}image_search_map_dinov3.png)</span>{fig-alt="About two hundred furniture product photos arranged in two dimensions according to their DINOv3 embeddings. A side table with hairpin legs is marked as the query; the images circled around it, its nearest neighbours, are mostly tables and desks with hairpin legs. Chairs and stools lie to the right, other tables below, lamps and shelves at the top left, and close-ups of fabric and wood at the top." width=100%}</span>
-<span id="cb2-728"><a href="#cb2-728" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-729"><a href="#cb2-729" aria-hidden="true" tabindex="-1"></a>DINOv3 embeddings (ViT-B/16, <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token) of ABO product images, reduced to two dimensions. The query (black frame) and its nearest neighbours (red circle). <span class="co">[</span><span class="ot">Source</span><span class="co">](https://amazon-berkeley-objects.s3.amazonaws.com/index.html)</span></span>
-<span id="cb2-730"><a href="#cb2-730" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-731"><a href="#cb2-731" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-732"><a href="#cb2-732" aria-hidden="true" tabindex="-1"></a>**Key insights:**</span>
-<span id="cb2-733"><a href="#cb2-733" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-734"><a href="#cb2-734" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Neighbours share shape and style:** The nearest neighbours of the hairpin-leg side table are mostly other furniture with hairpin legs and wooden tops, including desks and a bench. The model was never told what a hairpin leg is.</span>
-<span id="cb2-735"><a href="#cb2-735" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Product types form regions:** Chairs and stools, tables, and lamps and shelves occupy different parts of the map, without any category labels.</span>
-<span id="cb2-736"><a href="#cb2-736" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Real catalogues are noisy:** Close-ups of fabric and wood, dimension drawings, and even a product award badge end up in their own region at the top. Such outliers are easy to spot in embedding space.</span>
-<span id="cb2-737"><a href="#cb2-737" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-738"><a href="#cb2-738" aria-hidden="true" tabindex="-1"></a>As with the t-SNE maps earlier, the 2-dimensional map only serves for display. The search itself ranks images by cosine similarity in the full embedding space.</span>
+<span id="cb2-726"><a href="#cb2-726" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
+<span id="cb2-727"><a href="#cb2-727" aria-hidden="true" tabindex="-1"></a>\text{sim}_{\cos}(\vect{z}_q, \vect{z}_i)</span>
+<span id="cb2-728"><a href="#cb2-728" aria-hidden="true" tabindex="-1"></a>=</span>
+<span id="cb2-729"><a href="#cb2-729" aria-hidden="true" tabindex="-1"></a>\frac{\vect{z}_q^\top \vect{z}_i}</span>
+<span id="cb2-730"><a href="#cb2-730" aria-hidden="true" tabindex="-1"></a>{<span class="sc">\|</span>\vect{z}_q<span class="sc">\|</span>_2 <span class="sc">\|</span>\vect{z}_i<span class="sc">\|</span>_2}</span>
+<span id="cb2-731"><a href="#cb2-731" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
+<span id="cb2-732"><a href="#cb2-732" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-733"><a href="#cb2-733" aria-hidden="true" tabindex="-1"></a>This requires no labels and no classifier. The quality of the search results depends directly on the quality of the representation. If the embedding preserves product shape, style, colour, and texture, nearest neighbours in embedding space correspond to visually similar products.</span>
+<span id="cb2-734"><a href="#cb2-734" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-735"><a href="#cb2-735" aria-hidden="true" tabindex="-1"></a>@fig-rl-image-search-map illustrates this with product photos from the Amazon Berkeley Objects (ABO) dataset, a catalogue of furniture such as beds, chairs, lamps, sofas, storage, and tables. Each image is encoded with DINOv3 and the embeddings are reduced to two dimensions for display.</span>
+<span id="cb2-736"><a href="#cb2-736" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-737"><a href="#cb2-737" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-image-search-map}</span>
+<span id="cb2-738"><a href="#cb2-738" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}image_search_map_dinov3.png)</span>{fig-alt="About two hundred furniture product photos arranged in two dimensions according to their DINOv3 embeddings. A side table with hairpin legs is marked as the query; the images circled around it, its nearest neighbours, are mostly tables and desks with hairpin legs. Chairs and stools lie to the right, other tables below, lamps and shelves at the top left, and close-ups of fabric and wood at the top." width=100%}</span>
 <span id="cb2-739"><a href="#cb2-739" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-740"><a href="#cb2-740" aria-hidden="true" tabindex="-1"></a><span class="fu">### Classification on frozen embeddings</span></span>
-<span id="cb2-741"><a href="#cb2-741" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-742"><a href="#cb2-742" aria-hidden="true" tabindex="-1"></a>If labels *are* available — even just a few hundred per class — a small classifier on top of frozen embeddings is often a strong baseline. Concretely, encode every training image once, then fit a linear model (or a shallow MLP) on the resulting feature vectors. Because the encoder is frozen, training the head is fast and requires far fewer labels than training a full network from scratch. This is the standard *linear probe* protocol used to evaluate representation quality.</span>
-<span id="cb2-743"><a href="#cb2-743" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-744"><a href="#cb2-744" aria-hidden="true" tabindex="-1"></a><span class="fu">### Clustering and outlier detection</span></span>
-<span id="cb2-745"><a href="#cb2-745" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-746"><a href="#cb2-746" aria-hidden="true" tabindex="-1"></a>Without labels, clustering algorithms (k-means, agglomerative clustering, HDBSCAN) operating on embeddings can recover meaningful visual groups: animal species in camera-trap data, product types in a catalogue, or scene types in a photo library. The same geometric view supports outlier detection: images whose nearest neighbour is far away — or whose embedding lies in a sparse region — are candidates for inspection (rare classes, mis-labelled samples, near-duplicates).</span>
-<span id="cb2-747"><a href="#cb2-747" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-748"><a href="#cb2-748" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dense tasks via local tokens</span></span>
-<span id="cb2-749"><a href="#cb2-749" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-750"><a href="#cb2-750" aria-hidden="true" tabindex="-1"></a>For segmentation, detection, and correspondence, the global embedding is too coarse. Local patch tokens — one vector per spatial location — are the right primitive. A lightweight head on top of frozen patch tokens can produce per-pixel predictions, and matching patch tokens across images yields dense correspondences without any task-specific training.</span>
-<span id="cb2-751"><a href="#cb2-751" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-752"><a href="#cb2-752" aria-hidden="true" tabindex="-1"></a>The common thread across all of these: once images become vectors, downstream problems reduce to geometry — distances, neighbourhoods, and linear separations in a well-shaped embedding space.</span>
-<span id="cb2-753"><a href="#cb2-753" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-740"><a href="#cb2-740" aria-hidden="true" tabindex="-1"></a>DINOv3 embeddings (ViT-B/16, <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token) of ABO product images, reduced to two dimensions. The query (black frame) and its nearest neighbours (red circle). <span class="co">[</span><span class="ot">Source</span><span class="co">](https://amazon-berkeley-objects.s3.amazonaws.com/index.html)</span></span>
+<span id="cb2-741"><a href="#cb2-741" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-742"><a href="#cb2-742" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-743"><a href="#cb2-743" aria-hidden="true" tabindex="-1"></a>**Key insights:**</span>
+<span id="cb2-744"><a href="#cb2-744" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-745"><a href="#cb2-745" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Neighbours share shape and style:** The nearest neighbours of the hairpin-leg side table are mostly other furniture with hairpin legs and wooden tops, including desks and a bench. The model was never told what a hairpin leg is.</span>
+<span id="cb2-746"><a href="#cb2-746" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Product types form regions:** Chairs and stools, tables, and lamps and shelves occupy different parts of the map, without any category labels.</span>
+<span id="cb2-747"><a href="#cb2-747" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Real catalogues are noisy:** Close-ups of fabric and wood, dimension drawings, and even a product award badge end up in their own region at the top. Such outliers are easy to spot in embedding space.</span>
+<span id="cb2-748"><a href="#cb2-748" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-749"><a href="#cb2-749" aria-hidden="true" tabindex="-1"></a>As with the t-SNE maps earlier, the 2-dimensional map only serves for display. The search itself ranks images by cosine similarity in the full embedding space.</span>
+<span id="cb2-750"><a href="#cb2-750" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-751"><a href="#cb2-751" aria-hidden="true" tabindex="-1"></a><span class="fu">### Classification on frozen embeddings</span></span>
+<span id="cb2-752"><a href="#cb2-752" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-753"><a href="#cb2-753" aria-hidden="true" tabindex="-1"></a>If labels *are* available — even just a few hundred per class — a small classifier on top of frozen embeddings is often a strong baseline. Concretely, encode every training image once, then fit a linear model (or a shallow MLP) on the resulting feature vectors. Because the encoder is frozen, training the head is fast and requires far fewer labels than training a full network from scratch. This is the standard *linear probe* protocol used to evaluate representation quality.</span>
 <span id="cb2-754"><a href="#cb2-754" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-755"><a href="#cb2-755" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-756"><a href="#cb2-756" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quiz</span></span>
-<span id="cb2-757"><a href="#cb2-757" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-758"><a href="#cb2-758" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question 1: Understanding Representation Learning"}</span>
-<span id="cb2-759"><a href="#cb2-759" aria-hidden="true" tabindex="-1"></a>**Question:** Why do representations calculated from raw pixels (pixel-space similarity) fail to capture semantic relationships between images?</span>
+<span id="cb2-755"><a href="#cb2-755" aria-hidden="true" tabindex="-1"></a><span class="fu">### Clustering and outlier detection</span></span>
+<span id="cb2-756"><a href="#cb2-756" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-757"><a href="#cb2-757" aria-hidden="true" tabindex="-1"></a>Without labels, clustering algorithms (k-means, agglomerative clustering, HDBSCAN) operating on embeddings can recover meaningful visual groups: animal species in camera-trap data, product types in a catalogue, or scene types in a photo library. The same geometric view supports outlier detection: images whose nearest neighbour is far away — or whose embedding lies in a sparse region — are candidates for inspection (rare classes, mis-labelled samples, near-duplicates).</span>
+<span id="cb2-758"><a href="#cb2-758" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-759"><a href="#cb2-759" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dense tasks via local tokens</span></span>
 <span id="cb2-760"><a href="#cb2-760" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-761"><a href="#cb2-761" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-762"><a href="#cb2-762" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Answer<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
-<span id="cb2-763"><a href="#cb2-763" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-764"><a href="#cb2-764" aria-hidden="true" tabindex="-1"></a>**Answer:** Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in @fig-rl-similarity-pixel-space, pixel distances cannot distinguish between "different elephants in similar lighting" vs "same elephant in different lighting": both create similar pixel-level differences. Good representations compress the enormous space of possible images ($255^{H \times W \times C}$ combinations) into a semantic coordinate system where distances reflect meaning.</span>
+<span id="cb2-761"><a href="#cb2-761" aria-hidden="true" tabindex="-1"></a>For segmentation, detection, and correspondence, the global embedding is too coarse. Local patch tokens — one vector per spatial location — are the right primitive. A lightweight head on top of frozen patch tokens can produce per-pixel predictions, and matching patch tokens across images yields dense correspondences without any task-specific training.</span>
+<span id="cb2-762"><a href="#cb2-762" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-763"><a href="#cb2-763" aria-hidden="true" tabindex="-1"></a>The common thread across all of these: once images become vectors, downstream problems reduce to geometry — distances, neighbourhoods, and linear separations in a well-shaped embedding space.</span>
+<span id="cb2-764"><a href="#cb2-764" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-765"><a href="#cb2-765" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-766"><a href="#cb2-766" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-767"><a href="#cb2-767" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-766"><a href="#cb2-766" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-767"><a href="#cb2-767" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quiz</span></span>
 <span id="cb2-768"><a href="#cb2-768" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-769"><a href="#cb2-769" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question 2: Invariance and Selectivity Trade-off"}</span>
-<span id="cb2-770"><a href="#cb2-770" aria-hidden="true" tabindex="-1"></a>**Question:** Explain the invariance-selectivity trade-off in representation learning. Provide one concrete example where too much invariance would harm performance on a specific task.</span>
+<span id="cb2-769"><a href="#cb2-769" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question 1: Understanding Representation Learning"}</span>
+<span id="cb2-770"><a href="#cb2-770" aria-hidden="true" tabindex="-1"></a>**Question:** Why do representations calculated from raw pixels (pixel-space similarity) fail to capture semantic relationships between images?</span>
 <span id="cb2-771"><a href="#cb2-771" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-772"><a href="#cb2-772" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb2-773"><a href="#cb2-773" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Answer<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb2-774"><a href="#cb2-774" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-775"><a href="#cb2-775" aria-hidden="true" tabindex="-1"></a>**Answer:**</span>
+<span id="cb2-775"><a href="#cb2-775" aria-hidden="true" tabindex="-1"></a>**Answer:** Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in @fig-rl-similarity-pixel-space, pixel distances cannot distinguish between "different elephants in similar lighting" vs "same elephant in different lighting": both create similar pixel-level differences. Good representations compress the enormous space of possible images ($255^{H \times W \times C}$ combinations) into a semantic coordinate system where distances reflect meaning.</span>
 <span id="cb2-776"><a href="#cb2-776" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-777"><a href="#cb2-777" aria-hidden="true" tabindex="-1"></a>**The Trade-off:** Good representations must balance two competing goals:</span>
-<span id="cb2-778"><a href="#cb2-778" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-779"><a href="#cb2-779" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariance:** $<span class="sc">\|</span>f(\vect{x}) - f(g(\vect{x}))<span class="sc">\|</span>_2 &lt; \epsilon$ for nuisance transforms $g$ (lighting, pose changes)</span>
-<span id="cb2-780"><a href="#cb2-780" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Selectivity:** $<span class="sc">\|</span>f(\vect{x}_i) - f(\vect{x}_j)<span class="sc">\|</span>_2 &gt; \delta$ for semantically different inputs</span>
-<span id="cb2-781"><a href="#cb2-781" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-782"><a href="#cb2-782" aria-hidden="true" tabindex="-1"></a>**Concrete Example - Flower Classification:**</span>
-<span id="cb2-783"><a href="#cb2-783" aria-hidden="true" tabindex="-1"></a>If representations are completely **color-invariant** (treating all colors as identical), distinguishing between red roses and yellow roses becomes impossible, even though color is the primary discriminative feature. The model would collapse all flower images to similar embeddings regardless of color, destroying task-critical information.</span>
-<span id="cb2-784"><a href="#cb2-784" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-785"><a href="#cb2-785" aria-hidden="true" tabindex="-1"></a>**Other Examples:**</span>
-<span id="cb2-786"><a href="#cb2-786" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-787"><a href="#cb2-787" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Medical imaging:** Rotation invariance destroys anatomical orientation information needed for diagnosis</span>
-<span id="cb2-788"><a href="#cb2-788" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Object size estimation:** Scale invariance removes absolute/relative size cues</span>
-<span id="cb2-789"><a href="#cb2-789" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Material classification:** Texture invariance prevents distinguishing wood from metal</span>
-<span id="cb2-790"><a href="#cb2-790" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-791"><a href="#cb2-791" aria-hidden="true" tabindex="-1"></a>**Design Principle:** Match invariances to task requirements — preserve information the downstream task needs, discard only true nuisance factors.</span>
+<span id="cb2-777"><a href="#cb2-777" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-778"><a href="#cb2-778" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-779"><a href="#cb2-779" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-780"><a href="#cb2-780" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question 2: Invariance and Selectivity Trade-off"}</span>
+<span id="cb2-781"><a href="#cb2-781" aria-hidden="true" tabindex="-1"></a>**Question:** Explain the invariance-selectivity trade-off in representation learning. Provide one concrete example where too much invariance would harm performance on a specific task.</span>
+<span id="cb2-782"><a href="#cb2-782" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-783"><a href="#cb2-783" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-784"><a href="#cb2-784" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Answer<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb2-785"><a href="#cb2-785" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-786"><a href="#cb2-786" aria-hidden="true" tabindex="-1"></a>**Answer:**</span>
+<span id="cb2-787"><a href="#cb2-787" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-788"><a href="#cb2-788" aria-hidden="true" tabindex="-1"></a>**The Trade-off:** Good representations must balance two competing goals:</span>
+<span id="cb2-789"><a href="#cb2-789" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-790"><a href="#cb2-790" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariance:** $<span class="sc">\|</span>f(\vect{x}) - f(g(\vect{x}))<span class="sc">\|</span>_2 &lt; \epsilon$ for nuisance transforms $g$ (lighting, pose changes)</span>
+<span id="cb2-791"><a href="#cb2-791" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Selectivity:** $<span class="sc">\|</span>f(\vect{x}_i) - f(\vect{x}_j)<span class="sc">\|</span>_2 &gt; \delta$ for semantically different inputs</span>
 <span id="cb2-792"><a href="#cb2-792" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-793"><a href="#cb2-793" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-794"><a href="#cb2-794" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-793"><a href="#cb2-793" aria-hidden="true" tabindex="-1"></a>**Concrete Example - Flower Classification:**</span>
+<span id="cb2-794"><a href="#cb2-794" aria-hidden="true" tabindex="-1"></a>If representations are completely **color-invariant** (treating all colors as identical), distinguishing between red roses and yellow roses becomes impossible, even though color is the primary discriminative feature. The model would collapse all flower images to similar embeddings regardless of color, destroying task-critical information.</span>
 <span id="cb2-795"><a href="#cb2-795" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-796"><a href="#cb2-796" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question 3: Comparing SSL Objectives"}</span>
-<span id="cb2-797"><a href="#cb2-797" aria-hidden="true" tabindex="-1"></a>**Question:** What is the key advantage of self-distillation methods (DINO/DINOv2/DINOv3) over contrastive learning methods (SimCLR)?</span>
-<span id="cb2-798"><a href="#cb2-798" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-799"><a href="#cb2-799" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-800"><a href="#cb2-800" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Answer<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb2-796"><a href="#cb2-796" aria-hidden="true" tabindex="-1"></a>**Other Examples:**</span>
+<span id="cb2-797"><a href="#cb2-797" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-798"><a href="#cb2-798" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Medical imaging:** Rotation invariance destroys anatomical orientation information needed for diagnosis</span>
+<span id="cb2-799"><a href="#cb2-799" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Object size estimation:** Scale invariance removes absolute/relative size cues</span>
+<span id="cb2-800"><a href="#cb2-800" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Material classification:** Texture invariance prevents distinguishing wood from metal</span>
 <span id="cb2-801"><a href="#cb2-801" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-802"><a href="#cb2-802" aria-hidden="true" tabindex="-1"></a>**Answer:**</span>
+<span id="cb2-802"><a href="#cb2-802" aria-hidden="true" tabindex="-1"></a>**Design Principle:** Match invariances to task requirements — preserve information the downstream task needs, discard only true nuisance factors.</span>
 <span id="cb2-803"><a href="#cb2-803" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-804"><a href="#cb2-804" aria-hidden="true" tabindex="-1"></a>**Key Advantage:** Self-distillation does **not require explicit negative samples** or large batch sizes.</span>
-<span id="cb2-805"><a href="#cb2-805" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-806"><a href="#cb2-806" aria-hidden="true" tabindex="-1"></a>**Contrastive Learning (SimCLR):**</span>
-<span id="cb2-807"><a href="#cb2-807" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-808"><a href="#cb2-808" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Requires large batches (256-4096) to provide sufficient negative pairs</span>
-<span id="cb2-809"><a href="#cb2-809" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>InfoNCE loss: $\mathcal{L} = -\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}$</span>
-<span id="cb2-810"><a href="#cb2-810" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Computational cost and memory scale with batch size</span>
-<span id="cb2-811"><a href="#cb2-811" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Needs careful negative mining strategies</span>
+<span id="cb2-804"><a href="#cb2-804" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-805"><a href="#cb2-805" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-806"><a href="#cb2-806" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-807"><a href="#cb2-807" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question 3: Comparing SSL Objectives"}</span>
+<span id="cb2-808"><a href="#cb2-808" aria-hidden="true" tabindex="-1"></a>**Question:** What is the key advantage of self-distillation methods (DINO/DINOv2/DINOv3) over contrastive learning methods (SimCLR)?</span>
+<span id="cb2-809"><a href="#cb2-809" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-810"><a href="#cb2-810" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-811"><a href="#cb2-811" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Answer<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb2-812"><a href="#cb2-812" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-813"><a href="#cb2-813" aria-hidden="true" tabindex="-1"></a>**Self-Distillation (DINO):**</span>
+<span id="cb2-813"><a href="#cb2-813" aria-hidden="true" tabindex="-1"></a>**Answer:**</span>
 <span id="cb2-814"><a href="#cb2-814" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-815"><a href="#cb2-815" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Student network matches teacher's probability distribution over crops</span>
-<span id="cb2-816"><a href="#cb2-816" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Teacher is EMA of student weights (no separate training)</span>
-<span id="cb2-817"><a href="#cb2-817" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Emergent clustering arises from teacher-student dynamics and centering/sharpening</span>
-<span id="cb2-818"><a href="#cb2-818" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Works with smaller batches, more memory-efficient</span>
-<span id="cb2-819"><a href="#cb2-819" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Bonus:** Produces both strong global descriptors AND high-quality local (patch) tokens</span>
-<span id="cb2-820"><a href="#cb2-820" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-821"><a href="#cb2-821" aria-hidden="true" tabindex="-1"></a>**Result:** DINO-family models achieve state-of-the-art transfer performance with simpler training dynamics and lower computational requirements.</span>
-<span id="cb2-822"><a href="#cb2-822" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-823"><a href="#cb2-823" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-824"><a href="#cb2-824" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-815"><a href="#cb2-815" aria-hidden="true" tabindex="-1"></a>**Key Advantage:** Self-distillation does **not require explicit negative samples** or large batch sizes.</span>
+<span id="cb2-816"><a href="#cb2-816" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-817"><a href="#cb2-817" aria-hidden="true" tabindex="-1"></a>**Contrastive Learning (SimCLR):**</span>
+<span id="cb2-818"><a href="#cb2-818" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-819"><a href="#cb2-819" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Requires large batches (256-4096) to provide sufficient negative pairs</span>
+<span id="cb2-820"><a href="#cb2-820" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>InfoNCE loss: $\mathcal{L} = -\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}$</span>
+<span id="cb2-821"><a href="#cb2-821" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Computational cost and memory scale with batch size</span>
+<span id="cb2-822"><a href="#cb2-822" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Needs careful negative mining strategies</span>
+<span id="cb2-823"><a href="#cb2-823" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-824"><a href="#cb2-824" aria-hidden="true" tabindex="-1"></a>**Self-Distillation (DINO):**</span>
 <span id="cb2-825"><a href="#cb2-825" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-826"><a href="#cb2-826" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question 4: Global vs Local Representations"}</span>
-<span id="cb2-827"><a href="#cb2-827" aria-hidden="true" tabindex="-1"></a>**Question:** When should you use global representations versus local representations? Give one specific task example for each.</span>
-<span id="cb2-828"><a href="#cb2-828" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-829"><a href="#cb2-829" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-830"><a href="#cb2-830" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Answer<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb2-826"><a href="#cb2-826" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Student network matches teacher's probability distribution over crops</span>
+<span id="cb2-827"><a href="#cb2-827" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Teacher is EMA of student weights (no separate training)</span>
+<span id="cb2-828"><a href="#cb2-828" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Emergent clustering arises from teacher-student dynamics and centering/sharpening</span>
+<span id="cb2-829"><a href="#cb2-829" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Works with smaller batches, more memory-efficient</span>
+<span id="cb2-830"><a href="#cb2-830" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Bonus:** Produces both strong global descriptors AND high-quality local (patch) tokens</span>
 <span id="cb2-831"><a href="#cb2-831" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-832"><a href="#cb2-832" aria-hidden="true" tabindex="-1"></a>**Answer:**</span>
+<span id="cb2-832"><a href="#cb2-832" aria-hidden="true" tabindex="-1"></a>**Result:** DINO-family models achieve state-of-the-art transfer performance with simpler training dynamics and lower computational requirements.</span>
 <span id="cb2-833"><a href="#cb2-833" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-834"><a href="#cb2-834" aria-hidden="true" tabindex="-1"></a>**Global Representations** (single embedding per image, e.g., <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token):</span>
-<span id="cb2-835"><a href="#cb2-835" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-836"><a href="#cb2-836" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Use when:** Task requires image-level understanding without spatial localization</span>
-<span id="cb2-837"><a href="#cb2-837" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Examples:**</span>
-<span id="cb2-838"><a href="#cb2-838" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Image classification:** "Is this a cat or dog?" — only need overall category</span>
-<span id="cb2-839"><a href="#cb2-839" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Image retrieval:** "Find similar vacation photos" — semantic similarity at image level</span>
-<span id="cb2-840"><a href="#cb2-840" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Zero-shot classification (CLIP):** "Does this image contain a beach?" — image-text alignment</span>
-<span id="cb2-841"><a href="#cb2-841" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-842"><a href="#cb2-842" aria-hidden="true" tabindex="-1"></a>**Local Representations** (spatially-resolved patch tokens, e.g., DINOv3 patch features):</span>
-<span id="cb2-843"><a href="#cb2-843" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-844"><a href="#cb2-844" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Use when:** Task requires pixel-level or region-level understanding</span>
-<span id="cb2-845"><a href="#cb2-845" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Examples:**</span>
-<span id="cb2-846"><a href="#cb2-846" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Semantic segmentation:** "Label every pixel as road/car/pedestrian" — need spatial structure</span>
-<span id="cb2-847"><a href="#cb2-847" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Object detection:** "Find all bounding boxes containing cars" — need localization</span>
-<span id="cb2-848"><a href="#cb2-848" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Dense prediction:** "Generate depth map for each pixel" — requires preserved spatial information</span>
-<span id="cb2-849"><a href="#cb2-849" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-850"><a href="#cb2-850" aria-hidden="true" tabindex="-1"></a>**Key Difference:** Global embeddings through pooling (e.g., Global Average Pooling: $\text{GAP}(X) = \frac{1}{H \times W}\sum_{i,j} X_{i,j}$) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.</span>
-<span id="cb2-851"><a href="#cb2-851" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-852"><a href="#cb2-852" aria-hidden="true" tabindex="-1"></a>**Practical Tip:** Many modern architectures (DINOv3, ViTs) provide **both** — use the <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token for global tasks and patch tokens for dense tasks.</span>
-<span id="cb2-853"><a href="#cb2-853" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-854"><a href="#cb2-854" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb2-855"><a href="#cb2-855" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-856"><a href="#cb2-856" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-857"><a href="#cb2-857" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-858"><a href="#cb2-858" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
-<span id="cb2-859"><a href="#cb2-859" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-860"><a href="#cb2-860" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
-<span id="cb2-861"><a href="#cb2-861" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-834"><a href="#cb2-834" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-835"><a href="#cb2-835" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-836"><a href="#cb2-836" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-837"><a href="#cb2-837" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Question 4: Global vs Local Representations"}</span>
+<span id="cb2-838"><a href="#cb2-838" aria-hidden="true" tabindex="-1"></a>**Question:** When should you use global representations versus local representations? Give one specific task example for each.</span>
+<span id="cb2-839"><a href="#cb2-839" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-840"><a href="#cb2-840" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-841"><a href="#cb2-841" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Answer<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
+<span id="cb2-842"><a href="#cb2-842" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-843"><a href="#cb2-843" aria-hidden="true" tabindex="-1"></a>**Answer:**</span>
+<span id="cb2-844"><a href="#cb2-844" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-845"><a href="#cb2-845" aria-hidden="true" tabindex="-1"></a>**Global Representations** (single embedding per image, e.g., <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token):</span>
+<span id="cb2-846"><a href="#cb2-846" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-847"><a href="#cb2-847" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Use when:** Task requires image-level understanding without spatial localization</span>
+<span id="cb2-848"><a href="#cb2-848" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Examples:**</span>
+<span id="cb2-849"><a href="#cb2-849" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Image classification:** "Is this a cat or dog?" — only need overall category</span>
+<span id="cb2-850"><a href="#cb2-850" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Image retrieval:** "Find similar vacation photos" — semantic similarity at image level</span>
+<span id="cb2-851"><a href="#cb2-851" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Zero-shot classification (CLIP):** "Does this image contain a beach?" — image-text alignment</span>
+<span id="cb2-852"><a href="#cb2-852" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-853"><a href="#cb2-853" aria-hidden="true" tabindex="-1"></a>**Local Representations** (spatially-resolved patch tokens, e.g., DINOv3 patch features):</span>
+<span id="cb2-854"><a href="#cb2-854" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-855"><a href="#cb2-855" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Use when:** Task requires pixel-level or region-level understanding</span>
+<span id="cb2-856"><a href="#cb2-856" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Examples:**</span>
+<span id="cb2-857"><a href="#cb2-857" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Semantic segmentation:** "Label every pixel as road/car/pedestrian" — need spatial structure</span>
+<span id="cb2-858"><a href="#cb2-858" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Object detection:** "Find all bounding boxes containing cars" — need localization</span>
+<span id="cb2-859"><a href="#cb2-859" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Dense prediction:** "Generate depth map for each pixel" — requires preserved spatial information</span>
+<span id="cb2-860"><a href="#cb2-860" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-861"><a href="#cb2-861" aria-hidden="true" tabindex="-1"></a>**Key Difference:** Global embeddings through pooling (e.g., Global Average Pooling: $\text{GAP}(X) = \frac{1}{H \times W}\sum_{i,j} X_{i,j}$) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.</span>
+<span id="cb2-862"><a href="#cb2-862" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-863"><a href="#cb2-863" aria-hidden="true" tabindex="-1"></a>**Practical Tip:** Many modern architectures (DINOv3, ViTs) provide **both** — use the <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token for global tasks and patch tokens for dense tasks.</span>
+<span id="cb2-864"><a href="#cb2-864" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-865"><a href="#cb2-865" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
+<span id="cb2-866"><a href="#cb2-866" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-867"><a href="#cb2-867" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-868"><a href="#cb2-868" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-869"><a href="#cb2-869" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb2-870"><a href="#cb2-870" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-871"><a href="#cb2-871" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb2-872"><a href="#cb2-872" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
