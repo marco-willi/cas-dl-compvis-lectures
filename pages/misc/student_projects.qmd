@@ -183,9 +183,64 @@ Source: AMI-Br / TUPAC16 + MIDOG21
 **Difficulty/Effort**: High
 
 
+## Generative Projects
+
+These projects build a workflow around existing generative models, no training required. Using an image generation API (e.g. Gemini, OpenAI, or FLUX via Replicate / fal.ai) is fine and recommended, as it avoids GPU setup. Generating a few nice images is easy. The real work is defining what "good" means, measuring it, and comparing variants systematically.
+
+::: {.callout-tip title="AI Assistants"}
+AI coding assistants may be used for the implementation (API calls, pipeline, evaluation scripts). This frees time for workflow design and evaluation, which is where the focus of these projects lies. Fix the experimental grid (inputs × variants × repetitions) in advance and estimate the number of API calls and cost before you start.
+:::
+
+### Product Images in Different Environments
+
+**Goal**: Design a workflow that takes one or more source images of a product (e.g. a chair on a white background) and generates images of the same product in different environments (e.g. living room, office, terrace). The product must stay recognisably the same: shape, colour, material and proportions must not change.
+
+**Approach**: Build and compare three variants:
+
+1. *Editing model*: an image editing model via API with a fixed prompt template, e.g. "Place this chair in a bright Scandinavian living room".
+2. *Multiple views*: the same, but with 2–3 source views of the product as input. Does more context improve fidelity?
+3. *Cut-out + compositing*: segment the product (e.g. background removal or SAM), keep its pixels fixed, and only generate the background (inpainting / outpainting). This guarantees fidelity, but does the result still look realistic?
+
+Optionally, compare two different models or prompt formulations for the best variant.
+
+**Focus**:
+
+- *Product fidelity*: embedding similarity (DINO or CLIP) between the source product and the product region in the generated image.
+- *Prompt adherence*: does the scene match the requested environment? E.g. CLIP zero-shot classification over the environment names.
+- *Realism and overall quality*: a vision-language model as judge (e.g. a fixed rubric with scores 1–5), validated against your own ratings on a subset. How well do the judge and you agree?
+- *Failure analysis*: when does the product change (geometry, colour, texture)? Are scale, perspective and shadows plausible? Break down all metrics by product category and environment: which products and scenes are systematically hard?
+
+**Dataset**: 50–100 products from Amazon Berkeley Objects (ABO), which provides multiple views per item, and a fixed list of 5 environments (several hundred generated images in total). Choose the products to be diverse: different categories (e.g. chairs, sofas, tables, lamps, rugs, shelves), sizes, and deliberately difficult cases such as thin structures, glass, reflective metal, patterned fabric, or text and logos. Run small pilot experiments on a few products first, then scale up the final comparison.
+
+**Difficulty/Effort**: Medium - High
+
+
+### Food Images for a Fictional Delivery Service
+
+**Goal**: Design a workflow that generates menu images for a fictional food delivery service. All images should share a common look & feel (e.g. background, lighting, camera angle, plating). Consider two input scenarios: a) text descriptions of dishes (menu entries), and b) existing photos of varying quality that should be converted to the common style.
+
+**Approach**: First define the target style with a short style guide and 2–3 reference images. Then build both scenarios:
+
+- *a) Text-to-image*: compare a prompt template only vs. prompt template plus a style reference image.
+- *b) Image editing*: convert existing photos to the target style. Compare two models or two editing strengths and investigate the trade-off between preserving the original dish and matching the style.
+
+Optionally, use an LLM to turn short dish names into consistent, detailed menu descriptions and prompts.
+
+**Focus**:
+
+- *Content correctness*: is it the right dish? Use a Food-101 classifier or CLIP zero-shot classification over the dish names.
+- *Style consistency*: embedding similarity to the reference images and spread within the generated set. Inspect the menu side by side, does it look like one brand?
+- *Content preservation* (scenario b): similarity between original and converted photo. Plot preservation vs. style match across variants.
+- *Failure analysis*: which dishes are hard (e.g. soups, mixed dishes)? Does the model invent ingredients that are not in the description? Break down the metrics by cuisine, dish type and input photo quality.
+
+**Dataset**: 50–100 dishes from Food-101 (class names as menu items for a, photos as inputs for b), with several input photos per dish for scenario b) (several hundred images in total). Choose the dishes to be diverse: different cuisines, dish types (soups, salads, desserts, plated mains, finger food) and visual difficulty. For scenario b), deliberately include difficult input photos: dark, cluttered background, unusual angle, partially eaten, or several dishes in one photo. Run small pilot experiments on a few dishes first, then scale up the final comparison.
+
+**Difficulty/Effort**: Medium - High
+
+
 ## Research Projects
 
-These projects test a recent claim from the literature rather than solve an application problem. The outcome is open: a carefully executed negative result is as valuable as a positive one.
+These projects investigate an open question rather than solve an application problem. The question can come from anywhere: a claim in a recent paper, an untested idea, or an observation about how a model or method behaves. The focus is on careful experimental design and honest analysis. The outcome is open: a carefully executed negative result is as valuable as a positive one.
 
 ### Does MatryoshkaLoRA Transfer to Vision Transformers?
 
@@ -193,7 +248,7 @@ These projects test a recent claim from the literature rather than solve an appl
 
 **Background**: Standard LoRA computes $\m{W}_0 + \m{A}\m{B}$ with a fixed rank $R$. MatryoshkaLoRA inserts a fixed diagonal scaling between the adapters, $\m{W}_0 + \m{A}\,\mathrm{diag}(\vect{p})\,\m{B}$, where $\vect{p}$ up-weights the leading rank components (e.g. $\vect{p} = [4,3,2,2,1,1,1,1]$ for $R=8$ and nested ranks $\{1,2,4,8\}$). This way every sub-rank receives a training signal in each step. At inference, $\vect{p}$ is dropped and the first $k$ components are used. Official code: [IST-DASLab/MatryoshkaLoRA](https://github.com/IST-DASLab/MatryoshkaLoRA).
 
-**Approach**: Use a DINOv3 backbone (ViT-S/16 or ViT-B/16, available on HuggingFace after accepting the license) with a linear classification head. Establish a frozen-backbone (linear probe) baseline first. Then compare standard LoRA and MatryoshkaLoRA (and optionally DyLoRA) at a maximum rank of e.g. $R=32$. Evaluate MatryoshkaLoRA truncated to ranks $\{1, 2, 4, 8, 16, 32\}$ and compare against standard LoRA models trained separately at a subset of these ranks.
+**Approach**: Use a DINOv3 backbone (ViT-S/16 or ViT-B/16) loaded via `timm` (e.g. `timm.create_model("vit_small_patch16_dinov3.lvd1689m", pretrained=True)`, no HuggingFace account required) with a linear classification head. Establish a frozen-backbone (linear probe) baseline first. Then compare standard LoRA and MatryoshkaLoRA (and optionally DyLoRA) at a maximum rank of e.g. $R=32$. Evaluate MatryoshkaLoRA truncated to ranks $\{1, 2, 4, 8, 16, 32\}$ and compare against standard LoRA models trained separately at a subset of these ranks.
 
 **Focus**:
 

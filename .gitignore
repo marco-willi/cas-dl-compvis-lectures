@@ -165,4 +165,5 @@ exam/*
 .quarto/
 
 /.quarto/
+/course_notes.md
 TODO*.md

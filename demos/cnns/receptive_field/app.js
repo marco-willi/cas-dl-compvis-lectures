@@ -12,6 +12,47 @@
   const INK = "#1f2328";
   const MAX_MAP = 260; // px: largest side of one activation map
 
+  // Outline of an elephant drawn on the input, only as an illustration of image content.
+  // Coordinates are fractions of the map side.
+  const ELEPHANT = (() => {
+    const path = new Path2D();
+    // Silhouette: back, head, trunk, legs, rump
+    path.moveTo(0.8, 0.38);
+    path.bezierCurveTo(0.78, 0.22, 0.55, 0.18, 0.42, 0.24);
+    path.bezierCurveTo(0.36, 0.16, 0.22, 0.15, 0.17, 0.26);
+    path.bezierCurveTo(0.13, 0.34, 0.13, 0.44, 0.15, 0.52);
+    path.bezierCurveTo(0.14, 0.62, 0.12, 0.72, 0.08, 0.78);
+    path.bezierCurveTo(0.06, 0.81, 0.09, 0.84, 0.12, 0.81);
+    path.bezierCurveTo(0.18, 0.74, 0.21, 0.62, 0.23, 0.55);
+    path.lineTo(0.28, 0.58);
+    for (const [left, right] of [[0.28, 0.35], [0.38, 0.45]]) {
+      path.lineTo(left, 0.7);
+      path.lineTo(left, 0.86);
+      path.lineTo(right, 0.86);
+      path.lineTo(right, 0.7);
+    }
+    path.bezierCurveTo(0.5, 0.72, 0.56, 0.72, 0.6, 0.7);
+    for (const [left, right] of [[0.6, 0.67], [0.7, 0.77]]) {
+      path.lineTo(left, 0.7);
+      path.lineTo(left, 0.86);
+      path.lineTo(right, 0.86);
+      path.lineTo(right, 0.7);
+    }
+    path.bezierCurveTo(0.83, 0.58, 0.83, 0.46, 0.8, 0.38);
+    path.closePath();
+    // Tail
+    path.moveTo(0.815, 0.43);
+    path.quadraticCurveTo(0.87, 0.5, 0.86, 0.62);
+    // Ear
+    path.moveTo(0.3, 0.27);
+    path.bezierCurveTo(0.42, 0.25, 0.45, 0.42, 0.38, 0.52);
+    path.bezierCurveTo(0.34, 0.57, 0.29, 0.51, 0.29, 0.44);
+    // Eye
+    path.moveTo(0.225, 0.33);
+    path.arc(0.21, 0.33, 0.015, 0, 2 * Math.PI);
+    return path;
+  })();
+
   let state; // set by reset()
   let layout = null; // positions of the maps on the canvas, set by draw()
 
@@ -291,6 +332,17 @@
           ctx.lineTo(x + side, y + offset);
         }
         ctx.stroke();
+      }
+      if (l === 0) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(side, side);
+        ctx.strokeStyle = "rgba(70, 78, 92, 0.6)";
+        ctx.lineWidth = 2.5 / side;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.stroke(ELEPHANT);
+        ctx.restore();
       }
       ctx.strokeStyle = "#9aa3b2";
       ctx.strokeRect(x + 0.5, y + 0.5, side - 1, side - 1);

@@ -1,10 +1,12 @@
-"""Concatenate the lecture notes into a single Markdown file for AI assistants.
+"""Convert the lecture notes and the quiz into one Markdown file for AI assistants.
 
-Runs as a Quarto post-render script (see `_quarto.yml`) and writes
-`course_notes.md` into the output directory. The file is a build artifact
-and is not committed. Page order follows the sidebar sections listed in
-`SECTIONS`. Quarto-specific markup (shortcodes, hidden blocks, raw HTML,
-images, cross-references) is removed or converted to plain Markdown.
+Runs as a Quarto pre-render script (see `_quarto.yml`) and writes
+`course_notes.md` into the project root, from where Quarto copies it to the
+output directory as a resource. Generating it before rendering lets Quarto
+resolve links to it. The file is a build artifact and is not committed. Page order follows the sidebar sections listed in
+`SECTIONS`, followed by the quiz page. Quarto-specific markup
+(shortcodes, hidden blocks, raw HTML, images, cross-references) is removed
+or converted to plain Markdown.
 """
 
 import os
@@ -15,13 +17,15 @@ import yaml
 
 SECTIONS = ["Background & Preparation", "Lectures"]
 EXTRA_PAGES = ["pages/lectures/practical.qmd"]
+QUIZ_PAGE = "pages/misc/quiz.qmd"
 
 HEADER = """# {title} — Course Notes
 
 Plain-text version of the lecture notes, generated automatically from the
 course website for use with AI assistants (e.g. as a project file in
 ChatGPT or Claude). Figures, videos and interactive demos are omitted;
-figure captions are kept. Online version: {site_url}
+figure captions are kept. The last part contains the quiz and exam
+preparation questions with reference answers. Online version: {site_url}
 
 Formulas use the following LaTeX macros:
 
@@ -30,6 +34,10 @@ Formulas use the following LaTeX macros:
 ```
 
 """
+
+QUIZ_NOTE = """Quiz and exam preparation questions (in German), grouped by topic. Each
+question is followed by its reference answer, marked **Antwort**. Questions
+that refer to a figure link to the image."""
 
 XREF_NAMES = {
     "fig": "figure",
@@ -118,10 +126,18 @@ def strip_blocks(lines: list[str]) -> list[str]:
     return out
 
 
-def clean_inline(text: str, site_url: str, page: str) -> str:
+def clean_inline(text: str, site_url: str, page: str, link_images: bool) -> str:
     text = re.sub(r"\{\{<\s*(video|include|embed)\b.*?>\}\}\s*", "", text)
     text = re.sub(r"\{\{<.*?>\}\}", "", text)
-    # Images: keep alt text only if present.
+    # Images: link to the image on the website, or keep alt text only if present.
+    if link_images:
+        text = re.sub(
+            r"!\[([^\]]*)\]\(/?([^)]*)\)(\{[^}]*\})?",
+            lambda m: (
+                f"[Figure{': ' + m.group(1) if m.group(1) else ''}]({site_url}{m.group(2)})"
+            ),
+            text,
+        )
     text = re.sub(
         r"!\[([^\]]*)\]\([^)]*\)(\{[^}]*\})?",
         lambda m: f"[Figure: {m.group(1)}]" if m.group(1) else "",
@@ -161,13 +177,14 @@ def clean_inline(text: str, site_url: str, page: str) -> str:
     return text.strip()
 
 
-def convert_page(path: Path, site_url: str) -> str:
+def convert_page(path: Path, site_url: str, link_images: bool = False) -> str:
     meta, body = split_front_matter(path.read_text(encoding="utf-8"))
+    images_path = meta.get("params", {}).get("images_path", "")
+    body = body.replace("{{< meta params.images_path >}}", images_path)
     body = re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL)
     body = "\n".join(strip_blocks(body.splitlines()))
-    body = re.sub(
-        r"## References\s*$", "", clean_inline(body, site_url, str(path))
-    ).strip()
+    body = clean_inline(body, site_url, str(path), link_images)
+    body = re.sub(r"## References\s*$", "", body).strip()
     url = site_url + str(path.with_suffix(".html"))
     return f"# {meta.get('title', path.stem)}\n\nSource: {url}\n\n{body}\n"
 
@@ -175,9 +192,6 @@ def convert_page(path: Path, site_url: str) -> str:
 def main() -> None:
     config = yaml.safe_load(Path("_quarto.yml").read_text(encoding="utf-8"))
     site_url = config["website"]["site-url"].rstrip("/") + "/"
-    output_dir = Path(
-        os.environ.get("QUARTO_PROJECT_OUTPUT_DIR", config["project"]["output-dir"])
-    )
 
     macros = Path("assets/_macros.tex").read_text(encoding="utf-8").strip()
     parts = [
@@ -186,8 +200,11 @@ def main() -> None:
         )
     ]
     parts += [convert_page(Path(page), site_url) for page in page_order(config)]
-    output_dir.mkdir(parents=True, exist_ok=True)
-    (output_dir / "course_notes.md").write_text("\n\n".join(parts), encoding="utf-8")
+    title, source, quiz = convert_page(
+        Path(QUIZ_PAGE), site_url, link_images=True
+    ).split("\n\n", 2)
+    parts.append(f"{title}\n\n{source}\n\n{QUIZ_NOTE}\n\n{quiz}")
+    Path("course_notes.md").write_text("\n\n".join(parts), encoding="utf-8")
 
 
 if __name__ == "__main__":

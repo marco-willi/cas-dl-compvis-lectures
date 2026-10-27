@@ -239,6 +239,12 @@ In **single-label classification**, each image belongs to exactly one class. In 
 
 Whether multi-label classification is necessary is an empirical question. In Snapshot Kgalagadi, only 1.6% of the captures with an animal (15 of 939) contain more than one species, and only three species pairs occur (@fig-iad-multi-label). A single-label formulation is a reasonable simplification here, but in datasets from areas with dense, mixed herds the situation can be very different.
 
+::: {#fig-iad-multi-label}
+![]({{< meta params.images_path >}}kga_multi_label_share.png){width=100%}
+
+Multi-species captures in Snapshot Kgalagadi. Left: share of captures with an animal that contain more than one species. Middle: number of captures per species pair — only three pairs occur. Right: one example capture per pair.
+:::
+
 
 ### Dataset Splits
 

@@ -2,6 +2,7 @@ project:
   type: website
   output-dir: _output
   resources:
+    - course_notes.md
     - assets/datasets/**
     - demos/convolution/**
     - demos/cnns/augmentation_stability/**
@@ -42,8 +43,8 @@ project:
     - "index.qmd"
     - "!NOTES.md"
     - "!demos/*"
-  # Generates _output/course_notes.md (all lecture notes as one Markdown file)
-  post-render:
+  # Generates course_notes.md (lecture notes and quiz as one Markdown file, gitignored)
+  pre-render:
     - scripts/build_course_notes.py
 
 author: "Marco Willi"
@@ -142,10 +143,6 @@ website:
           - pages/misc/tutor_prompt.qmd
 
 bibliography: assets/references.bib
-
-filters:
-  - quarto
-  - assets/filters/lazy-loading.lua
 
 institute: "Institute for Data Science I4DS, FHNW"
 
