@@ -227,7 +227,7 @@ $$\hat{\vect{x}} = g_{\theta}(\vect{y}, \vect{z}), \qquad \vect{z} \sim \mathcal
 
 ## Quiz: Latent Variables {.center}
 
-![]({{< meta params.images_path >}}latent_variables_intuition1.png){width=45%}
+![Reproduced from @foster_generative_2023.]({{< meta params.images_path >}}intro_figures/latent_intuition_dataset.svg){width=60%}
 
 ::: {.fragment}
 What could the latent variables be for this dataset?
@@ -240,10 +240,10 @@ What could the latent variables be for this dataset?
 
 ## Latent Space → Outputs
 
-![]({{< meta params.images_path >}}latent_variables_intuition2.png){.r-stretch}
+![]({{< meta params.images_path >}}intro_figures/latent_intuition_space.svg){.r-stretch}
 
 ::: {.fragment}
-Plausible 2D latent space and the mapping to samples (@foster_generative_2023).
+Plausible 2D latent space and the mapping $g$ to samples. Reproduced from @foster_generative_2023.
 :::
 
 
