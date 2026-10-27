@@ -27,6 +27,8 @@ The following datasets are well-suited for project work. Size and task type vary
 | Amazon Berkeley Objects (ABO) | Image Retrieval | ~25k images, 6 categories | Multi-view per item |
 | DeepFashion (In-Shop) | Image Retrieval | ~3,300 images, 5 classes | Item-level train/test splits |
 | AMI-Br | Binary Classification | Small (histopathology patches) | Domain shift; suited for LoRA/PEFT |
+| FFHQ | Super Resolution | Up to 70k face images | Aligned faces, narrow domain |
+| CLIC | Super Resolution | ~2k high-res photographs | Diverse scenes; train on crops |
 
 ::: {.callout-note}
 Snapshot Serengeti is large, work with a curated subset and account for class imbalance in your evaluation (F1, weighted metrics, confusion matrices). AMI-Br is intentionally small and best suited for parameter-efficient fine-tuning experiments. MNIST is available but too simple to constitute a meaningful project. Additional camera trap datasets can be found at [LILA BC](https://lila.science/datasets#project-descriptions).
@@ -65,7 +67,7 @@ Edit the configuration block at the top of the script to select species and imag
 Source: [Link](https://github.com/phelber/eurosat)
 :::
 
-**Difficulty/Effort**: Medium
+**Difficulty/Effort**: Low - Medium
 
 
 
@@ -85,7 +87,7 @@ Source: [Link](https://github.com/phelber/eurosat)
 Source: [Link](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/)
 :::
 
-**Difficulty/Effort**: Medium
+**Difficulty/Effort**: Low - Medium
 
 
 ### Age Estimation from Faces
@@ -123,7 +125,7 @@ Source: [Link](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/)
 Bobcat from the Caltech Camera Traps dataset. Source: [LILA BC](https://lila.science/datasets/caltech-camera-traps)
 :::
 
-**Difficulty/Effort**: Medium
+**Difficulty/Effort**: Low - Medium
 
 
 ### Industrial Surface Defect Detection
@@ -142,7 +144,7 @@ Bobcat from the Caltech Camera Traps dataset. Source: [LILA BC](https://lila.sci
 Source: Mendeley / Özgenel et al.
 :::
 
-**Difficulty/Effort**: Medium
+**Difficulty/Effort**: Low - Medium
 
 
 ### Product Image Retrieval
@@ -161,7 +163,7 @@ Source: Mendeley / Özgenel et al.
 Source: Amazon Berkeley Objects
 :::
 
-**Difficulty/Effort**: Medium
+**Difficulty/Effort**: Low - Medium
 
 
 ### Histopathology Fine-Tuning with LoRA
@@ -181,6 +183,32 @@ Source: AMI-Br / TUPAC16 + MIDOG21
 :::
 
 **Difficulty/Effort**: High
+
+
+## Image-to-Image Projects
+
+### Super Resolution
+
+**Goal**: Develop a model that converts a low-resolution image into a higher resolution (e.g. 4× upscaling).
+
+**Approach**: Define an image-to-image architecture and train it on suitable data. You can assume fixed input and output resolutions. Create training pairs by downsampling high-resolution images. Implement SRCNN [@dong_image_2015] as a baseline and test your own variations of the architecture (e.g. deeper networks, residual connections, learned upsampling instead of bicubic pre-upsampling).
+
+**Focus**: Compare against bicubic interpolation as a trivial baseline. Evaluate with PSNR and SSIM, and inspect the results visually: which details does the model recover, and where does it produce blurry or wrong structures? Discuss the limits of pixel-wise losses (e.g. MSE) for perceived image quality.
+
+Finally, compare your best model against one or two API-based generative upscalers on a small test set (e.g. 20–50 images), e.g. an image editing model prompted to upscale the image, or a diffusion-based upscaler via Replicate / fal.ai. These models typically produce sharper, more pleasing images, but are the added details faithful to the original? Compare PSNR/SSIM with a perceptual metric (e.g. LPIPS) and look for hallucinated details (e.g. changed facial features, invented text or textures).
+
+**Dataset**: Choose one of the following:
+
+- *Faces*: FFHQ ([Link](https://github.com/NVlabs/ffhq-dataset)), up to 70,000 aligned face images. The narrow domain makes the task easier and is a good starting point.
+- *Diverse photographs*: the CLIC dataset ([Link](https://archive.compression.cc/datasets/)) of the Challenge on Learned Image Compression (for example this [subset](https://downloads.compression.cc/clic2020_professional_train.zip)), containing high-resolution professional and mobile phone photographs of varied scenes (landscapes, architecture, people, objects). The images are large, so train on random crops (patches). The diversity makes the task harder and is better suited to evaluate generalisation. Optionally, train on FFHQ and test on CLIC (or vice versa) to analyse domain shift.
+
+:::{#fig-sp-superres-faces}
+![]({{< meta params.images_path >}}superres_faces.jpg){width=600}
+
+Source: [FFHQ](https://github.com/NVlabs/ffhq-dataset)
+:::
+
+**Difficulty/Effort**:  Medium
 
 
 ## Generative Projects
