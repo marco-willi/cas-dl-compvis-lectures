@@ -17,7 +17,7 @@ $$
 
 ## Properties of Image Data
 
-![Three regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. [Image Source](https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk)]({{< meta params.images_path >}}cows2_multiscale.png){width=100%}
+![Three regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. [Image Source](https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk)]({{< meta params.images_path >}}cows2_multiscale.jpg){width=100%}
 
 ::: {.incremental}
 - **High-Dimensional**: An RGB image of size $224 \times 224$ has $224 \times 224 \times 3 = 150{,}528$ values
@@ -86,13 +86,13 @@ $$f(g(\vect{x})) = g(f(\vect{x}))$$
 
 ::: {#fig-cnns-invariance-example layout-ncol=2 fig-width=6}
 
-![Original]({{< meta params.images_path >}}cows2_invariance_original.png){width=75%}
+![Original]({{< meta params.images_path >}}cows2_invariance_original.jpg){width=75%}
 
-![Translated]({{< meta params.images_path >}}cows2_invariance_translate.png){width=75%}
+![Translated]({{< meta params.images_path >}}cows2_invariance_translate.jpg){width=75%}
 
-![Color-jittered]({{< meta params.images_path >}}cows2_invariance_color.png){width=75%}
+![Color-jittered]({{< meta params.images_path >}}cows2_invariance_color.jpg){width=75%}
 
-![Rotated]({{< meta params.images_path >}}cows2_invariance_rotate.png){width=75%}
+![Rotated]({{< meta params.images_path >}}cows2_invariance_rotate.jpg){width=75%}
 
 A classifier should produce **"cow"** in all four cases.
 :::
@@ -102,13 +102,13 @@ A classifier should produce **"cow"** in all four cases.
 
 ::: {#fig-cnns-equivariance-example layout-ncol=2 fig-width=6}
 
-![Original]({{< meta params.images_path >}}cows2_equivariance_original.png){width=75%}
+![Original]({{< meta params.images_path >}}cows2_equivariance_original.jpg){width=75%}
 
-![Shifted right]({{< meta params.images_path >}}cows2_equivariance_shift_right.png){width=75%}
+![Shifted right]({{< meta params.images_path >}}cows2_equivariance_shift_right.jpg){width=75%}
 
-![Shifted left]({{< meta params.images_path >}}cows2_equivariance_shift_left.png){width=75%}
+![Shifted left]({{< meta params.images_path >}}cows2_equivariance_shift_left.jpg){width=75%}
 
-![Shifted up + right]({{< meta params.images_path >}}cows2_equivariance_shift_up.png){width=75%}
+![Shifted up + right]({{< meta params.images_path >}}cows2_equivariance_shift_up.jpg){width=75%}
 
 The bounding boxes **move with** the cows.
 :::

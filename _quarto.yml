@@ -143,6 +143,10 @@ website:
 
 bibliography: assets/references.bib
 
+filters:
+  - quarto
+  - assets/filters/lazy-loading.lua
+
 institute: "Institute for Data Science I4DS, FHNW"
 
 format:

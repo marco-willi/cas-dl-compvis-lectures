@@ -92,7 +92,7 @@ Images have unique properties that make them challenging for standard neural net
 
 :::{#fig-cnn-example-rgb-image}
 
-![ ]({{< meta params.images_path >}}cows2_multiscale.png){width=100%}
+![ ]({{< meta params.images_path >}}cows2_multiscale.jpg){width=100%}
 
 A high-resolution photograph (left) with three regions (sky, cow, grass), each marked with boxes of $12 \times 12$, $48 \times 48$ and $192 \times 192$ pixels. The crops (right) show the image content at these three scales: within the small boxes neighboring pixels have almost the same color, at the medium scale pixels form textures and parts (cloud edge, fur, flowers), and only the large boxes contain whole objects. [Image Source](https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk)
 :::
@@ -223,13 +223,13 @@ $$f(g(\vect{x})) = g(f(\vect{x}))$$
 
 ::: {#fig-cnns-invariance-example layout-ncol=2}
 
-![Original]({{< meta params.images_path >}}cows2_invariance_original.png){#fig-cnns-invariance-a}
+![Original]({{< meta params.images_path >}}cows2_invariance_original.jpg){#fig-cnns-invariance-a}
 
-![Translated]({{< meta params.images_path >}}cows2_invariance_translate.png){#fig-cnns-invariance-b}
+![Translated]({{< meta params.images_path >}}cows2_invariance_translate.jpg){#fig-cnns-invariance-b}
 
-![Color-jittered]({{< meta params.images_path >}}cows2_invariance_color.png){#fig-cnns-invariance-c}
+![Color-jittered]({{< meta params.images_path >}}cows2_invariance_color.jpg){#fig-cnns-invariance-c}
 
-![Rotated]({{< meta params.images_path >}}cows2_invariance_rotate.png){#fig-cnns-invariance-d}
+![Rotated]({{< meta params.images_path >}}cows2_invariance_rotate.jpg){#fig-cnns-invariance-d}
 
 The same scene under four different input perturbations. A classifier that is invariant to these transformations produces the same label ("cow") for all four panels. Invariance is not restricted to translation — we usually also want invariance to color/lighting changes and small rotations.
 
@@ -240,13 +240,13 @@ The same scene under four different input perturbations. A classifier that is in
 
 ::: {#fig-cnns-equivariance-example layout-ncol=2}
 
-![Original]({{< meta params.images_path >}}cows2_equivariance_original.png){#fig-cnns-equivariance-a}
+![Original]({{< meta params.images_path >}}cows2_equivariance_original.jpg){#fig-cnns-equivariance-a}
 
-![Shifted right]({{< meta params.images_path >}}cows2_equivariance_shift_right.png){#fig-cnns-equivariance-b}
+![Shifted right]({{< meta params.images_path >}}cows2_equivariance_shift_right.jpg){#fig-cnns-equivariance-b}
 
-![Shifted left]({{< meta params.images_path >}}cows2_equivariance_shift_left.png){#fig-cnns-equivariance-c}
+![Shifted left]({{< meta params.images_path >}}cows2_equivariance_shift_left.jpg){#fig-cnns-equivariance-c}
 
-![Shifted up + right]({{< meta params.images_path >}}cows2_equivariance_shift_up.png){#fig-cnns-equivariance-d}
+![Shifted up + right]({{< meta params.images_path >}}cows2_equivariance_shift_up.jpg){#fig-cnns-equivariance-d}
 
 Each panel shows the detector's output on the same scene under a different translation. The bounding boxes move with the cows — the model $f(\vect{x})$ is equivariant with respect to spatial translations.
 
@@ -668,7 +668,7 @@ Non-linear activation functions must be used between the convolutions. Otherwise
 
 :::{#fig-cnn-conv-zeiler}
 
-![]({{< meta params.images_path >}}zeiler_learned_filters.png){width=600}
+![]({{< meta params.images_path >}}zeiler_learned_filters.jpg){width=600}
 
 Shown are patterns the learned filters are reacting to for several layers (in gray) and the corresponding image patches that achieve maximum activation values for these patterns. Source: @Zeiler2014
 

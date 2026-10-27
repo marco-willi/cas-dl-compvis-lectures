@@ -447,21 +447,16 @@ GANs and VAEs: one forward pass. Diffusion and flow matching: tens of steps. Aut
 :::
 
 
-## Coverage: Mode Collapse
+## Fidelity and Coverage
 
-![]({{< meta params.images_path >}}intro_figures/coverage_mode_collapse.svg){width=90%}
+![]({{< meta params.images_path >}}intro_figures/coverage_mode_collapse.svg){width=100%}
 
 ::: {.fragment}
-Realistic samples, but only of a few modes: a well-known problem of GANs.
+(c) samples between the modes. (d) Mode collapse: realistic samples, but only of a few modes, a well-known problem of GANs.
 :::
 
-
-## Fidelity vs. Coverage: Guidance
-
-![]({{< meta params.images_path >}}intro_figures/guidance_tradeoff.svg){width=90%}
-
 ::: {.fragment}
-Techniques that increase fidelity often reduce coverage, e.g. guidance in diffusion models [@ho_classifier-free_2022].
+Techniques that increase fidelity often reduce coverage, e.g. guidance in diffusion models [@ho_classifier-free_2022] moves a model from (c) towards (d).
 :::
 
 
