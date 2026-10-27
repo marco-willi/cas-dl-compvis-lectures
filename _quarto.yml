@@ -42,6 +42,9 @@ project:
     - "index.qmd"
     - "!NOTES.md"
     - "!demos/*"
+  # Generates _output/course_notes.md (all lecture notes as one Markdown file)
+  post-render:
+    - scripts/build_course_notes.py
 
 author: "Marco Willi"
 affiliation: "Institute for Data Science I4DS, FHNW"
@@ -136,6 +139,7 @@ website:
           - pages/misc/links.qmd
           - pages/misc/notation.qmd
           - pages/misc/ai_coding_agents.qmd
+          - pages/misc/tutor_prompt.qmd
 
 bibliography: assets/references.bib
 

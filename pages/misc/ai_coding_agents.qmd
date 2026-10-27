@@ -188,6 +188,8 @@ Do not modify the implementation.
 
 In contrast, prompts such as "fix this error", "write the training script for my project", or "explain what this code does" are not wrong — but when the objective is learning, they delegate exactly the part that builds understanding.
 
+A ready-to-use system prompt implementing the three levels for ChatGPT/Claude projects and coding agents is available on the [AI Tutor Prompt](tutor_prompt.qmd) page.
+
 ### Illusion of Competence and Self-Assessment
 
 The main risks for learners are:
