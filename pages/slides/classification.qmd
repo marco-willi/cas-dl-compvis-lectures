@@ -25,17 +25,8 @@ $$
 
 ## Image Classification
 
-::: {#fig-classification-classification-illustration}
-![]({{< meta params.images_path >}}classification_illustration.jpg){width=60%}
-
-Assign an image to one of $K$ predefined categories.
-:::
-
-
-## Classification Variants
-
 ::: {#fig-classification-tasks}
-![]({{< meta params.images_path >}}classification_tasks.png)
+![]({{< meta params.images_path >}}classification_tasks.png){width=75%}
 
 Different variants of classification.
 
@@ -335,21 +326,6 @@ Classes: empty, deer, fox, badger, bird. Which augmentations would you use, whic
 
 ::: {.fragment}
 **Careful:** aggressive crops can cut the animal out, an "empty" image labelled "deer"
-:::
-
-
-# Summary {.center}
-
-## Key Takeaways
-
-::: {.incremental}
-- Image classification maps an image to **class logits**.
-- **Softmax** converts logits into class probabilities.
-- **Cross-entropy** penalizes low probability assigned to the true class.
-- Most classifiers use a **backbone** plus a small classification head.
-- Architecture evolution: **AlexNet → VGG → ResNet → ConvNeXt / ViT**.
-- Start with a proven pretrained backbone; only customize when needed.
-- **Data augmentation** teaches invariances the architecture does not provide; it must preserve the label.
 :::
 
 

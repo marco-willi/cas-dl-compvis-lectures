@@ -398,14 +398,12 @@ All cats — but very different. [Source](https://www.maxpixel.net/)
 
 ## Context Dependence
 
-::: {#fig-tiger-context}
+![]({{< meta params.images_path >}}tiger_context1.png){width=700px fig-align="center"}
 
-![]({{< meta params.images_path >}}tiger_context.jpg){width=55%}
-
-:::
+**Question:** Is this a tiger?
 
 ::: {.fragment}
-**Question:** Is this a tiger?
+![]({{< meta params.images_path >}}tiger_context2.png){width=700px fig-align="center"}
 :::
 
 

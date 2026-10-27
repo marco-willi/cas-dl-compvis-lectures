@@ -21,6 +21,15 @@ Imbalance, noisy labels, hidden shortcuts, leakage, wrong tensor assumptions.
 :::
 
 
+## One Class, Many Appearances
+
+::: {#fig-iad-hard-conditions}
+![]({{< meta params.images_path >}}kga_hard_conditions.png){width=100%}
+
+Eight Snapshot Kgalagadi images, all labelled *gemsbok*: close-up, far away (circled), partly visible, night (flash), unusual pose, group, back view, and half hidden in grass.
+:::
+
+
 # Image Representations
 
 

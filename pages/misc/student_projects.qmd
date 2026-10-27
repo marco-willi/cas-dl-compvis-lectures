@@ -240,30 +240,40 @@ Optionally, compare two different models or prompt formulations for the best var
 
 **Dataset**: 50–100 products from Amazon Berkeley Objects (ABO), which provides multiple views per item, and a fixed list of 5 environments (several hundred generated images in total). Choose the products to be diverse: different categories (e.g. chairs, sofas, tables, lamps, rugs, shelves), sizes, and deliberately difficult cases such as thin structures, glass, reflective metal, patterned fabric, or text and logos. Run small pilot experiments on a few products first, then scale up the final comparison.
 
+:::{#fig-sp-sofa}
+![]({{< meta params.images_path >}}sofa_example.webp){width=600}
+
+Example of a cut-out product image (sofa on a white background). Source: [Pfister](https://www.pfister.ch/de/produkt/m0061818/sofa-soria-mayor)
+:::
+
 **Difficulty/Effort**: Medium - High
 
 
 ### Food Images for a Fictional Delivery Service
 
-**Goal**: Design a workflow that generates menu images for a fictional food delivery service. All images should share a common look & feel (e.g. background, lighting, camera angle, plating). Consider two input scenarios: a) text descriptions of dishes (menu entries), and b) existing photos of varying quality that should be converted to the common style.
+**Goal**: Create a visually consistent menu for a fictional food delivery service using generative AI. All dish images should share a common look & feel (e.g. background, lighting, camera angle, plating), while accurately representing the dishes and their ingredients. Compare two approaches: a) generating images from text descriptions, and b) transforming existing food photographs into the desired style.
 
-**Approach**: First define the target style with a short style guide and 2–3 reference images. Then build both scenarios:
+**Approach**: Select 8–12 diverse dishes and define a target visual style using a short style guide and 1–2 reference images. Implement and compare:
 
-- *a) Text-to-image*: compare a prompt template only vs. prompt template plus a style reference image.
-- *b) Image editing*: convert existing photos to the target style. Compare two models or two editing strengths and investigate the trade-off between preserving the original dish and matching the style.
+- *a) Text-to-image*: Generate menu photographs from dish names and short ingredient descriptions. Compare a consistent prompt template with reference-guided generation (if supported by the model).
+- *b) Image editing*: Transform existing food photographs into the target style while preserving the original dishes. Experiment with different instructions or editing strengths to investigate the trade-off between content preservation and style consistency.
 
-Optionally, use an LLM to turn short dish names into consistent, detailed menu descriptions and prompts.
+Use a common image-generation API for both scenarios where possible. Coding agents can assist with API integration, prompt templates and creating comparison grids.
 
 **Focus**:
 
-- *Content correctness*: is it the right dish? Use a Food-101 classifier or CLIP zero-shot classification over the dish names.
-- *Style consistency*: embedding similarity to the reference images and spread within the generated set. Inspect the menu side by side, does it look like one brand?
-- *Content preservation* (scenario b): similarity between original and converted photo. Plot preservation vs. style match across variants.
-- *Failure analysis*: which dishes are hard (e.g. soups, mixed dishes)? Does the model invent ingredients that are not in the description? Break down the metrics by cuisine, dish type and input photo quality.
+- *Content correctness*: Does the generated image represent the intended dish? Are important ingredients preserved, missing or invented?
+- *Style consistency*: Do the resulting images look like they belong to the same food delivery service? Compare the images side by side.
+- *Generation vs. editing*: Which approach produces more consistent images? Which better preserves dish-specific details?
+- *Evaluation*: Create a visual comparison grid and use simple manual ratings (e.g. 1–5 for content correctness and style consistency). Optionally compare these assessments with a vision-language model.
+- *Failure analysis*: Identify representative failures and investigate which dishes or visual characteristics are particularly challenging.
 
-**Dataset**: 50–100 dishes from Food-101 (class names as menu items for a, photos as inputs for b), with several input photos per dish for scenario b) (several hundred images in total). Choose the dishes to be diverse: different cuisines, dish types (soups, salads, desserts, plated mains, finger food) and visual difficulty. For scenario b), deliberately include difficult input photos: dark, cluttered background, unusual angle, partially eaten, or several dishes in one photo. Run small pilot experiments on a few dishes first, then scale up the final comparison.
+**Dataset**: Curate 8–12 diverse dishes using photographs from [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:Food), Food-101 or your own photographs. Include soups, salads, main courses and desserts, ideally with different backgrounds, lighting conditions and camera angles. Write a short menu description and identify the key ingredients for each dish. Start with 2–3 dishes to test the workflow before processing the full collection.
 
-**Difficulty/Effort**: Medium - High
+**Deliverable**: A small, visually consistent menu gallery, a side-by-side comparison of original, generated and edited images, and a short evaluation of the methods, trade-offs and typical failures.
+
+**Difficulty/Effort**: Medium
+
 
 
 ## Research Projects

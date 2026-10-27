@@ -15,7 +15,12 @@ $$
 # Why CNNs Work for Images
 
 
-## Properties of Image Data
+## Properties of Image Data (1/2)
+
+![[Image Source](https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk)]({{< meta params.images_path >}}cows2_small.png){width=60%}
+
+
+## Properties of Image Data (2/2)
 
 ![Three regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. [Image Source](https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk)]({{< meta params.images_path >}}cows2_multiscale.jpg){width=100%}
 
@@ -86,13 +91,13 @@ $$f(g(\vect{x})) = g(f(\vect{x}))$$
 
 ::: {#fig-cnns-invariance-example layout-ncol=2 fig-width=6}
 
-![Original]({{< meta params.images_path >}}cows2_invariance_original.jpg){width=75%}
+![Original]({{< meta params.images_path >}}cows2_invariance_original.jpg){width=50%}
 
-![Translated]({{< meta params.images_path >}}cows2_invariance_translate.jpg){width=75%}
+![Translated]({{< meta params.images_path >}}cows2_invariance_translate.jpg){width=50%}
 
-![Color-jittered]({{< meta params.images_path >}}cows2_invariance_color.jpg){width=75%}
+![Color-jittered]({{< meta params.images_path >}}cows2_invariance_color.jpg){width=50%}
 
-![Rotated]({{< meta params.images_path >}}cows2_invariance_rotate.jpg){width=75%}
+![Rotated]({{< meta params.images_path >}}cows2_invariance_rotate.jpg){width=50%}
 
 A classifier should produce **"cow"** in all four cases.
 :::
@@ -180,6 +185,15 @@ $I$: input, $K$: kernel (smaller than $I$), $b$: bias
 </div>
 
 Find a kernel that detects horizontal edges. [Open in new tab](../../demos/convolution/index.html){target="_blank"}
+
+
+## Convolution on Multiple Channels
+
+![]({{< meta params.images_path >}}conv_rgb_channels.png){width=75%}
+
+::: {.fragment}
+Each channel's filter slice is applied to its input channel; the per-channel sums plus the bias collapse to **one** output value.
+:::
 
 
 ## Many Filters, Many Activation Maps
@@ -404,6 +418,15 @@ $(3 \times 3 \times 3 \times 16) + 16 = 432 + 16 = 448$ parameters
 **Why?** Local connectivity + parameter sharing = massive efficiency!
 :::
 
+
+
+## Demo: Translation in MLPs and CNNs
+
+<div style="height: 905px;">
+<iframe data-src="../../demos/cnns/cnns_vs_mlp_demo/index.html" width="1800" height="1290" style="border: 1px solid #ddd; border-radius: 6px; max-height: none; transform: scale(0.7); transform-origin: top left;" title="Interactive demo: MLP vs CNN on shifted MNIST digits"></iframe>
+</div>
+
+Move the digit: which network still recognizes it? [Open in new tab](../../demos/cnns/cnns_vs_mlp_demo/index.html){target="_blank"}
 
 
 # References
