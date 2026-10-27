@@ -195,14 +195,8 @@ Marco Willi
 <section id="image-classification" class="slide level2">
 <h2>Image Classification</h2>
 
-<img data-src="../../assets/images/classification/classification_illustration.jpg" style="width:60.0%" class="r-stretch quarto-figure-center" id="fig-classification-classification-illustration"><p class="caption">
-Figure&nbsp;1: Assign an image to one of <span class="math inline">\(K\)</span> predefined categories.
-</p></section>
-<section id="classification-variants" class="slide level2">
-<h2>Classification Variants</h2>
-
-<img data-src="../../assets/images/classification/classification_tasks.png" class="r-stretch quarto-figure-center" id="fig-classification-tasks"><p class="caption">
-Figure&nbsp;2: Different variants of classification.
+<img data-src="../../assets/images/classification/classification_tasks.png" style="width:75.0%" class="r-stretch quarto-figure-center" id="fig-classification-tasks"><p class="caption">
+Figure&nbsp;1: Different variants of classification.
 </p></section></section>
 <section>
 <section id="modelling-classification" class="title-slide slide level1 center">
@@ -250,7 +244,7 @@ P(Y = k \mid X = \mathbf{x}^{(i)}) = \sigma(\mathbf{z})_k = \frac{e^{z_k}}{\sum_
 <img data-src="classification_files/figure-revealjs/fig-classification-logits-to-probs-output-1.png" class="quarto-figure quarto-figure-center" width="1355" height="472">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-classification-logits-to-probs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Logits are arbitrary real-valued scores. Softmax converts them into probabilities.
+Figure&nbsp;2: Logits are arbitrary real-valued scores. Softmax converts them into probabilities.
 </figcaption>
 </figure>
 </div>
@@ -357,7 +351,7 @@ CE = -\log(0.4) \approx 0.92
 <h2>AlexNet (2012)</h2>
 
 <img data-src="../../assets/images/classification/alexnet_illustration.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-alexnet2"><p class="caption">
-Figure&nbsp;4: 5 conv + 3 FC layers, 1000-way softmax. Trained on <strong>two</strong> GTX 580 GPUs (3 GB each). Source: <span class="citation" data-cites="prince_understanding_2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>
+Figure&nbsp;3: 5 conv + 3 FC layers, 1000-way softmax. Trained on <strong>two</strong> GTX 580 GPUs (3 GB each). Source: <span class="citation" data-cites="prince_understanding_2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>
 </p><div class="fragment">
 <p>The network had to be <strong>split across GPUs</strong> due to memory limits.</p>
 </div>
@@ -430,23 +424,6 @@ Figure&nbsp;4: 5 conv + 3 FC layers, 1000-way softmax. Trained on <strong>two</s
 <div class="fragment">
 <p><strong>Careful:</strong> aggressive crops can cut the animal out, an “empty” image labelled “deer”</p>
 </div>
-</section></section>
-<section>
-<section id="summary" class="title-slide slide level1 center">
-<h1>Summary</h1>
-
-</section>
-<section id="key-takeaways" class="slide level2">
-<h2>Key Takeaways</h2>
-<ul>
-<li class="fragment">Image classification maps an image to <strong>class logits</strong>.</li>
-<li class="fragment"><strong>Softmax</strong> converts logits into class probabilities.</li>
-<li class="fragment"><strong>Cross-entropy</strong> penalizes low probability assigned to the true class.</li>
-<li class="fragment">Most classifiers use a <strong>backbone</strong> plus a small classification head.</li>
-<li class="fragment">Architecture evolution: <strong>AlexNet → VGG → ResNet → ConvNeXt / ViT</strong>.</li>
-<li class="fragment">Start with a proven pretrained backbone; only customize when needed.</li>
-<li class="fragment"><strong>Data augmentation</strong> teaches invariances the architecture does not provide; it must preserve the label.</li>
-</ul>
 </section></section>
 <section id="references" class="title-slide slide level1 smaller scrollable">
 <h1>References</h1>

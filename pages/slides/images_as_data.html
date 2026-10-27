@@ -186,6 +186,12 @@ Marco Willi
 <p>Imbalance, noisy labels, hidden shortcuts, leakage, wrong tensor assumptions.</p>
 </div>
 </section>
+<section id="one-class-many-appearances" class="slide level2">
+<h2>One Class, Many Appearances</h2>
+
+<img data-src="../../assets/images/images_as_data/kga_hard_conditions.png" style="width:100.0%" class="r-stretch quarto-figure-center" id="fig-iad-hard-conditions"><p class="caption">
+Figure&nbsp;1: Eight Snapshot Kgalagadi images, all labelled <em>gemsbok</em>: close-up, far away (circled), partly visible, night (flash), unusual pose, group, back view, and half hidden in grass.
+</p></section>
 <section>
 <section id="image-representations" class="title-slide slide level1 center">
 <h1>Image Representations</h1>
@@ -195,13 +201,13 @@ Marco Willi
 <h2>Images as Tensors (1/2)</h2>
 
 <img data-src="../../assets/images/images_as_data/tensor_anatomy.png" style="width:100.0%" class="r-stretch quarto-figure-center" id="fig-iad-tensor-anatomy"><p class="caption">
-Figure&nbsp;1: An image as a tensor of shape <strong>H × W × C</strong>.
+Figure&nbsp;2: An image as a tensor of shape <strong>H × W × C</strong>.
 </p></section>
 <section id="images-as-tensors-22" class="slide level2">
 <h2>Images as Tensors (2/2)</h2>
 
 <img data-src="../../assets/images/images_as_data/tensor_anatomy.png" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-iad-tensor-anatomy"><p class="caption">
-Figure&nbsp;2: An image as a tensor of shape <strong>H × W × C</strong>.
+Figure&nbsp;3: An image as a tensor of shape <strong>H × W × C</strong>.
 </p><div class="fragment">
 <p>Pixel values: <code>uint8 [0, 255]</code> → float <code>[0, 1]</code> → standardized (zero mean, unit variance)</p>
 </div>
@@ -218,7 +224,7 @@ Figure&nbsp;2: An image as a tensor of shape <strong>H × W × C</strong>.
 <h2>Channels: What Does C Mean?</h2>
 
 <img data-src="../../assets/images/images_as_data/rgb_vs_grayscale.png" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-iad-rgb-vs-grayscale"><p class="caption">
-Figure&nbsp;3: RGB (3 channels) vs.&nbsp;grayscale (1 channel).
+Figure&nbsp;4: RGB (3 channels) vs.&nbsp;grayscale (1 channel).
 </p><ul>
 <li class="fragment"><strong>1</strong>: grayscale, depth, IR/thermal, X-ray, ultrasound</li>
 <li class="fragment"><strong>3</strong>: RGB (or HSV, same info, different axes)</li>
@@ -233,7 +239,7 @@ Figure&nbsp;3: RGB (3 channels) vs.&nbsp;grayscale (1 channel).
 <h2>Thermal Imaging</h2>
 
 <img data-src="../../assets/images/images_as_data/thermal_drone.gif" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-iad-thermal-imaging"><p class="caption">
-Figure&nbsp;4: Thermal images are often single-channel sensor measurements: each pixel represents heat / infrared intensity. For display, they may be mapped to false-color RGB.
+Figure&nbsp;5: Thermal images are often single-channel sensor measurements: each pixel represents heat / infrared intensity. For display, they may be mapped to false-color RGB.
 </p></section>
 <section id="quiz-batch-shape" class="slide level2">
 <h2>Quiz: Batch Shape</h2>
@@ -250,7 +256,7 @@ Figure&nbsp;4: Thermal images are often single-channel sensor measurements: each
 <h2>Resolution</h2>
 
 <img data-src="../../assets/images/images_as_data/resolution_comparison.png" class="r-stretch quarto-figure-center" id="fig-iad-resolution"><p class="caption">
-Figure&nbsp;5: Same image at 224 × 224, 64 × 64, 16 × 16. Detail is progressively lost.
+Figure&nbsp;6: Same image at 224 × 224, 64 × 64, 16 × 16. Detail is progressively lost.
 </p><ul>
 <li class="fragment"><strong>Higher</strong> → detail, more memory + compute</li>
 <li class="fragment"><strong>Lower</strong> → faster, but discards information</li>
@@ -266,14 +272,14 @@ Figure&nbsp;5: Same image at 224 × 224, 64 × 64, 16 × 16. Detail is progressi
 <p>Is it still H × W × C?</p>
 
 <img data-src="../../assets/images/images_as_data/mri_example.png" style="width:100.0%" class="r-stretch quarto-figure-center" id="fig-iad-mri"><p class="caption">
-Figure&nbsp;6: <a href="https://www.nzbri.org/Labs/mri/Images/">Source</a>
+Figure&nbsp;7: <a href="https://www.nzbri.org/Labs/mri/Images/">Source</a>
 </p></section>
 <section id="mri-as-a-tensor" class="slide level2">
 <h2>MRI as a Tensor</h2>
 <p>How would an MRI scan be represented?</p>
 
 <img data-src="../../assets/images/images_as_data/mri.png" style="width:100.0%" class="r-stretch quarto-figure-center" id="fig-iad-mri-volume"><p class="caption">
-Figure&nbsp;7: MRI scans.
+Figure&nbsp;8: MRI scans.
 </p><div class="fragment">
 <p>The H × W × C abstraction generalizes: sequences and depth become extra axes.</p>
 </div>
@@ -293,7 +299,7 @@ Figure&nbsp;7: MRI scans.
 <h2>Real-World Camera Trap Dataset</h2>
 
 <img data-src="../../assets/images/images_as_data/similar_camera_trap_collage.png" style="width:70.0%" class="r-stretch quarto-figure-center" id="fig-iad-similar-camera-trap-collage"><p class="caption">
-Figure&nbsp;8: <a href="https://lila.science/datasets/snapshot-kgalagadi/">Source: Snapshot Kgalgadi</a>
+Figure&nbsp;9: <a href="https://lila.science/datasets/snapshot-kgalagadi/">Source: Snapshot Kgalgadi</a>
 </p><div class="fragment">
 <p><strong>Question</strong>: What could be the challenge for classification, looking at these examples?</p>
 </div>
@@ -302,7 +308,7 @@ Figure&nbsp;8: <a href="https://lila.science/datasets/snapshot-kgalagadi/">Sourc
 <h2>Class Imbalance</h2>
 
 <img data-src="../../assets/images/images_as_data/kga_class_distribution.png" style="width:80.0%" class="r-stretch quarto-figure-center" id="fig-iad-class-distribution"><p class="caption">
-Figure&nbsp;9: Captures per class in the Kalahari dataset (log scale).
+Figure&nbsp;10: Captures per class in the Kalahari dataset (log scale).
 </p><div class="fragment">
 <p>74% of captures are empty; many species appear only once.</p>
 </div>
@@ -311,7 +317,7 @@ Figure&nbsp;9: Captures per class in the Kalahari dataset (log scale).
 <h2>Label Noise</h2>
 
 <img data-src="../../assets/images/images_as_data/label_ambiguity.png" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-iad-label-ambiguity"><p class="caption">
-Figure&nbsp;10: Wolf or large dog? Empty, or a tail at the edge of the frame?
+Figure&nbsp;11: Wolf or large dog? Empty, or a tail at the edge of the frame?
 </p><ul>
 <li class="fragment"><strong>Inter-annotator disagreement</strong> on borderline cases</li>
 <li class="fragment"><strong>Systematic errors</strong>: annotators consistently confuse two classes</li>
@@ -325,7 +331,7 @@ Figure&nbsp;10: Wolf or large dog? Empty, or a tail at the edge of the frame?
 <h2>Hidden Bias</h2>
 
 <img data-src="../../assets/images/images_as_data/dataset_bias.png" style="width:70.0%" class="r-stretch quarto-figure-center" id="fig-iad-dataset-bias"><p class="caption">
-Figure&nbsp;11: Same animal, different background: different prediction. The <strong>background</strong>, not the cow, drives the prediction. Adapted from <span class="citation" data-cites="Beery2018">Beery et al. (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span>.
+Figure&nbsp;12: Same animal, different background: different prediction. The <strong>background</strong>, not the cow, drives the prediction. Adapted from <span class="citation" data-cites="Beery2018">Beery et al. (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span>.
 </p><ul>
 <li class="fragment"><strong>Geographic</strong>: limited regional diversity (architecture, vegetation, clothing)</li>
 <li class="fragment"><strong>Selection</strong>: internet-sourced images overrepresent certain demographics/styles</li>
@@ -352,7 +358,7 @@ Figure&nbsp;11: Same animal, different background: different prediction. The <st
 <h2>Splitting a Dataset</h2>
 
 <img data-src="../../assets/images/images_as_data/train_test_leakage.avif" class="r-stretch quarto-figure-center" id="fig-iad-grouped-split-sequence"><p class="caption">
-Figure&nbsp;12: <a href="https://voxel51.com/blog/on-leaky-datasets-and-a-clever-horse">Source: Voxel51</a>
+Figure&nbsp;13: <a href="https://voxel51.com/blog/on-leaky-datasets-and-a-clever-horse">Source: Voxel51</a>
 </p><div class="fragment">
 <p><strong>Question</strong>: What is wrong with this split?</p>
 </div>
@@ -362,7 +368,7 @@ Figure&nbsp;12: <a href="https://voxel51.com/blog/on-leaky-datasets-and-a-clever
 <p>The model sees information during training that it will not have at deployment.</p>
 
 <img data-src="../../assets/images/images_as_data/kga_leakage_gap.png" style="width:50.0%" class="r-stretch quarto-figure-center" id="fig-iad-leakage-gap"><p class="caption">
-Figure&nbsp;13: Same images and model, different splits: the score drops as the split gets stricter.
+Figure&nbsp;14: Same images and model, different splits: the score drops as the split gets stricter.
 </p><div class="fragment">
 <p>Causes: near-duplicates, same site in train and test, statistics computed on all data.</p>
 </div>

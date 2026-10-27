@@ -349,11 +349,22 @@
     ]
   },
   {
+    "objectID": "pages/slides/images_as_data.html#one-class-many-appearances",
+    "href": "pages/slides/images_as_data.html#one-class-many-appearances",
+    "title": "2 - Images as Data",
+    "section": "One Class, Many Appearances",
+    "text": "One Class, Many Appearances\n\n\nFigure 1: Eight Snapshot Kgalagadi images, all labelled gemsbok: close-up, far away (circled), partly visible, night (flash), unusual pose, group, back view, and half hidden in grass.",
+    "crumbs": [
+      "Slides",
+      "2 - Images as Data"
+    ]
+  },
+  {
     "objectID": "pages/slides/images_as_data.html#images-as-tensors-12",
     "href": "pages/slides/images_as_data.html#images-as-tensors-12",
     "title": "2 - Images as Data",
     "section": "Images as Tensors (1/2)",
-    "text": "Images as Tensors (1/2)\n\n\nFigure 1: An image as a tensor of shape H × W × C.",
+    "text": "Images as Tensors (1/2)\n\n\nFigure 2: An image as a tensor of shape H × W × C.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -364,7 +375,7 @@
     "href": "pages/slides/images_as_data.html#images-as-tensors-22",
     "title": "2 - Images as Data",
     "section": "Images as Tensors (2/2)",
-    "text": "Images as Tensors (2/2)\n\n\nFigure 2: An image as a tensor of shape H × W × C.\n\nPixel values: uint8 [0, 255] → float [0, 1] → standardized (zero mean, unit variance)\n\n\nShape conventions:\n\nNumPy / PIL: (H, W, C) — channels last\nPyTorch: (C, H, W) — channels first\n\nMismatched conventions → silent bugs.",
+    "text": "Images as Tensors (2/2)\n\n\nFigure 3: An image as a tensor of shape H × W × C.\n\nPixel values: uint8 [0, 255] → float [0, 1] → standardized (zero mean, unit variance)\n\n\nShape conventions:\n\nNumPy / PIL: (H, W, C) — channels last\nPyTorch: (C, H, W) — channels first\n\nMismatched conventions → silent bugs.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -375,7 +386,7 @@
     "href": "pages/slides/images_as_data.html#channels-what-does-c-mean",
     "title": "2 - Images as Data",
     "section": "Channels: What Does C Mean?",
-    "text": "Channels: What Does C Mean?\n\n\nFigure 3: RGB (3 channels) vs. grayscale (1 channel).\n\n1: grayscale, depth, IR/thermal, X-ray, ultrasound\n3: RGB (or HSV, same info, different axes)\n4: RGBA (alpha) or RGB + near-IR\nN (10s–100s): multispectral / hyperspectral (remote sensing, agriculture, astronomy)\n\n\nFor ordinary 2-D images, only C changes; the tensor structure stays H × W × C. For volumes or time series, we add additional axes.",
+    "text": "Channels: What Does C Mean?\n\n\nFigure 4: RGB (3 channels) vs. grayscale (1 channel).\n\n1: grayscale, depth, IR/thermal, X-ray, ultrasound\n3: RGB (or HSV, same info, different axes)\n4: RGBA (alpha) or RGB + near-IR\nN (10s–100s): multispectral / hyperspectral (remote sensing, agriculture, astronomy)\n\n\nFor ordinary 2-D images, only C changes; the tensor structure stays H × W × C. For volumes or time series, we add additional axes.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -386,7 +397,7 @@
     "href": "pages/slides/images_as_data.html#thermal-imaging",
     "title": "2 - Images as Data",
     "section": "Thermal Imaging",
-    "text": "Thermal Imaging\n\n\nFigure 4: Thermal images are often single-channel sensor measurements: each pixel represents heat / infrared intensity. For display, they may be mapped to false-color RGB.",
+    "text": "Thermal Imaging\n\n\nFigure 5: Thermal images are often single-channel sensor measurements: each pixel represents heat / infrared intensity. For display, they may be mapped to false-color RGB.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -408,7 +419,7 @@
     "href": "pages/slides/images_as_data.html#resolution",
     "title": "2 - Images as Data",
     "section": "Resolution",
-    "text": "Resolution\n\n\nFigure 5: Same image at 224 × 224, 64 × 64, 16 × 16. Detail is progressively lost.\n\nHigher → detail, more memory + compute\nLower → faster, but discards information\nAspect-ratio distortion → squashing deforms objects\n\n\nCommon: resize shortest edge + center-crop, or resize with padding.",
+    "text": "Resolution\n\n\nFigure 6: Same image at 224 × 224, 64 × 64, 16 × 16. Detail is progressively lost.\n\nHigher → detail, more memory + compute\nLower → faster, but discards information\nAspect-ratio distortion → squashing deforms objects\n\n\nCommon: resize shortest edge + center-crop, or resize with padding.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -419,7 +430,7 @@
     "href": "pages/slides/images_as_data.html#quiz-mri-as-a-tensor",
     "title": "2 - Images as Data",
     "section": "Quiz: MRI as a Tensor",
-    "text": "Quiz: MRI as a Tensor\nHow would an MRI scan be represented?\nIs it still H × W × C?\n\n\nFigure 6: Source",
+    "text": "Quiz: MRI as a Tensor\nHow would an MRI scan be represented?\nIs it still H × W × C?\n\n\nFigure 7: Source",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -430,7 +441,7 @@
     "href": "pages/slides/images_as_data.html#mri-as-a-tensor",
     "title": "2 - Images as Data",
     "section": "MRI as a Tensor",
-    "text": "MRI as a Tensor\nHow would an MRI scan be represented?\n\n\nFigure 7: MRI scans.\n\nThe H × W × C abstraction generalizes: sequences and depth become extra axes.",
+    "text": "MRI as a Tensor\nHow would an MRI scan be represented?\n\n\nFigure 8: MRI scans.\n\nThe H × W × C abstraction generalizes: sequences and depth become extra axes.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -441,7 +452,7 @@
     "href": "pages/slides/images_as_data.html#real-world-camera-trap-dataset",
     "title": "2 - Images as Data",
     "section": "Real-World Camera Trap Dataset",
-    "text": "Real-World Camera Trap Dataset\n\n\nFigure 8: Source: Snapshot Kgalgadi\n\nQuestion: What could be the challenge for classification, looking at these examples?",
+    "text": "Real-World Camera Trap Dataset\n\n\nFigure 9: Source: Snapshot Kgalgadi\n\nQuestion: What could be the challenge for classification, looking at these examples?",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -452,7 +463,7 @@
     "href": "pages/slides/images_as_data.html#class-imbalance",
     "title": "2 - Images as Data",
     "section": "Class Imbalance",
-    "text": "Class Imbalance\n\n\nFigure 9: Captures per class in the Kalahari dataset (log scale).\n\n74% of captures are empty; many species appear only once.",
+    "text": "Class Imbalance\n\n\nFigure 10: Captures per class in the Kalahari dataset (log scale).\n\n74% of captures are empty; many species appear only once.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -463,7 +474,7 @@
     "href": "pages/slides/images_as_data.html#label-noise",
     "title": "2 - Images as Data",
     "section": "Label Noise",
-    "text": "Label Noise\n\n\nFigure 10: Wolf or large dog? Empty, or a tail at the edge of the frame?\n\nInter-annotator disagreement on borderline cases\nSystematic errors: annotators consistently confuse two classes\nAmbiguous category boundaries: class definitions overlap\n\n\nDeep networks can eventually memorize noisy labels (Arpit et al. 2017), so validation monitoring and data inspection matter.",
+    "text": "Label Noise\n\n\nFigure 11: Wolf or large dog? Empty, or a tail at the edge of the frame?\n\nInter-annotator disagreement on borderline cases\nSystematic errors: annotators consistently confuse two classes\nAmbiguous category boundaries: class definitions overlap\n\n\nDeep networks can eventually memorize noisy labels (Arpit et al. 2017), so validation monitoring and data inspection matter.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -474,7 +485,7 @@
     "href": "pages/slides/images_as_data.html#hidden-bias",
     "title": "2 - Images as Data",
     "section": "Hidden Bias",
-    "text": "Hidden Bias\n\n\nFigure 11: Same animal, different background: different prediction. The background, not the cow, drives the prediction. Adapted from Beery et al. (2018).\n\nGeographic: limited regional diversity (architecture, vegetation, clothing)\nSelection: internet-sourced images overrepresent certain demographics/styles\nWatermark / source artifacts: visual quirks correlate with labels",
+    "text": "Hidden Bias\n\n\nFigure 12: Same animal, different background: different prediction. The background, not the cow, drives the prediction. Adapted from Beery et al. (2018).\n\nGeographic: limited regional diversity (architecture, vegetation, clothing)\nSelection: internet-sourced images overrepresent certain demographics/styles\nWatermark / source artifacts: visual quirks correlate with labels",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -496,7 +507,7 @@
     "href": "pages/slides/images_as_data.html#splitting-a-dataset",
     "title": "2 - Images as Data",
     "section": "Splitting a Dataset",
-    "text": "Splitting a Dataset\n\n\nFigure 12: Source: Voxel51\n\nQuestion: What is wrong with this split?",
+    "text": "Splitting a Dataset\n\n\nFigure 13: Source: Voxel51\n\nQuestion: What is wrong with this split?",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -507,7 +518,7 @@
     "href": "pages/slides/images_as_data.html#data-leakage",
     "title": "2 - Images as Data",
     "section": "Data Leakage",
-    "text": "Data Leakage\nThe model sees information during training that it will not have at deployment.\n\n\nFigure 13: Same images and model, different splits: the score drops as the split gets stricter.\n\nCauses: near-duplicates, same site in train and test, statistics computed on all data.",
+    "text": "Data Leakage\nThe model sees information during training that it will not have at deployment.\n\n\nFigure 14: Same images and model, different splits: the score drops as the split gets stricter.\n\nCauses: near-duplicates, same site in train and test, statistics computed on all data.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -1057,18 +1068,7 @@
     "href": "pages/slides/classification.html#image-classification",
     "title": "4 - Image Classification",
     "section": "Image Classification",
-    "text": "Image Classification\n\n\nFigure 1: Assign an image to one of \\(K\\) predefined categories.",
-    "crumbs": [
-      "Slides",
-      "4 - Image Classification"
-    ]
-  },
-  {
-    "objectID": "pages/slides/classification.html#classification-variants",
-    "href": "pages/slides/classification.html#classification-variants",
-    "title": "4 - Image Classification",
-    "section": "Classification Variants",
-    "text": "Classification Variants\n\n\nFigure 2: Different variants of classification.",
+    "text": "Image Classification\n\n\nFigure 1: Different variants of classification.",
     "crumbs": [
       "Slides",
       "4 - Image Classification"
@@ -1101,7 +1101,7 @@
     "href": "pages/slides/classification.html#logits-probabilities",
     "title": "4 - Image Classification",
     "section": "Logits → Probabilities",
-    "text": "Logits → Probabilities\n\n\n\n\n\n\n\n\nFigure 3: Logits are arbitrary real-valued scores. Softmax converts them into probabilities.\n\n\n\n\n\n\nLogits can be any real number — softmax always produces a valid probability distribution.",
+    "text": "Logits → Probabilities\n\n\n\n\n\n\n\n\nFigure 2: Logits are arbitrary real-valued scores. Softmax converts them into probabilities.\n\n\n\n\n\n\nLogits can be any real number — softmax always produces a valid probability distribution.",
     "crumbs": [
       "Slides",
       "4 - Image Classification"
@@ -1178,7 +1178,7 @@
     "href": "pages/slides/classification.html#alexnet-2012",
     "title": "4 - Image Classification",
     "section": "AlexNet (2012)",
-    "text": "AlexNet (2012)\n\n\nFigure 4: 5 conv + 3 FC layers, 1000-way softmax. Trained on two GTX 580 GPUs (3 GB each). Source: Prince (2023)\n\nThe network had to be split across GPUs due to memory limits.",
+    "text": "AlexNet (2012)\n\n\nFigure 3: 5 conv + 3 FC layers, 1000-way softmax. Trained on two GTX 580 GPUs (3 GB each). Source: Prince (2023)\n\nThe network had to be split across GPUs due to memory limits.",
     "crumbs": [
       "Slides",
       "4 - Image Classification"
@@ -1245,17 +1245,6 @@
     "title": "4 - Image Classification",
     "section": "Quiz: Camera-Trap Augmentations",
     "text": "Quiz: Camera-Trap Augmentations\nClasses: empty, deer, fox, badger, bird. Which augmentations would you use, which avoid?\n\nUseful: horizontal flips, moderate crops, brightness/contrast, grayscale (night IR images)\n\n\nAvoid: vertical flips and large rotations: camera traps are mounted upright\n\n\nCareful: aggressive crops can cut the animal out, an “empty” image labelled “deer”",
-    "crumbs": [
-      "Slides",
-      "4 - Image Classification"
-    ]
-  },
-  {
-    "objectID": "pages/slides/classification.html#key-takeaways",
-    "href": "pages/slides/classification.html#key-takeaways",
-    "title": "4 - Image Classification",
-    "section": "Key Takeaways",
-    "text": "Key Takeaways\n\nImage classification maps an image to class logits.\nSoftmax converts logits into class probabilities.\nCross-entropy penalizes low probability assigned to the true class.\nMost classifiers use a backbone plus a small classification head.\nArchitecture evolution: AlexNet → VGG → ResNet → ConvNeXt / ViT.\nStart with a proven pretrained backbone; only customize when needed.\nData augmentation teaches invariances the architecture does not provide; it must preserve the label.",
     "crumbs": [
       "Slides",
       "4 - Image Classification"
@@ -1361,7 +1350,7 @@
     "href": "pages/misc/student_projects.html#generative-projects",
     "title": "Project Ideas",
     "section": "4 Generative Projects",
-    "text": "4 Generative Projects\nThese projects build a workflow around existing generative models, no training required. Using an image generation API (e.g. Gemini, OpenAI, or FLUX via Replicate / fal.ai) is fine and recommended, as it avoids GPU setup. Generating a few nice images is easy. The real work is defining what “good” means, measuring it, and comparing variants systematically.\n\n\n\n\n\n\nTipAI Assistants\n\n\n\nAI coding assistants may be used for the implementation (API calls, pipeline, evaluation scripts). This frees time for workflow design and evaluation, which is where the focus of these projects lies. Fix the experimental grid (inputs × variants × repetitions) in advance and estimate the number of API calls and cost before you start.\n\n\n\n4.1 Product Images in Different Environments\nGoal: Design a workflow that takes one or more source images of a product (e.g. a chair on a white background) and generates images of the same product in different environments (e.g. living room, office, terrace). The product must stay recognisably the same: shape, colour, material and proportions must not change.\nApproach: Build and compare three variants:\n\nEditing model: an image editing model via API with a fixed prompt template, e.g. “Place this chair in a bright Scandinavian living room”.\nMultiple views: the same, but with 2–3 source views of the product as input. Does more context improve fidelity?\nCut-out + compositing: segment the product (e.g. background removal or SAM), keep its pixels fixed, and only generate the background (inpainting / outpainting). This guarantees fidelity, but does the result still look realistic?\n\nOptionally, compare two different models or prompt formulations for the best variant.\nFocus:\n\nProduct fidelity: embedding similarity (DINO or CLIP) between the source product and the product region in the generated image.\nPrompt adherence: does the scene match the requested environment? E.g. CLIP zero-shot classification over the environment names.\nRealism and overall quality: a vision-language model as judge (e.g. a fixed rubric with scores 1–5), validated against your own ratings on a subset. How well do the judge and you agree?\nFailure analysis: when does the product change (geometry, colour, texture)? Are scale, perspective and shadows plausible? Break down all metrics by product category and environment: which products and scenes are systematically hard?\n\nDataset: 50–100 products from Amazon Berkeley Objects (ABO), which provides multiple views per item, and a fixed list of 5 environments (several hundred generated images in total). Choose the products to be diverse: different categories (e.g. chairs, sofas, tables, lamps, rugs, shelves), sizes, and deliberately difficult cases such as thin structures, glass, reflective metal, patterned fabric, or text and logos. Run small pilot experiments on a few products first, then scale up the final comparison.\nDifficulty/Effort: Medium - High\n\n\n4.2 Food Images for a Fictional Delivery Service\nGoal: Design a workflow that generates menu images for a fictional food delivery service. All images should share a common look & feel (e.g. background, lighting, camera angle, plating). Consider two input scenarios: a) text descriptions of dishes (menu entries), and b) existing photos of varying quality that should be converted to the common style.\nApproach: First define the target style with a short style guide and 2–3 reference images. Then build both scenarios:\n\na) Text-to-image: compare a prompt template only vs. prompt template plus a style reference image.\nb) Image editing: convert existing photos to the target style. Compare two models or two editing strengths and investigate the trade-off between preserving the original dish and matching the style.\n\nOptionally, use an LLM to turn short dish names into consistent, detailed menu descriptions and prompts.\nFocus:\n\nContent correctness: is it the right dish? Use a Food-101 classifier or CLIP zero-shot classification over the dish names.\nStyle consistency: embedding similarity to the reference images and spread within the generated set. Inspect the menu side by side, does it look like one brand?\nContent preservation (scenario b): similarity between original and converted photo. Plot preservation vs. style match across variants.\nFailure analysis: which dishes are hard (e.g. soups, mixed dishes)? Does the model invent ingredients that are not in the description? Break down the metrics by cuisine, dish type and input photo quality.\n\nDataset: 50–100 dishes from Food-101 (class names as menu items for a, photos as inputs for b), with several input photos per dish for scenario b) (several hundred images in total). Choose the dishes to be diverse: different cuisines, dish types (soups, salads, desserts, plated mains, finger food) and visual difficulty. For scenario b), deliberately include difficult input photos: dark, cluttered background, unusual angle, partially eaten, or several dishes in one photo. Run small pilot experiments on a few dishes first, then scale up the final comparison.\nDifficulty/Effort: Medium - High",
+    "text": "4 Generative Projects\nThese projects build a workflow around existing generative models, no training required. Using an image generation API (e.g. Gemini, OpenAI, or FLUX via Replicate / fal.ai) is fine and recommended, as it avoids GPU setup. Generating a few nice images is easy. The real work is defining what “good” means, measuring it, and comparing variants systematically.\n\n\n\n\n\n\nTipAI Assistants\n\n\n\nAI coding assistants may be used for the implementation (API calls, pipeline, evaluation scripts). This frees time for workflow design and evaluation, which is where the focus of these projects lies. Fix the experimental grid (inputs × variants × repetitions) in advance and estimate the number of API calls and cost before you start.\n\n\n\n4.1 Product Images in Different Environments\nGoal: Design a workflow that takes one or more source images of a product (e.g. a chair on a white background) and generates images of the same product in different environments (e.g. living room, office, terrace). The product must stay recognisably the same: shape, colour, material and proportions must not change.\nApproach: Build and compare three variants:\n\nEditing model: an image editing model via API with a fixed prompt template, e.g. “Place this chair in a bright Scandinavian living room”.\nMultiple views: the same, but with 2–3 source views of the product as input. Does more context improve fidelity?\nCut-out + compositing: segment the product (e.g. background removal or SAM), keep its pixels fixed, and only generate the background (inpainting / outpainting). This guarantees fidelity, but does the result still look realistic?\n\nOptionally, compare two different models or prompt formulations for the best variant.\nFocus:\n\nProduct fidelity: embedding similarity (DINO or CLIP) between the source product and the product region in the generated image.\nPrompt adherence: does the scene match the requested environment? E.g. CLIP zero-shot classification over the environment names.\nRealism and overall quality: a vision-language model as judge (e.g. a fixed rubric with scores 1–5), validated against your own ratings on a subset. How well do the judge and you agree?\nFailure analysis: when does the product change (geometry, colour, texture)? Are scale, perspective and shadows plausible? Break down all metrics by product category and environment: which products and scenes are systematically hard?\n\nDataset: 50–100 products from Amazon Berkeley Objects (ABO), which provides multiple views per item, and a fixed list of 5 environments (several hundred generated images in total). Choose the products to be diverse: different categories (e.g. chairs, sofas, tables, lamps, rugs, shelves), sizes, and deliberately difficult cases such as thin structures, glass, reflective metal, patterned fabric, or text and logos. Run small pilot experiments on a few products first, then scale up the final comparison.\n\n\n\n\n\n\nFigure 9: Example of a cut-out product image (sofa on a white background). Source: Pfister\n\n\n\nDifficulty/Effort: Medium - High\n\n\n4.2 Food Images for a Fictional Delivery Service\nGoal: Create a visually consistent menu for a fictional food delivery service using generative AI. All dish images should share a common look & feel (e.g. background, lighting, camera angle, plating), while accurately representing the dishes and their ingredients. Compare two approaches: a) generating images from text descriptions, and b) transforming existing food photographs into the desired style.\nApproach: Select 8–12 diverse dishes and define a target visual style using a short style guide and 1–2 reference images. Implement and compare:\n\na) Text-to-image: Generate menu photographs from dish names and short ingredient descriptions. Compare a consistent prompt template with reference-guided generation (if supported by the model).\nb) Image editing: Transform existing food photographs into the target style while preserving the original dishes. Experiment with different instructions or editing strengths to investigate the trade-off between content preservation and style consistency.\n\nUse a common image-generation API for both scenarios where possible. Coding agents can assist with API integration, prompt templates and creating comparison grids.\nFocus:\n\nContent correctness: Does the generated image represent the intended dish? Are important ingredients preserved, missing or invented?\nStyle consistency: Do the resulting images look like they belong to the same food delivery service? Compare the images side by side.\nGeneration vs. editing: Which approach produces more consistent images? Which better preserves dish-specific details?\nEvaluation: Create a visual comparison grid and use simple manual ratings (e.g. 1–5 for content correctness and style consistency). Optionally compare these assessments with a vision-language model.\nFailure analysis: Identify representative failures and investigate which dishes or visual characteristics are particularly challenging.\n\nDataset: Curate 8–12 diverse dishes using photographs from Wikimedia Commons, Food-101 or your own photographs. Include soups, salads, main courses and desserts, ideally with different backgrounds, lighting conditions and camera angles. Write a short menu description and identify the key ingredients for each dish. Start with 2–3 dishes to test the workflow before processing the full collection.\nDeliverable: A small, visually consistent menu gallery, a side-by-side comparison of original, generated and edited images, and a short evaluation of the methods, trade-offs and typical failures.\nDifficulty/Effort: Medium",
     "crumbs": [
       "Project Ideas"
     ]
@@ -1722,7 +1711,7 @@
     "href": "pages/background/frameworks.html#tensors",
     "title": "3 - Software & Hardware",
     "section": "2.2 Tensors",
-    "text": "2.2 Tensors\ntorch.Tensor is the central data structure in PyTorch. Essentially very similar to numpy.array, it can be easily loaded onto GPUs.\nTensors can be created in various ways. For example, from lists:\n\ndata = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)\nprint(x_data)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from numpy.ndarray:\n\nnp_array = np.array(data)\nx_np = torch.from_numpy(np_array)\nprint(x_np)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from other tensors:\n\nx_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")\n\nOnes Tensor: \n tensor([[1, 1],\n        [1, 1]]) \n\nRandom Tensor: \n tensor([[0.3058, 0.9099],\n        [0.0947, 0.5552]]) \n\n\n\nOr with randomly generated numbers or constants:\n\nshape = (2,3,)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")\n\nRandom Tensor: \n tensor([[0.4968, 0.0717, 0.7194],\n        [0.8060, 0.6197, 0.3955]]) \n\nOnes Tensor: \n tensor([[1., 1., 1.],\n        [1., 1., 1.]]) \n\nZeros Tensor: \n tensor([[0., 0., 0.],\n        [0., 0., 0.]])\n\n\nTensor attributes:\n\ntensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")\n\nShape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu\n\n\nThere are over 100 operations that can be performed on a tensor. The full list is available here.\nIndexing and Slicing:\n\ntensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[:, -1]}\")\ntensor[:,1] = 0\nprint(tensor)\n\nFirst row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\n\nJoining tensors:\n\nt1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)\n\ntensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n\n\nArithmetic operations:\n\n# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)\n\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
+    "text": "2.2 Tensors\ntorch.Tensor is the central data structure in PyTorch. Essentially very similar to numpy.array, it can be easily loaded onto GPUs.\nTensors can be created in various ways. For example, from lists:\n\ndata = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)\nprint(x_data)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from numpy.ndarray:\n\nnp_array = np.array(data)\nx_np = torch.from_numpy(np_array)\nprint(x_np)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from other tensors:\n\nx_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")\n\nOnes Tensor: \n tensor([[1, 1],\n        [1, 1]]) \n\nRandom Tensor: \n tensor([[0.6232, 0.9228],\n        [0.7484, 0.7367]]) \n\n\n\nOr with randomly generated numbers or constants:\n\nshape = (2,3,)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")\n\nRandom Tensor: \n tensor([[0.5691, 0.0430, 0.7837],\n        [0.4472, 0.8945, 0.5779]]) \n\nOnes Tensor: \n tensor([[1., 1., 1.],\n        [1., 1., 1.]]) \n\nZeros Tensor: \n tensor([[0., 0., 0.],\n        [0., 0., 0.]])\n\n\nTensor attributes:\n\ntensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")\n\nShape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu\n\n\nThere are over 100 operations that can be performed on a tensor. The full list is available here.\nIndexing and Slicing:\n\ntensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[:, -1]}\")\ntensor[:,1] = 0\nprint(tensor)\n\nFirst row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\n\nJoining tensors:\n\nt1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)\n\ntensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n\n\nArithmetic operations:\n\n# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)\n\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
     "crumbs": [
       "Background & Preparation",
       "3 - Software & Hardware"
@@ -1733,7 +1722,7 @@
     "href": "pages/background/frameworks.html#autograd",
     "title": "3 - Software & Hardware",
     "section": "2.3 Autograd",
-    "text": "2.3 Autograd\nTo train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an auto-diff functionality: torch.autograd. This can automatically compute gradients for a computational graph.\n\n\n\n\n\n\nTipAutograd Key Points\n\n\n\n\nSet requires_grad=True on tensors you want to track for gradient computation\nCall .backward() on a scalar loss to compute all gradients\nAccess gradients via .grad attribute of tensors\nUse torch.no_grad() context for inference to save memory and speed up computation\n\n\n\nThe following is an example using a 1-layer neural network (see Figure 4 ):\n\n\n\n\n\n\nFigure 4: Source: PyTorch\n\n\n\nThe network from Figure 4 is defined in PyTorch code in Listing 4.\n\n\n\n\nListing 4: Example computational graph.\n\n\nimport torch\n\nx = torch.ones(5)  # input tensor\ny = torch.zeros(3)  # expected output\nw = torch.randn(5, 3, requires_grad=True)\nb = torch.randn(3, requires_grad=True)\nz = torch.matmul(x, w)+b\nloss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)\n\n\n\n\nWe can now use Autograd to compute the gradient:\n\nloss.backward()\nprint(w.grad)\nprint(b.grad)\n\ntensor([[0.3190, 0.1978, 0.3233],\n        [0.3190, 0.1978, 0.3233],\n        [0.3190, 0.1978, 0.3233],\n        [0.3190, 0.1978, 0.3233],\n        [0.3190, 0.1978, 0.3233]])\ntensor([0.3190, 0.1978, 0.3233])",
+    "text": "2.3 Autograd\nTo train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an auto-diff functionality: torch.autograd. This can automatically compute gradients for a computational graph.\n\n\n\n\n\n\nTipAutograd Key Points\n\n\n\n\nSet requires_grad=True on tensors you want to track for gradient computation\nCall .backward() on a scalar loss to compute all gradients\nAccess gradients via .grad attribute of tensors\nUse torch.no_grad() context for inference to save memory and speed up computation\n\n\n\nThe following is an example using a 1-layer neural network (see Figure 4 ):\n\n\n\n\n\n\nFigure 4: Source: PyTorch\n\n\n\nThe network from Figure 4 is defined in PyTorch code in Listing 4.\n\n\n\n\nListing 4: Example computational graph.\n\n\nimport torch\n\nx = torch.ones(5)  # input tensor\ny = torch.zeros(3)  # expected output\nw = torch.randn(5, 3, requires_grad=True)\nb = torch.randn(3, requires_grad=True)\nz = torch.matmul(x, w)+b\nloss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)\n\n\n\n\nWe can now use Autograd to compute the gradient:\n\nloss.backward()\nprint(w.grad)\nprint(b.grad)\n\ntensor([[0.0027, 0.2643, 0.2842],\n        [0.0027, 0.2643, 0.2842],\n        [0.0027, 0.2643, 0.2842],\n        [0.0027, 0.2643, 0.2842],\n        [0.0027, 0.2643, 0.2842]])\ntensor([0.0027, 0.2643, 0.2842])",
     "crumbs": [
       "Background & Preparation",
       "3 - Software & Hardware"
@@ -3361,11 +3350,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#properties-of-image-data",
-    "href": "pages/slides/cnns.html#properties-of-image-data",
+    "objectID": "pages/slides/cnns.html#properties-of-image-data-12",
+    "href": "pages/slides/cnns.html#properties-of-image-data-12",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Properties of Image Data",
-    "text": "Properties of Image Data\n\nThree regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. Image Source\nHigh-Dimensional: An RGB image of size \\(224 \\times 224\\) has \\(224 \\times 224 \\times 3 = 150{,}528\\) values\nLocality: Nearby pixels are statistically related (edges, textures, objects)\nStability under transformations: A cow should be recognized regardless of position\nHierarchical Structure: Features at multiple scales (pixels → edges → textures → objects)",
+    "section": "Properties of Image Data (1/2)",
+    "text": "Properties of Image Data (1/2)\n\nImage Source",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#properties-of-image-data-22",
+    "href": "pages/slides/cnns.html#properties-of-image-data-22",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Properties of Image Data (2/2)",
+    "text": "Properties of Image Data (2/2)\n\nThree regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. Image Source\nHigh-Dimensional: An RGB image of size \\(224 \\times 224\\) has \\(224 \\times 224 \\times 3 = 150{,}528\\) values\nLocality: Nearby pixels are statistically related (edges, textures, objects)\nStability under transformations: A cow should be recognized regardless of position\nHierarchical Structure: Features at multiple scales (pixels → edges → textures → objects)",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3498,6 +3498,17 @@
     "title": "3 - Convolutional Neural Networks",
     "section": "Demo: Convolution",
     "text": "Demo: Convolution\n\n\n\n\nFind a kernel that detects horizontal edges. Open in new tab",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#convolution-on-multiple-channels",
+    "href": "pages/slides/cnns.html#convolution-on-multiple-channels",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Convolution on Multiple Channels",
+    "text": "Convolution on Multiple Channels\n\n\nEach channel’s filter slice is applied to its input channel; the per-channel sums plus the bias collapse to one output value.",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3707,6 +3718,17 @@
     "title": "3 - Convolutional Neural Networks",
     "section": "Quiz: Solutions",
     "text": "Quiz: Solutions\n\nMLP first layer:\n\\((32 \\times 32 \\times 3) \\times 256 = 3{,}072 \\times 256 = 786{,}432\\) parameters\n\n\nCNN first layer:\n\\((3 \\times 3 \\times 3 \\times 16) + 16 = 432 + 16 = 448\\) parameters\n\n\nCNN uses 1,755× fewer parameters! 🚀\n\n\nWhy? Local connectivity + parameter sharing = massive efficiency!",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#demo-translation-in-mlps-and-cnns",
+    "href": "pages/slides/cnns.html#demo-translation-in-mlps-and-cnns",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Demo: Translation in MLPs and CNNs",
+    "text": "Demo: Translation in MLPs and CNNs\n\n\n\n\nMove the digit: which network still recognizes it? Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -4905,7 +4927,7 @@
     "href": "pages/slides/intro.html#context-dependence",
     "title": "1 - Introduction",
     "section": "Context Dependence",
-    "text": "Context Dependence\n\n\nFigure 21\n\nQuestion: Is this a tiger?",
+    "text": "Context Dependence\n\n\n\n\n\nQuestion: Is this a tiger?",
     "crumbs": [
       "Slides",
       "1 - Introduction"
@@ -4916,7 +4938,7 @@
     "href": "pages/slides/intro.html#context-dependence-2",
     "title": "1 - Introduction",
     "section": "Context Dependence 2",
-    "text": "Context Dependence 2\n\n\nFigure 22: From (Torralba et al. (2010)).\n\nVisual systems lean heavily on context when input is degraded.",
+    "text": "Context Dependence 2\n\n\nFigure 21: From (Torralba et al. (2010)).\n\nVisual systems lean heavily on context when input is degraded.",
     "crumbs": [
       "Slides",
       "1 - Introduction"

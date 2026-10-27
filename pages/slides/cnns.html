@@ -184,8 +184,12 @@ Marco Willi
 <h1>Why CNNs Work for Images</h1>
 
 </section>
-<section id="properties-of-image-data" class="slide level2">
-<h2>Properties of Image Data</h2>
+<section id="properties-of-image-data-12" class="slide level2">
+<h2>Properties of Image Data (1/2)</h2>
+
+<img data-src="../../assets/images/cnns/cows2_small.png" style="width:60.0%" class="r-stretch quarto-figure-center"><p class="caption"><a href="https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk">Image Source</a></p></section>
+<section id="properties-of-image-data-22" class="slide level2">
+<h2>Properties of Image Data (2/2)</h2>
 
 <img data-src="../../assets/images/cnns/cows2_multiscale.jpg" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Three regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. <a href="https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk">Image Source</a></p><ul>
 <li class="fragment"><strong>High-Dimensional</strong>: An RGB image of size <span class="math inline">\(224 \times 224\)</span> has <span class="math inline">\(224 \times 224 \times 3 = 150{,}528\)</span> values</li>
@@ -243,7 +247,7 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{H \times W \tim
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_invariance_original.jpg" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_invariance_original.jpg" style="width:50.0%"></p>
 <figcaption>Original</figcaption>
 </figure>
 </div>
@@ -251,7 +255,7 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{H \times W \tim
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_invariance_translate.jpg" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_invariance_translate.jpg" style="width:50.0%"></p>
 <figcaption>Translated</figcaption>
 </figure>
 </div>
@@ -261,7 +265,7 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{H \times W \tim
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_invariance_color.jpg" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_invariance_color.jpg" style="width:50.0%"></p>
 <figcaption>Color-jittered</figcaption>
 </figure>
 </div>
@@ -269,7 +273,7 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{H \times W \tim
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_invariance_rotate.jpg" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_invariance_rotate.jpg" style="width:50.0%"></p>
 <figcaption>Rotated</figcaption>
 </figure>
 </div>
@@ -376,6 +380,13 @@ S(i, j) = (K * I)(i, j) = \sum_m \sum_n I(i + m, j + n) K(m, n) + b
 </iframe>
 </div>
 <p>Find a kernel that detects horizontal edges. <a href="../../demos/convolution/index.html" target="_blank">Open in new tab</a></p>
+</section>
+<section id="convolution-on-multiple-channels" class="slide level2">
+<h2>Convolution on Multiple Channels</h2>
+
+<img data-src="../../assets/images/cnns/conv_rgb_channels.png" style="width:75.0%" class="r-stretch"><div class="fragment">
+<p>Each channel’s filter slice is applied to its input channel; the per-channel sums plus the bias collapse to <strong>one</strong> output value.</p>
+</div>
 </section>
 <section id="many-filters-many-activation-maps" class="slide level2">
 <h2>Many Filters, Many Activation Maps</h2>
@@ -554,6 +565,14 @@ r_0 = \sum_{l=1}^L \left( (k_l - 1) \prod_{i=1}^{l-1} s_i \right) + 1
 <div class="fragment">
 <p><strong>Why?</strong> Local connectivity + parameter sharing = massive efficiency!</p>
 </div>
+</section>
+<section id="demo-translation-in-mlps-and-cnns" class="slide level2">
+<h2>Demo: Translation in MLPs and CNNs</h2>
+<div style="height: 905px;">
+<iframe data-src="../../demos/cnns/cnns_vs_mlp_demo/index.html" width="1800" height="1290" style="border: 1px solid #ddd; border-radius: 6px; max-height: none; transform: scale(0.7); transform-origin: top left;" title="Interactive demo: MLP vs CNN on shifted MNIST digits">
+</iframe>
+</div>
+<p>Move the digit: which network still recognizes it? <a href="../../demos/cnns/cnns_vs_mlp_demo/index.html" target="_blank">Open in new tab</a></p>
 </section></section>
 <section id="references" class="title-slide slide level1 smaller scrollable">
 <h1>References</h1>
