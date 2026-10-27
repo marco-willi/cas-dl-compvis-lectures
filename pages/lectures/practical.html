@@ -578,7 +578,7 @@ window.Quarto = {
 <section id="a-recipe-for-training-neural-networks" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="a-recipe-for-training-neural-networks"><span class="header-section-number">1</span> A Recipe for Training Neural Networks</h2>
 <p>How does one successfully train a deep learning model? Modern ML frameworks make training appear straightforward, but Karpathy observed that these abstractions are <strong>leaky</strong>: without a solid understanding of what happens inside, backpropagation, gradient descent, loss dynamics, mistakes creep in undetected. A model with a learning rate that is too high may converge to a poor solution without raising any error. A data preprocessing bug may silently corrupt every batch. <strong>Training neural networks fails silently.</strong></p>
-<div id="133f4011" class="cell" data-execution_count="1">
+<div id="4e0e8b61" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>your_data <span class="op">=</span> <span class="co"># plug your awesome dataset here</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SuperCrossValidator(SuperDuper.fit, your_data, ResNet50, SGDOptimizer)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -591,7 +591,7 @@ window.Quarto = {
 <div id="fig-practical-camera-traps-corrupt" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-camera-traps-corrupt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/camera_traps_corrupt.jpg" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/camera_traps_corrupt.jpg" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-camera-traps-corrupt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Examples of images from camera traps distorted by heat. They may still be usable, but their quality must be assessed.
@@ -602,7 +602,7 @@ Figure&nbsp;1: Examples of images from camera traps distorted by heat. They may 
 <div id="fig-practical-camera-traps-difficulties" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-camera-traps-difficulties-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/cam_trap_difficulties.png" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/cam_trap_difficulties.png" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-camera-traps-difficulties-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Examples of challenging cases in camera trap images. Small ROIs suggest that resolution requirements should be assessed carefully. Source: <span class="citation" data-cites="Beery2018">Beery et al. (<a href="#ref-Beery2018" role="doc-biblioref">2018</a>)</span>.
@@ -613,7 +613,7 @@ Figure&nbsp;2: Examples of challenging cases in camera trap images. Small ROIs s
 <div id="fig-practical-camera-traps-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-camera-traps-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/cam_trap_dist2.jpg" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/cam_trap_dist2.jpg" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-camera-traps-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Species distribution in a typical camera trap dataset. Heavy imbalance toward a few dominant species is common.
@@ -624,7 +624,7 @@ Figure&nbsp;3: Species distribution in a typical camera trap dataset. Heavy imba
 <div id="fig-practical-camera-traps-multi" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-camera-traps-multi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/multi_species.JPG" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/multi_species.JPG" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-camera-traps-multi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: An image from a camera trap containing multiple species simultaneously. Standard multi-class classification cannot handle this without modification.
@@ -646,7 +646,7 @@ Figure&nbsp;4: An image from a camera trap containing multiple species simultane
 <div id="fig-ml-prozess" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ml-prozess-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/ml_process_raschka.png" class="img-fluid figure-img" width="800">
+<img src="../../assets/images/practical/ml_process_raschka.png" class="img-fluid figure-img" loading="lazy" width="800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ml-prozess-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: The components of a typical machine learning process. Source: <span class="citation" data-cites="raschka_python_2020">Raschka and Mirjalili (<a href="#ref-raschka_python_2020" role="doc-biblioref">2020</a>)</span>.
@@ -688,7 +688,7 @@ Click for result
 <div id="fig-practical-camera-trap-difficult" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-camera-trap-difficult-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/camera_trap_difficult.jpeg" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/camera_trap_difficult.jpeg" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-camera-trap-difficult-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: A challenging image from a camera trap dataset. Establishing how reliably humans can label such images sets a meaningful performance ceiling.
@@ -711,7 +711,7 @@ Figure&nbsp;6: A challenging image from a camera trap dataset. Establishing how 
 <div id="fig-practical-learning-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-learning-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/learning_curve.jpg" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/learning_curve.jpg" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-learning-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: Example of a learning curve. As training set size increases, validation performance improves. Source: <span class="citation" data-cites="raschka_python_2020">Raschka and Mirjalili (<a href="#ref-raschka_python_2020" role="doc-biblioref">2020</a>)</span>.
@@ -732,7 +732,7 @@ Figure&nbsp;7: Example of a learning curve. As training set size increases, vali
 <div id="fig-practical-augly" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-augly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/augly.jpg" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/augly.jpg" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-augly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8: AugLy augmentation library.
@@ -742,7 +742,7 @@ Figure&nbsp;8: AugLy augmentation library.
 <div id="fig-practical-albumentations" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-albumentations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/albumentations.jpg" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/albumentations.jpg" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-albumentations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9: Albumentations augmentation library.
@@ -752,7 +752,7 @@ Figure&nbsp;9: Albumentations augmentation library.
 <div id="fig-practical-kornia" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-kornia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/kornia.png" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/kornia.png" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-kornia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;10: Kornia augmentation library.
@@ -763,7 +763,7 @@ Figure&nbsp;10: Kornia augmentation library.
 <div id="fig-practical-augmentation-rhino" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-augmentation-rhino-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/augmentation_rhino.png" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/augmentation_rhino.png" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-augmentation-rhino-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11: Data augmentation applied to a single image. Each transformed copy becomes a distinct training example.
@@ -775,7 +775,7 @@ Figure&nbsp;11: Data augmentation applied to a single image. Each transformed co
 <div id="fig-practical-synthetic-examples" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-synthetic-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/synthetic_camera_trap_images.jpg" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/synthetic_camera_trap_images.jpg" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-synthetic-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;12: Synthetic and semi-synthetic camera trap images generated using 3D animal models. Source: <span class="citation" data-cites="Beery2020">Beery et al. (<a href="#ref-Beery2020" role="doc-biblioref">2020</a>)</span>.
@@ -789,7 +789,7 @@ Figure&nbsp;12: Synthetic and semi-synthetic camera trap images generated using 
 <div id="fig-practical-early-stopping" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-early-stopping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/early_stopping.png" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/early_stopping.png" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-early-stopping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13: Early stopping halts training at the point of best validation performance. <a href="https://www.oreilly.com/library/view/hands-on-transfer-learning/9781788831307/41172567-9482-4cad-ac87-1cfbd46026df.xhtml">Source</a>
@@ -811,7 +811,7 @@ Figure&nbsp;13: Early stopping halts training at the point of best validation pe
 <div id="fig-practical-transfer-learning" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-practical-transfer-learning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/practical/transfer_learning.jpg" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/practical/transfer_learning.jpg" class="img-fluid figure-img" loading="lazy" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-practical-transfer-learning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;14: Transfer learning: adapt a pre-trained backbone to a new task by replacing and training the final classification head. Source: <span class="citation" data-cites="johnson_eecs_2021">Johnson and Fouhey (<a href="#ref-johnson_eecs_2021" role="doc-biblioref">2021</a>)</span>.

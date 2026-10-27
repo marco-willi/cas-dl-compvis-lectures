@@ -187,7 +187,7 @@ Marco Willi
 <section id="properties-of-image-data" class="slide level2">
 <h2>Properties of Image Data</h2>
 
-<img data-src="../../assets/images/cnns/cows2_multiscale.png" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Three regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. <a href="https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk">Image Source</a></p><ul>
+<img data-src="../../assets/images/cnns/cows2_multiscale.jpg" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Three regions (sky, cow, grass) at three scales: 12, 48 and 192 pixels. <a href="https://unsplash.com/de/fotos/braune-schafe-auf-grunem-grasfeld-tagsuber-olonUwUrmQk">Image Source</a></p><ul>
 <li class="fragment"><strong>High-Dimensional</strong>: An RGB image of size <span class="math inline">\(224 \times 224\)</span> has <span class="math inline">\(224 \times 224 \times 3 = 150{,}528\)</span> values</li>
 <li class="fragment"><strong>Locality</strong>: Nearby pixels are statistically related (edges, textures, objects)</li>
 <li class="fragment"><strong>Stability under transformations</strong>: A cow should be recognized regardless of position</li>
@@ -243,7 +243,7 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{H \times W \tim
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_invariance_original.png" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_invariance_original.jpg" style="width:75.0%"></p>
 <figcaption>Original</figcaption>
 </figure>
 </div>
@@ -251,7 +251,7 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{H \times W \tim
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_invariance_translate.png" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_invariance_translate.jpg" style="width:75.0%"></p>
 <figcaption>Translated</figcaption>
 </figure>
 </div>
@@ -261,7 +261,7 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{H \times W \tim
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_invariance_color.png" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_invariance_color.jpg" style="width:75.0%"></p>
 <figcaption>Color-jittered</figcaption>
 </figure>
 </div>
@@ -269,7 +269,7 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{H \times W \tim
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_invariance_rotate.png" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_invariance_rotate.jpg" style="width:75.0%"></p>
 <figcaption>Rotated</figcaption>
 </figure>
 </div>
@@ -291,7 +291,7 @@ Figure&nbsp;2: A classifier should produce <strong>“cow”</strong> in all fou
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_equivariance_original.png" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_equivariance_original.jpg" style="width:75.0%"></p>
 <figcaption>Original</figcaption>
 </figure>
 </div>
@@ -299,7 +299,7 @@ Figure&nbsp;2: A classifier should produce <strong>“cow”</strong> in all fou
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_right.png" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_right.jpg" style="width:75.0%"></p>
 <figcaption>Shifted right</figcaption>
 </figure>
 </div>
@@ -309,7 +309,7 @@ Figure&nbsp;2: A classifier should produce <strong>“cow”</strong> in all fou
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_left.png" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_left.jpg" style="width:75.0%"></p>
 <figcaption>Shifted left</figcaption>
 </figure>
 </div>
@@ -317,7 +317,7 @@ Figure&nbsp;2: A classifier should produce <strong>“cow”</strong> in all fou
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_up.png" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_up.jpg" style="width:75.0%"></p>
 <figcaption>Shifted up + right</figcaption>
 </figure>
 </div>

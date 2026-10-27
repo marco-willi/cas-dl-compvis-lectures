@@ -4584,9 +4584,13 @@ Commercial applications of generative AI include the virtual staging of rooms wi
 
 Virtual staging examples from [Link](https://www.spacely.ai/tools/ai-virtual-staging)
 
-AI-generated images are prevalent in commercials and ads. Restuarants or fast food businesses  increasingly use generative AI to promote their menus, since it is cheaper and quicker than hiring a food photographer ([Source](https://www.nytimes.com/interactive/2026/10/06/technology/ai-slop-food-images-restaurant-menus.html)). The results often look uncanny (see the figure). Humans are particularly sensitive to food that does not look real, and food images depend on texture, repetition, and the interfaces between materials, which older and free models handle poorly: they may, for example, spread the pattern of sesame seeds over an entire dish. Moreover, even a convincing image does not show the dish that is actually served: it is *plausible*, but not *faithful*. We will return to this distinction in the section.
+AI-generated images are prevalent in commercials and ads. Restuarants or fast food businesses  increasingly use generative AI to promote their menus ([Lieferando Examples](https://www.spiegel.de/netzwelt/web/lieferando-was-hat-es-mit-diesen-merkwuerdigen-ki-bildern-beim-lieferdienst-auf-sich-a-ab881b6f-f808-4b9a-b8a2-bc2288c660a1)), since it is cheaper and quicker than hiring a food photographer ([Source](https://www.nytimes.com/interactive/2026/10/06/technology/ai-slop-food-images-restaurant-menus.html)). The results often look uncanny (see the figure). Humans are particularly sensitive to food that does not look real, and food images depend on texture, repetition, and the interfaces between materials, which older and free models handle poorly: they may, for example, spread the pattern of sesame seeds over an entire dish. Moreover, even a convincing image does not show the dish that is actually served: it is *plausible*, but not *faithful*. We will return to this distinction in the section. Image editing also works the other way around: the figure shows a real burger that was allegedly edited to look undercooked, presumably to claim a refund from a delivery service. The origin of this example is unconfirmed, but it shows how easily a photo used as evidence can be manipulated.
 
-AI-generated food image used in restaurant advertising. [Source](https://www.nytimes.com/interactive/2026/10/06/technology/ai-slop-food-images-restaurant-menus.html)
+[Figure: AI-generated food image used in restaurant advertising. [Source]](https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/ai_food.webp)
+
+[Figure: Original (left) and allegedly AI-edited, undercooked version (right) of a burger. Unconfirmed. [Source]](https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/food_uncercooked.jpg)
+
+AI-generated and AI-edited food images.
 
 Video generation has advanced rapidly as well. Models such as Google's Veo 3.1 generate short clips including audio and can be conditioned on reference images ([Source](https://blog.google/innovation-and-ai/technology/ai/veo-3-1-ingredients-to-video/)).
 
@@ -4825,9 +4829,13 @@ $$
 
 In contrast to a probability mass (e.g. the class probabilities of a classifier), a density value is not a probability: it can be larger than 1, and the probability of observing one exact image is zero. Only regions of $\mathcal{X}$ have a probability. Intuitively, a high density at $\vect{x}$ means that images *in the neighbourhood* of $\vect{x}$ are likely.
 
-What does the equation mean in practice? First, generated samples should be realistic: they should lie in regions where $p_{\text{data}}$ has a high density. the figure illustrates the principle: Models should aim to synthesize data points (x axis) which are probable under the true distribution.
+What does such a density look like for images? Since images are high-dimensional, we cannot plot $p_{\text{data}}$ directly. the figure illustrates the idea in 1D: the x axis is a path through image space, from a real 0 to a real 7. Near the two modes, the images are plausible digits. Between the modes, they are blends that are neither a 0 nor a 7: such images lie in a region of low density, and a good generative model should rarely produce them.
 
-Shown is the true distribution (blue) of some 1-D data. Green are plausible synthetic examples, while red crosses indicate data points which are improbable (they lie in regions of low density).
+Illustration of a density along a path through image space. Each position corresponds to a pixel-wise blend of two MNIST digits. Real digits lie at the modes (green), mixtures of both digits between them (red). The density is illustrative and not computed from the images.
+
+What does the equation mean in practice? First, generated samples should be realistic: they should lie in regions where $p_{\text{data}}$ has a high density. the figure illustrates the principle with the path from the figure: Models should aim to synthesize samples which are probable under the true distribution.
+
+Plausible and improbable generated samples. Shown is the true distribution (blue) along the path from the figure. Green dots are plausible samples near the modes. Red crosses are improbable samples in regions of low density: a blend of both digits between the modes, and noisy digits, which do not occur in the training data, in the tails.
 
 Realistic samples alone, however, are not enough. A model that always produces the same, most typical image, generates only realistic samples, but it has not learned the distribution. Generated samples should also cover all regions where real data occurs, in the right proportions. A good generative model represents the full distribution, not merely individual high-density samples.
 
@@ -4854,7 +4862,7 @@ It can be shown that, for a large number of training samples, this is equivalent
 
 the figure illustrates how the modelled distribution improves by increasing the likelihood of observing the training data.
 
-Example of learning a density model in 1D.
+Maximum likelihood in 1D. A mixture of two Gaussians (orange) is fitted to training samples (blue). (a) The initial model assigns a low density to many training examples. (b) After fitting by maximum likelihood, the model places its density where the training data lies, and the average log-likelihood increases.
 
 **Note:** Evaluating a density and sampling from it are different capabilities. A model that can evaluate $p_{\theta}(\vect{x})$ is useful on its own, for example to detect outliers, but it still needs a mechanism to generate samples. Conversely, some models can generate samples but cannot evaluate $p_{\theta}(\vect{x})$.
 
@@ -4892,13 +4900,11 @@ Typical number of network evaluations per generated sample (log scale). The numb
 
 ### Fidelity and Coverage
 
-A good generative model needs both fidelity and coverage, as introduced in the section. A typical failure is **mode collapse**: the model generates realistic samples, but only of a few modes of the data (see the figure). Mode collapse is a well-known problem of GANs. Likelihood-based models, in contrast, are encouraged by their objective to cover all training data, VAEs sometimes at the cost of sample quality. Diffusion models also tend to have good coverage.
+A good generative model needs both fidelity and coverage, as introduced in the section. the figure shows the two typical failures on a 2D toy dataset. A model with low fidelity covers all modes, but it also generates many samples between them, i.e. unrealistic samples. VAEs, for example, tend to cover all training data at the cost of sample quality (blurry images). A model with low coverage generates realistic samples, but only of a few modes of the data. This failure is called **mode collapse** and is a well-known problem of GANs. Likelihood-based models, in contrast, are encouraged by their objective to cover all training data. Diffusion models also tend to have good coverage.
 
-Coverage on a 2D toy dataset with 8 modes. (a) Training data. (b) A model with good coverage generates samples of all modes. (c) A mode-collapsed model generates realistic samples, but only of 2 modes.
+Fidelity and coverage on a 2D toy dataset with 8 modes. (a) Training data. (b) A good model generates realistic samples of all modes. (c) A model with low fidelity covers all modes, but generates many samples between them. (d) A model with low coverage (mode collapse) generates realistic samples, but only of 2 modes.
 
-Notably, the two properties are often in tension: techniques that increase fidelity tend to reduce coverage. A prominent example is guidance in diffusion models (ho_classifier-free_2022), which trades coverage for fidelity (see the figure).
-
-Guidance trades coverage for fidelity. Each class consists of 4 sub-modes, and the inner sub-modes of both classes overlap. Samples for class $c$ are drawn from the guided distribution $p(\vect{x} \mid c)^{1+w}\, p(\vect{x})^{-w}$ of classifier-free guidance. With increasing guidance scale $w$, samples move away from the other class and concentrate on the most class-typical sub-modes: they become less ambiguous, but less diverse.
+Notably, the two properties are often in tension: techniques that increase fidelity tend to reduce coverage. A prominent example is guidance in diffusion models (ho_classifier-free_2022): it concentrates the samples on the most typical regions of a class. In terms of the figure, a strong guidance moves a model from (c) towards (d): the samples become more realistic, but less diverse.
 
 ### Latent-Space Structure and Controllability
 

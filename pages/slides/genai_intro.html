@@ -632,18 +632,16 @@ Marco Willi
 <p>GANs and VAEs: one forward pass. Diffusion and flow matching: tens of steps. Autoregressive: one step per token.</p>
 </div>
 </section>
-<section id="coverage-mode-collapse" class="slide level2">
-<h2>Coverage: Mode Collapse</h2>
+<section id="fidelity-and-coverage-1" class="slide level2">
+<h2>Fidelity and Coverage</h2>
 
-<img data-src="../../assets/images/genai/intro_figures/coverage_mode_collapse.svg" style="width:90.0%" class="r-stretch"><div class="fragment">
-<p>Realistic samples, but only of a few modes: a well-known problem of GANs.</p>
+<img data-src="../../assets/images/genai/intro_figures/coverage_mode_collapse.svg" style="width:100.0%" class="r-stretch"><div class="fragment">
+<ol start="3" type="a">
+<li>samples between the modes. (d) Mode collapse: realistic samples, but only of a few modes, a well-known problem of GANs.</li>
+</ol>
 </div>
-</section>
-<section id="fidelity-vs.-coverage-guidance" class="slide level2">
-<h2>Fidelity vs.&nbsp;Coverage: Guidance</h2>
-
-<img data-src="../../assets/images/genai/intro_figures/guidance_tradeoff.svg" style="width:90.0%" class="r-stretch"><div class="fragment">
-<p>Techniques that increase fidelity often reduce coverage, e.g.&nbsp;guidance in diffusion models <span class="citation" data-cites="ho_classifier-free_2022">(<a href="#/references" role="doc-biblioref" onclick="">Ho and Salimans 2022</a>)</span>.</p>
+<div class="fragment">
+<p>Techniques that increase fidelity often reduce coverage, e.g.&nbsp;guidance in diffusion models <span class="citation" data-cites="ho_classifier-free_2022">(<a href="#/references" role="doc-biblioref" onclick="">Ho and Salimans 2022</a>)</span> moves a model from (c) towards (d).</p>
 </div>
 </section>
 <section id="smooth-latent-space" class="slide level2">
