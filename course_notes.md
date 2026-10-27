@@ -4731,11 +4731,11 @@ Consider the dataset shown in the figure: What could be latent variables for thi
 
 Each output is defined by its width and height. Therefore, we have two (unobserved) latent variables.
 
-Intuition about latent variables in generative models. From (foster_generative_2023).
+A dataset of cylinders. Reproduced from (foster_generative_2023).
 
-the figure shows a plausible latent space and the corresponding mapping / samples from that space.
+the figure shows a plausible latent space and the mapping $g$ from a point in that space to a sample.
 
-Intuition about latent variables in generative models. From (foster_generative_2023).
+A 2D latent space for the cylinder dataset: $z_1$ controls the width, $z_2$ the height. Filled cylinders are training examples, dashed ones do not occur in the training data. The generator $g$ maps any latent point $\vect{z}$, also one without a training example, to a cylinder. Reproduced from (foster_generative_2023), with the notation adapted to this lecture.
 
 This example is deliberately simple: the latent space is two-dimensional and each axis has a clear meaning. Latent spaces of real image generators are high-dimensional, and their individual dimensions usually do not correspond to human-interpretable properties such as pose or time of day.
 

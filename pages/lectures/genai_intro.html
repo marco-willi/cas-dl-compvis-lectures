@@ -1042,21 +1042,21 @@ Click for result
 <div id="fig-genai-basics-latent-intuition" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-basics-latent-intuition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai/latent_variables_intuition1.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai/intro_figures/latent_intuition_dataset.svg" class="img-fluid figure-img" loading="lazy">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-basics-latent-intuition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22: Intuition about latent variables in generative models. From <span class="citation" data-cites="foster_generative_2023">Foster (<a href="#ref-foster_generative_2023" role="doc-biblioref">2023</a>)</span>.
+Figure&nbsp;22: A dataset of cylinders. Reproduced from <span class="citation" data-cites="foster_generative_2023">Foster (<a href="#ref-foster_generative_2023" role="doc-biblioref">2023</a>)</span>.
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-genai-basics-latent-intuition2" class="quarto-xref">Figure&nbsp;23</a> shows a plausible latent space and the corresponding mapping / samples from that space.</p>
+<p><a href="#fig-genai-basics-latent-intuition2" class="quarto-xref">Figure&nbsp;23</a> shows a plausible latent space and the mapping <span class="math inline">\(g\)</span> from a point in that space to a sample.</p>
 <div id="fig-genai-basics-latent-intuition2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-basics-latent-intuition2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai/latent_variables_intuition2.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai/intro_figures/latent_intuition_space.svg" class="img-fluid figure-img" loading="lazy">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-basics-latent-intuition2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23: Intuition about latent variables in generative models. From <span class="citation" data-cites="foster_generative_2023">Foster (<a href="#ref-foster_generative_2023" role="doc-biblioref">2023</a>)</span>.
+Figure&nbsp;23: A 2D latent space for the cylinder dataset: <span class="math inline">\(z_1\)</span> controls the width, <span class="math inline">\(z_2\)</span> the height. Filled cylinders are training examples, dashed ones do not occur in the training data. The generator <span class="math inline">\(g\)</span> maps any latent point <span class="math inline">\(\mathbf{z}\)</span>, also one without a training example, to a cylinder. Reproduced from <span class="citation" data-cites="foster_generative_2023">Foster (<a href="#ref-foster_generative_2023" role="doc-biblioref">2023</a>)</span>, with the notation adapted to this lecture.
 </figcaption>
 </figure>
 </div>
@@ -2798,19 +2798,19 @@ Yuksekgonul, Mert, Federico Bianchi, Pratyusha Kalluri, Dan Jurafsky, and James 
 <span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>::: {#fig-genai-basics-latent-intuition}</span>
 <span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}latent_variables_intuition1.png)</span></span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}intro_figures/latent_intuition_dataset.svg)</span></span>
 <span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>Intuition about latent variables in generative models. From @foster_generative_2023.</span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>A dataset of cylinders. Reproduced from @foster_generative_2023.</span>
 <span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>@fig-genai-basics-latent-intuition2 shows a plausible latent space and the corresponding mapping / samples from that space.</span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>@fig-genai-basics-latent-intuition2 shows a plausible latent space and the mapping $g$ from a point in that space to a sample.</span>
 <span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>::: {#fig-genai-basics-latent-intuition2}</span>
 <span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}latent_variables_intuition2.png)</span></span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}intro_figures/latent_intuition_space.svg)</span></span>
 <span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>Intuition about latent variables in generative models. From @foster_generative_2023.</span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>A 2D latent space for the cylinder dataset: $z_1$ controls the width, $z_2$ the height. Filled cylinders are training examples, dashed ones do not occur in the training data. The generator $g$ maps any latent point $\vect{z}$, also one without a training example, to a cylinder. Reproduced from @foster_generative_2023, with the notation adapted to this lecture.</span>
 <span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>This example is deliberately simple: the latent space is two-dimensional and each axis has a clear meaning. Latent spaces of real image generators are high-dimensional, and their individual dimensions usually do not correspond to human-interpretable properties such as pose or time of day.</span>
