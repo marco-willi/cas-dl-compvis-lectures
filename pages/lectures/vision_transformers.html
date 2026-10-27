@@ -651,7 +651,7 @@ window.Quarto = {
 <div id="fig-vit-patch-embedding" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-vit-patch-embedding-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/vision_transformers/patchify.png" class="img-fluid figure-img" loading="lazy" width="700">
+<img src="../../assets/images/vision_transformers/patchify.png" class="img-fluid figure-img" width="700">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-vit-patch-embedding-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: From an image to a sequence of tokens. (a) Input image. (b) The image is split into non-overlapping patches, numbered in reading order. (c) Each patch is flattened and projected with the same linear layer <span class="math inline">\(\mathbf{E}\)</span> into an embedding with <span class="math inline">\(D\)</span> values. A learnable [CLS] token is prepended, and a position embedding is added to each token. For readability, the figure uses a coarse grid of 4×4 patches (64×64 pixels each) and <span class="math inline">\(D = 8\)</span>; ViT-B/16 uses 16×16 patches (196 for a 224×224 image) and <span class="math inline">\(D = 768\)</span>. The embedding values are illustrative.
@@ -661,7 +661,7 @@ Figure&nbsp;1: From an image to a sequence of tokens. (a) Input image. (b) The i
 <div id="fig-vit-paper" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-vit-paper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/vision_transformers/vit.png" class="img-fluid figure-img" loading="lazy" width="600">
+<img src="../../assets/images/vision_transformers/vit.png" class="img-fluid figure-img" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-vit-paper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: An image is split into fixed-size patches. Each patch is flattened and linearly projected into a patch embedding. Positional embeddings are added to retain spatial information. The resulting sequence is processed by a standard transformer encoder. Source: <span class="citation" data-cites="dosovitskiy_image_2020">Dosovitskiy et al. (<a href="#ref-dosovitskiy_image_2020" role="doc-biblioref">2020</a>)</span>
@@ -776,7 +776,7 @@ Click for result
 <div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../../assets/images/vision_transformers/attention_matrices.png" class="img-fluid figure-img" loading="lazy"></p>
+<p><img src="../../assets/images/vision_transformers/attention_matrices.png" class="img-fluid figure-img"></p>
 <figcaption>Attention weight matrices showing how strongly each patch attends to every other patch.</figcaption>
 </figure>
 </div>
@@ -786,7 +786,7 @@ Click for result
 <div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../../assets/images/vision_transformers/attention_spatial.png" class="img-fluid figure-img" loading="lazy"></p>
+<p><img src="../../assets/images/vision_transformers/attention_spatial.png" class="img-fluid figure-img"></p>
 <figcaption>Spatial attention maps overlaid on the input image, illustrating which image regions a given patch focuses on.</figcaption>
 </figure>
 </div>
@@ -868,7 +868,7 @@ Figure&nbsp;3: Attention visualizations from a trained ViT. Left: attention weig
 <div id="fig-vit-inductive-biases" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-vit-inductive-biases-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/vision_transformers/inductive_biases.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/vision_transformers/inductive_biases.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-vit-inductive-biases-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Inductive biases of CNNs and ViTs. (a) A 3×3 convolution: each output depends on a local 3×3 neighborhood, with the same kernel weights at every position (two positions shown). (b) Self-attention of a pretrained ViT (layer 7, mean over heads) for two query patches (outlined): all patches can contribute, and the weights depend on the content. (c) Mean attention distance per layer: the distance between a query patch and the patches it attends to, weighted by attention, averaged over all heads, all patches, and 12 images (register tokens excluded). For reference, with the same measure: a stack of 3×3 convolutions on the same 16×16 patch grid, i.e.&nbsp;the mean distance within its receptive field if all positions in it had the same weight (after one layer, the receptive field is 3×3 patches = 48 pixels wide, with a mean distance of 17 pixels), and uniform attention over all patches. The patch grid makes the comparison like for like; a CNN on raw pixels grows its receptive field differently.
@@ -917,7 +917,7 @@ Key considerations
 <section id="in-practice" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="in-practice"><span class="header-section-number">5.2</span> In Practice</h3>
 <p>Both architectures are readily available through libraries such as <a href="https://github.com/huggingface/pytorch-image-models">timm</a>, which provides hundreds of pretrained models.</p>
-<div id="ff6bbaa9" class="cell" data-execution_count="1">
+<div id="d82c6bbc" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load a pretrained CNN</span></span>

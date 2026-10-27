@@ -654,7 +654,7 @@ window.Quarto = {
 <div id="fig-genai-modern-sd35-examples" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-sd35-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/pract_sd35_large_examples.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/pract_sd35_large_examples.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-sd35-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Stable Diffusion 3.5 Large: example generations showing diverse styles, subjects, and legible text from text prompts. Like earlier versions, it generates in a VAE latent space, but it replaces the U-Net with a transformer trained with a flow matching objective <span class="citation" data-cites="esser_scaling_2024">(<a href="#ref-esser_scaling_2024" role="doc-biblioref">Esser et al. 2024</a>)</span>. <a href="https://huggingface.co/stabilityai/stable-diffusion-3.5-large">Source</a>.
@@ -665,7 +665,7 @@ Figure&nbsp;1: Stable Diffusion 3.5 Large: example generations showing diverse s
 <div id="fig-genai-diffusion-sd-architecture" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-diffusion-sd-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/diffusion_sd_architecture_genbook.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/diffusion_sd_architecture_genbook.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-diffusion-sd-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Stable Diffusion pipeline: text is encoded, diffusion runs in VAE latent space, and the VAE decoder produces the final image. Adapted from GenBook.
@@ -759,7 +759,7 @@ Figure&nbsp;2: Stable Diffusion pipeline: text is encoded, diffusion runs in VAE
 <div id="fig-genai-modern-diffusion-transformer" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-diffusion-transformer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/diffusion_transformer.jpg" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/diffusion_transformer.jpg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-diffusion-transformer-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Transformer-based architecture for diffusion models: Tokens (patches or latent representations) interact through self-attention, capturing long-range dependencies. Timestep embeddings condition the network on noise level. From <span class="citation" data-cites="peebles_scalable_2023">Peebles and Xie (<a href="#ref-peebles_scalable_2023" role="doc-biblioref">2023</a>)</span>.
@@ -870,7 +870,7 @@ v_\theta(\mathbf{x}_t, t) \approx \mathbf{x}_1 - \mathbf{\epsilon}
 <div id="fig-genai-modern-cross-vs-joint-attention" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-cross-vs-joint-attention-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/cross_vs_joint_attention.svg" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/cross_vs_joint_attention.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-cross-vs-joint-attention-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Cross-attention vs.&nbsp;joint attention, shown as attention matrices: rows are the tokens that read information (queries), columns the tokens that are read (keys). With cross-attention, only the image tokens read from fixed text tokens. With joint attention, all four blocks exist, and the text tokens are updated as well. The weights are illustrative.
@@ -881,7 +881,7 @@ Figure&nbsp;4: Cross-attention vs.&nbsp;joint attention, shown as attention matr
 <div id="fig-genai-modern-cross-attention-maps" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-cross-attention-maps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/cross_attention_maps.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/cross_attention_maps.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-cross-attention-maps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: Cross-attention maps of Stable Diffusion 1.5 for selected words of the prompt, averaged over attention heads, the layers at 16x16 resolution, and 30 sampling steps. Brighter regions attend more strongly to the word.
@@ -896,13 +896,13 @@ Figure&nbsp;5: Cross-attention maps of Stable Diffusion 1.5 for selected words o
 <div id="fig-genai-modern-interative-generation" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-interative-generation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<p><img src="../../assets/images/genai_modern/dada_design-9KGB4HspwsM-unsplash.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<p><img src="../../assets/images/genai_modern/dada_design-9KGB4HspwsM-unsplash.jpg" class="img-fluid figure-img"></p>
 <p><a href="https://unsplash.com/photos/a-living-room-with-a-couch-and-a-table-9KGB4HspwsM">Source</a></p>
-<p><img src="../../assets/images/genai_modern/room_step1_no_books.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<p><img src="../../assets/images/genai_modern/room_step1_no_books.jpg" class="img-fluid figure-img"></p>
 <p>After: “Remove the book lying on the floor, replace it with clean floor”</p>
-<p><img src="../../assets/images/genai_modern/room_step2_turquoise_sofa.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<p><img src="../../assets/images/genai_modern/room_step2_turquoise_sofa.jpg" class="img-fluid figure-img"></p>
 <p>After: “Recolor the sofa and ottoman to a vibrant turquoise color”</p>
-<p><img src="../../assets/images/genai_modern/room_step3_matching_carpet.jpg" class="img-fluid figure-img" loading="lazy"></p>
+<p><img src="../../assets/images/genai_modern/room_step3_matching_carpet.jpg" class="img-fluid figure-img"></p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-interative-generation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: After: “Change the carpet color to match the turquoise sofa”
@@ -913,7 +913,7 @@ Figure&nbsp;6: After: “Change the carpet color to match the turquoise sofa”
 <div id="fig-genai-modern-multimodal-patterns" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-multimodal-patterns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/multimodal_patterns.svg" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/multimodal_patterns.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-multimodal-patterns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: Three architectural patterns of multimodal image generation. Blue: understanding of the inputs, green: generation. The patterns are deliberately simplified and are not exact diagrams of the named models.
@@ -929,7 +929,7 @@ Figure&nbsp;7: Three architectural patterns of multimodal image generation. Blue
 <div id="fig-genai-modern-qwen-image-architecture" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-qwen-image-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/qwen2-image-architecture.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/qwen2-image-architecture.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-qwen-image-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8: Architecture of Qwen-Image 2.0 for an editing task. A frozen Qwen3-VL encodes the prompt and the input image (semantic conditioning), a VAE encodes the input image (appearance conditioning), and the noisy latents of the target image are denoised by a multimodal diffusion transformer that processes all tokens jointly. From <span class="citation" data-cites="zhao_qwen-image-20_2026">Zhao et al. (<a href="#ref-zhao_qwen-image-20_2026" role="doc-biblioref">2026</a>)</span>.
@@ -1040,7 +1040,7 @@ Key considerations
 <div id="fig-genai-modern-person-adaptation" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-person-adaptation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/person_comparison.jpg" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/person_comparison.jpg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-genai-modern-person-adaptation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9
@@ -1506,7 +1506,7 @@ LoRA-adapted model</code></pre>
 <div id="fig-genai-modern-replicate" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-replicate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/replicate.jpg" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/replicate.jpg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-replicate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;10: Replicate: a hosted API that provides access to both proprietary and open-weight models, allowing users to choose between convenience and control. <a href="https://replicate.com/">Source</a>.
@@ -1533,7 +1533,7 @@ Figure&nbsp;10: Replicate: a hosted API that provides access to both proprietary
 <div id="fig-genai-modern-luce-rear" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-luce-rear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/ferrari_rear_nanob2.jpg" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/ferrari_rear_nanob2.jpg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-luce-rear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11: The new electric Ferrari Luce seen from the rear. This image is visually plausible but given the vehicle is electric, it is unlikely to have a visible exhaust pipe. This is an example of a plausible but factually incorrect generated image.
@@ -1557,7 +1557,7 @@ Figure&nbsp;11: The new electric Ferrari Luce seen from the rear. This image is 
 <div id="fig-genai-deterioration-on-pollution" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-deterioration-on-pollution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/deterioration_on_pollution.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/deterioration_on_pollution.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-deterioration-on-pollution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;12: Example: deterioration of generated image quality under pollution or domain shift. From <span class="citation" data-cites="alemohammad_self-consuming_2023">Alemohammad et al. (<a href="#ref-alemohammad_self-consuming_2023" role="doc-biblioref">2023</a>)</span>.
@@ -1574,7 +1574,7 @@ Figure&nbsp;12: Example: deterioration of generated image quality under pollutio
 <div id="fig-genai-ai-bias-wp-front" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-ai-bias-wp-front-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/ai_bias_wp_front.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/ai_bias_wp_front.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-ai-bias-wp-front-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13: AI bias example. Source: Washington Post.
@@ -1584,7 +1584,7 @@ Figure&nbsp;13: AI bias example. Source: Washington Post.
 <div id="fig-genai-ai-bias-wp-examples" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-ai-bias-wp-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/ai_bias_wp_examples.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/ai_bias_wp_examples.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-ai-bias-wp-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;14: Example outputs illustrating biased visual associations. Source: Washington Post.
@@ -1608,7 +1608,7 @@ Figure&nbsp;14: Example outputs illustrating biased visual associations. Source:
 <div id="fig-genai-real-or-not-musk" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-real-or-not-musk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/real_or_not_musk.png" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/real_or_not_musk.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-real-or-not-musk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;15: “Real or Not?” Example of uncertainty around whether an event image is real or synthetic. Source: Spiegel.
@@ -1629,7 +1629,7 @@ Figure&nbsp;15: “Real or Not?” Example of uncertainty around whether an even
 <div id="fig-genai-modern-google-earth-fake" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-modern-google-earth-fake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/genai_modern/google_earth_fake_monument.jpg" class="img-fluid figure-img" loading="lazy">
+<img src="../../assets/images/genai_modern/google_earth_fake_monument.jpg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-genai-modern-google-earth-fake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;16: Fake bomb crater next to the Washington Monument, created by a Washington Post reporter with a short prompt in Google Earth’s AI image feature. The map labels and the familiar interface lend the fake credibility. <a href="https://www.washingtonpost.com/technology/2026/07/31/see-how-google-earth-let-people-make-fake-scenes-bombings-riots-destruction/">Source</a>: Washington Post.

@@ -592,7 +592,7 @@ window.Quarto = {
 <li>Using a machine learning algorithm to train a model that learns to associate observations with labels.</li>
 <li>Evaluating/applying the model on new data.</li>
 </ul>
-<div id="cb4d0afb" class="cell" data-execution_count="1">
+<div id="862a37ae" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(observations, labels):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Train a Model"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit Model here</span></span>
@@ -614,7 +614,7 @@ window.Quarto = {
 <div id="fig-super-resolution-demo" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-super-resolution-demo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/machine_learning/super_resolution_demo.png" class="img-fluid figure-img" style="width:100.0%" loading="lazy">
+<img src="../../assets/images/machine_learning/super_resolution_demo.png" class="img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-super-resolution-demo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Image super-resolution demonstration: Converting a low-resolution (100×100 pixels) image to high-resolution (400×400 pixels). The middle panel shows why naive upscaling fails—it remains pixelated. Machine learning models learn to add realistic high-frequency details.
@@ -644,7 +644,7 @@ Key considerations
 <div id="fig-ml-pipeline" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ml-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/machine_learning/python_ml.png" class="img-fluid figure-img" loading="lazy" width="600">
+<img src="../../assets/images/machine_learning/python_ml.png" class="img-fluid figure-img" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ml-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Machine Learning Pipeline (Source: <span class="citation" data-cites="raschka_python_2020">Raschka and Mirjalili (<a href="#ref-raschka_python_2020" role="doc-biblioref">2020</a>)</span>)
@@ -683,7 +683,7 @@ f_{\theta}(\mathbf{x}^{(i)}) \text{ or } f(\theta, \mathbf{x}^{(i)})
 <li><span class="math inline">\(\theta_0\)</span> (intercept): Where the line crosses the y-axis</li>
 <li><span class="math inline">\(\theta_1\)</span> (slope): How steep the line is</li>
 </ul>
-<div id="b7d374b3" class="cell" width="500" data-execution_count="2">
+<div id="de0df0da" class="cell" width="500" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -767,7 +767,7 @@ f_{\theta}(\mathbf{x}^{(i)}) \text{ or } f(\theta, \mathbf{x}^{(i)})
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="machine_learning_files/figure-html/cell-3-output-1.png" loading="lazy" width="659" height="476" class="figure-img"></p>
+<p><img src="machine_learning_files/figure-html/cell-3-output-1.png" width="659" height="476" class="figure-img"></p>
 <figcaption>Linear regression fitted to synthetic 1D dataset. The red line shows the learned model, and dashed lines show residuals (errors) for each data point.</figcaption>
 </figure>
 </div>
@@ -815,7 +815,7 @@ f_{\theta}(\mathbf{x}^{(i)}) \text{ or } f(\theta, \mathbf{x}^{(i)})
 </ul>
 <p><strong>Optimization goal</strong>: Find parameters <span class="math inline">\(\theta^* = [\theta_0^*, \theta_1^*]\)</span> that minimize MSE:</p>
 <p><span class="math display">\[\theta^* = \mathsf{argmin}_{\theta} J(\theta)\]</span></p>
-<div id="1ff49662" class="cell" data-execution_count="3">
+<div id="19e4ba6c" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
@@ -876,7 +876,7 @@ f_{\theta}(\mathbf{x}^{(i)}) \text{ or } f(\theta, \mathbf{x}^{(i)})
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="machine_learning_files/figure-html/cell-4-output-1.png" loading="lazy" width="659" height="474" class="figure-img"></p>
+<p><img src="machine_learning_files/figure-html/cell-4-output-1.png" width="659" height="474" class="figure-img"></p>
 <figcaption>Probabilistic view of linear regression. The red line shows the expected value E[y|x], and green curves show the modeled normal distributions p(y|x) at different x locations.</figcaption>
 </figure>
 </div>
@@ -913,7 +913,7 @@ The optimization found: θ₀*=-0.215, θ₁*=1.031</code></pre>
 <div id="fig-train-test-split" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-train-test-split-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/machine_learning/train_test_split.png" class="img-fluid figure-img" loading="lazy" width="600">
+<img src="../../assets/images/machine_learning/train_test_split.png" class="img-fluid figure-img" width="600">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-train-test-split-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Train-Test Split to select and evaluate models.
