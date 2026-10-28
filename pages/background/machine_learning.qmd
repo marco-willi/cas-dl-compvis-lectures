@@ -29,8 +29,8 @@ def predict(test_images, model):
 
 **Core Concepts:**
 
-- **Model**: Function $f_{\theta}(\mathbf{x}) = \hat{y}$ mapping inputs to outputs via learned parameters $\theta$
-- **Optimization**: Find parameters that minimize loss: $\mathsf{argmin}_{\theta} J(f_{\theta}(\mathbf{X}), \mathbf{y})$
+- **Model**: Function $f_{\theta}(\vect{x}) = \hat{y}$ mapping inputs to outputs via learned parameters $\theta$
+- **Optimization**: Find parameters that minimize loss: $\arg\min_{\theta} J(f_{\theta}(\m{X}), \vect{y})$
 - **Hyperparameters**: Settings that control learning (learning rate, regularization) but aren't learned from data
 - **Loss Functions**: Measure prediction error (MSE for regression, cross-entropy for classification)
 
@@ -142,16 +142,16 @@ At the core of a machine learning application is typically a mathematical model,
 A model is typically described as a function of a data point, generating an output $\hat{y}$:
 
 \begin{align*}
-f(\mathbf{x}^{(i)}) = \hat{y}^{(i)}
+f(\vect{x}^{(i)}) = \hat{y}^{(i)}
 \end{align*}
 
 Most models have parameters or coefficients that describe the model. The entirety of all parameters is denoted by $\theta$.
 
 \begin{align*}
-f_{\theta}(\mathbf{x}^{(i)}) \text{ or } f(\theta, \mathbf{x}^{(i)})
+f_{\theta}(\vect{x}^{(i)}) \text{ or } f(\vect{x}^{(i)}; \theta)
 \end{align*}
 
-For simplicity, we often omit $\theta$: $f(\mathbf{x}^{(i)})$
+For simplicity, we often omit $\theta$: $f(\vect{x}^{(i)})$
 
 ::: {.callout-note title="Linear Regression Example" collapse="true"}
 
@@ -259,33 +259,33 @@ The coefficients are fitted to a training dataset through an optimization proced
 
 The optimization procedure can often be influenced by additional factors, called hyperparameters ($\alpha, \lambda, \dots$). These cannot be directly optimized.
 
-The function/quantity to be optimized is usually called the cost function, i.e., cost function (other terms include objective function, loss function, etc.). We use $J(\cdot)$ to denote the cost function. Often, the cost function is also referred to as the loss function $L(\cdot)$. We use $l(\cdot)$ for the per-sample loss, i.e., the computation of the cost function on a single sample.
+The function/quantity to be optimized is usually called the cost function, i.e., cost function (other terms include objective function, loss function, etc.). We use $J(\cdot)$ to denote the cost function. Often, the cost function is also referred to as the loss function. We use $L(\cdot)$ for the per-sample loss, i.e., the computation of the cost function on a single sample.
 
 Our goal is to find a model (and its parameters) that minimizes the cost function:
 
 \begin{equation*}
-\mathsf{argmin}_{\theta, \lambda} J\Big(f_{\theta, \lambda}(\mathbf{X}), \mathbf{y}\Big)
+\arg\min_{\theta, \lambda} J\Big(f_{\theta, \lambda}(\m{X}), \vect{y}\Big)
 \end{equation*}
 
 ::: {.callout-note title="Linear Regression Loss Function" collapse="true"}
 
 For linear regression, we measure prediction errors using **Mean Squared Error (MSE)** or the **Least Squares** approach:
 
-$$J(\theta) = \frac{1}{n}\sum_{i=1}^n (y^{(i)} - f_\theta(x^{(i)}))^2$$
+$$J(\theta) = \frac{1}{N}\sum_{i=1}^N (y^{(i)} - f_\theta(x^{(i)}))^2$$
 
-Often a factor $\frac{1}{2n}$ is used to make the derivative computation more elegant:
+Often a factor $\frac{1}{2N}$ is used to make the derivative computation more elegant:
 
-$$J(\theta) = \frac{1}{2n}\sum_{i=1}^n (y^{(i)} - f_\theta(x^{(i)}))^2$$
+$$J(\theta) = \frac{1}{2N}\sum_{i=1}^N (y^{(i)} - f_\theta(x^{(i)}))^2$$
 
 **Intuition**:
 
 - $(y^{(i)} - f_\theta(x^{(i)}))$ is the **residual** (error) for data point $i$
 - Squaring penalizes large errors more than small ones
-- We average over all $n$ training points
+- We average over all $N$ training points
 
 **Optimization goal**: Find parameters $\theta^* = [\theta_0^*, \theta_1^*]$ that minimize MSE:
 
-$$\theta^* = \mathsf{argmin}_{\theta} J(\theta)$$
+$$\theta^* = \arg\min_{\theta} J(\theta)$$
 
 ```{python}
 # | echo: true
@@ -360,8 +360,8 @@ Model selection is one of the most important and complex components of the machi
 
 **Evaluation Metrics** are crucial for quantifying model performance and vary depending on the problem type. For **regression tasks**, common metrics include:
 
-- **Mean Squared Error (MSE)**: $\text{MSE} = \frac{1}{n}\sum_{i=1}^n (y_i - \hat{y}_i)^2$, which penalizes large errors heavily
-- **Mean Absolute Error (MAE)**: $\text{MAE} = \frac{1}{n}\sum_{i=1}^n |y_i - \hat{y}_i|$, which treats all errors equally
+- **Mean Squared Error (MSE)**: $\text{MSE} = \frac{1}{N}\sum_{i=1}^N (y^{(i)} - \hat{y}^{(i)})^2$, which penalizes large errors heavily
+- **Mean Absolute Error (MAE)**: $\text{MAE} = \frac{1}{N}\sum_{i=1}^N |y^{(i)} - \hat{y}^{(i)}|$, which treats all errors equally
 
 For **classification tasks**, key metrics include:
 

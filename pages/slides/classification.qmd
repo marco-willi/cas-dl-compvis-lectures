@@ -60,13 +60,13 @@ Logits are **not probabilities**, they can be negative, positive, small, or larg
 Softmax converts logits into class probabilities:
 
 $$
-P(Y = k \mid X = \vect{x}^{(i)}) = \sigma(\vect{z})_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}
+P(y = k \mid \vect{x}^{(i)}) = \mathrm{softmax}(\vect{z})_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}
 $$
 
 
 ::: {.fragment}
 - $\vect{z}$  logits: unbounded class scores
-- $\sigma(\vect{z})$ probabilities: positive and sum to 1
+- $\mathrm{softmax}(\vect{z})$ probabilities: positive and sum to 1
 - Larger logits receive larger probabilities
 :::
 
@@ -152,7 +152,7 @@ For one sample with one-hot label $\vect{y}$ and predicted probabilities $\hat{\
 
 $$
 CE(\vect{y}, \hat{\vect{y}})
-= -\sum_{j=1}^K y_j \log \hat{y}_j
+= -\sum_{k=1}^K y_k \log \hat{y}_k
 $$
 
 ::: {.fragment}
@@ -375,13 +375,13 @@ Not overfitting — an **optimization problem**.
 :::
 
 $$
-\vect{x}_{l+1} = \vect{x}_l + F(\vect{x}_l)
+\vect{x}^{(l+1)} = \vect{x}^{(l)} + F(\vect{x}^{(l)})
 $$
 
 ::: {.fragment}
 Learn the **change**, not the full transformation.
 
-If a layer has nothing to add: $F(\vect{x}_l) \approx 0$ → identity.
+If a layer has nothing to add: $F(\vect{x}^{(l)}) \approx 0$ → identity.
 :::
 
 

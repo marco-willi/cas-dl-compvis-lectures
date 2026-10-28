@@ -142,7 +142,7 @@ HTML(table_html)
 We can also say: By describing the image we **represent** the image with natural language, instead of the raw pixels. This is exactly what **Representation Learning** is interested in: How can we find compact representations (also _embeddings_) wich are significantly smaller than the raw, original representations while retaining _relevant_ information?
 
 
-One motivation is the dramatic mismatch between the set of all *possible* images and the set of *natural* images. As illustrated in @fig-rl-set-of-images, natural images occupy only a tiny fraction of the full pixel space. For instance, for RGB images of size $256 \times 256$ pixels with 255 possible intensity values per channel, the total number of possible images is $255^{256 \times 256 \times 3}$, an astronomically large number, effectively infinite from a practical standpoint. A well-chosen embedding space exploits this structure, placing semantically similar images close together regardless of lighting, pose, or viewpoint.
+One motivation is the dramatic mismatch between the set of all *possible* images and the set of *natural* images. As illustrated in @fig-rl-set-of-images, natural images occupy only a tiny fraction of the full pixel space. For instance, for RGB images of size $256 \times 256$ pixels with 255 possible intensity values per channel, the total number of possible images is $255^{3 \times 256 \times 256}$, an astronomically large number, effectively infinite from a practical standpoint. A well-chosen embedding space exploits this structure, placing semantically similar images close together regardless of lighting, pose, or viewpoint.
 
 ::: {#fig-rl-set-of-images}
 ![]({{< meta params.images_path >}}set_of_images.png){fig-alt="Set of example images illustrating representation learning concepts" width=600}
@@ -265,13 +265,13 @@ Good representations represent a **semantic coordinate system** where distances 
 ::: {#fig-data-representation-spaces}
 ![]({{< meta params.images_path >}}data_and_representation_space.png){fig-alt="Mapping from data space to representation space via encoder" width=80%}
 
-**Data Space vs Representation Space:** The encoder $f$ transforms high-dimensional input samples $\vect{x}_i$ from data space into compact representations $\vect{z}_i$ in representation space, where semantic relationships become explicit through distances and clustering.
+**Data Space vs Representation Space:** The encoder $f$ transforms high-dimensional input samples $\vect{x}^{(i)}$ from data space into compact representations $\vect{z}^{(i)}$ in representation space, where semantic relationships become explicit through distances and clustering.
 :::
 
 
 Good representations balance two competing objectives:
 
-- **Invariance:** $\|f(\vect{x}) - f(g(\vect{x}))\|_2 < \epsilon$ for nuisance transforms $g$ such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.
+- **Invariance:** $\|f(\vect{x}) - f(t(\vect{x}))\|_2 < \epsilon$ for nuisance transforms $t$ such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.
 - **Selectivity:** $\|f(\vect{x}_i) - f(\vect{x}_j)\|_2 > \delta$ for semantically distinct inputs. The representation must distinguish images that differ in ways that matter.
 
 The critical point is that "nuisance" is task-dependent. For product retrieval, color is discriminative: a color-invariant embedding would make a red shoe and a white shoe indistinguishable. For medical imaging, orientation is often meaningful: a rotation-invariant embedding could destroy diagnostic information. A good representation discards only what the downstream task truly does not need.
@@ -285,7 +285,7 @@ Here is an overview of desirable properties:
 
 **Invariance & Selectivity Balance**
 
-- **Invariance:** $\|f(\vect{x}) - f(g(\vect{x}))\|_2 < \epsilon$ for nuisance transform $g$ (lighting, pose)
+- **Invariance:** $\|f(\vect{x}) - f(t(\vect{x}))\|_2 < \epsilon$ for nuisance transform $t$ (lighting, pose)
 - **Selectivity:** $\|f(\vect{x}_i) - f(\vect{x}_j)\|_2 > \delta$ for semantically different $\vect{x}_i, \vect{x}_j$
 - *Trade-off:* Too much invariance → loss of discriminative details
 - *Sweet spot:* Preserve task-relevant variations, discard irrelevant ones
@@ -338,12 +338,12 @@ Weak supervision uses noisy or partial labels at scale, such as image–caption 
 
 **Composite objective.** CLIP jointly trains an **image encoder** $f_\theta$ and a **text encoder** $g_\phi$ to align matched image–text pairs using a **symmetric contrastive (InfoNCE) loss** with a learned temperature.
 
-**Setup.** For a batch of $N$ paired samples $\{(x_i, y_i)\}_{i=1}^N$:
+**Setup.** For a batch of $N$ paired samples $\{(\vect{x}_i, y_i)\}_{i=1}^N$:
 
-- Image features: $\tilde{\mathbf{v}}_i = \frac{f_\theta(x_i)}{\|f_\theta(x_i)\|}$
-- Text features: $\tilde{\mathbf{t}}_i = \frac{g_\phi(y_i)}{\|g_\phi(y_i)\|}$
+- Image features: $\tilde{\vect{v}}_i = \frac{f_\theta(\vect{x}_i)}{\|f_\theta(\vect{x}_i)\|}$
+- Text features: $\tilde{\vect{t}}_i = \frac{g_\phi(y_i)}{\|g_\phi(y_i)\|}$
 - Learned logit scale: $\alpha = \exp(s)$ with parameter $s$ (equivalently temperature $\tau = 1/\alpha$)
-- Similarities (cosine scaled): $s_{ij} = \alpha \, \tilde{\mathbf{v}}_i^\top \tilde{\mathbf{t}}_j$
+- Similarities (cosine scaled): $s_{ij} = \alpha \, \tilde{\vect{v}}_i^\top \tilde{\vect{t}}_j$
 
 **Image-to-text loss (with in-batch negatives).**
 \begin{equation}
@@ -367,7 +367,7 @@ Weak supervision uses noisy or partial labels at scale, such as image–caption 
 = \tfrac{1}{2} \left( \mathcal{L}_{i \to t} + \mathcal{L}_{t \to i} \right) \, .
 \end{equation}
 
-*Inference note:* zero-shot classification uses text prompts $y_c =$ "a photo of a $\{class\}$" to form class prototypes $\tilde{\mathbf{t}}_c$ and picks $\arg\max_c \tilde{\mathbf{v}}^\top \tilde{\mathbf{t}}_c$.
+*Inference note:* zero-shot classification uses text prompts $y_c =$ "a photo of a $\{class\}$" to form class prototypes $\tilde{\vect{t}}_c$ and picks $\arg\max_c \tilde{\vect{v}}^\top \tilde{\vect{t}}_c$.
 :::
 
 ::: {#fig-clip-contrastive}
@@ -386,21 +386,21 @@ Self-supervised learning (SSL) derives training signal from the data itself: no 
 
 ::: {.callout-note title="(Optional) Masked Autoencoding Loss" collapse="true"}
 
-**Setup.** Given an image $x$, MAE patchifies it and **masks** a large subset of patches $\mathcal{M}$ (typically $\sim 75\%$), keeping visible patches $\mathcal{V}$.
+**Setup.** Given an image $\vect{x}$, MAE patchifies it and **masks** a large subset of patches $\mathcal{M}$ (typically $\sim 75\%$), keeping visible patches $\mathcal{V}$.
 
-- Patchify: $X = \mathrm{Patchify}(x) \in \mathbb{R}^{P \times d}$ with $P$ patches and patch-dimension $d$.
-- Split: $X = \{X_{\mathcal{V}}, X_{\mathcal{M}}\}$.
-- **Encoder** $E_\theta$ processes only visible tokens $X_{\mathcal{V}}$ to produce latents $H = E_\theta(X_{\mathcal{V}})$.
-- **Decoder** $D_\phi$ receives $H$ plus learned mask tokens at masked positions and predicts $\hat{X}_{\mathcal{M}} = D_\phi(H, \text{mask tokens})$.
+- Patchify: $\m{X} = \mathrm{Patchify}(\vect{x}) \in \mathbb{R}^{P \times d}$ with $P$ patches and patch-dimension $d$.
+- Split: $\m{X} = \{\m{X}_{\mathcal{V}}, \m{X}_{\mathcal{M}}\}$.
+- **Encoder** $E_\theta$ processes only visible tokens $\m{X}_{\mathcal{V}}$ to produce latents $\m{H} = E_\theta(\m{X}_{\mathcal{V}})$.
+- **Decoder** $D_\phi$ receives $\m{H}$ plus learned mask tokens at masked positions and predicts $\hat{\m{X}}_{\mathcal{M}} = D_\phi(\m{H}, \text{mask tokens})$.
 
 **Reconstruction loss (masked patches only).**
 \begin{equation}
 \mathcal{L}_{\text{MAE}}
 =
 \frac{1}{|\mathcal{M}|} \sum_{p \in \mathcal{M}}
-\left\| \hat{X}_{p} - \tilde{X}_{p} \right\|_2^2 ,
+\left\| \hat{\m{X}}_{p} - \tilde{\m{X}}_{p} \right\|_2^2 ,
 \end{equation}
-where $\tilde{X}$ are **normalized pixel targets** (per-channel mean/variance normalization) in patch space. The high mask ratio combined with an asymmetric encoder/decoder yields efficient pretraining and strong transfer.
+where $\tilde{\m{X}}$ are **normalized pixel targets** (per-channel mean/variance normalization) in patch space. The high mask ratio combined with an asymmetric encoder/decoder yields efficient pretraining and strong transfer.
 :::
 
 ::: {#fig-mae-architecture}
@@ -419,15 +419,15 @@ Contrastive learning trains the model such that different augmented views of the
 
 **Mathematical Form:**
 $$
-\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}\right]
+\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau)}{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\mathrm{sim}(\vect{z}_i, \vect{z}_j^-)/\tau)}\right]
 $$
 
 **Components:**
 
-- $z_i$: Anchor embedding (encoded from image $x_i$)
-- $z_i^+$: Positive embedding (different augmentation of same image)
-- $z_j^-$: Negative embeddings (from different images in batch)
-- $\text{sim}(\cdot, \cdot)$: Cosine similarity
+- $\vect{z}_i$: Anchor embedding (encoded from image $\vect{x}_i$)
+- $\vect{z}_i^+$: Positive embedding (different augmentation of same image)
+- $\vect{z}_j^-$: Negative embeddings (from different images in batch)
+- $\mathrm{sim}(\cdot, \cdot)$: Cosine similarity
 - $\tau$: Temperature parameter; typical values $\tau \in [0.07, 0.5]$
 
 Large batch sizes (256–4096) are required to provide sufficient negatives.
@@ -465,28 +465,28 @@ The four components of the DINOv3 composite objective. **A** — Global DINO: th
 \end{align}
 
 **Global DINO (distribution matching, no negatives).**
-Student probabilities $p_s=\mathrm{softmax}(g_s(z_s)/\tau_s)$; teacher targets
-$q_t=\mathrm{stopgrad}\!\left[\mathrm{softmax}\!\left((g_t(z_t)-c)/\tau_t\right)\right]$ with centering $c$ and temperatures $\tau_s,\tau_t$.
+Student probabilities $p_s=\mathrm{softmax}(g_s(\vect{z}_s)/\tau_s)$; teacher targets
+$q_t=\mathrm{stopgrad}\!\left[\mathrm{softmax}\!\left((g_t(\vect{z}_t)-c)/\tau_t\right)\right]$ with centering $c$ and temperatures $\tau_s,\tau_t$.
 \begin{equation}
-\mathcal{L}_{\text{DINO}} \;=\; - \sum_{k} q_t^{(k)} \log p_s^{(k)}
+\mathcal{L}_{\text{DINO}} \;=\; - \sum_{k} q_{t,k} \log p_{s,k}
 \quad \text{(summed over pairs of student/teacher crops).}
 \end{equation}
 
 **Local iBOT (masked token prediction).**
 \begin{equation}
-\mathcal{L}_{\text{iBOT}} \;=\; - \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}}\sum_{k} q_{t,m}^{(k)} \log p_{s,m}^{(k)} .
+\mathcal{L}_{\text{iBOT}} \;=\; - \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}}\sum_{k} q_{t,m,k} \log p_{s,m,k} .
 \end{equation}
 
 **KoLeo (feature uniformity).**
 \begin{equation}
 \mathcal{L}_{\text{KoLeo}} \;\approx\; -\frac{1}{N}\sum_{i=1}^{N} \log d_i
-\quad \text{with } d_i \text{ the nearest-neighbour distance of } z^{[\text{CLS}]}_i .
+\quad \text{with } d_i \text{ the nearest-neighbour distance of } \vect{z}^{[\text{CLS}]}_i .
 \end{equation}
 
 **Gram anchoring (refinement step).**
-With $\ell_2$-normalized patch features $\tilde{Z}_s, \tilde{Z}_g \in \mathbb{R}^{P \times D}$ of the student and of the Gram teacher (an earlier checkpoint) and Gram matrices $G(\tilde{Z})=\tilde{Z}\tilde{Z}^\top$:
+With $\ell_2$-normalized patch features $\tilde{\m{Z}}_s, \tilde{\m{Z}}_g \in \mathbb{R}^{P \times D}$ of the student and of the Gram teacher (an earlier checkpoint) and Gram matrices $G(\tilde{\m{Z}})=\tilde{\m{Z}}\tilde{\m{Z}}^\top$:
 \begin{equation}
-\mathcal{L}_{\text{Gram}} \;=\; \big\| G(\tilde{Z}_s) - G(\tilde{Z}_g) \big\|_F^2 .
+\mathcal{L}_{\text{Gram}} \;=\; \big\| G(\tilde{\m{Z}}_s) - G(\tilde{\m{Z}}_g) \big\|_F^2 .
 \end{equation}
 
 Teacher is an EMA of the student; teachers view only **global crops**; iBOT masks a subset of student patches. Gram anchoring is applied in a late refinement phase to restore patch-level consistency.
@@ -571,12 +571,12 @@ Cosine similarities between normalized representations are shown in @fig-rl-simi
 For images represented as vectors $\vect{z}_i, \vect{z}_j \in \mathbb{R}^d$:
 
 - **Euclidean Distance (Pixel Space):**
-    $$d_{\text{L2}}(\vect{z}_i, \vect{z}_j) = \|\vect{z}_i - \vect{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_i^{(k)} - z_j^{(k)})^2}$$
+    $$d_{\text{L2}}(\vect{z}_i, \vect{z}_j) = \|\vect{z}_i - \vect{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_{i,k} - z_{j,k})^2}$$
 
 - **Cosine Similarity:**
-    $$\text{sim}_{\cos}(\vect{z}_i, \vect{z}_j) = \frac{\vect{z}_i^\top \vect{z}_j}{\|\vect{z}_i\|_2 \|\vect{z}_j\|_2} = \frac{\sum_{k=1}^d z_i^{(k)} z_j^{(k)}}{\sqrt{\sum_{k=1}^d (z_i^{(k)})^2} \sqrt{\sum_{k=1}^d (z_j^{(k)})^2}}$$
+    $$\mathrm{sim}_{\cos}(\vect{z}_i, \vect{z}_j) = \frac{\vect{z}_i^\top \vect{z}_j}{\|\vect{z}_i\|_2 \|\vect{z}_j\|_2} = \frac{\sum_{k=1}^d z_{i,k} z_{j,k}}{\sqrt{\sum_{k=1}^d (z_{i,k})^2} \sqrt{\sum_{k=1}^d (z_{j,k})^2}}$$
 
-where $\text{sim}_{\cos} \in [-1, 1]$ with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.
+where $\mathrm{sim}_{\cos} \in [-1, 1]$ with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.
 :::
 
 
@@ -720,7 +720,7 @@ A query image is encoded in the same way:
 The most similar images are then retrieved by nearest-neighbour search, commonly using cosine similarity:
 
 \begin{equation}
-\text{sim}_{\cos}(\vect{z}_q, \vect{z}_i)
+\mathrm{sim}_{\cos}(\vect{z}_q, \vect{z}_i)
 =
 \frac{\vect{z}_q^\top \vect{z}_i}
 {\|\vect{z}_q\|_2 \|\vect{z}_i\|_2}
@@ -768,7 +768,7 @@ The common thread across all of these: once images become vectors, downstream pr
 <details>
 <summary>Click for Answer</summary>
 
-**Answer:** Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in @fig-rl-similarity-pixel-space, pixel distances cannot distinguish between "different elephants in similar lighting" vs "same elephant in different lighting": both create similar pixel-level differences. Good representations compress the enormous space of possible images ($255^{H \times W \times C}$ combinations) into a semantic coordinate system where distances reflect meaning.
+**Answer:** Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in @fig-rl-similarity-pixel-space, pixel distances cannot distinguish between "different elephants in similar lighting" vs "same elephant in different lighting": both create similar pixel-level differences. Good representations compress the enormous space of possible images ($255^{C \times H \times W}$ combinations) into a semantic coordinate system where distances reflect meaning.
 
 </details>
 :::
@@ -783,7 +783,7 @@ The common thread across all of these: once images become vectors, downstream pr
 
 **The Trade-off:** Good representations must balance two competing goals:
 
-- **Invariance:** $\|f(\vect{x}) - f(g(\vect{x}))\|_2 < \epsilon$ for nuisance transforms $g$ (lighting, pose changes)
+- **Invariance:** $\|f(\vect{x}) - f(t(\vect{x}))\|_2 < \epsilon$ for nuisance transforms $t$ (lighting, pose changes)
 - **Selectivity:** $\|f(\vect{x}_i) - f(\vect{x}_j)\|_2 > \delta$ for semantically different inputs
 
 **Concrete Example - Flower Classification:**
@@ -813,7 +813,7 @@ If representations are completely **color-invariant** (treating all colors as id
 **Contrastive Learning (SimCLR):**
 
 - Requires large batches (256-4096) to provide sufficient negative pairs
-- InfoNCE loss: $\mathcal{L} = -\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}$
+- InfoNCE loss: $\mathcal{L}_{\text{InfoNCE}} = -\log \frac{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau)}{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\mathrm{sim}(\vect{z}_i, \vect{z}_j^-)/\tau)}$
 - Computational cost and memory scale with batch size
 - Needs careful negative mining strategies
 
@@ -854,7 +854,7 @@ If representations are completely **color-invariant** (treating all colors as id
   - **Object detection:** "Find all bounding boxes containing cars" — need localization
   - **Dense prediction:** "Generate depth map for each pixel" — requires preserved spatial information
 
-**Key Difference:** Global embeddings through pooling (e.g., Global Average Pooling: $\text{GAP}(X) = \frac{1}{H \times W}\sum_{i,j} X_{i,j}$) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.
+**Key Difference:** Global embeddings through pooling (e.g., Global Average Pooling: $\text{GAP}(\tensor{X}) = \frac{1}{H \times W}\sum_{i,j} \tensor{X}_{:,i,j}$) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.
 
 **Practical Tip:** Many modern architectures (DINOv3, ViTs) provide **both** — use the [CLS] token for global tasks and patch tokens for dense tasks.
 

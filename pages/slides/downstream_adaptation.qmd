@@ -172,13 +172,13 @@ Which layers to tune depends on architecture, pretraining objective and task: **
 ## LoRA — Low-Rank Updates
 
 $$
-W' = W + \frac{\alpha}{r}BA, \qquad
-B \in \mathbb{R}^{d_{out}\times r},\quad
-A \in \mathbb{R}^{r\times d_{in}}
+\m{W}' = \m{W} + \frac{\alpha}{r}\m{B}\m{A}, \qquad
+\m{B} \in \mathbb{R}^{d_{out}\times r},\quad
+\m{A} \in \mathbb{R}^{r\times d_{in}}
 $$
 
 ::: {.incremental}
-- $W$ stays frozen; only $A$, $B$ and the head are trained
+- $\m{W}$ stays frozen; only $\m{A}$, $\m{B}$ and the head are trained
 - $r(d_{in}+d_{out})$ instead of $d_{out}d_{in}$ parameters; rank $r$ controls capacity
 - Unlike adapters, LoRA inserts no new layer: it changes existing weights
 - Backprop still passes through the whole encoder

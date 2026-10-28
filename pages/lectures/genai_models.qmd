@@ -72,24 +72,24 @@ To compare the families on equal terms, each of the following sections contains 
 Autoregressive models generate data sequentially, predicting one element at a time conditioned on all previous elements.
 
 
-For an image represented as a sequence of pixels, patches, or discrete image tokens $x_1, x_2, \ldots, x_n$, the joint distribution can be factorized as a product of conditionals:
+For an image represented as a sequence of pixels, patches, or discrete image tokens $x_1, x_2, \ldots, x_d$, the joint distribution can be factorized as a product of conditionals:
 
 $$
-p(x_1, x_2, \ldots, x_n) = p(x_1) \cdot p(x_2|x_1) \cdot p(x_3|x_1,x_2) \cdots p(x_n|x_1,\ldots,x_{n-1})
+p(x_1, x_2, \ldots, x_d) = p(x_1) \cdot p(x_2 \mid x_1) \cdot p(x_3 \mid x_1,x_2) \cdots p(x_d \mid x_1,\ldots,x_{d-1})
 $$
 
 During generation, the model samples step by step:
 
 1. Sample $x_1 \sim p(x_1)$
-2. Sample $x_2 \sim p(x_2|x_1)$
-3. Sample $x_3 \sim p(x_3|x_1,x_2)$
+2. Sample $x_2 \sim p(x_2 \mid x_1)$
+3. Sample $x_3 \sim p(x_3 \mid x_1,x_2)$
 4. Continue until all pixels generated
 
 ::: {.callout-note title="Key Idea"}
 Autoregressive models turn image generation into a sequence prediction problem.
 :::
 
-Each conditional $p(x_i|x_1,\ldots,x_{i-1})$ is modeled by a neural network (typically a masked CNN or Transformer). This sequential factorization turns the complex problem of modeling high-dimensional distributions into a series of simpler conditional distributions.
+Each conditional $p(x_i \mid x_1,\ldots,x_{i-1})$ is modeled by a neural network (typically a masked CNN or Transformer). This sequential factorization turns the complex problem of modeling high-dimensional distributions into a series of simpler conditional distributions.
 
 
 Figure @fig-genai-autoregressive-overview illustrates the autoregressive generation process. The model generates pixels one by one, conditioning on all previously generated pixels. This allows for exact likelihood computation, but the sequential nature makes sampling slow and limits parallelization.
@@ -162,16 +162,16 @@ GANs, see @goodfellow_generative_2014, frame generative modeling as an **adversa
 
 ![]({{< meta params.images_path >}}gan-architecture.jpg)
 
-GAN idea: The generator creates fake samples from random noise $z \sim \mathcal{N}(0, I)$, while the discriminator judges whether samples are real or fake. From [Link](https://microsoft.github.io/GenStudio/)
+GAN idea: The generator creates fake samples from random noise $\vect{z} \sim \mathcal{N}(\vect{0}, \m{I})$, while the discriminator judges whether samples are real or fake. From [Link](https://microsoft.github.io/GenStudio/)
 :::
 
 The GAN training objective can be expressed as a minimax game:
 
 $$
-\min_{g} \max_{d} \mathbb{E}_{\vect{x} \sim p_{data}}[\log d(\vect{x})] + \mathbb{E}_{\vect{z} \sim p_z}[\log(1 - d(g(\vect{z})))]
+\min_{g} \max_{d} \mathbb{E}_{\vect{x} \sim p_{\text{data}}}[\log d(\vect{x})] + \mathbb{E}_{\vect{z} \sim p_z}[\log(1 - d(g(\vect{z})))]
 $$
 
-The discriminator $d$ maximizes its ability to correctly classify real ($d(\vect{x}) \approx 1$) vs. fake ($d(g(\vect{z})) \approx 0$) samples. The generator $G$ minimizes the discriminator's success, trying to produce samples where $d(g(\vect{z})) \approx 1$ (fooling the discriminator). See @fig-genai-gan-learning for an illustration.
+The discriminator $d$ maximizes its ability to correctly classify real ($d(\vect{x}) \approx 1$) vs. fake ($d(g(\vect{z})) \approx 0$) samples. The generator $g$ minimizes the discriminator's success, trying to produce samples where $d(g(\vect{z})) \approx 1$ (fooling the discriminator). See @fig-genai-gan-learning for an illustration.
 
 In practice, training alternates between:
 1. **Discriminator step**: Update $d$ to better distinguish real from fake
@@ -239,13 +239,13 @@ Variational Autoencoders (VAEs) [@Kingma2014] take a different approach to gener
 
 ![]({{< meta params.images_path >}}vae_illustration.png)
 
-VAE architecture: The encoder maps inputs to latent distributions $q(z|x)$, while the decoder reconstructs from latent samples. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
+VAE architecture: The encoder maps inputs to latent distributions $q(\vect{z} \mid \vect{x})$, while the decoder reconstructs from latent samples. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
 :::
 
 A VAE learns two networks that perform (approximate) inverse operations:
 
-- **Encoder** $q_{\psi}(z|x)$: Maps data $x$ to a distribution over latent codes $z$
-- **Decoder** $p_{\theta}(x|z)$: Maps latent codes $z$ back to data $x$
+- **Encoder** $q_{\psi}(\vect{z} \mid \vect{x})$: Maps data $\vect{x}$ to a distribution over latent codes $\vect{z}$
+- **Decoder** $p_{\theta}(\vect{x} \mid \vect{z})$: Maps latent codes $\vect{z}$ back to data $\vect{x}$
 
 Unlike standard autoencoders, VAEs enforce structure on the latent space through probabilistic modeling (see @fig-genai-vae-illustration2), ensuring that randomly sampled latent codes produce meaningful outputs.
 
@@ -253,17 +253,17 @@ Unlike standard autoencoders, VAEs enforce structure on the latent space through
 
 ![]({{< meta params.images_path >}}vae_illustration2.png)
 
-VAE computational graph: The encoder outputs mean $\mu$ and variance $\sigma^2$ for each latent dimension. The **reparameterization trick** ($z = \mu + \epsilon \cdot \sigma$, where $\epsilon \sim \mathcal{N}(0, 1)$) enables gradient-based optimization. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
+VAE computational graph: The encoder outputs mean $\vect{\mu}$ and variance $\vect{\sigma}^2$ for each latent dimension. The **reparameterization trick** ($\vect{z} = \vect{\mu} + \vect{\epsilon} \odot \vect{\sigma}$, where $\vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$) enables gradient-based optimization. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
 :::
 
 
 VAEs optimize the **Evidence Lower Bound (ELBO)**, which consists of two terms:
 
 $$
-\text{ELBO} = \underbrace{\mathbb{E}_{z \sim q_{\psi}(z|x)}[\log p_{\theta}(x|z)]}_{\text{Reconstruction}} - \underbrace{\text{KL}(q_{\psi}(z|x) \| p(z))}_{\text{Regularization}}
+\text{ELBO} = \underbrace{\mathbb{E}_{\vect{z} \sim q_{\psi}(\vect{z} \mid \vect{x})}[\log p_{\theta}(\vect{x} \mid \vect{z})]}_{\text{Reconstruction}} - \underbrace{D_{\mathrm{KL}}(q_{\psi}(\vect{z} \mid \vect{x}) \,\Vert\, p(\vect{z}))}_{\text{Regularization}}
 $$
 
-The **reconstruction term** ensures the decoder can recover the input from the latent code. The **KL regularization term** (typically with prior $p(z) = \mathcal{N}(0, I)$) prevents the latent space from developing "gaps and tendrils"—ensuring that random samples from $\mathcal{N}(0, I)$ decode to meaningful outputs.
+The **reconstruction term** ensures the decoder can recover the input from the latent code. The **KL regularization term** (typically with prior $p(\vect{z}) = \mathcal{N}(\vect{0}, \m{I})$) prevents the latent space from developing "gaps and tendrils"—ensuring that random samples from $\mathcal{N}(\vect{0}, \m{I})$ decode to meaningful outputs.
 
 This balance is key to VAE behavior: the reconstruction loss wants to use the latent space flexibly, while KL regularization pushes latent codes toward a standard normal distribution. The result is a **structured, continuous latent space** where interpolation and attribute manipulation work smoothly.
 
@@ -344,12 +344,12 @@ The forward process at step $t$ can be written as:
 +
 \sqrt{\beta_t}\vect{\epsilon}_t,
 \quad
-\vect{\epsilon}_t \sim \mathcal{N}(\mathbf{0}, \mathbfit{I})
+\vect{\epsilon}_t \sim \mathcal{N}(\vect{0}, \m{I})
 \end{equation}
 
 where $\beta_t$ controls the noise level (**the noise schedule**). This process
 gradually degrades the clean image $\vect{x}_0$ into an almost pure-noise image
-$\vect{x}_T \approx \mathcal{N}(\mathbf{0}, \mathbfit{I})$.
+$\vect{x}_T \approx \mathcal{N}(\vect{0}, \m{I})$.
 
 Common noise schedules, such as linear or cosine schedules, start with small
 $\beta_t$ values and gradually increase them. This produces a smooth transition
@@ -374,7 +374,7 @@ A neural network learns to gradually remove noise, step by step. Starting from
 pure noise
 
 $$
-\vect{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbfit{I}),
+\vect{x}_T \sim \mathcal{N}(\vect{0}, \m{I}),
 $$
 
 the model denoises iteratively to produce a realistic sample
@@ -486,7 +486,7 @@ Flow-based models take yet another perspective: they **transform** a simple dist
 
 ### Normalizing Flows
 
-A normalizing flow [@rezende_variational_2016; @dinh_density_2017] is an **invertible** neural network $f_\theta$ that maps a latent vector $\vect{z} \sim p(\vect{z}) = \mathcal{N}(\mathbf{0}, \m{I})$ to an image $\vect{x} = f_\theta(\vect{z})$. Because $f_\theta$ is invertible, every image $\vect{x}$ corresponds to exactly one latent vector $\vect{z} = f_\theta^{-1}(\vect{x})$. In contrast to VAEs and GANs, the latent vector has the same dimensionality as the image.
+A normalizing flow [@rezende_variational_2016; @dinh_density_2017] is an **invertible** neural network $f_\theta$ that maps a latent vector $\vect{z} \sim p(\vect{z}) = \mathcal{N}(\vect{0}, \m{I})$ to an image $\vect{x} = f_\theta(\vect{z})$. Because $f_\theta$ is invertible, every image $\vect{x}$ corresponds to exactly one latent vector $\vect{z} = f_\theta^{-1}(\vect{x})$. In contrast to VAEs and GANs, the latent vector has the same dimensionality as the image.
 
 Invertibility allows computing the exact likelihood with the **change of variables** formula:
 
@@ -496,7 +496,7 @@ $$ {#eq-genai-models-change-of-variables}
 
 The first term measures how likely the corresponding latent vector is under the Gaussian. The second term, the log-determinant of the Jacobian, accounts for how much the transformation stretches or compresses space: a region that is compressed into a small volume must receive a higher density. The model is trained by maximizing @eq-genai-models-change-of-variables on the training data, i.e. by maximum likelihood.
 
-The price is a restricted architecture. For a general neural network, computing the determinant of the $d \times d$ Jacobian is prohibitively expensive (for a $256 \times 256 \times 3$ image, $d \approx 200{,}000$). Normalizing flows therefore only use layers that are invertible and have a cheap determinant, such as the coupling layers of RealNVP [@dinh_density_2017] and Glow [@kingma_glow_2018]. Sampling requires a single pass through the network, but the sample quality of normalizing flows lags behind GANs and diffusion models.
+The price is a restricted architecture. For a general neural network, computing the determinant of the $d \times d$ Jacobian is prohibitively expensive (for a $3 \times 256 \times 256$ image, $d \approx 200{,}000$). Normalizing flows therefore only use layers that are invertible and have a cheap determinant, such as the coupling layers of RealNVP [@dinh_density_2017] and Glow [@kingma_glow_2018]. Sampling requires a single pass through the network, but the sample quality of normalizing flows lags behind GANs and diffusion models.
 
 ::: {.callout-note title="Key Idea"}
 Normalizing flows trade architectural flexibility for exact likelihoods: every layer must be invertible and have a cheap Jacobian determinant.
@@ -504,7 +504,7 @@ Normalizing flows trade architectural flexibility for exact likelihoods: every l
 
 ### Flow Matching {#sec-genai-models-flow-matching}
 
-Instead of a fixed number of invertible layers, one can describe the transformation from noise to data as a **continuous process** over time $t \in [0, 1]$. A neural network $v_\theta(\vect{x}_t, t)$ predicts a **velocity**: in which direction, and how fast, the point $\vect{x}_t$ should move at time $t$. Starting from noise $\vect{x}_0 \sim \mathcal{N}(\mathbf{0}, \m{I})$, a sample is generated by following the velocity field until $t = 1$, i.e. by solving an ordinary differential equation (ODE):
+Instead of a fixed number of invertible layers, one can describe the transformation from noise to data as a **continuous process** over time $t \in [0, 1]$. A neural network $v_\theta(\vect{x}_t, t)$ predicts a **velocity**: in which direction, and how fast, the point $\vect{x}_t$ should move at time $t$. Starting from noise $\vect{x}_0 \sim \mathcal{N}(\vect{0}, \m{I})$, a sample is generated by following the velocity field until $t = 1$, i.e. by solving an ordinary differential equation (ODE):
 
 $$
 \frac{d\vect{x}_t}{dt} = v_\theta(\vect{x}_t, t)
@@ -512,7 +512,7 @@ $$
 
 Such models are known as continuous normalizing flows [@chen_neural_2018]. For a long time, they were expensive to train, because the ODE had to be simulated during training. **Flow matching** [@lipman_flow_2023; @liu_flow_2022] solves this problem with a surprisingly simple training procedure. Note that, in contrast to the diffusion notation above, $t = 0$ denotes noise and $t = 1$ denotes data.
 
-During training, we pair a training image $\vect{x}_1$ with a random noise image $\vect{x}_0 = \vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \m{I})$ and connect them with a straight line:
+During training, we pair a training image $\vect{x}_1$ with a random noise image $\vect{x}_0 = \vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$ and connect them with a straight line:
 
 $$
 \vect{x}_t = (1 - t)\, \vect{\epsilon} + t\, \vect{x}_1

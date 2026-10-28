@@ -26,7 +26,7 @@ After this lecture you should be able to:
 
 **Why CNNs? The Problem with MLPs on Images**
 
-- Images are high-dimensional (e.g., $224 \times 224 \times 3 = 150{,}528$ pixels)
+- Images are high-dimensional (e.g., $3 \times 224 \times 224 = 150{,}528$ pixels)
 - MLPs flatten images, losing spatial structure
 - Fully connected layers require millions of parameters
 - MLPs don't exploit natural image properties (locality, translation invariance)
@@ -39,8 +39,8 @@ After this lecture you should be able to:
 
 **Invariance vs Equivariance**
 
-- **Invariant**: $f(g(\vect{x})) = f(\vect{x})$ — output unchanged by transformation (needed for *classification*)
-- **Equivariant**: $f(g(\vect{x})) = g(f(\vect{x}))$ — output transforms with input (needed for *detection*, *segmentation*)
+- **Invariant**: $f(t(\vect{x})) = f(\vect{x})$ — output unchanged by transformation (needed for *classification*)
+- **Equivariant**: $f(t(\vect{x})) = t(f(\vect{x}))$ — output transforms with input (needed for *detection*, *segmentation*)
 - CNNs are naturally translation equivariant; add pooling for invariance
 
 **Core Operation: Convolution**
@@ -85,7 +85,7 @@ $$r_0 = \sum_{l=1}^L \left( (k_l - 1) \prod_{i=1}^{l-1} s_i \right) + 1$$
 
 Images have unique properties that make them challenging for standard neural networks:
 
-- **High-Dimensional**: An RGB image of size $224 \times 224$ has $224 \times 224 \times 3 = 150{,}528$ values
+- **High-Dimensional**: An RGB image of size $224 \times 224$ has $3 \times 224 \times 224 = 150{,}528$ values
 - **Locality**: Nearby pixels are statistically related (edges, textures, objects)
 - **Stability under transformations**: Interpretation of an image does not change under many geometric transformations. A cat should be recognized regardless of its position in the image.
 - **Hierarchical Structure**: Images contain features at multiple scales (pixels → edges → textures → objects)
@@ -122,7 +122,7 @@ Even though Convolutional Neural Networks (CNNs) are much better suited to model
 
 ### MLPs and Images
 
-The input to an MLP is a vector $\vect{x}^{(i)}$, which is transformed through multiple hidden layers to the output layer. The fully connected layers can only process 1-D vectors. Therefore, images $\in \mathbb{R}^{H \times W \times C}$ must be flattened into 1-D vectors $\in \mathbb{R}^p$, where $p= H \times W \times C$. This causes MLPs to become very large when applied to high-dimensional inputs such as images. See @fig-cnn-mlp for an illustration.
+The input to an MLP is a vector $\vect{x}^{(i)}$, which is transformed through multiple hidden layers to the output layer. The fully connected layers can only process 1-D vectors. Therefore, images $\in \mathbb{R}^{C \times H \times W}$ must be flattened into 1-D vectors $\in \mathbb{R}^d$, where $d = C \times H \times W$. This causes MLPs to become very large when applied to high-dimensional inputs such as images. See @fig-cnn-mlp for an illustration.
 
 
 :::{#fig-cnn-mlp}
@@ -153,7 +153,7 @@ Illustration of weight matrix $\m{W}$ and how the weights of a single neuron can
 :::
 
 
-Often the patterns we want to learn are not stationary. Ideally we want to recognize them under translations of the inputs, e.g., $g(\vect{x})$ where $g()$ is a spatial translation. @fig-cnns-mlp-pattern-shift illustrates the problem, where the same pattern appears at different spatial positions.
+Often the patterns we want to learn are not stationary. Ideally we want to recognize them under translations of the inputs, e.g., $t(\vect{x})$ where $t()$ is a spatial translation. @fig-cnns-mlp-pattern-shift illustrates the problem, where the same pattern appears at different spatial positions.
 
 
 ::: {#fig-cnns-mlp-pattern-shift}
@@ -206,11 +206,11 @@ The demo at the end of this lecture (@sec-cnn-recap-demo) compares an MLP and tw
 
 For many tasks involving image data, small variations in the input ($\vect{x}$) should either **not** change the model output ($f(\vect{x})$), _invariance_, or should change the output **in tandem** with the input changes, _equivariance_.
 
-A function $f(\vect{x})$ is **invariant** to transformation $g(\vect{x})$ if:
-$$f(g(\vect{x})) = f(\vect{x})$$
+A function $f(\vect{x})$ is **invariant** to transformation $t(\vect{x})$ if:
+$$f(t(\vect{x})) = f(\vect{x})$$
 
-A function $f(\vect{x})$ is **equivariant** to transformation $g(\vect{x})$ if:
-$$f(g(\vect{x})) = g(f(\vect{x}))$$
+A function $f(\vect{x})$ is **equivariant** to transformation $t(\vect{x})$ if:
+$$f(t(\vect{x})) = t(f(\vect{x}))$$
 
 ::: {.callout-important title="Intuition"}
 
@@ -542,8 +542,8 @@ Open the section "Exercises" below the demo and solve the tasks with the letter 
 <details>
 <summary>Click for solutions</summary>
 
-1. $p = 2$, $s = 1$, $d = 1$: $o = \lfloor (9 + 4 - 4 - 1)/1 + 1 \rfloor = 9$. In general, $p = (k-1)/2$ preserves the size for $s = d = 1$.
-2. $p = 1$, $s = 2$: $o = \lfloor (9 + 2 - 2 - 1)/2 + 1 \rfloor = 5$. Without padding, $s = 2$ gives $o = 4$.
+1. $p = 2$, $s = 1$, $d = 1$: $o = \floor{(9 + 4 - 4 - 1)/1 + 1} = 9$. In general, $p = (k-1)/2$ preserves the size for $s = d = 1$.
+2. $p = 1$, $s = 2$: $o = \floor{(9 + 2 - 2 - 1)/2 + 1} = 5$. Without padding, $s = 2$ gives $o = 4$.
 3. Dilation $d = 3$: the effective kernel size is $d \cdot (k-1) + 1 = 7$, while the kernel still has only 9 weights. With $p = 0$ and $s = 1$ the output cell $(1, 1)$ reads rows and columns 1, 4 and 7, which span the whole T. Note that it *reads* only 9 of the 49 cells.
 4. Preset "Identity" with $p = (k-1)/2 \cdot d$, e.g. $k = 3$, $p = 1$ (or a $1 \times 1$ kernel with weight 1 and $p = 0$).
 5. A kernel that subtracts the cell above from the center cell, with $p = 1$ and ReLU:
@@ -590,10 +590,10 @@ o = \left\lfloor \frac{i + 2p - d\cdot(k-1) - 1}{s} + 1 \right\rfloor
 
 **Step-by-step solution**:
 
-1. Apply the formula: $o = \lfloor \frac{i + 2p - d(k-1) - 1}{s} + 1 \rfloor$
-2. Substitute: $o = \lfloor \frac{32 + 2(1) - 1(3-1) - 1}{2} + 1 \rfloor$
-3. Simplify: $o = \lfloor \frac{32 + 2 - 2 - 1}{2} + 1 \rfloor$
-4. Calculate: $o = \lfloor \frac{31}{2} + 1 \rfloor = \lfloor 15.5 + 1 \rfloor = 16$
+1. Apply the formula: $o = \floor{\frac{i + 2p - d(k-1) - 1}{s} + 1}$
+2. Substitute: $o = \floor{\frac{32 + 2(1) - 1(3-1) - 1}{2} + 1}$
+3. Simplify: $o = \floor{\frac{32 + 2 - 2 - 1}{2} + 1}$
+4. Calculate: $o = \floor{\frac{31}{2} + 1} = \floor{15.5 + 1} = 16$
 
 **Answer**: $o = 16$
 
@@ -641,7 +641,7 @@ $$
 1. **Filter weights**: $(5 \times 5) \times 3 \times 64 = 4{,}800$
 2. **Bias parameters**: $64$ (one per output channel)
 3. **Total parameters**: $4{,}800 + 64 = 4{,}864$
-4. **Fully connected alternative**: $(32 \times 32 \times 3) \times 64 = 196{,}608$
+4. **Fully connected alternative**: $(3 \times 32 \times 32) \times 64 = 196{,}608$
 
 **Insight**: The CNN uses **40× fewer parameters** while being more effective for images!
 
@@ -710,7 +710,7 @@ The following demo illustrates how the receptive field grows through a stack of 
 <iframe name="receptive-field" loading="lazy" data-auto-height src="../../demos/cnns/receptive_field/index.html" width="100%" height="700" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: receptive field of stacked convolutions"></iframe>
 ```
 
-All maps are drawn with the same size, so that the marked regions line up spatially; maps with fewer activations (after a stride of 2) have larger cells. Each layer uses the padding $p_l = \lfloor k_l / 2 \rfloor$. A dashed frame indicates that the receptive field reaches into the zero-padding. With "Shade by number of paths", activations are shaded by how many paths connect them to the selected activation: central inputs contribute through many more paths than those at the border of the receptive field. [Open the demo in a new tab](../../demos/cnns/receptive_field/index.html){target="_blank"} or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/receptive_field).
+All maps are drawn with the same size, so that the marked regions line up spatially; maps with fewer activations (after a stride of 2) have larger cells. Each layer uses the padding $p_l = \floor{k_l / 2}$. A dashed frame indicates that the receptive field reaches into the zero-padding. With "Shade by number of paths", activations are shaded by how many paths connect them to the selected activation: central inputs contribute through many more paths than those at the border of the receptive field. [Open the demo in a new tab](../../demos/cnns/receptive_field/index.html){target="_blank"} or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/receptive_field).
 :::
 
 ::: {.callout-note appearance="simple"}
@@ -813,7 +813,7 @@ Use the setting "only top-left" for tasks 1–3.
 <summary>Click for solutions</summary>
 
 1. The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its $64 \times 14 \times 14$ input. Only the weights for the top-left positions have been trained (see the weight map in "Look inside"); the others still have their random initial values. The MLP has the same problem directly on the pixels.
-2. The activation maps shift together with the input: $f(g(\vect{x})) = g(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.
+2. The activation maps shift together with the input: $f(t(\vect{x})) = t(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.
 3. The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride [@azulay_why_2019; @zhang_making_2019], and because of the zero-padding at the image border.
 4. The MLP has to learn every position from data, i.e. the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.
 

@@ -42,7 +42,7 @@ pixel-space setting, the model starts from random noise and gradually denoises i
 into an image:
 
 $$
-\vect{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbfit{I})
+\vect{x}_T \sim \mathcal{N}(\vect{0}, \m{I})
 \quad \rightarrow \quad
 \vect{x}_{T-1}
 \quad \rightarrow \quad
@@ -232,7 +232,7 @@ $$
 v_\theta(\vect{x}_t, t) \approx \vect{x}_1 - \vect{\epsilon}
 $$
 
-where $\vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \m{I})$ is noise, $\vect{x}_1$ is a training image (or its latent), and $t \in [0, 1]$. In practice, both formulations start from Gaussian noise, apply the network iteratively, and can use either architecture. Flow matching, however, often requires fewer sampling steps, because its trajectories from noise to data are straighter.
+where $\vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$ is noise, $\vect{x}_1$ is a training image (or its latent), and $t \in [0, 1]$. In practice, both formulations start from Gaussian noise, apply the network iteratively, and can use either architecture. Flow matching, however, often requires fewer sampling steps, because its trajectories from noise to data are straighter.
 
 Stable Diffusion 3 is a typical example that combines all three ideas: a VAE latent space, a transformer denoiser, and a rectified flow objective [@esser_scaling_2024]. The widely used FLUX models follow the same recipe and also use flow matching for instruction-based editing [@labs_flux1_2025]. Modern image generation is therefore not simply "classical denoising implemented with transformers".
 
@@ -473,7 +473,7 @@ LoRA is a lightweight fine-tuning method. Instead of updating all model weights,
 it freezes the base model and learns a small low-rank update:
 
 $$
-\Delta W = BA
+\Delta \m{W} = \m{B}\m{A}
 $$
 
 The result is a small adapter that can be loaded on top of the base model.

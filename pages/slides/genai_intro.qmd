@@ -193,7 +193,7 @@ A specific label should produce a diverse set of outputs.
 ::: {.fragment}
 Add stochastic input $\vect{z} \sim p(\vect{z})$:
 
-$$\hat{\vect{x}} = g_{\theta}(\vect{y}, \vect{z}), \qquad \vect{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$$
+$$\hat{\vect{x}} = g_{\theta}(\vect{y}, \vect{z}), \qquad \vect{z} \sim \mathcal{N}(\vect{0}, \m{I})$$
 :::
 
 ::: {.fragment}
@@ -383,9 +383,9 @@ Learn a probability density $p_{\theta}(\vect{x})$, then sample from it.
 ## Density Models
 
 ::: {.fragment}
-Learn $p_{\theta}: \vect{x} \to [0, \infty)$ with normalization:
+Learn $p_{\theta}: \mathcal{X} \to [0, \infty)$ over the image space $\mathcal{X}$ with normalization:
 
-$$\int_{\vect{x}} p_{\theta}(\vect{x})\, d\vect{x} = 1$$
+$$\int_{\mathcal{X}} p_{\theta}(\vect{x})\, d\vect{x} = 1$$
 :::
 
 ::: {.fragment}
@@ -395,7 +395,7 @@ Goal: $p_{\theta} \approx p_{\text{data}}$.
 ::: {.fragment}
 **Maximum likelihood objective:**
 
-$$\underset{\theta}{\arg\max} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})$$
+$$\arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})$$
 :::
 
 ::: {.fragment}

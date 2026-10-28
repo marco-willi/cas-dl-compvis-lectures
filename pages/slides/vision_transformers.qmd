@@ -48,7 +48,7 @@ A 2-D image grid → a **sequence of patches**.
 
 ::: {.incremental}
 1. **Divide** image into a grid of patches
-2. **Flatten** each patch ($16 \times 16 \times 3 = 768$)
+2. **Flatten** each patch ($3 \times 16 \times 16 = 768$)
 3. **Project** through a learnable linear layer → embedding of dim $D$
 4. **Add positional embeddings** — encode spatial position
 5. **Prepend [CLS] token** — image-level representation (à la BERT)

@@ -18,7 +18,7 @@ After this lecture you should be able to:
 
 **From Linear to Non-Linear:**
 
-- Linear models: $f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}$ (limited to linear decision boundaries)
+- Linear models: $f(\vect{x}) = \m{W}\vect{x} + \vect{b}$ (limited to linear decision boundaries)
 - Neural networks add **activation functions** (ReLU, sigmoid, tanh) enabling non-linear mappings
 - Without activation functions, multiple layers collapse to a single linear transformation
 
@@ -38,7 +38,7 @@ After this lecture you should be able to:
 **Architecture Components:**
 
 - **Multilayer Perceptron (MLP)**: Fully connected layers with activation functions
-- **Parameters**: Weights $\mathbf{W}$ and biases $\mathbf{b}$ learned via optimization (backpropagation)
+- **Parameters**: Weights $\m{W}$ and biases $\vect{b}$ learned via optimization (backpropagation)
 - **Example**: 784 → 128 → 10 network has ~102K parameters (784×128 + 128×10 + biases)
 
 **Practical Implementation (PyTorch):**
@@ -104,16 +104,16 @@ A neural network with two _hidden layers_. The lines show connections between ne
 In the following, we will describe neural networks mathematically. We start with a linear model. A linear model has the following form (see @eq-nn-linear-model):
 
 $$
-   f(\mathbf{x}^{(i)}) = \mathbf{W} \mathbf{x}^{(i)}  +  \mathbf{b}
+   f(\vect{x}^{(i)}) = \m{W} \vect{x}^{(i)}  +  \vect{b}
 $$ {#eq-nn-linear-model}
 
 With the following elements:
 
-- The $i$-th data point $\vect{x}^{(i)}$ is a $p$-dimensional vector: $\in \mathbb{R}^{p \times 1}$
-- Model weights $\m{W} \in \mathbb{R}^{k \times p}$ linearily project the data point to $k$ dimensions.
+- The $i$-th data point $\vect{x}^{(i)}$ is a $d$-dimensional vector: $\in \mathbb{R}^{d \times 1}$
+- Model weights $\m{W} \in \mathbb{R}^{k \times d}$ linearily project the data point to $k$ dimensions.
 - A bias term $\vect{b} \in \mathbb{R}^{k \times 1}$ is added to the result.
 
-$f(\mathbf{x}^{(i)})$ is thus $\in  \mathbb{R}^{k \times 1}$.
+$f(\vect{x}^{(i)})$ is thus $\in  \mathbb{R}^{k \times 1}$.
 
 The following parameters must be learned from training data using an optimization method: $\m{W}$ and $\vect{b}$.
 
@@ -121,10 +121,10 @@ The following parameters must be learned from training data using an optimizatio
 In neural networks, the linear model is extended with additional _layers_. @eq-nn-deep-linear-model defines a neural network with two layers (one hidden layer $\m{W}^{(1)}, \vect{b}^{(1)}$ and one output layer $\m{W}^{(2)}, \vect{b}^{(2)}$).
 
 $$
-   f(\vect{x}^{(i)}) = \m{W}^{(2)} g\big(\m{W}^{(1)} \vect{x}^{(i)}  +  \vect{b}^{(1)} \big)  +  \vect{b}^{(2)}
+   f(\vect{x}^{(i)}) = \m{W}^{(2)} \phi\big(\m{W}^{(1)} \vect{x}^{(i)}  +  \vect{b}^{(1)} \big)  +  \vect{b}^{(2)}
 $$ {#eq-nn-deep-linear-model}
 
-Where $g()$ is an _activation function_, such as the _ReLU_ function shown in @eq-nn-relu. Only due to _activation functions_ non-linear relationships can be modelled. Without activation functions, the model collapses to a simple linear model with one layer.
+Where $\phi()$ is an _activation function_, such as the _ReLU_ function shown in @eq-nn-relu. Only due to _activation functions_ non-linear relationships can be modelled. Without activation functions, the model collapses to a simple linear model with one layer.
 
 $$
 \text{ReLU}(x) = \begin{cases}
@@ -137,10 +137,10 @@ $$ {#eq-nn-relu}
 
 Every layer between the input and output layer is called a _hidden layer_.
 
-Typically, not just one data point is processed but a _mini-batch_ of data, or even the entire dataset. The data points are arranged in a data matrix $\m{X} \in \mathbb{R}^{n \times p}$. The linear model from @eq-nn-linear-model can be rewritten in matrix notation as shown in @eq-nn-linear-model-matrix.
+Typically, not just one data point is processed but a _mini-batch_ of data, or even the entire dataset. The data points are arranged in a data matrix $\m{X} \in \mathbb{R}^{N \times d}$. The linear model from @eq-nn-linear-model can be rewritten in matrix notation as shown in @eq-nn-linear-model-matrix.
 
 $$
-   f( \m{X}) = \m{X} \m{W}^T  +  \vect{b}^T
+   f( \m{X}) = \m{X} \m{W}^\top  +  \vect{b}^\top
 $$ {#eq-nn-linear-model-matrix}
 
 The bias term $\vect{b}$ is _broadcast_ ([details here](https://pytorch.org/docs/stable/notes/broadcasting.html)), so it can be added to each projected input.
@@ -209,7 +209,7 @@ plt.show()
 
 ![]({{< meta params.images_path >}}mlp_shallow.jpg){width=800}
 
-A neural network with a _hidden layer_. The lines show connections between neurons and their weights $w_{i,j}$.
+A neural network with a _hidden layer_. The lines show connections between neurons and their weights $W_{i,j}$.
 :::
 
 ::: {.callout-note title="Activation Function Cheat Sheet"}

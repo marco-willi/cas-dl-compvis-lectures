@@ -276,15 +276,15 @@ A pretrained encoder typically requires a smaller learning rate than a randomly 
 
 ### LoRA (Parameter-Efficient Fine-Tuning)
 
-LoRA @hu_lora_2021 adapts selected weight matrices without changing the original pretrained weights. For a weight matrix $W \in \mathbb{R}^{d_{out}\times d_{in}}$, the effective weight is
+LoRA @hu_lora_2021 adapts selected weight matrices without changing the original pretrained weights. For a weight matrix $\m{W} \in \mathbb{R}^{d_{out}\times d_{in}}$, the effective weight is
 
 $$
-W' = W + \frac{\alpha}{r}BA, \qquad
-B \in \mathbb{R}^{d_{out}\times r},\quad
-A \in \mathbb{R}^{r\times d_{in}}.
+\m{W}' = \m{W} + \frac{\alpha}{r}\m{B}\m{A}, \qquad
+\m{B} \in \mathbb{R}^{d_{out}\times r},\quad
+\m{A} \in \mathbb{R}^{r\times d_{in}}.
 $$
 
-Only $A$ and $B$ are trained (along with the task head). Instead of learning $d_{out}d_{in}$ parameters for an unconstrained update, the update uses $r(d_{in}+d_{out})$ parameters. The **rank** $r$ controls the capacity of the update. LoRA is particularly useful for adapting or maintaining several variants of a large pretrained model.
+Only $\m{A}$ and $\m{B}$ are trained (along with the task head). Instead of learning $d_{out}d_{in}$ parameters for an unconstrained update, the update uses $r(d_{in}+d_{out})$ parameters. The **rank** $r$ controls the capacity of the update. LoRA is particularly useful for adapting or maintaining several variants of a large pretrained model.
 
 Unlike an ordinary bottleneck **adapter**, LoRA does not insert a new sequential processing layer. It adds a low-rank change to selected existing weight matrices.
 
@@ -319,10 +319,10 @@ model.print_trainable_parameters()
 Module names and training wrappers differ between architectures and library versions. Inspect the model's named modules when adapting the example to another backbone.
 :::
 
-The saving is not guaranteed: for $r > \frac{d_{in}d_{out}}{d_{in}+d_{out}}$ the factors have more parameters than $W$ itself.
+The saving is not guaranteed: for $r > \frac{d_{in}d_{out}}{d_{in}+d_{out}}$ the factors have more parameters than $\m{W}$ itself.
 
 ::: {.content-visible when-format="html"}
-The following demo shows a frozen $64 \times 64$ matrix $W$ and the trainable factors $B$ and $A$ to scale. Change the rank $r$ and compare the parameter counts.
+The following demo shows a frozen $64 \times 64$ matrix $\m{W}$ and the trainable factors $\m{B}$ and $\m{A}$ to scale. Change the rank $r$ and compare the parameter counts.
 
 ::: {.callout-tip title="🎮 Interactive Demo: LoRA Rank Explorer"}
 
@@ -352,7 +352,7 @@ A full update has $768 \cdot 768 = 589{,}824$ parameters, a LoRA update $r \cdot
 | 16 | 24,576 | 4.17% |
 | 32 | 49,152 | 8.33% |
 
-**No**, the savings in computation are not proportional. Each training step still computes the activations of the complete frozen network, and the backward pass still propagates gradients through the frozen layers to reach $A$ and $B$. LoRA mainly saves the gradients and optimizer states of the frozen weights and the storage for each adapted variant.
+**No**, the savings in computation are not proportional. Each training step still computes the activations of the complete frozen network, and the backward pass still propagates gradients through the frozen layers to reach $\m{A}$ and $\m{B}$. LoRA mainly saves the gradients and optimizer states of the frozen weights and the storage for each adapted variant.
 </details>
 :::
 

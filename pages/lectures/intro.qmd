@@ -604,7 +604,7 @@ In the presence of image degradation a visual system (e.g. humans) heavily uses 
 ### The Limitations of Hand-Crafted Features
 
 
-Images typically have very high dimensionality. For example, an RGB image with a resolution of $800 \times 600$ has a dimensionality of $800 \times 600 \times 3 = 1,440,000$. Classical machine learning algorithms often struggle with such high dimensionalities:
+Images typically have very high dimensionality. For example, an RGB image with a resolution of $800 \times 600$ has a dimensionality of $3 \times 800 \times 600 = 1,440,000$. Classical machine learning algorithms often struggle with such high dimensionalities:
 
 - They are very slow or require a lot of memory.
 - They cannot exploit the 2-D structure of images.

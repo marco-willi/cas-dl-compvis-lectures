@@ -82,7 +82,7 @@ Transformers process sequences of token embeddings. Images, however, are 2-D gri
 The process works as follows:
 
 1. **Divide** the image into a grid of non-overlapping patches. For a 224×224 image with patch size 16×16, this produces $\frac{224}{16} \times \frac{224}{16} = 196$ patches.
-2. **Flatten** each patch into a 1-D vector. A 16×16 RGB patch becomes a vector of length $16 \times 16 \times 3 = 768$.
+2. **Flatten** each patch into a 1-D vector. A 16×16 RGB patch becomes a vector of length $3 \times 16 \times 16 = 768$.
 3. **Project** each flattened patch through a learnable linear layer to produce a patch embedding of dimension $D$ (typically 768).
 4. **Add positional embeddings** — learned vectors that encode the spatial position of each patch in the grid.
 5. **Prepend a [CLS] token** — a special learnable embedding whose output after the transformer serves as the image-level representation for classification (the same concept as in BERT).
@@ -144,7 +144,7 @@ This is analogous to the resolution trade-off in CNNs — coarser input means fa
 
 **Correct answer:** 2 — a convolution with kernel size and stride equal to the patch size.
 
-With a stride equal to the kernel size, the windows do not overlap: each window covers exactly one patch. Each of the 768 filters has $16 \times 16 \times 3$ weights, so its output at one position is the dot product of one filter with the flattened patch — exactly one entry of the linear projection. All filters together correspond to the projection matrix $\m{E}$, and like $\m{E}$, they are shared across all patches. Both variants have the same number of parameters: $768 \cdot (16 \cdot 16 \cdot 3) + 768 = 590{,}592$ (weights and biases).
+With a stride equal to the kernel size, the windows do not overlap: each window covers exactly one patch. Each of the 768 filters has $3 \times 16 \times 16$ weights, so its output at one position is the dot product of one filter with the flattened patch — exactly one entry of the linear projection. All filters together correspond to the projection matrix $\m{E}$, and like $\m{E}$, they are shared across all patches. Both variants have the same number of parameters: $768 \cdot (16 \cdot 16 \cdot 3) + 768 = 590{,}592$ (weights and biases).
 
 The convolution outputs a 768×14×14 activation map for a 224×224 image, which is flattened into a sequence of 196 embeddings. This is how ViTs are typically implemented in practice, for example in [timm](https://github.com/huggingface/pytorch-image-models):
 

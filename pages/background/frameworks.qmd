@@ -98,7 +98,7 @@ At the core of neural networks is the _Computational Graph_. It automatically em
 
 
 $$
-    f(\mathbf{A}, \mathbf{B}, \mathbf{C}) =  \sum_{ij} \big((\mathbf{A} \odot \mathbf{B}) + \mathbf{C}\big)_{ij}
+    f(\m{A}, \m{B}, \m{C}) =  \sum_{i,j} \big((\m{A} \odot \m{B}) + \m{C}\big)_{i,j}
 $$ {#eq-frameworks-graph}
 
 
@@ -766,22 +766,22 @@ When training models, monitoring the training process, debugging, and logging hy
 
 ## Tensor Operations
 
-In neural networks, there are many tensor operations. Tensors are essentially multi-dimensional arrays, such as a scalar $x$, a vector $\mathbf{x}$, or a matrix $\mathbf{X}$.
+In neural networks, there are many tensor operations. Tensors are essentially multi-dimensional arrays, such as a scalar $x$, a vector $\vect{x}$, or a matrix $\m{X}$.
 
-A typical representative of a tensor operation is the matrix multiplication $\mathbf{C} = \mathbf{A}\mathbf{B}$. It is everywhere in neural networks: a linear layer applied to a batch of inputs computes $\mathbf{Y} = \mathbf{X}\mathbf{W}$, and convolutions are typically implemented as matrix multiplications as well.
+A typical representative of a tensor operation is the matrix multiplication $\m{C} = \m{A}\m{B}$. It is everywhere in neural networks: a linear layer applied to a batch of inputs computes $\m{Y} = \m{X}\m{W}^\top$, and convolutions are typically implemented as matrix multiplications as well.
 
-@fig-infrastructure-matrix-mult illustrates that each entry $c_{ij}$ only requires row $i$ of $\mathbf{A}$ and column $j$ of $\mathbf{B}$:
+@fig-infrastructure-matrix-mult illustrates that each entry $C_{i,j}$ only requires row $i$ of $\m{A}$ and column $j$ of $\m{B}$:
 
 $$
-c_{ij} = \sum_k a_{ik} \, b_{kj}
+C_{i,j} = \sum_k A_{i,k} \, B_{k,j}
 $$ {#eq-frameworks-matmul}
 
-All entries of $\mathbf{C}$ are therefore independent of each other and can be computed in parallel.
+All entries of $\m{C}$ are therefore independent of each other and can be computed in parallel.
 
 ::: {#fig-infrastructure-matrix-mult}
 ![]({{< meta params.images_path >}}matmul_parallel.png){width=700}
 
-Matrix multiplication: each entry of $\mathbf{C}$ is an independent dot product of a row of $\mathbf{A}$ and a column of $\mathbf{B}$.
+Matrix multiplication: each entry of $\m{C}$ is an independent dot product of a row of $\m{A}$ and a column of $\m{B}$.
 :::
 
 ## Graphics Processing Units (GPUs)

@@ -25,7 +25,7 @@ Predict one element at a time, conditioned on all previous elements (@torralba_f
 ## Factorization
 
 ::: {.fragment}
-$$p(x_1, \ldots, x_n) = p(x_1)\, p(x_2|x_1)\, p(x_3|x_1, x_2) \cdots p(x_n|x_1, \ldots, x_{n-1})$$
+$$p(x_1, \ldots, x_d) = p(x_1)\, p(x_2 \mid x_1)\, p(x_3 \mid x_1, x_2) \cdots p(x_d \mid x_1, \ldots, x_{d-1})$$
 :::
 
 ::: {.fragment}
@@ -142,7 +142,7 @@ Unlike standard autoencoders, the latent space is **structured probabilistically
 ![]({{< meta params.images_path >}}vae_illustration2.png){.r-stretch}
 
 ::: {.fragment}
-$$\vect{z} = \vect{\mu} + \vect{\epsilon} \cdot \vect{\sigma}, \qquad \vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$$
+$$\vect{z} = \vect{\mu} + \vect{\epsilon} \odot \vect{\sigma}, \qquad \vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$$
 :::
 
 ::: {.fragment}
@@ -153,12 +153,12 @@ Lets gradients flow through stochastic sampling.
 ## ELBO Objective
 
 ::: {.fragment}
-$$\text{ELBO} = \underbrace{\mathbb{E}_{\vect{z} \sim q_{\psi}(\vect{z}|\vect{x})}[\log p_{\theta}(\vect{x}|\vect{z})]}_{\text{Reconstruction}} - \underbrace{\text{KL}(q_{\psi}(\vect{z}|\vect{x}) \,\|\, p(\vect{z}))}_{\text{Regularization}}$$
+$$\text{ELBO} = \underbrace{\mathbb{E}_{\vect{z} \sim q_{\psi}(\vect{z} \mid \vect{x})}[\log p_{\theta}(\vect{x} \mid \vect{z})]}_{\text{Reconstruction}} - \underbrace{D_{\mathrm{KL}}(q_{\psi}(\vect{z} \mid \vect{x}) \,\Vert\, p(\vect{z}))}_{\text{Regularization}}$$
 :::
 
 ::: {.incremental}
 - **Reconstruction** — decoder must recover the input
-- **KL regularization** — pull posterior toward prior $p(\vect{z}) = \mathcal{N}(\mathbf{0}, \mathbf{I})$
+- **KL regularization** — pull posterior toward prior $p(\vect{z}) = \mathcal{N}(\vect{0}, \m{I})$
 - Result: a **smooth, continuous** latent space
 :::
 
@@ -205,12 +205,12 @@ Gradually add Gaussian noise over $T$ steps (@torralba_foundations_2024). **Fixe
 ## Forward Process
 
 ::: {.fragment}
-$$\vect{x}_t = \sqrt{1 - \beta_t}\, \vect{x}_{t-1} + \sqrt{\beta_t}\, \vect{\epsilon}_t, \qquad \vect{\epsilon}_t \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$$
+$$\vect{x}_t = \sqrt{1 - \beta_t}\, \vect{x}_{t-1} + \sqrt{\beta_t}\, \vect{\epsilon}_t, \qquad \vect{\epsilon}_t \sim \mathcal{N}(\vect{0}, \m{I})$$
 :::
 
 ::: {.incremental}
 - $\beta_t$ — **noise schedule** (linear, cosine, …)
-- $\vect{x}_0$ (clean) → $\vect{x}_T \approx \mathcal{N}(\mathbf{0}, \mathbf{I})$
+- $\vect{x}_0$ (clean) → $\vect{x}_T \approx \mathcal{N}(\vect{0}, \m{I})$
 - Can sample $\vect{x}_t$ **directly from** $\vect{x}_0$ → efficient training over many noise levels
 :::
 
@@ -228,7 +228,7 @@ A neural network learns to gradually remove noise, step by step (@torralba_found
 
 ::: {.fragment}
 Start from pure noise:
-$$\vect{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$$
+$$\vect{x}_T \sim \mathcal{N}(\vect{0}, \m{I})$$
 :::
 
 ::: {.fragment}
@@ -318,7 +318,7 @@ Note: here $t = 0$ is **noise** and $t = 1$ is **data** (opposite to diffusion).
 ## Training: Straight Lines
 
 ::: {.fragment}
-Pair a training image $\vect{x}_1$ with noise $\vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$, connect them with a line:
+Pair a training image $\vect{x}_1$ with noise $\vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$, connect them with a line:
 
 $$\vect{x}_t = (1 - t)\, \vect{\epsilon} + t\, \vect{x}_1$$
 :::
@@ -346,7 +346,7 @@ Training lines cross; the network learns their **average** direction. The learne
 ## Sampling
 
 ::: {.fragment}
-Start from noise $\vect{x}_0 \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ and follow the velocity (Euler steps):
+Start from noise $\vect{x}_0 \sim \mathcal{N}(\vect{0}, \m{I})$ and follow the velocity (Euler steps):
 
 $$\vect{x}_{t + \Delta t} = \vect{x}_t + \Delta t \, v_\theta(\vect{x}_t, t)$$
 :::

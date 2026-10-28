@@ -110,7 +110,7 @@ HTML(table_html)
 ![Illustrated are the set of all possible images and the subset of natural images]({{< meta params.images_path >}}set_of_images.png){.r-stretch}
 
 ::: {.fragment}
-Total possible $256\times256$ RGB images: $256^{256 \times 256 \times 3}$ ≈ **infinite**
+Total possible $256\times256$ RGB images: $256^{3 \times 256 \times 256}$ ≈ **infinite**
 :::
 
 ::: {.fragment}
@@ -217,7 +217,7 @@ Augmented copies and other elephants land close together; the car is far away.
 
 ::: {.incremental}
 
-- **Invariance:** $\|f(\vect{x}) - f(g(\vect{x}))\|_2 < \epsilon$ for nuisance transform $g$ (lighting, pose)
+- **Invariance:** $\|f(\vect{x}) - f(t(\vect{x}))\|_2 < \epsilon$ for nuisance transform $t$ (lighting, pose)
 
 - **Selectivity:** $\|f(\vect{x}_i) - f(\vect{x}_j)\|_2 > \delta$ for semantically different $\vect{x}_i, \vect{x}_j$
 
@@ -491,7 +491,7 @@ $$
 ::: {.fragment}
 3. Retrieve nearest neighbours:
 $$
-\operatorname{topk}_i \; \text{sim}_{\cos}(\vect{z}_q, \vect{z}_i)
+\operatorname{topk}_i \; \mathrm{sim}_{\cos}(\vect{z}_q, \vect{z}_i)
 $$
 :::
 

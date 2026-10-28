@@ -13,6 +13,8 @@ $$
 $$
 :::
 
+The notation follows the [Deep Learning Book](https://www.deeplearningbook.org/contents/notation.html) [@goodfellow_deep_2016] where possible. Deviations and course-specific symbols are listed at the end of this page.
+
 ## Numbers and Arrays
 
 | Syntax    | Description                |
@@ -23,14 +25,24 @@ $$
 | $\tensor{A}$ | A tensor                   |
 | $\m{I}_n$ | Identity matrix with $n$ rows and $n$ columns |
 | $\m{I}$ | Identity matrix with dimensionality implied by context |
+| $\vect{0}$ | Vector of zeros with dimensionality implied by context |
 | $\vect{e}^{(i)}$ | Standard basis vector $[0,\dots,0,1,0,\dots,0]$ with a 1 at position $i$ |
 | $\text{diag}(\vect{a})$ | A square, diagonal matrix with diagonal entries given by $\vect{a}$ |
 | $\rand{a}$ | A scalar random variable |
 | $\vrand{a}$ | A vector-valued random variable |
-| $\m{A}$ | A matrix-valued random variable |
 | $\theta$ | Parameters of a model |
-| $f(\theta, \vect{x})$ | A function (model) with paramters $\theta$ and data $\vect{x}$ |
-| $\m{A} \odot \m{B}$ | Element-wise (Hadamard) product of $\m{A}$ and $\m{B}$ |
+
+
+## Sets
+
+| Syntax    | Description                |
+|-----------|----------------------------|
+| $\mathcal{A}$ | A set |
+| $\mathbb{R}$ | The set of real numbers |
+| $\mathbb{R}^{d}$, $\mathbb{R}^{m \times n}$ | The set of real vectors with $d$ entries, of real matrices with $m$ rows and $n$ columns |
+| $\{0, 1, \dots, n\}$ | The set of all integers between $0$ and $n$ |
+| $[a, b]$ | The real interval including $a$ and $b$ |
+| $(a, b]$ | The real interval excluding $a$ but including $b$ |
 
 
 ## Indexing
@@ -39,50 +51,127 @@ $$
 |-----------|----------------------------|
 | $a_i$ | Element $i$ of vector $\vect{a}$, with indexing starting at 1 |
 | $A_{i,j}$ | Element $i, j$ of matrix $\m{A}$ |
+| $\m{A}_{i,:}$ | Row $i$ of matrix $\m{A}$ |
+| $\m{A}_{:,i}$ | Column $i$ of matrix $\m{A}$ |
+| $\tensor{A}_{i,j,k}$ | Element $(i, j, k)$ of a 3-D tensor $\tensor{A}$ |
+| $\m{W}^{(l)}$, $\vect{h}^{(l)}$ | Weights and activations of layer $l$ |
 
 
-## Datasets and Distributions
-
-| Syntax    | Description                |
-|-----------|----------------------------|
-| $\m{X}$ | The design matrix with dimensionality $nxp$ with $n$ samples with $p$ features. |
-| $\vect{x}^{(i)}$ | The i-th training example. |
-| $\vect{y}^{(i)}$ | The label-vector for the i-th training example. |
-| $y^{(i)}$ | The label for the i-th training example. |
-
-## Probability Theory
+## Linear Algebra Operations
 
 | Syntax    | Description                |
 |-----------|----------------------------|
-| $P(x)$ | A probability distribution over a discrete variable. |
-| $p(x)$ | A probability distribution over a contiuous variable or over a variable whose type has not been specified. |
-| $\mathbb{E}_{x \sim P} [ f(x) ]\text{ or } \mathbb{E} f(x)$ | Expectation of $f(x)$ with respect to $P(x)$ |
-| $\mathcal{N} ( \mathbf{x} ; \mu , \Sigma)$ | Gaussian distribution over $\mathbf{x}$ with mean $\mu$ and covariance $\Sigma$ |
-| $x \sim \mathcal{N} (\mu , \sigma)$ | Gaussian distribution over $x$ with mean $\mu$ and variance $\sigma$ |
-
-
+| $\m{A}^\top$ | Transpose of matrix $\m{A}$ |
+| $\m{A} \odot \m{B}$ | Element-wise (Hadamard) product of $\m{A}$ and $\m{B}$ |
+| $\det(\m{A})$ | Determinant of $\m{A}$ |
+| $\operatorname{tr}(\m{A})$ | Trace of $\m{A}$ |
 
 
 ## Calculus
 
 | Syntax    | Description                |
 |-----------|----------------------------|
-| $\nabla_{\vect{w}} J$ | Gradient of $J$ with respect to $\vect{w}$|
-| $\frac{\partial J}{\partial w}$ | Partial derivative of $J$ with respect to $w$|
+| $\frac{dy}{dx}$ | Derivative of $y$ with respect to $x$ |
+| $\frac{\partial y}{\partial x}$ | Partial derivative of $y$ with respect to $x$ |
+| $\nabla_{\vect{x}} y$ | Gradient of $y$ with respect to $\vect{x}$ |
+| $\frac{\partial f}{\partial \vect{x}} \in \mathbb{R}^{m \times n}$ | Jacobian matrix of $f: \mathbb{R}^n \rightarrow \mathbb{R}^m$ |
+| $\int_{\mathcal{S}} f(\vect{x}) \, d\vect{x}$ | Definite integral over the set $\mathcal{S}$ |
 
+
+## Probability and Information Theory
+
+| Syntax    | Description                |
+|-----------|----------------------------|
+| $P(x)$ | A probability distribution over a discrete variable |
+| $p(x)$ | A probability distribution over a continuous variable or over a variable whose type has not been specified |
+| $p(\vect{x} \mid \vect{y})$ | Conditional distribution of $\vect{x}$ given $\vect{y}$ |
+| $\vect{x} \sim p$ | $\vect{x}$ is sampled from (has distribution) $p$ |
+| $\mathbb{E}_{\vect{x} \sim p} [ f(\vect{x}) ]$ | Expectation of $f(\vect{x})$ with respect to $p(\vect{x})$ |
+| $D_{\mathrm{KL}}(P \,\Vert\, Q)$ | Kullback-Leibler divergence of $P$ and $Q$ |
+| $\mathcal{N}(\vect{x}; \vect{\mu}, \m{\Sigma})$ | Gaussian distribution over $\vect{x}$ with mean $\vect{\mu}$ and covariance $\m{\Sigma}$ |
+| $\mathcal{N}(x; \mu, \sigma^2)$ | Gaussian distribution over $x$ with mean $\mu$ and variance $\sigma^2$ |
+| $\vect{z} \sim \mathcal{N}(\vect{0}, \m{I})$ | $\vect{z}$ is sampled from a standard Gaussian |
 
 
 ## Functions
 
 | Syntax    | Description                |
 |-----------|----------------------------|
-| $\log x$ | The natural logarithm of $x$. |
-| $\lVert \mathbf{x} \rVert_p$ | $L^p$ norm of $\mathbf{x}$ |
-| $\lVert \mathbf{x} \rVert$ | $L^2$ norm of $\mathbf{x}$ |
+| $f: \mathcal{A} \rightarrow \mathcal{B}$ | The function $f$ with domain $\mathcal{A}$ and range $\mathcal{B}$ |
+| $f \circ g$ | Composition of the functions $f$ and $g$ |
+| $f_\theta(\vect{x})$ | A function (model) of $\vect{x}$ with parameters $\theta$ |
+| $\log x$ | The natural logarithm of $x$ |
+| $\sigma(x)$ | Logistic sigmoid, $\frac{1}{1 + \exp(-x)}$ |
+| $\mathrm{softmax}(\vect{z})$ | Softmax, $\mathrm{softmax}(\vect{z})_k = \frac{\exp(z_k)}{\sum_{j=1}^K \exp(z_j)}$ |
+| $\mathrm{ReLU}(x)$ | Rectified linear unit, $\max(0, x)$ |
+| $\lVert \vect{x} \rVert_p$ | $L^p$ norm of $\vect{x}$ |
+| $\lVert \vect{x} \rVert$ | $L^2$ norm of $\vect{x}$ |
+| $\floor{x}$ | $x$ rounded down to the nearest integer |
+| $\arg\min_{\theta} f(\theta)$ | The value of $\theta$ that minimizes $f(\theta)$ |
 
 
-## Deep Learning
+## Datasets and Learning
 
 | Syntax    | Description                |
 |-----------|----------------------------|
-| NCHW | The input format of images and activations in PyTorch. N: number of images (batch size), C: number of channels, H: height, W: width|
+| $N$ | Number of training examples |
+| $d$ | Number of input features (dimensionality of $\vect{x}$) |
+| $K$ | Number of classes |
+| $\mathcal{D} = \{(\vect{x}^{(i)}, y^{(i)})\}_{i=1}^N$ | A training set |
+| $\vect{x}^{(i)}$ | The $i$-th training example |
+| $y^{(i)}$, $\vect{y}^{(i)}$ | The target (label or label vector) of the $i$-th training example |
+| $\hat{y}$, $\hat{\vect{y}}$ | A model prediction |
+| $\m{X} \in \mathbb{R}^{N \times d}$ | The design matrix, with example $\vect{x}^{(i)}$ in row $\m{X}_{i,:}$ |
+| $p_{\text{data}}$ | The data-generating distribution |
+| $L(\hat{y}, y)$ | Loss of a single example |
+| $J(\theta)$ | Cost (objective): the loss averaged over the training set |
+| $\theta^*$ | Optimal parameters, $\theta^* = \arg\min_{\theta} J(\theta)$ |
+
+
+## Course-Specific Notation
+
+The following symbols are not covered by the Deep Learning Book.
+
+### Images and CNNs
+
+| Syntax    | Description                |
+|-----------|----------------------------|
+| $C \times H \times W$ | Shape of an image or activation map: channels, height, width |
+| $N \times C \times H \times W$ | Shape of a batch of $N$ images (NCHW, the format used by PyTorch) |
+| $C_{in}$, $C_{out}$ | Number of input and output channels of a layer |
+| $i$, $o$ | Spatial input and output size of a convolution |
+| $k$, $s$, $p$, $d$ | Kernel size, stride, padding, dilation |
+| $K * I$ | Convolution (implemented as cross-correlation) of input $I$ with kernel $K$ |
+| $r_0$ | Receptive field size |
+
+### Representation Learning
+
+| Syntax    | Description                |
+|-----------|----------------------------|
+| $\vect{z} = f(\vect{x})$ | Representation (embedding) of $\vect{x}$ |
+| $\mathrm{sim}(\vect{z}_i, \vect{z}_j)$ | Similarity of two representations, usually cosine similarity |
+| $\tau$ | Temperature |
+
+### Generative Models
+
+| Syntax    | Description                |
+|-----------|----------------------------|
+| $p_\theta(\vect{x})$ | Model distribution with parameters $\theta$ |
+| $\vect{z}$ | Latent variable / random input of a generative model |
+| $\vect{c}$ | Condition (e.g. class label, text prompt) |
+| $g$, $d$ | Generator, discriminator |
+| $q_\psi(\vect{z} \mid \vect{x})$ | Encoder (approximate posterior) of a VAE |
+| $\vect{x}_t$, $T$ | Sample at time step $t$, number of time steps (diffusion, flows) |
+| $\vect{\epsilon}$ | Gaussian noise |
+| $v_\theta(\vect{x}_t, t)$ | Velocity field (flow matching) |
+
+
+## Deviations from the Deep Learning Book
+
+- Models are written as $f_\theta(\vect{x})$ instead of $f(\vect{x}; \theta)$, as in most of the generative modelling literature.
+- The number of training examples is $N$ (instead of $m$) and the number of input features is $d$ (instead of $n$).
+- Sets are calligraphic ($\mathcal{D}$) instead of blackboard bold.
+- Vectors and matrices are upright bold ($\vect{x}$, $\m{X}$) instead of bold italic.
+- Pairs of examples in similarity and contrastive formulas are written as $\vect{z}_i, \vect{z}_j$ instead of $\vect{z}^{(i)}, \vect{z}^{(j)}$, following the original papers.
+- Named objectives from papers keep their symbol, e.g. $\mathcal{L}_{\text{InfoNCE}}$.
+- Time steps of diffusion models and flows are subscripts ($\vect{x}_t$) instead of superscripts ($\vect{x}^{(t)}$).

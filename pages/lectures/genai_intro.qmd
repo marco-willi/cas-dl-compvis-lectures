@@ -244,7 +244,7 @@ How do such models work, and what does it mean for a model to *generate* data? I
 
 Let's contrast generative modelling with a classification task (see @fig-genai-intro-basics-classifier). As a simplified mental picture, let's denote $f(\vect{x}) = \vect{y}$ for a classifier, and $g(\vect{y}) = \vect{x}$ for a generative model.
 
-In classification the model has as input an image $\vect{x}^{(i)}$ and models a probability distribution over all classes $\vect{\hat{y}}^{(i)}$ which ideally assigns a high probability to the true label $\vect{y}^{(i)}$.
+In classification the model has as input an image $\vect{x}^{(i)}$ and models a probability distribution over all classes $\hat{\vect{y}}^{(i)}$ which ideally assigns a high probability to the true label $\vect{y}^{(i)}$.
 
 
 ::: {#fig-genai-intro-basics-classifier}
@@ -308,7 +308,7 @@ Since neural networks consist of deterministic operations (such as matrix multip
 Generative modelling with a diverse set of outputs.
 :::
 
-One way to achieve this is to give the generative model an additional random input $\vect{z} \sim p(\vect{z})$ and to generate samples using $g_{\theta}(\vect{z}, \vect{y})$. Typically, $p(\vect{z})$ is a simple distribution that is easy to sample from, such as a standard Gaussian: $\vect{z} \sim \mathcal{N}(\mathbf{0}, \m{I})$. Each new draw of $\vect{z}$ yields a new output.
+One way to achieve this is to give the generative model an additional random input $\vect{z} \sim p(\vect{z})$ and to generate samples using $g_{\theta}(\vect{z}, \vect{y})$. Typically, $p(\vect{z})$ is a simple distribution that is easy to sample from, such as a standard Gaussian: $\vect{z} \sim \mathcal{N}(\vect{0}, \m{I})$. Each new draw of $\vect{z}$ yields a new output.
 
 @fig-genai-intro-conditional-generation shows the resulting conditional generator: it combines the same condition $\vect{c}$ with different random inputs $\vect{z}^{(1)}, \vect{z}^{(2)}, \vect{z}^{(3)}$ and produces a different, plausible image for each of them. In contrast to the classifier in @fig-genai-intro-classification, the output is not a distribution over a few classes but a sample from a distribution over images.
 
@@ -467,7 +467,7 @@ $$ {#eq-genai-intro-objective}
 Some models define $p_{\theta}$ explicitly as a formula that can be evaluated. Others define it only implicitly, through their sampling procedure.
 
 ::: {.callout-note title="Probability densities"}
-Images take (approximately) continuous values, so $p_{\text{data}}$ and $p_{\theta}$ are probability **density** functions over the image space $\mathcal{X}$, for example $\mathcal{X} = \mathbb{R}^{H \times W \times 3}$. A density $p: \mathcal{X} \to [0, \infty)$ must integrate to one:
+Images take (approximately) continuous values, so $p_{\text{data}}$ and $p_{\theta}$ are probability **density** functions over the image space $\mathcal{X}$, for example $\mathcal{X} = \mathbb{R}^{3 \times H \times W}$. A density $p: \mathcal{X} \to [0, \infty)$ must integrate to one:
 
 $$
 \int_{\mathcal{X}} p(\vect{x}) \, d\vect{x} = 1
@@ -518,7 +518,7 @@ Fidelity vs. coverage for a bimodal target distribution (blue). (a) The model co
 How can we make $p_{\theta}$ similar to $p_{\text{data}}$ if we only have samples from $p_{\text{data}}$? A classic approach is **maximum likelihood estimation**: we choose the parameters $\theta$ such that the training data is as likely as possible under the model:
 
 $$
-\theta^{*} = \underset{\theta}{\arg\max} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})
+\theta^{*} = \arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})
 $$ {#eq-genai-intro-mle}
 
 It can be shown that, for a large number of training samples, this is equivalent to minimizing the Kullback-Leibler divergence $D_{\mathrm{KL}}(p_{\text{data}} \,\|\, p_{\theta})$, a measure of the difference between the two distributions. Maximum likelihood strongly penalizes a model that assigns a low density to any real training example, which encourages coverage. It requires, however, that $p_{\theta}(\vect{x})$ can be evaluated (or at least bounded) for a given image.
