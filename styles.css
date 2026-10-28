@@ -34,3 +34,23 @@
 .course-map a:hover rect {
   fill: #f7f7f7;
 }
+
+/* Hero demo on the welcome page: height follows the width, as the iframe cannot report its
+   height when the site is opened via file:// (on a web server, data-auto-height takes over).
+   Side by side: two 16:9 panels of half the width (28.13% of the width) plus 64-102px of
+   text, less on wider screens as the caption wraps less; stacked below 561px: two full-width
+   panels plus the text. Fitted to measured heights; adjust if the caption changes. */
+.hero-demo {
+  container-type: inline-size;
+}
+
+.hero-demo iframe {
+  display: block;
+  height: max(calc(17.2cqw + 165px), calc(28.13cqw + 66px));
+}
+
+@container (max-width: 560px) {
+  .hero-demo iframe {
+    height: calc(89.6cqw + 250px);
+  }
+}

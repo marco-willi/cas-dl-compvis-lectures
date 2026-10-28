@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-79d1a0c49cc1dacd2e60a426aee88f06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2a03f9d9cdf4952de142da8c0c16ab41.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -477,6 +477,9 @@ gtag('config', 'G-0D0M41JVKL', { 'anonymize_ip': true});
 <p><a href="https://www.fhnw.ch/de/weiterbildung/informatik/fachvertiefungsmodule-data-science/computer-vision-mit-deep-learning">Modul Computer Vision mit DL</a></p>
 <p><a href="https://www.fhnw.ch/de/weiterbildung/informatik/cas-deep-learning">CAS Page</a></p>
 <p>Inhalte zu Objekt-Detektion, Segmentierung und dem CV Lab sind nicht Teil von dieser Page und werden separat behandelt.</p>
+<div class="hero-demo">
+<iframe name="hero-similarity" data-auto-height="" src="demos/welcome/hero_similarity/index.html" width="100%" height="420" style="border: 0;" title="Interaktive Demo: DINOv3 Ähnlichkeit"></iframe>
+</div>
 <section id="kursübersicht" class="level2">
 <h2 class="anchored" data-anchor-id="kursübersicht">Kursübersicht</h2>
 <svg class="course-map" viewbox="0 0 960 380" role="img" aria-label="Kursübersicht: 10 Lektionen über drei Tage" font-family="'Open Sans', 'Helvetica Neue', Arial, sans-serif">
@@ -515,14 +518,27 @@ gtag('config', 'G-0D0M41JVKL', { 'anonymize_ip': true});
 </section>
 <section id="lernziele" class="level2">
 <h2 class="anchored" data-anchor-id="lernziele">Lernziele</h2>
+<p>Nach dem Kurs könnt ihr …</p>
+<p><strong>Tag 1: Grundlagen</strong></p>
 <ul>
-<li>Die fundamentalen Herausforderungen beim Modellieren von Bilddaten verstehen</li>
-<li>Convolutional Neural Networks verstehen, implementieren und trainieren können</li>
-<li>Foundation-Models als Grundlage für viele Vision Tasks verstehen und einsetzten können</li>
-<li>Bildklassifikation verstehen und systematisch umsetzen können</li>
-<li>Generative Modelle verstehen und praktische Anwendungen mit modernen Generative AI Modellen umsetzen können</li>
-<li>Mit Deep Learning Frameworks umgehen und Libraries verwenden können</li>
-<li>Praktische Anwendung umsetzen, vorstellen und erklären können</li>
+<li>die besonderen Herausforderungen von Bilddaten (hohe Dimensionalität, Variabilität in Blickwinkel, …) beschreiben und einen Bilddatensatz systematisch untersuchen und für die Modellierung aufbereiten.</li>
+<li>den Aufbau von Convolutional Neural Networks (Convolutions, Activations, Layers) erklären und begründen, warum CNNs für Bilddaten geeignet sind.</li>
+<li>ein Bildklassifikationsmodell in PyTorch nach einem systematischen Vorgehen trainieren, evaluieren und typische Fallstricke vermeiden.</li>
+</ul>
+<p><strong>Tag 2: Representations und moderne Backbones</strong></p>
+<ul>
+<li>mit vortrainierten Modellen Embeddings extrahieren und für Aufgaben wie die Retrieval nutzen.</li>
+<li>eine geeignete Strategie zur Adaptation vortrainierter Modelle (k-NN, Linear Probe, LoRA, Fine-Tuning) anhand von Datenmenge und Domäne auswählen und anwenden.</li>
+<li>CNNs und Vision Transformers vergleichen und einen passenden Backbone für einen Anwendungsfall begründet auswählen.</li>
+</ul>
+<p><strong>Tag 3: Generative AI</strong></p>
+<ul>
+<li>die Funktionsweise der wichtigsten Familien generativer Modelle (autoregressive Modelle, GANs, VAEs, Diffusion- und Flow-Modelle) erklären und ihre Stärken und Schwächen vergleichen.</li>
+<li>moderne generative Bildmodelle über APIs und Open-Weight-Modelle einsetzen und deren Grenzen und Risiken (Halluzinationen, Bias, …) kritisch beurteilen.</li>
+</ul>
+<p><strong>Projekt</strong></p>
+<ul>
+<li>eine eigene Computer-Vision-Anwendung konzipieren, umsetzen und Ergebnisse nachvollziehbar präsentieren.</li>
 </ul>
 </section>
 <section id="ablauf" class="level2">
@@ -1186,120 +1202,139 @@ gtag('config', 'G-0D0M41JVKL', { 'anonymize_ip': true});
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">number-sections:</span><span class="co"> false</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Herzlich willkommen zum Modul **Computer Vision mit Deep Learning**!</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Hier finden Sie Unterlagen und aktuelle Informationen zum Modul.</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Modul Computer Vision mit DL</span><span class="co">](https://www.fhnw.ch/de/weiterbildung/informatik/fachvertiefungsmodule-data-science/computer-vision-mit-deep-learning)</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">CAS Page</span><span class="co">](https://www.fhnw.ch/de/weiterbildung/informatik/cas-deep-learning)</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>Inhalte zu Objekt-Detektion, Segmentierung und dem CV Lab sind nicht Teil von dieser Page und werden separat behandelt.</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Kursübersicht</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;svg class="course-map" viewBox="0 0 960 380" role="img" aria-label="Kursübersicht: 10 Lektionen über drei Tage" font-family="'Open Sans', 'Helvetica Neue', Arial, sans-serif"&gt;</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;defs&gt;&lt;marker id="cm-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"&gt;&lt;path d="M0 0 L10 5 L0 10 z" fill="#888"/&gt;&lt;/marker&gt;&lt;/defs&gt;</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;rect x="5" y="10" width="950" height="100" rx="10" fill="#eaf2f9"/&gt;</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="56" font-size="20" font-weight="bold" fill="#2c7fb8"&gt;Tag 1&lt;/text&gt;</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="76" font-size="12" fill="#555"&gt;CNNs &amp;&lt;/text&gt;</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="91" font-size="12" fill="#555"&gt;Klassifikation&lt;/text&gt;</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/intro.html"&gt;&lt;title&gt;1 - Introduction&lt;/title&gt;&lt;rect x="130" y="25" width="192" height="70" rx="8" fill="white" stroke="#2c7fb8" stroke-width="2"/&gt;&lt;text x="226" y="55" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2c7fb8"&gt;1&lt;/tspan&gt;  Introduction&lt;/text&gt;&lt;text x="226" y="77" font-size="12.5" fill="#555" text-anchor="middle"&gt;Tasks &amp; challenges&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="324" y1="60" x2="338" y2="60" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/images_as_data.html"&gt;&lt;title&gt;2 - Images as Data&lt;/title&gt;&lt;rect x="340" y="25" width="192" height="70" rx="8" fill="white" stroke="#2c7fb8" stroke-width="2"/&gt;&lt;text x="435" y="55" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2c7fb8"&gt;2&lt;/tspan&gt;  Images as Data&lt;/text&gt;&lt;text x="435" y="77" font-size="12.5" fill="#555" text-anchor="middle"&gt;Pixels, tensors, datasets&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="533" y1="60" x2="547" y2="60" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/cnns.html"&gt;&lt;title&gt;3 - CNNs&lt;/title&gt;&lt;rect x="549" y="25" width="192" height="70" rx="8" fill="white" stroke="#2c7fb8" stroke-width="2"/&gt;&lt;text x="645" y="55" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2c7fb8"&gt;3&lt;/tspan&gt;  CNNs&lt;/text&gt;&lt;text x="645" y="77" font-size="12.5" fill="#555" text-anchor="middle"&gt;Convolution &amp; feature maps&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="742" y1="60" x2="756" y2="60" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/classification.html"&gt;&lt;title&gt;4 - Classification&lt;/title&gt;&lt;rect x="758" y="25" width="192" height="70" rx="8" fill="white" stroke="#2c7fb8" stroke-width="2"/&gt;&lt;text x="854" y="55" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2c7fb8"&gt;4&lt;/tspan&gt;  Classification&lt;/text&gt;&lt;text x="854" y="77" font-size="12.5" fill="#555" text-anchor="middle"&gt;Training &amp; augmentation&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;rect x="5" y="140" width="950" height="100" rx="10" fill="#e8f5ef"/&gt;</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="186" font-size="20" font-weight="bold" fill="#2a9d6f"&gt;Tag 2&lt;/text&gt;</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="206" font-size="12" fill="#555"&gt;Representations&lt;/text&gt;</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="221" font-size="12" fill="#555"&gt;&amp; Backbones&lt;/text&gt;</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;path d="M854 95 V125 H261 V153" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/representation_learning.html"&gt;&lt;title&gt;5 - Visual Representations&lt;/title&gt;&lt;rect x="130" y="155" width="261" height="70" rx="8" fill="white" stroke="#2a9d6f" stroke-width="2"/&gt;&lt;text x="261" y="185" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2a9d6f"&gt;5&lt;/tspan&gt;  Visual Representations&lt;/text&gt;&lt;text x="261" y="207" font-size="12.5" fill="#555" text-anchor="middle"&gt;Embeddings &amp; retrieval&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="393" y1="190" x2="407" y2="190" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/downstream_adaptation.html"&gt;&lt;title&gt;6 - Adapting Models&lt;/title&gt;&lt;rect x="409" y="155" width="261" height="70" rx="8" fill="white" stroke="#2a9d6f" stroke-width="2"/&gt;&lt;text x="540" y="185" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2a9d6f"&gt;6&lt;/tspan&gt;  Adapting Models&lt;/text&gt;&lt;text x="540" y="207" font-size="12.5" fill="#555" text-anchor="middle"&gt;Fine-tuning &amp; downstream tasks&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="673" y1="190" x2="687" y2="190" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/vision_transformers.html"&gt;&lt;title&gt;7 - Modern Vision Backbones&lt;/title&gt;&lt;rect x="689" y="155" width="261" height="70" rx="8" fill="white" stroke="#2a9d6f" stroke-width="2"/&gt;&lt;text x="819" y="185" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2a9d6f"&gt;7&lt;/tspan&gt;  Modern Vision Backbones&lt;/text&gt;&lt;text x="819" y="207" font-size="12.5" fill="#555" text-anchor="middle"&gt;Vision Transformers vs CNNs&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;rect x="5" y="270" width="950" height="100" rx="10" fill="#f2eef8"/&gt;</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="316" font-size="20" font-weight="bold" fill="#7b5ea7"&gt;Tag 3&lt;/text&gt;</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="336" font-size="12" fill="#555"&gt;Generative AI&lt;/text&gt;</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;path d="M819 225 V255 H261 V283" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/genai_intro.html"&gt;&lt;title&gt;8 - GenAI for Computer Vision&lt;/title&gt;&lt;rect x="130" y="285" width="261" height="70" rx="8" fill="white" stroke="#7b5ea7" stroke-width="2"/&gt;&lt;text x="261" y="315" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#7b5ea7"&gt;8&lt;/tspan&gt;  GenAI for Computer Vision&lt;/text&gt;&lt;text x="261" y="337" font-size="12.5" fill="#555" text-anchor="middle"&gt;Modelling, control, evaluation&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="393" y1="320" x2="407" y2="320" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/genai_models.html"&gt;&lt;title&gt;9 - GenAI Model Families&lt;/title&gt;&lt;rect x="409" y="285" width="261" height="70" rx="8" fill="white" stroke="#7b5ea7" stroke-width="2"/&gt;&lt;text x="540" y="315" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#7b5ea7"&gt;9&lt;/tspan&gt;  GenAI Model Families&lt;/text&gt;&lt;text x="540" y="337" font-size="12.5" fill="#555" text-anchor="middle"&gt;GANs, VAEs, diffusion, flows&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="673" y1="320" x2="687" y2="320" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/genai_practical.html"&gt;&lt;title&gt;10 - GenAI: Modern Systems&lt;/title&gt;&lt;rect x="689" y="285" width="261" height="70" rx="8" fill="white" stroke="#7b5ea7" stroke-width="2"/&gt;&lt;text x="819" y="315" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#7b5ea7"&gt;10&lt;/tspan&gt;  GenAI: Modern Systems&lt;/text&gt;&lt;text x="819" y="337" font-size="12.5" fill="#555" text-anchor="middle"&gt;Latent diffusion &amp; DiTs&lt;/text&gt;&lt;/a&gt;</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/svg&gt;</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lernziele</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die fundamentalen Herausforderungen beim Modellieren von Bilddaten verstehen</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Convolutional Neural Networks verstehen, implementieren und trainieren können</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Foundation-Models als Grundlage für viele Vision Tasks verstehen und einsetzten können</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Bildklassifikation verstehen und systematisch umsetzen können</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Generative Modelle verstehen und praktische Anwendungen mit modernen Generative AI Modellen umsetzen können</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Mit Deep Learning Frameworks umgehen und Libraries verwenden können</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Praktische Anwendung umsetzen, vorstellen und erklären können</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>Herzlich willkommen zum Modul **Computer Vision mit Deep Learning**!</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>Hier finden Sie Unterlagen und aktuelle Informationen zum Modul.</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Modul Computer Vision mit DL</span><span class="co">](https://www.fhnw.ch/de/weiterbildung/informatik/fachvertiefungsmodule-data-science/computer-vision-mit-deep-learning)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">CAS Page</span><span class="co">](https://www.fhnw.ch/de/weiterbildung/informatik/cas-deep-learning)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>Inhalte zu Objekt-Detektion, Segmentierung und dem CV Lab sind nicht Teil von dieser Page und werden separat behandelt.</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="hero-demo"&gt;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;iframe name="hero-similarity" data-auto-height src="demos/welcome/hero_similarity/index.html" width="100%" height="420" style="border: 0;" title="Interaktive Demo: DINOv3 Ähnlichkeit"&gt;&lt;/iframe&gt;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Kursübersicht</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;svg class="course-map" viewBox="0 0 960 380" role="img" aria-label="Kursübersicht: 10 Lektionen über drei Tage" font-family="'Open Sans', 'Helvetica Neue', Arial, sans-serif"&gt;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;defs&gt;&lt;marker id="cm-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"&gt;&lt;path d="M0 0 L10 5 L0 10 z" fill="#888"/&gt;&lt;/marker&gt;&lt;/defs&gt;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;rect x="5" y="10" width="950" height="100" rx="10" fill="#eaf2f9"/&gt;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="56" font-size="20" font-weight="bold" fill="#2c7fb8"&gt;Tag 1&lt;/text&gt;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="76" font-size="12" fill="#555"&gt;CNNs &amp;&lt;/text&gt;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="91" font-size="12" fill="#555"&gt;Klassifikation&lt;/text&gt;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/intro.html"&gt;&lt;title&gt;1 - Introduction&lt;/title&gt;&lt;rect x="130" y="25" width="192" height="70" rx="8" fill="white" stroke="#2c7fb8" stroke-width="2"/&gt;&lt;text x="226" y="55" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2c7fb8"&gt;1&lt;/tspan&gt;  Introduction&lt;/text&gt;&lt;text x="226" y="77" font-size="12.5" fill="#555" text-anchor="middle"&gt;Tasks &amp; challenges&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="324" y1="60" x2="338" y2="60" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/images_as_data.html"&gt;&lt;title&gt;2 - Images as Data&lt;/title&gt;&lt;rect x="340" y="25" width="192" height="70" rx="8" fill="white" stroke="#2c7fb8" stroke-width="2"/&gt;&lt;text x="435" y="55" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2c7fb8"&gt;2&lt;/tspan&gt;  Images as Data&lt;/text&gt;&lt;text x="435" y="77" font-size="12.5" fill="#555" text-anchor="middle"&gt;Pixels, tensors, datasets&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="533" y1="60" x2="547" y2="60" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/cnns.html"&gt;&lt;title&gt;3 - CNNs&lt;/title&gt;&lt;rect x="549" y="25" width="192" height="70" rx="8" fill="white" stroke="#2c7fb8" stroke-width="2"/&gt;&lt;text x="645" y="55" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2c7fb8"&gt;3&lt;/tspan&gt;  CNNs&lt;/text&gt;&lt;text x="645" y="77" font-size="12.5" fill="#555" text-anchor="middle"&gt;Convolution &amp; feature maps&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="742" y1="60" x2="756" y2="60" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/classification.html"&gt;&lt;title&gt;4 - Classification&lt;/title&gt;&lt;rect x="758" y="25" width="192" height="70" rx="8" fill="white" stroke="#2c7fb8" stroke-width="2"/&gt;&lt;text x="854" y="55" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2c7fb8"&gt;4&lt;/tspan&gt;  Classification&lt;/text&gt;&lt;text x="854" y="77" font-size="12.5" fill="#555" text-anchor="middle"&gt;Training &amp; augmentation&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;rect x="5" y="140" width="950" height="100" rx="10" fill="#e8f5ef"/&gt;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="186" font-size="20" font-weight="bold" fill="#2a9d6f"&gt;Tag 2&lt;/text&gt;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="206" font-size="12" fill="#555"&gt;Representations&lt;/text&gt;</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="221" font-size="12" fill="#555"&gt;&amp; Backbones&lt;/text&gt;</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;path d="M854 95 V125 H261 V153" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/representation_learning.html"&gt;&lt;title&gt;5 - Visual Representations&lt;/title&gt;&lt;rect x="130" y="155" width="261" height="70" rx="8" fill="white" stroke="#2a9d6f" stroke-width="2"/&gt;&lt;text x="261" y="185" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2a9d6f"&gt;5&lt;/tspan&gt;  Visual Representations&lt;/text&gt;&lt;text x="261" y="207" font-size="12.5" fill="#555" text-anchor="middle"&gt;Embeddings &amp; retrieval&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="393" y1="190" x2="407" y2="190" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/downstream_adaptation.html"&gt;&lt;title&gt;6 - Adapting Models&lt;/title&gt;&lt;rect x="409" y="155" width="261" height="70" rx="8" fill="white" stroke="#2a9d6f" stroke-width="2"/&gt;&lt;text x="540" y="185" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2a9d6f"&gt;6&lt;/tspan&gt;  Adapting Models&lt;/text&gt;&lt;text x="540" y="207" font-size="12.5" fill="#555" text-anchor="middle"&gt;Fine-tuning &amp; downstream tasks&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="673" y1="190" x2="687" y2="190" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/vision_transformers.html"&gt;&lt;title&gt;7 - Modern Vision Backbones&lt;/title&gt;&lt;rect x="689" y="155" width="261" height="70" rx="8" fill="white" stroke="#2a9d6f" stroke-width="2"/&gt;&lt;text x="819" y="185" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#2a9d6f"&gt;7&lt;/tspan&gt;  Modern Vision Backbones&lt;/text&gt;&lt;text x="819" y="207" font-size="12.5" fill="#555" text-anchor="middle"&gt;Vision Transformers vs CNNs&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;rect x="5" y="270" width="950" height="100" rx="10" fill="#f2eef8"/&gt;</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="316" font-size="20" font-weight="bold" fill="#7b5ea7"&gt;Tag 3&lt;/text&gt;</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;text x="18" y="336" font-size="12" fill="#555"&gt;Generative AI&lt;/text&gt;</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;path d="M819 225 V255 H261 V283" fill="none" stroke="#888" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/genai_intro.html"&gt;&lt;title&gt;8 - GenAI for Computer Vision&lt;/title&gt;&lt;rect x="130" y="285" width="261" height="70" rx="8" fill="white" stroke="#7b5ea7" stroke-width="2"/&gt;&lt;text x="261" y="315" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#7b5ea7"&gt;8&lt;/tspan&gt;  GenAI for Computer Vision&lt;/text&gt;&lt;text x="261" y="337" font-size="12.5" fill="#555" text-anchor="middle"&gt;Modelling, control, evaluation&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="393" y1="320" x2="407" y2="320" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/genai_models.html"&gt;&lt;title&gt;9 - GenAI Model Families&lt;/title&gt;&lt;rect x="409" y="285" width="261" height="70" rx="8" fill="white" stroke="#7b5ea7" stroke-width="2"/&gt;&lt;text x="540" y="315" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#7b5ea7"&gt;9&lt;/tspan&gt;  GenAI Model Families&lt;/text&gt;&lt;text x="540" y="337" font-size="12.5" fill="#555" text-anchor="middle"&gt;GANs, VAEs, diffusion, flows&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;line x1="673" y1="320" x2="687" y2="320" stroke="#888" stroke-width="1.5" marker-end="url(#cm-arrow)"/&gt;</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;a href="pages/lectures/genai_practical.html"&gt;&lt;title&gt;10 - GenAI: Modern Systems&lt;/title&gt;&lt;rect x="689" y="285" width="261" height="70" rx="8" fill="white" stroke="#7b5ea7" stroke-width="2"/&gt;&lt;text x="819" y="315" font-size="15" font-weight="bold" fill="#222" text-anchor="middle"&gt;&lt;tspan fill="#7b5ea7"&gt;10&lt;/tspan&gt;  GenAI: Modern Systems&lt;/text&gt;&lt;text x="819" y="337" font-size="12.5" fill="#555" text-anchor="middle"&gt;Latent diffusion &amp; DiTs&lt;/text&gt;&lt;/a&gt;</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/svg&gt;</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lernziele</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>Nach dem Kurs könnt ihr ...</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>**Tag 1: Grundlagen**</span>
 <span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ablauf</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tag 1: Grundlagen CNNs und Bildklassifikation</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>die besonderen Herausforderungen von Bilddaten (hohe Dimensionalität, Variabilität in Blickwinkel, ...) beschreiben und einen Bilddatensatz systematisch untersuchen und für die Modellierung aufbereiten.</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>den Aufbau von Convolutional Neural Networks (Convolutions, Activations, Layers) erklären und begründen, warum CNNs für Bilddaten geeignet sind.</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>ein Bildklassifikationsmodell in PyTorch nach einem systematischen Vorgehen trainieren, evaluieren und typische Fallstricke vermeiden.</span>
 <span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Zeit <span class="pp">|</span> Thema <span class="pp">|</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8:45 - 9:00 <span class="pp">|</span> Willkommen &amp; Admin <span class="pp">|</span></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9:00 - 9:45 <span class="pp">|</span> Introduction to Computer Vision with Deep Learning <span class="pp">|</span></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9:45 - 10:15 <span class="pp">|</span> Images as Data <span class="pp">|</span></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10:15 - 10:30 <span class="pp">|</span> Pause<span class="pp">|</span></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10:30 - 11:00 <span class="pp">|</span> Übung: Image Data Inspection <span class="pp">|</span></span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 11:00 - 12:00 <span class="pp">|</span> CNNs: Why They Work for Images <span class="pp">|</span></span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 12:00 - 13:00 <span class="pp">|</span> Mittagspause <span class="pp">|</span></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 13:00 - 14:00 <span class="pp">|</span> CNNs: Filters, Feature Maps, and Hierarchical Learning <span class="pp">|</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14:00 - 14:45 <span class="pp">|</span> Image Classification: Theory and Practical Aspects <span class="pp">|</span></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14:45 - 15:00 <span class="pp">|</span> Pause<span class="pp">|</span></span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15:00 - 16:00 <span class="pp">|</span> Übung: Image Classification <span class="pp">|</span></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 16:00 - 16:30 <span class="pp">|</span> Recap and Discussion of the Exercise <span class="pp">|</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>**Tag 2: Representations und moderne Backbones**</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>mit vortrainierten Modellen Embeddings extrahieren und für Aufgaben wie die Retrieval nutzen.</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>eine geeignete Strategie zur Adaptation vortrainierter Modelle (k-NN, Linear Probe, LoRA, Fine-Tuning) anhand von Datenmenge und Domäne auswählen und anwenden.</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>CNNs und Vision Transformers vergleichen und einen passenden Backbone für einen Anwendungsfall begründet auswählen.</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>**Tag 3: Generative AI**</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>die Funktionsweise der wichtigsten Familien generativer Modelle (autoregressive Modelle, GANs, VAEs, Diffusion- und Flow-Modelle) erklären und ihre Stärken und Schwächen vergleichen.</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>moderne generative Bildmodelle über APIs und Open-Weight-Modelle einsetzen und deren Grenzen und Risiken (Halluzinationen, Bias, ...) kritisch beurteilen.</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>**Projekt**</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>eine eigene Computer-Vision-Anwendung konzipieren, umsetzen und Ergebnisse nachvollziehbar präsentieren.</span>
 <span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tag 2: Representations, Retrieval und moderne Backbones</span></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Zeit <span class="pp">|</span> Thema <span class="pp">|</span></span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8:45 - 9:00 <span class="pp">|</span> Recap Day 1 <span class="pp">|</span></span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9:00 - 10:15 <span class="pp">|</span> Pretrained Visual Representations and Embeddings <span class="pp">|</span></span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10:15 - 10:30 <span class="pp">|</span> Pause<span class="pp">|</span></span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10:30 - 11:30 <span class="pp">|</span> Übung: Image Retrieval Using Embeddings <span class="pp">|</span></span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 11:30 - 12:00 <span class="pp">|</span> Adapting Pretrained Models for Downstream Tasks: Part 1 <span class="pp">|</span></span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 12:00 - 13:00 <span class="pp">|</span> Mittagspause <span class="pp">|</span></span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 13:00 - 14:00 <span class="pp">|</span> Adapting Pretrained Models for Downstream Tasks: Part 2 <span class="pp">|</span></span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14:00 - 14:45 <span class="pp">|</span> Übung: Reusing Pretrained Models <span class="pp">|</span></span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14:45 - 15:00 <span class="pp">|</span> Pause<span class="pp">|</span></span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15:00 - 15:45 <span class="pp">|</span> CNNs, Vision Transformers, and Modern Vision Backbones <span class="pp">|</span></span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15:45 - 16:15 <span class="pp">|</span> Übung: CNNs, Vision Transformers, and Modern Vision Backbones <span class="pp">|</span></span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 16:15 - 16:30 <span class="pp">|</span> Finish <span class="pp">|</span></span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ablauf</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tag 1: Grundlagen CNNs und Bildklassifikation</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Zeit <span class="pp">|</span> Thema <span class="pp">|</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8:45 - 9:00 <span class="pp">|</span> Willkommen &amp; Admin <span class="pp">|</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9:00 - 9:45 <span class="pp">|</span> Introduction to Computer Vision with Deep Learning <span class="pp">|</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9:45 - 10:15 <span class="pp">|</span> Images as Data <span class="pp">|</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10:15 - 10:30 <span class="pp">|</span> Pause<span class="pp">|</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10:30 - 11:00 <span class="pp">|</span> Übung: Image Data Inspection <span class="pp">|</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 11:00 - 12:00 <span class="pp">|</span> CNNs: Why They Work for Images <span class="pp">|</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 12:00 - 13:00 <span class="pp">|</span> Mittagspause <span class="pp">|</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 13:00 - 14:00 <span class="pp">|</span> CNNs: Filters, Feature Maps, and Hierarchical Learning <span class="pp">|</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14:00 - 14:45 <span class="pp">|</span> Image Classification: Theory and Practical Aspects <span class="pp">|</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14:45 - 15:00 <span class="pp">|</span> Pause<span class="pp">|</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15:00 - 16:00 <span class="pp">|</span> Übung: Image Classification <span class="pp">|</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 16:00 - 16:30 <span class="pp">|</span> Recap and Discussion of the Exercise <span class="pp">|</span></span>
 <span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tag 3: Generative AI</span></span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Zeit <span class="pp">|</span> Thema <span class="pp">|</span></span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>8:45 - 09:00   <span class="pp">|</span> Admin, Recap, Quiz <span class="pp">|</span></span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>09:00 - 10:00  <span class="pp">|</span> Intro Generative AI for Computer Vision <span class="pp">|</span></span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>10:00 - 10:15  <span class="pp">|</span> Pause <span class="pp">|</span></span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>10:15 - 11:00  <span class="pp">|</span> Generative Models: Part 1 <span class="pp">|</span></span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>11:00 - 11:30  <span class="pp">|</span> Übung Generative Models <span class="pp">|</span></span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>11:30 - 12:00  <span class="pp">|</span> Generative Models: Part 2 <span class="pp">|</span></span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>12:00 - 13:00  <span class="pp">|</span> Mittagspause <span class="pp">|</span></span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>13:00 - 14:00  <span class="pp">|</span> Moderne Generative Models: Part 1 <span class="pp">|</span></span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>14:00  - 15:00 <span class="pp">|</span> Übung: Vortrainerte Generative Modelle und APIs <span class="pp">|</span></span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>15:00 - 16:00  <span class="pp">|</span> Moderne Generative Models: Part 2 <span class="pp">|</span></span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>16:00  - 16:30 <span class="pp">|</span> Finish <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tag 2: Representations, Retrieval und moderne Backbones</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Zeit <span class="pp">|</span> Thema <span class="pp">|</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8:45 - 9:00 <span class="pp">|</span> Recap Day 1 <span class="pp">|</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9:00 - 10:15 <span class="pp">|</span> Pretrained Visual Representations and Embeddings <span class="pp">|</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10:15 - 10:30 <span class="pp">|</span> Pause<span class="pp">|</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10:30 - 11:30 <span class="pp">|</span> Übung: Image Retrieval Using Embeddings <span class="pp">|</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 11:30 - 12:00 <span class="pp">|</span> Adapting Pretrained Models for Downstream Tasks: Part 1 <span class="pp">|</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 12:00 - 13:00 <span class="pp">|</span> Mittagspause <span class="pp">|</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 13:00 - 14:00 <span class="pp">|</span> Adapting Pretrained Models for Downstream Tasks: Part 2 <span class="pp">|</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14:00 - 14:45 <span class="pp">|</span> Übung: Reusing Pretrained Models <span class="pp">|</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14:45 - 15:00 <span class="pp">|</span> Pause<span class="pp">|</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15:00 - 15:45 <span class="pp">|</span> CNNs, Vision Transformers, and Modern Vision Backbones <span class="pp">|</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15:45 - 16:15 <span class="pp">|</span> Übung: CNNs, Vision Transformers, and Modern Vision Backbones <span class="pp">|</span></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 16:15 - 16:30 <span class="pp">|</span> Finish <span class="pp">|</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tag 3: Generative AI</span></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Zeit <span class="pp">|</span> Thema <span class="pp">|</span></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>8:45 - 09:00   <span class="pp">|</span> Admin, Recap, Quiz <span class="pp">|</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>09:00 - 10:00  <span class="pp">|</span> Intro Generative AI for Computer Vision <span class="pp">|</span></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>10:00 - 10:15  <span class="pp">|</span> Pause <span class="pp">|</span></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>10:15 - 11:00  <span class="pp">|</span> Generative Models: Part 1 <span class="pp">|</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>11:00 - 11:30  <span class="pp">|</span> Übung Generative Models <span class="pp">|</span></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>11:30 - 12:00  <span class="pp">|</span> Generative Models: Part 2 <span class="pp">|</span></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>12:00 - 13:00  <span class="pp">|</span> Mittagspause <span class="pp">|</span></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>13:00 - 14:00  <span class="pp">|</span> Moderne Generative Models: Part 1 <span class="pp">|</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>14:00  - 15:00 <span class="pp">|</span> Übung: Vortrainerte Generative Modelle und APIs <span class="pp">|</span></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>15:00 - 16:00  <span class="pp">|</span> Moderne Generative Models: Part 2 <span class="pp">|</span></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>16:00  - 16:30 <span class="pp">|</span> Finish <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
