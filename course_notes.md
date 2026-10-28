@@ -367,7 +367,7 @@ In the presence of image degradation a visual system (e.g. humans) heavily uses 
 
 ### The Limitations of Hand-Crafted Features
 
-Images typically have very high dimensionality. For example, an RGB image with a resolution of $800 \times 600$ has a dimensionality of $800 \times 600 \times 3 = 1,440,000$. Classical machine learning algorithms often struggle with such high dimensionalities:
+Images typically have very high dimensionality. For example, an RGB image with a resolution of $800 \times 600$ has a dimensionality of $3 \times 800 \times 600 = 1,440,000$. Classical machine learning algorithms often struggle with such high dimensionalities:
 
 - They are very slow or require a lot of memory.
 - They cannot exploit the 2-D structure of images.
@@ -784,7 +784,7 @@ After this lecture you should be able to:
 
 **Why CNNs? The Problem with MLPs on Images**
 
-- Images are high-dimensional (e.g., $224 \times 224 \times 3 = 150{,}528$ pixels)
+- Images are high-dimensional (e.g., $3 \times 224 \times 224 = 150{,}528$ pixels)
 - MLPs flatten images, losing spatial structure
 - Fully connected layers require millions of parameters
 - MLPs don't exploit natural image properties (locality, translation invariance)
@@ -797,8 +797,8 @@ After this lecture you should be able to:
 
 **Invariance vs Equivariance**
 
-- **Invariant**: $f(g(\vect{x})) = f(\vect{x})$ — output unchanged by transformation (needed for *classification*)
-- **Equivariant**: $f(g(\vect{x})) = g(f(\vect{x}))$ — output transforms with input (needed for *detection*, *segmentation*)
+- **Invariant**: $f(t(\vect{x})) = f(\vect{x})$ — output unchanged by transformation (needed for *classification*)
+- **Equivariant**: $f(t(\vect{x})) = t(f(\vect{x}))$ — output transforms with input (needed for *detection*, *segmentation*)
 - CNNs are naturally translation equivariant; add pooling for invariance
 
 **Core Operation: Convolution**
@@ -836,7 +836,7 @@ $$r_0 = \sum_{l=1}^L \left( (k_l - 1) \prod_{i=1}^{l-1} s_i \right) + 1$$
 
 Images have unique properties that make them challenging for standard neural networks:
 
-- **High-Dimensional**: An RGB image of size $224 \times 224$ has $224 \times 224 \times 3 = 150{,}528$ values
+- **High-Dimensional**: An RGB image of size $224 \times 224$ has $3 \times 224 \times 224 = 150{,}528$ values
 - **Locality**: Nearby pixels are statistically related (edges, textures, objects)
 - **Stability under transformations**: Interpretation of an image does not change under many geometric transformations. A cat should be recognized regardless of its position in the image.
 - **Hierarchical Structure**: Images contain features at multiple scales (pixels → edges → textures → objects)
@@ -864,7 +864,7 @@ Even though Convolutional Neural Networks (CNNs) are much better suited to model
 
 ### MLPs and Images
 
-The input to an MLP is a vector $\vect{x}^{(i)}$, which is transformed through multiple hidden layers to the output layer. The fully connected layers can only process 1-D vectors. Therefore, images $\in \mathbb{R}^{H \times W \times C}$ must be flattened into 1-D vectors $\in \mathbb{R}^p$, where $p= H \times W \times C$. This causes MLPs to become very large when applied to high-dimensional inputs such as images. See the figure for an illustration.
+The input to an MLP is a vector $\vect{x}^{(i)}$, which is transformed through multiple hidden layers to the output layer. The fully connected layers can only process 1-D vectors. Therefore, images $\in \mathbb{R}^{C \times H \times W}$ must be flattened into 1-D vectors $\in \mathbb{R}^d$, where $d = C \times H \times W$. This causes MLPs to become very large when applied to high-dimensional inputs such as images. See the figure for an illustration.
 
 [Figure:  ]
 
@@ -880,7 +880,7 @@ Since each neuron in the first hidden layer is connected to each input value and
 
 Illustration of weight matrix $\m{W}$ and how the weights of a single neuron can be reshaped into the input image dimensionality.
 
-Often the patterns we want to learn are not stationary. Ideally we want to recognize them under translations of the inputs, e.g., $g(\vect{x})$ where $g()$ is a spatial translation. the figure illustrates the problem, where the same pattern appears at different spatial positions.
+Often the patterns we want to learn are not stationary. Ideally we want to recognize them under translations of the inputs, e.g., $t(\vect{x})$ where $t()$ is a spatial translation. the figure illustrates the problem, where the same pattern appears at different spatial positions.
 
 Illustration of different inputs with the same pattern but shifted spatially. Illustrated are the weights of the first neuron. Green cells represent high weight values and yellow cells represent low values.
 
@@ -918,11 +918,11 @@ The demo at the end of this lecture (the section) compares an MLP and two CNNs o
 
 For many tasks involving image data, small variations in the input ($\vect{x}$) should either **not** change the model output ($f(\vect{x})$), _invariance_, or should change the output **in tandem** with the input changes, _equivariance_.
 
-A function $f(\vect{x})$ is **invariant** to transformation $g(\vect{x})$ if:
-$$f(g(\vect{x})) = f(\vect{x})$$
+A function $f(\vect{x})$ is **invariant** to transformation $t(\vect{x})$ if:
+$$f(t(\vect{x})) = f(\vect{x})$$
 
-A function $f(\vect{x})$ is **equivariant** to transformation $g(\vect{x})$ if:
-$$f(g(\vect{x})) = g(f(\vect{x}))$$
+A function $f(\vect{x})$ is **equivariant** to transformation $t(\vect{x})$ if:
+$$f(t(\vect{x})) = t(f(\vect{x}))$$
 
 **Intuition**
 
@@ -1148,8 +1148,8 @@ Open the section "Exercises" below the demo and solve the tasks with the letter 
 
 **Click for solutions**
 
-1. $p = 2$, $s = 1$, $d = 1$: $o = \lfloor (9 + 4 - 4 - 1)/1 + 1 \rfloor = 9$. In general, $p = (k-1)/2$ preserves the size for $s = d = 1$.
-2. $p = 1$, $s = 2$: $o = \lfloor (9 + 2 - 2 - 1)/2 + 1 \rfloor = 5$. Without padding, $s = 2$ gives $o = 4$.
+1. $p = 2$, $s = 1$, $d = 1$: $o = \floor{(9 + 4 - 4 - 1)/1 + 1} = 9$. In general, $p = (k-1)/2$ preserves the size for $s = d = 1$.
+2. $p = 1$, $s = 2$: $o = \floor{(9 + 2 - 2 - 1)/2 + 1} = 5$. Without padding, $s = 2$ gives $o = 4$.
 3. Dilation $d = 3$: the effective kernel size is $d \cdot (k-1) + 1 = 7$, while the kernel still has only 9 weights. With $p = 0$ and $s = 1$ the output cell $(1, 1)$ reads rows and columns 1, 4 and 7, which span the whole T. Note that it *reads* only 9 of the 49 cells.
 4. Preset "Identity" with $p = (k-1)/2 \cdot d$, e.g. $k = 3$, $p = 1$ (or a $1 \times 1$ kernel with weight 1 and $p = 0$).
 5. A kernel that subtracts the cell above from the center cell, with $p = 1$ and ReLU:
@@ -1189,10 +1189,10 @@ o = \left\lfloor \frac{i + 2p - d\cdot(k-1) - 1}{s} + 1 \right\rfloor
 
 **Step-by-step solution**:
 
-1. Apply the formula: $o = \lfloor \frac{i + 2p - d(k-1) - 1}{s} + 1 \rfloor$
-2. Substitute: $o = \lfloor \frac{32 + 2(1) - 1(3-1) - 1}{2} + 1 \rfloor$
-3. Simplify: $o = \lfloor \frac{32 + 2 - 2 - 1}{2} + 1 \rfloor$
-4. Calculate: $o = \lfloor \frac{31}{2} + 1 \rfloor = \lfloor 15.5 + 1 \rfloor = 16$
+1. Apply the formula: $o = \floor{\frac{i + 2p - d(k-1) - 1}{s} + 1}$
+2. Substitute: $o = \floor{\frac{32 + 2(1) - 1(3-1) - 1}{2} + 1}$
+3. Simplify: $o = \floor{\frac{32 + 2 - 2 - 1}{2} + 1}$
+4. Calculate: $o = \floor{\frac{31}{2} + 1} = \floor{15.5 + 1} = 16$
 
 **Answer**: $o = 16$
 
@@ -1233,7 +1233,7 @@ $$
 1. **Filter weights**: $(5 \times 5) \times 3 \times 64 = 4{,}800$
 2. **Bias parameters**: $64$ (one per output channel)
 3. **Total parameters**: $4{,}800 + 64 = 4{,}864$
-4. **Fully connected alternative**: $(32 \times 32 \times 3) \times 64 = 196{,}608$
+4. **Fully connected alternative**: $(3 \times 32 \times 32) \times 64 = 196{,}608$
 
 **Insight**: The CNN uses **40× fewer parameters** while being more effective for images!
 
@@ -1271,7 +1271,7 @@ The following demo illustrates how the receptive field grows through a stack of 
 
 **🎮 Interactive Demo: Receptive Field**
 
-All maps are drawn with the same size, so that the marked regions line up spatially; maps with fewer activations (after a stride of 2) have larger cells. Each layer uses the padding $p_l = \lfloor k_l / 2 \rfloor$. A dashed frame indicates that the receptive field reaches into the zero-padding. With "Shade by number of paths", activations are shaded by how many paths connect them to the selected activation: central inputs contribute through many more paths than those at the border of the receptive field. [Open the demo in a new tab](https://marco-willi.github.io/cas-dl-compvis-lectures/pages/demos/cnns/receptive_field/index.html) or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/receptive_field).
+All maps are drawn with the same size, so that the marked regions line up spatially; maps with fewer activations (after a stride of 2) have larger cells. Each layer uses the padding $p_l = \floor{k_l / 2}$. A dashed frame indicates that the receptive field reaches into the zero-padding. With "Shade by number of paths", activations are shaded by how many paths connect them to the selected activation: central inputs contribute through many more paths than those at the border of the receptive field. [Open the demo in a new tab](https://marco-willi.github.io/cas-dl-compvis-lectures/pages/demos/cnns/receptive_field/index.html) or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/receptive_field).
 
 **🤔 Think About It**
 
@@ -1339,7 +1339,7 @@ Use the setting "only top-left" for tasks 1–3.
 **Click for solutions**
 
 1. The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its $64 \times 14 \times 14$ input. Only the weights for the top-left positions have been trained (see the weight map in "Look inside"); the others still have their random initial values. The MLP has the same problem directly on the pixels.
-2. The activation maps shift together with the input: $f(g(\vect{x})) = g(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.
+2. The activation maps shift together with the input: $f(t(\vect{x})) = t(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.
 3. The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride (azulay_why_2019; zhang_making_2019), and because of the zero-padding at the image border.
 4. The MLP has to learn every position from data, i.e. the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.
 
@@ -1368,14 +1368,14 @@ After this lecture you should be able to:
 
 **Softmax: Logits to Probabilities**
 
-$$P(Y = k \mid X = \vect{x}) = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}$$
+$$P(y = k \mid \vect{x}) = \mathrm{softmax}(\vect{z})_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}$$
 
 - Logits $\vect{z}$: raw, unbounded model outputs
 - Softmax: converts logits to a valid probability distribution (sums to 1, all values in $[0, 1]$)
 
 **Cross-Entropy Loss**
 
-$$CE = -\sum_{j=1}^K y_j \log \hat{y}_j$$
+$$CE = -\sum_{k=1}^K y_k \log \hat{y}_k$$
 
 - Measures how well predicted probabilities $\hat{\vect{y}}$ match the true distribution $\vect{y}$
 - Penalizes confident wrong predictions heavily; loss approaches 0 when the model is correct and confident
@@ -1383,7 +1383,7 @@ $$CE = -\sum_{j=1}^K y_j \log \hat{y}_j$$
 
 **Architecture: ResNet as Default**
 
-- Residual connections: $\vect{x}_{l+1} = \vect{x}_l + F(\vect{x}_l)$ — learn the change, not the full transformation
+- Residual connections: $\vect{x}^{(l+1)} = \vect{x}^{(l)} + F(\vect{x}^{(l)})$ — learn the change, not the full transformation
 - Enable training of very deep networks ($>100$ layers) by smoothing the loss landscape
 - Progression: AlexNet (2012) $\rightarrow$ VGG (2014) $\rightarrow$ ResNet (2015) $\rightarrow$ ConvNeXt (2022)
 - Practical advice: use proven architectures (ResNet-50, EfficientNet, ConvNeXt) rather than designing custom ones
@@ -1428,19 +1428,19 @@ The four classification task variants: multi-class, binary, multi-label, and mul
 In a parametric approach, we seek a model of the following form:
 
 $$
-\hat{y}^{(i)} = f(\theta, \vect{x}^{(i)})
+\hat{y}^{(i)} = f_\theta(\vect{x}^{(i)})
 $$
 
-We want to find model parameters $\theta$ that output a score/prediction $\hat{y}^{(i)}$ for any data points $\vect{x}^{(i)}$ for each class $k \in K$. We then want to assess how good this score is with the help of a loss function.
+We want to find model parameters $\theta$ that output a score/prediction $\hat{y}^{(i)}$ for any data points $\vect{x}^{(i)}$ for each class $k \in \{1, \dots, K\}$. We then want to assess how good this score is with the help of a loss function.
 
 Note: The model parameters $\theta$ are all the learnable parameters of a model, e.g. the filters of the convolutional layers.
 
-With a softmax classifier, we interpret model predictions/scores as probabilities of class memberships: $P(Y=\vect{y}^{(i)}| X = \vect{x}^{(i)})$. We interpret the output of a model as the parameters of a [Categorical Distribution](https://en.wikipedia.org/wiki/Categorical_distribution) over all possible classes.
+With a softmax classifier, we interpret model predictions/scores as probabilities of class memberships: $P(y^{(i)} \mid \vect{x}^{(i)})$. We interpret the output of a model as the parameters of a [Categorical Distribution](https://en.wikipedia.org/wiki/Categorical_distribution) over all possible classes.
 
-To obtain a valid probability distribution, the untransformed outputs $\vect{z}$, also called **logits**, of a model are transformed with the softmax function $\sigma(\vect{z})$:
+To obtain a valid probability distribution, the untransformed outputs $\vect{z}$, also called **logits**, of a model are transformed with the softmax function $\mathrm{softmax}(\vect{z})$:
 
 $$
-P(Y = k| X = \vect{x}^{(i)}) = \sigma(\vect{z})_k = \frac{e^{z_k}}{\sum_i^K e^{z_i}}
+P(y = k \mid \vect{x}^{(i)}) = \mathrm{softmax}(\vect{z})_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}
 $$
 
 the figure shows an example of the effect of the softmax transformation.
@@ -1474,7 +1474,7 @@ The following demo makes the softmax tangible. Drag the logit bars (or type valu
 - Logits can be any real number (negative, zero, or positive); probabilities always lie in $[0, 1]$ and sum to 1.
 - Only *differences* between logits matter: "Add 1 to all" leaves the probabilities unchanged.
 - Scaling the logits ("All × 2", "All ÷ 2") makes the distribution sharper or flatter.
-- **Entropy** measures uncertainty: 0 for a certain prediction, $\ln K$ for uniform probabilities. Compare "Uniform logits" with "Very confident".
+- **Entropy** measures uncertainty: 0 for a certain prediction, $\log K$ for uniform probabilities. Compare "Uniform logits" with "Very confident".
 
 [Open the demo in a new tab](https://marco-willi.github.io/cas-dl-compvis-lectures/pages/demos/classification/softmax_explorer/index.html) or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/classification/softmax_explorer).
 
@@ -1491,7 +1491,7 @@ The key idea is straightforward: a good model should assign high probability to 
 Cross-entropy formalizes this intuition. For a single data point with one-hot encoded true label $\vect{y}$ and predicted probabilities $\hat{\vect{y}}$, the cross-entropy is defined as:
 
 $$
-CE = -\sum_{j=1}^K y_j \log \hat{y}_j
+CE = -\sum_{k=1}^K y_k \log \hat{y}_k
 $$
 
 Since $\vect{y}$ is one-hot (only the true class $c$ has $y_c = 1$, all others are 0), this simplifies to:
@@ -1505,7 +1505,7 @@ The loss is simply the negative logarithm of the predicted probability for the c
 For the full dataset, the loss is averaged over all $N$ samples:
 
 $$
-L(\m{X}, \vect{y}, \theta) = -\frac{1}{N} \sum_{i=1}^N \sum_{j=1}^K y_j^{(i)} \log \hat{y}_j^{(i)}
+J(\theta) = -\frac{1}{N} \sum_{i=1}^N \sum_{k=1}^K y_k^{(i)} \log \hat{y}_k^{(i)}
 $$
 
 the figure illustrates the relationship between a true distribution and a predicted distribution, showing how the cross-entropy quantifies the mismatch.
@@ -1633,21 +1633,21 @@ Cross-entropy can be derived from a maximum likelihood framework. The key steps 
 **1. Likelihood.** Interpreting the model's softmax outputs as parameters of a categorical distribution, the likelihood of observing the true label $y^{(i)}$ given input $\vect{x}^{(i)}$ is:
 
 $$
-P(Y = y^{(i)} \mid X = \vect{x}^{(i)}) = \prod_{j=1}^K P(Y = j \mid X = \vect{x}^{(i)})^{y_j^{(i)}}
+P(y^{(i)} \mid \vect{x}^{(i)}) = \prod_{k=1}^K P(y = k \mid \vect{x}^{(i)})^{y_k^{(i)}}
 $$
 
 For the full dataset (assuming i.i.d. samples):
 
 $$
-P(\vect{y} \mid \theta, \m{X}) = \prod_{i=1}^N \prod_{j=1}^K P(Y = j \mid X = \vect{x}^{(i)})^{y_j^{(i)}}
+P(\vect{y} \mid \m{X}; \theta) = \prod_{i=1}^N \prod_{k=1}^K P(y = k \mid \vect{x}^{(i)})^{y_k^{(i)}}
 $$
 
 **2. Maximum Likelihood Estimation (MLE).** The goal is to find parameters $\theta$ that maximize this likelihood.
 
-**3. Negative Log-Likelihood.** Taking the logarithm (which preserves the maximum) and negating (to turn maximization into minimization) yields:
+**3. Negative Log-Likelihood.** Taking the logarithm (which preserves the maximum), negating (to turn maximization into minimization), and averaging over the $N$ samples yields:
 
 $$
-L(\m{X}, \vect{y}, \theta) = -\sum_{i=1}^N \sum_{j=1}^K y_j^{(i)} \log P(Y = j \mid X = \vect{x}^{(i)})
+J(\theta) = -\frac{1}{N} \sum_{i=1}^N \sum_{k=1}^K y_k^{(i)} \log P(y = k \mid \vect{x}^{(i)})
 $$
 
 This is identical to the cross-entropy formula. Minimizing cross-entropy is therefore equivalent to maximizing the likelihood of the observed data under the model.
@@ -1703,10 +1703,10 @@ Deeper networks degrade in performance — not from overfitting but from optimiz
 The solution is elegant. Instead of learning the full transformation at each layer, the network learns only the **residual** — the change from the input:
 
 $$
-\vect{x}_{l+1} = \vect{x}_l + F(\vect{x}_l)
+\vect{x}^{(l+1)} = \vect{x}^{(l)} + F(\vect{x}^{(l)})
 $$
 
-The identity mapping $\vect{x}_l$ passes through unchanged, and $F(\vect{x}_l)$ represents what the layer adds on top. If a layer has nothing useful to contribute, it can simply learn $F(\vect{x}_l) \approx 0$, effectively becoming an identity mapping. This makes deeper networks at least as good as shallower ones.
+The identity mapping $\vect{x}^{(l)}$ passes through unchanged, and $F(\vect{x}^{(l)})$ represents what the layer adds on top. If a layer has nothing useful to contribute, it can simply learn $F(\vect{x}^{(l)}) \approx 0$, effectively becoming an identity mapping. This makes deeper networks at least as good as shallower ones.
 
 A residual connection. The input $\vect{x}$ is added to the output of the learned transformation $F(\vect{x})$. Source: (johnson_eecs_2019).
 
@@ -1892,7 +1892,7 @@ HTML(table_html)
 
 We can also say: By describing the image we **represent** the image with natural language, instead of the raw pixels. This is exactly what **Representation Learning** is interested in: How can we find compact representations (also _embeddings_) wich are significantly smaller than the raw, original representations while retaining _relevant_ information?
 
-One motivation is the dramatic mismatch between the set of all *possible* images and the set of *natural* images. As illustrated in the figure, natural images occupy only a tiny fraction of the full pixel space. For instance, for RGB images of size $256 \times 256$ pixels with 255 possible intensity values per channel, the total number of possible images is $255^{256 \times 256 \times 3}$, an astronomically large number, effectively infinite from a practical standpoint. A well-chosen embedding space exploits this structure, placing semantically similar images close together regardless of lighting, pose, or viewpoint.
+One motivation is the dramatic mismatch between the set of all *possible* images and the set of *natural* images. As illustrated in the figure, natural images occupy only a tiny fraction of the full pixel space. For instance, for RGB images of size $256 \times 256$ pixels with 255 possible intensity values per channel, the total number of possible images is $255^{3 \times 256 \times 256}$, an astronomically large number, effectively infinite from a practical standpoint. A well-chosen embedding space exploits this structure, placing semantically similar images close together regardless of lighting, pose, or viewpoint.
 
 The set of all possible images vastly outnumbers the set of natural images. Representation learning finds coordinates within the natural image manifold.
 
@@ -1981,11 +1981,11 @@ There is thus not one correct 2-dimensional representation. The reliable source 
 
 Good representations represent a **semantic coordinate system** where distances $\|\vect{z}_i - \vect{z}_j\|_2$ reflect meaningful relationships.
 
-**Data Space vs Representation Space:** The encoder $f$ transforms high-dimensional input samples $\vect{x}_i$ from data space into compact representations $\vect{z}_i$ in representation space, where semantic relationships become explicit through distances and clustering.
+**Data Space vs Representation Space:** The encoder $f$ transforms high-dimensional input samples $\vect{x}^{(i)}$ from data space into compact representations $\vect{z}^{(i)}$ in representation space, where semantic relationships become explicit through distances and clustering.
 
 Good representations balance two competing objectives:
 
-- **Invariance:** $\|f(\vect{x}) - f(g(\vect{x}))\|_2 < \epsilon$ for nuisance transforms $g$ such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.
+- **Invariance:** $\|f(\vect{x}) - f(t(\vect{x}))\|_2 < \epsilon$ for nuisance transforms $t$ such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.
 - **Selectivity:** $\|f(\vect{x}_i) - f(\vect{x}_j)\|_2 > \delta$ for semantically distinct inputs. The representation must distinguish images that differ in ways that matter.
 
 The critical point is that "nuisance" is task-dependent. For product retrieval, color is discriminative: a color-invariant embedding would make a red shoe and a white shoe indistinguishable. For medical imaging, orientation is often meaningful: a rotation-invariant embedding could destroy diagnostic information. A good representation discards only what the downstream task truly does not need.
@@ -1998,7 +1998,7 @@ Here is an overview of desirable properties:
 
 **Invariance & Selectivity Balance**
 
-- **Invariance:** $\|f(\vect{x}) - f(g(\vect{x}))\|_2 < \epsilon$ for nuisance transform $g$ (lighting, pose)
+- **Invariance:** $\|f(\vect{x}) - f(t(\vect{x}))\|_2 < \epsilon$ for nuisance transform $t$ (lighting, pose)
 - **Selectivity:** $\|f(\vect{x}_i) - f(\vect{x}_j)\|_2 > \delta$ for semantically different $\vect{x}_i, \vect{x}_j$
 - *Trade-off:* Too much invariance → loss of discriminative details
 - *Sweet spot:* Preserve task-relevant variations, discard irrelevant ones
@@ -2045,12 +2045,12 @@ Weak supervision uses noisy or partial labels at scale, such as image–caption 
 
 **Composite objective.** CLIP jointly trains an **image encoder** $f_\theta$ and a **text encoder** $g_\phi$ to align matched image–text pairs using a **symmetric contrastive (InfoNCE) loss** with a learned temperature.
 
-**Setup.** For a batch of $N$ paired samples $\{(x_i, y_i)\}_{i=1}^N$:
+**Setup.** For a batch of $N$ paired samples $\{(\vect{x}_i, y_i)\}_{i=1}^N$:
 
-- Image features: $\tilde{\mathbf{v}}_i = \frac{f_\theta(x_i)}{\|f_\theta(x_i)\|}$
-- Text features: $\tilde{\mathbf{t}}_i = \frac{g_\phi(y_i)}{\|g_\phi(y_i)\|}$
+- Image features: $\tilde{\vect{v}}_i = \frac{f_\theta(\vect{x}_i)}{\|f_\theta(\vect{x}_i)\|}$
+- Text features: $\tilde{\vect{t}}_i = \frac{g_\phi(y_i)}{\|g_\phi(y_i)\|}$
 - Learned logit scale: $\alpha = \exp(s)$ with parameter $s$ (equivalently temperature $\tau = 1/\alpha$)
-- Similarities (cosine scaled): $s_{ij} = \alpha \, \tilde{\mathbf{v}}_i^\top \tilde{\mathbf{t}}_j$
+- Similarities (cosine scaled): $s_{ij} = \alpha \, \tilde{\vect{v}}_i^\top \tilde{\vect{t}}_j$
 
 **Image-to-text loss (with in-batch negatives).**
 \begin{equation}
@@ -2074,7 +2074,7 @@ Weak supervision uses noisy or partial labels at scale, such as image–caption 
 = \tfrac{1}{2} \left( \mathcal{L}_{i \to t} + \mathcal{L}_{t \to i} \right) \, .
 \end{equation}
 
-*Inference note:* zero-shot classification uses text prompts $y_c =$ "a photo of a $\{class\}$" to form class prototypes $\tilde{\mathbf{t}}_c$ and picks $\arg\max_c \tilde{\mathbf{v}}^\top \tilde{\mathbf{t}}_c$.
+*Inference note:* zero-shot classification uses text prompts $y_c =$ "a photo of a $\{class\}$" to form class prototypes $\tilde{\vect{t}}_c$ and picks $\arg\max_c \tilde{\vect{v}}^\top \tilde{\vect{t}}_c$.
 
 CLIP contrastive pre-training: image and text encoders produce normalized embeddings that are aligned via a similarity matrix. Matching pairs (diagonal) are pulled together; non-matching pairs are pushed apart.
 
@@ -2088,21 +2088,21 @@ Self-supervised learning (SSL) derives training signal from the data itself: no 
 
 **(Optional) Masked Autoencoding Loss**
 
-**Setup.** Given an image $x$, MAE patchifies it and **masks** a large subset of patches $\mathcal{M}$ (typically $\sim 75\%$), keeping visible patches $\mathcal{V}$.
+**Setup.** Given an image $\vect{x}$, MAE patchifies it and **masks** a large subset of patches $\mathcal{M}$ (typically $\sim 75\%$), keeping visible patches $\mathcal{V}$.
 
-- Patchify: $X = \mathrm{Patchify}(x) \in \mathbb{R}^{P \times d}$ with $P$ patches and patch-dimension $d$.
-- Split: $X = \{X_{\mathcal{V}}, X_{\mathcal{M}}\}$.
-- **Encoder** $E_\theta$ processes only visible tokens $X_{\mathcal{V}}$ to produce latents $H = E_\theta(X_{\mathcal{V}})$.
-- **Decoder** $D_\phi$ receives $H$ plus learned mask tokens at masked positions and predicts $\hat{X}_{\mathcal{M}} = D_\phi(H, \text{mask tokens})$.
+- Patchify: $\m{X} = \mathrm{Patchify}(\vect{x}) \in \mathbb{R}^{P \times d}$ with $P$ patches and patch-dimension $d$.
+- Split: $\m{X} = \{\m{X}_{\mathcal{V}}, \m{X}_{\mathcal{M}}\}$.
+- **Encoder** $E_\theta$ processes only visible tokens $\m{X}_{\mathcal{V}}$ to produce latents $\m{H} = E_\theta(\m{X}_{\mathcal{V}})$.
+- **Decoder** $D_\phi$ receives $\m{H}$ plus learned mask tokens at masked positions and predicts $\hat{\m{X}}_{\mathcal{M}} = D_\phi(\m{H}, \text{mask tokens})$.
 
 **Reconstruction loss (masked patches only).**
 \begin{equation}
 \mathcal{L}_{\text{MAE}}
 =
 \frac{1}{|\mathcal{M}|} \sum_{p \in \mathcal{M}}
-\left\| \hat{X}_{p} - \tilde{X}_{p} \right\|_2^2 ,
+\left\| \hat{\m{X}}_{p} - \tilde{\m{X}}_{p} \right\|_2^2 ,
 \end{equation}
-where $\tilde{X}$ are **normalized pixel targets** (per-channel mean/variance normalization) in patch space. The high mask ratio combined with an asymmetric encoder/decoder yields efficient pretraining and strong transfer.
+where $\tilde{\m{X}}$ are **normalized pixel targets** (per-channel mean/variance normalization) in patch space. The high mask ratio combined with an asymmetric encoder/decoder yields efficient pretraining and strong transfer.
 
 MAE pre-training: a large fraction of patches is masked; the encoder processes only visible patches; a lightweight decoder reconstructs the original pixels from encoder latents and mask tokens. Post-training, only the encoder is used.
 
@@ -2116,15 +2116,15 @@ Contrastive learning trains the model such that different augmented views of the
 
 **Mathematical Form:**
 $$
-\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}\right]
+\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau)}{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\mathrm{sim}(\vect{z}_i, \vect{z}_j^-)/\tau)}\right]
 $$
 
 **Components:**
 
-- $z_i$: Anchor embedding (encoded from image $x_i$)
-- $z_i^+$: Positive embedding (different augmentation of same image)
-- $z_j^-$: Negative embeddings (from different images in batch)
-- $\text{sim}(\cdot, \cdot)$: Cosine similarity
+- $\vect{z}_i$: Anchor embedding (encoded from image $\vect{x}_i$)
+- $\vect{z}_i^+$: Positive embedding (different augmentation of same image)
+- $\vect{z}_j^-$: Negative embeddings (from different images in batch)
+- $\mathrm{sim}(\cdot, \cdot)$: Cosine similarity
 - $\tau$: Temperature parameter; typical values $\tau \in [0.07, 0.5]$
 
 Large batch sizes (256–4096) are required to provide sufficient negatives.
@@ -2150,28 +2150,28 @@ The four components of the DINOv3 composite objective. **A** — Global DINO: th
 \end{align}
 
 **Global DINO (distribution matching, no negatives).**
-Student probabilities $p_s=\mathrm{softmax}(g_s(z_s)/\tau_s)$; teacher targets
-$q_t=\mathrm{stopgrad}\!\left[\mathrm{softmax}\!\left((g_t(z_t)-c)/\tau_t\right)\right]$ with centering $c$ and temperatures $\tau_s,\tau_t$.
+Student probabilities $p_s=\mathrm{softmax}(g_s(\vect{z}_s)/\tau_s)$; teacher targets
+$q_t=\mathrm{stopgrad}\!\left[\mathrm{softmax}\!\left((g_t(\vect{z}_t)-c)/\tau_t\right)\right]$ with centering $c$ and temperatures $\tau_s,\tau_t$.
 \begin{equation}
-\mathcal{L}_{\text{DINO}} \;=\; - \sum_{k} q_t^{(k)} \log p_s^{(k)}
+\mathcal{L}_{\text{DINO}} \;=\; - \sum_{k} q_{t,k} \log p_{s,k}
 \quad \text{(summed over pairs of student/teacher crops).}
 \end{equation}
 
 **Local iBOT (masked token prediction).**
 \begin{equation}
-\mathcal{L}_{\text{iBOT}} \;=\; - \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}}\sum_{k} q_{t,m}^{(k)} \log p_{s,m}^{(k)} .
+\mathcal{L}_{\text{iBOT}} \;=\; - \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}}\sum_{k} q_{t,m,k} \log p_{s,m,k} .
 \end{equation}
 
 **KoLeo (feature uniformity).**
 \begin{equation}
 \mathcal{L}_{\text{KoLeo}} \;\approx\; -\frac{1}{N}\sum_{i=1}^{N} \log d_i
-\quad \text{with } d_i \text{ the nearest-neighbour distance of } z^{[\text{CLS}]}_i .
+\quad \text{with } d_i \text{ the nearest-neighbour distance of } \vect{z}^{[\text{CLS}]}_i .
 \end{equation}
 
 **Gram anchoring (refinement step).**
-With $\ell_2$-normalized patch features $\tilde{Z}_s, \tilde{Z}_g \in \mathbb{R}^{P \times D}$ of the student and of the Gram teacher (an earlier checkpoint) and Gram matrices $G(\tilde{Z})=\tilde{Z}\tilde{Z}^\top$:
+With $\ell_2$-normalized patch features $\tilde{\m{Z}}_s, \tilde{\m{Z}}_g \in \mathbb{R}^{P \times D}$ of the student and of the Gram teacher (an earlier checkpoint) and Gram matrices $G(\tilde{\m{Z}})=\tilde{\m{Z}}\tilde{\m{Z}}^\top$:
 \begin{equation}
-\mathcal{L}_{\text{Gram}} \;=\; \big\| G(\tilde{Z}_s) - G(\tilde{Z}_g) \big\|_F^2 .
+\mathcal{L}_{\text{Gram}} \;=\; \big\| G(\tilde{\m{Z}}_s) - G(\tilde{\m{Z}}_g) \big\|_F^2 .
 \end{equation}
 
 Teacher is an EMA of the student; teachers view only **global crops**; iBOT masks a subset of student patches. Gram anchoring is applied in a late refinement phase to restore patch-level consistency.
@@ -2223,12 +2223,12 @@ Cosine similarities between normalized representations are shown in the figure, 
 For images represented as vectors $\vect{z}_i, \vect{z}_j \in \mathbb{R}^d$:
 
 - **Euclidean Distance (Pixel Space):**
-    $$d_{\text{L2}}(\vect{z}_i, \vect{z}_j) = \|\vect{z}_i - \vect{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_i^{(k)} - z_j^{(k)})^2}$$
+    $$d_{\text{L2}}(\vect{z}_i, \vect{z}_j) = \|\vect{z}_i - \vect{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_{i,k} - z_{j,k})^2}$$
 
 - **Cosine Similarity:**
-    $$\text{sim}_{\cos}(\vect{z}_i, \vect{z}_j) = \frac{\vect{z}_i^\top \vect{z}_j}{\|\vect{z}_i\|_2 \|\vect{z}_j\|_2} = \frac{\sum_{k=1}^d z_i^{(k)} z_j^{(k)}}{\sqrt{\sum_{k=1}^d (z_i^{(k)})^2} \sqrt{\sum_{k=1}^d (z_j^{(k)})^2}}$$
+    $$\mathrm{sim}_{\cos}(\vect{z}_i, \vect{z}_j) = \frac{\vect{z}_i^\top \vect{z}_j}{\|\vect{z}_i\|_2 \|\vect{z}_j\|_2} = \frac{\sum_{k=1}^d z_{i,k} z_{j,k}}{\sqrt{\sum_{k=1}^d (z_{i,k})^2} \sqrt{\sum_{k=1}^d (z_{j,k})^2}}$$
 
-where $\text{sim}_{\cos} \in [-1, 1]$ with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.
+where $\mathrm{sim}_{\cos} \in [-1, 1]$ with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.
 
 ### Pixel Space
 
@@ -2339,7 +2339,7 @@ A query image is encoded in the same way:
 The most similar images are then retrieved by nearest-neighbour search, commonly using cosine similarity:
 
 \begin{equation}
-\text{sim}_{\cos}(\vect{z}_q, \vect{z}_i)
+\mathrm{sim}_{\cos}(\vect{z}_q, \vect{z}_i)
 =
 \frac{\vect{z}_q^\top \vect{z}_i}
 {\|\vect{z}_q\|_2 \|\vect{z}_i\|_2}
@@ -2381,7 +2381,7 @@ The common thread across all of these: once images become vectors, downstream pr
 
 **Click for Answer**
 
-**Answer:** Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in the figure, pixel distances cannot distinguish between "different elephants in similar lighting" vs "same elephant in different lighting": both create similar pixel-level differences. Good representations compress the enormous space of possible images ($255^{H \times W \times C}$ combinations) into a semantic coordinate system where distances reflect meaning.
+**Answer:** Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in the figure, pixel distances cannot distinguish between "different elephants in similar lighting" vs "same elephant in different lighting": both create similar pixel-level differences. Good representations compress the enormous space of possible images ($255^{C \times H \times W}$ combinations) into a semantic coordinate system where distances reflect meaning.
 
 **Question 2: Invariance and Selectivity Trade-off**
 
@@ -2393,7 +2393,7 @@ The common thread across all of these: once images become vectors, downstream pr
 
 **The Trade-off:** Good representations must balance two competing goals:
 
-- **Invariance:** $\|f(\vect{x}) - f(g(\vect{x}))\|_2 < \epsilon$ for nuisance transforms $g$ (lighting, pose changes)
+- **Invariance:** $\|f(\vect{x}) - f(t(\vect{x}))\|_2 < \epsilon$ for nuisance transforms $t$ (lighting, pose changes)
 - **Selectivity:** $\|f(\vect{x}_i) - f(\vect{x}_j)\|_2 > \delta$ for semantically different inputs
 
 **Concrete Example - Flower Classification:**
@@ -2420,7 +2420,7 @@ If representations are completely **color-invariant** (treating all colors as id
 **Contrastive Learning (SimCLR):**
 
 - Requires large batches (256-4096) to provide sufficient negative pairs
-- InfoNCE loss: $\mathcal{L} = -\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}$
+- InfoNCE loss: $\mathcal{L}_{\text{InfoNCE}} = -\log \frac{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau)}{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\mathrm{sim}(\vect{z}_i, \vect{z}_j^-)/\tau)}$
 - Computational cost and memory scale with batch size
 - Needs careful negative mining strategies
 
@@ -2458,7 +2458,7 @@ If representations are completely **color-invariant** (treating all colors as id
   - **Object detection:** "Find all bounding boxes containing cars" — need localization
   - **Dense prediction:** "Generate depth map for each pixel" — requires preserved spatial information
 
-**Key Difference:** Global embeddings through pooling (e.g., Global Average Pooling: $\text{GAP}(X) = \frac{1}{H \times W}\sum_{i,j} X_{i,j}$) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.
+**Key Difference:** Global embeddings through pooling (e.g., Global Average Pooling: $\text{GAP}(\tensor{X}) = \frac{1}{H \times W}\sum_{i,j} \tensor{X}_{:,i,j}$) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.
 
 **Practical Tip:** Many modern architectures (DINOv3, ViTs) provide **both** — use the [CLS] token for global tasks and patch tokens for dense tasks.
 
@@ -2718,15 +2718,15 @@ A pretrained encoder typically requires a smaller learning rate than a randomly 
 
 ### LoRA (Parameter-Efficient Fine-Tuning)
 
-LoRA (hu_lora_2021) adapts selected weight matrices without changing the original pretrained weights. For a weight matrix $W \in \mathbb{R}^{d_{out}\times d_{in}}$, the effective weight is
+LoRA (hu_lora_2021) adapts selected weight matrices without changing the original pretrained weights. For a weight matrix $\m{W} \in \mathbb{R}^{d_{out}\times d_{in}}$, the effective weight is
 
 $$
-W' = W + \frac{\alpha}{r}BA, \qquad
-B \in \mathbb{R}^{d_{out}\times r},\quad
-A \in \mathbb{R}^{r\times d_{in}}.
+\m{W}' = \m{W} + \frac{\alpha}{r}\m{B}\m{A}, \qquad
+\m{B} \in \mathbb{R}^{d_{out}\times r},\quad
+\m{A} \in \mathbb{R}^{r\times d_{in}}.
 $$
 
-Only $A$ and $B$ are trained (along with the task head). Instead of learning $d_{out}d_{in}$ parameters for an unconstrained update, the update uses $r(d_{in}+d_{out})$ parameters. The **rank** $r$ controls the capacity of the update. LoRA is particularly useful for adapting or maintaining several variants of a large pretrained model.
+Only $\m{A}$ and $\m{B}$ are trained (along with the task head). Instead of learning $d_{out}d_{in}$ parameters for an unconstrained update, the update uses $r(d_{in}+d_{out})$ parameters. The **rank** $r$ controls the capacity of the update. LoRA is particularly useful for adapting or maintaining several variants of a large pretrained model.
 
 Unlike an ordinary bottleneck **adapter**, LoRA does not insert a new sequential processing layer. It adds a low-rank change to selected existing weight matrices.
 
@@ -2759,9 +2759,9 @@ model.print_trainable_parameters()
 
 Module names and training wrappers differ between architectures and library versions. Inspect the model's named modules when adapting the example to another backbone.
 
-The saving is not guaranteed: for $r > \frac{d_{in}d_{out}}{d_{in}+d_{out}}$ the factors have more parameters than $W$ itself.
+The saving is not guaranteed: for $r > \frac{d_{in}d_{out}}{d_{in}+d_{out}}$ the factors have more parameters than $\m{W}$ itself.
 
-The following demo shows a frozen $64 \times 64$ matrix $W$ and the trainable factors $B$ and $A$ to scale. Change the rank $r$ and compare the parameter counts.
+The following demo shows a frozen $64 \times 64$ matrix $\m{W}$ and the trainable factors $\m{B}$ and $\m{A}$ to scale. Change the rank $r$ and compare the parameter counts.
 
 **🎮 Interactive Demo: LoRA Rank Explorer**
 
@@ -2783,7 +2783,7 @@ A full update has $768 \cdot 768 = 589{,}824$ parameters, a LoRA update $r \cdot
 | 16 | 24,576 | 4.17% |
 | 32 | 49,152 | 8.33% |
 
-**No**, the savings in computation are not proportional. Each training step still computes the activations of the complete frozen network, and the backward pass still propagates gradients through the frozen layers to reach $A$ and $B$. LoRA mainly saves the gradients and optimizer states of the frozen weights and the storage for each adapted variant.
+**No**, the savings in computation are not proportional. Each training step still computes the activations of the complete frozen network, and the backward pass still propagates gradients through the frozen layers to reach $\m{A}$ and $\m{B}$. LoRA mainly saves the gradients and optimizer states of the frozen weights and the storage for each adapted variant.
 
 ## Choosing an Adaptation Strategy
 
@@ -3104,7 +3104,7 @@ Transformers process sequences of token embeddings. Images, however, are 2-D gri
 The process works as follows:
 
 1. **Divide** the image into a grid of non-overlapping patches. For a 224×224 image with patch size 16×16, this produces $\frac{224}{16} \times \frac{224}{16} = 196$ patches.
-2. **Flatten** each patch into a 1-D vector. A 16×16 RGB patch becomes a vector of length $16 \times 16 \times 3 = 768$.
+2. **Flatten** each patch into a 1-D vector. A 16×16 RGB patch becomes a vector of length $3 \times 16 \times 16 = 768$.
 3. **Project** each flattened patch through a learnable linear layer to produce a patch embedding of dimension $D$ (typically 768).
 4. **Add positional embeddings** — learned vectors that encode the spatial position of each patch in the grid.
 5. **Prepend a [CLS] token** — a special learnable embedding whose output after the transformer serves as the image-level representation for classification (the same concept as in BERT).
@@ -3145,7 +3145,7 @@ This is analogous to the resolution trade-off in CNNs — coarser input means fa
 
 **Correct answer:** 2 — a convolution with kernel size and stride equal to the patch size.
 
-With a stride equal to the kernel size, the windows do not overlap: each window covers exactly one patch. Each of the 768 filters has $16 \times 16 \times 3$ weights, so its output at one position is the dot product of one filter with the flattened patch — exactly one entry of the linear projection. All filters together correspond to the projection matrix $\m{E}$, and like $\m{E}$, they are shared across all patches. Both variants have the same number of parameters: $768 \cdot (16 \cdot 16 \cdot 3) + 768 = 590{,}592$ (weights and biases).
+With a stride equal to the kernel size, the windows do not overlap: each window covers exactly one patch. Each of the 768 filters has $3 \times 16 \times 16$ weights, so its output at one position is the dot product of one filter with the flattened patch — exactly one entry of the linear projection. All filters together correspond to the projection matrix $\m{E}$, and like $\m{E}$, they are shared across all patches. Both variants have the same number of parameters: $768 \cdot (16 \cdot 16 \cdot 3) + 768 = 590{,}592$ (weights and biases).
 
 The convolution outputs a 768×14×14 activation map for a 224×224 image, which is flattened into a sequence of 196 embeddings. This is how ViTs are typically implemented in practice, for example in [timm](https://github.com/huggingface/pytorch-image-models):
 
@@ -3401,7 +3401,7 @@ How do such models work, and what does it mean for a model to *generate* data? I
 
 Let's contrast generative modelling with a classification task (see the figure). As a simplified mental picture, let's denote $f(\vect{x}) = \vect{y}$ for a classifier, and $g(\vect{y}) = \vect{x}$ for a generative model.
 
-In classification the model has as input an image $\vect{x}^{(i)}$ and models a probability distribution over all classes $\vect{\hat{y}}^{(i)}$ which ideally assigns a high probability to the true label $\vect{y}^{(i)}$.
+In classification the model has as input an image $\vect{x}^{(i)}$ and models a probability distribution over all classes $\hat{\vect{y}}^{(i)}$ which ideally assigns a high probability to the true label $\vect{y}^{(i)}$.
 
 Classification.
 
@@ -3439,7 +3439,7 @@ Since neural networks consist of deterministic operations (such as matrix multip
 
 Generative modelling with a diverse set of outputs.
 
-One way to achieve this is to give the generative model an additional random input $\vect{z} \sim p(\vect{z})$ and to generate samples using $g_{\theta}(\vect{z}, \vect{y})$. Typically, $p(\vect{z})$ is a simple distribution that is easy to sample from, such as a standard Gaussian: $\vect{z} \sim \mathcal{N}(\mathbf{0}, \m{I})$. Each new draw of $\vect{z}$ yields a new output.
+One way to achieve this is to give the generative model an additional random input $\vect{z} \sim p(\vect{z})$ and to generate samples using $g_{\theta}(\vect{z}, \vect{y})$. Typically, $p(\vect{z})$ is a simple distribution that is easy to sample from, such as a standard Gaussian: $\vect{z} \sim \mathcal{N}(\vect{0}, \m{I})$. Each new draw of $\vect{z}$ yields a new output.
 
 the figure shows the resulting conditional generator: it combines the same condition $\vect{c}$ with different random inputs $\vect{z}^{(1)}, \vect{z}^{(2)}, \vect{z}^{(3)}$ and produces a different, plausible image for each of them. In contrast to the classifier in the figure, the output is not a distribution over a few classes but a sample from a distribution over images.
 
@@ -3555,7 +3555,7 @@ Some models define $p_{\theta}$ explicitly as a formula that can be evaluated. O
 
 **Probability densities**
 
-Images take (approximately) continuous values, so $p_{\text{data}}$ and $p_{\theta}$ are probability **density** functions over the image space $\mathcal{X}$, for example $\mathcal{X} = \mathbb{R}^{H \times W \times 3}$. A density $p: \mathcal{X} \to [0, \infty)$ must integrate to one:
+Images take (approximately) continuous values, so $p_{\text{data}}$ and $p_{\theta}$ are probability **density** functions over the image space $\mathcal{X}$, for example $\mathcal{X} = \mathbb{R}^{3 \times H \times W}$. A density $p: \mathcal{X} \to [0, \infty)$ must integrate to one:
 
 $$
 \int_{\mathcal{X}} p(\vect{x}) \, d\vect{x} = 1
@@ -3589,7 +3589,7 @@ Fidelity vs. coverage for a bimodal target distribution (blue). (a) The model co
 How can we make $p_{\theta}$ similar to $p_{\text{data}}$ if we only have samples from $p_{\text{data}}$? A classic approach is **maximum likelihood estimation**: we choose the parameters $\theta$ such that the training data is as likely as possible under the model:
 
 $$
-\theta^{*} = \underset{\theta}{\arg\max} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})
+\theta^{*} = \arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})
 $$
 
 It can be shown that, for a large number of training samples, this is equivalent to minimizing the Kullback-Leibler divergence $D_{\mathrm{KL}}(p_{\text{data}} \,\|\, p_{\theta})$, a measure of the difference between the two distributions. Maximum likelihood strongly penalizes a model that assigns a low density to any real training example, which encourages coverage. It requires, however, that $p_{\theta}(\vect{x})$ can be evaluated (or at least bounded) for a given image.
@@ -3886,24 +3886,24 @@ To compare the families on equal terms, each of the following sections contains 
 
 Autoregressive models generate data sequentially, predicting one element at a time conditioned on all previous elements.
 
-For an image represented as a sequence of pixels, patches, or discrete image tokens $x_1, x_2, \ldots, x_n$, the joint distribution can be factorized as a product of conditionals:
+For an image represented as a sequence of pixels, patches, or discrete image tokens $x_1, x_2, \ldots, x_d$, the joint distribution can be factorized as a product of conditionals:
 
 $$
-p(x_1, x_2, \ldots, x_n) = p(x_1) \cdot p(x_2|x_1) \cdot p(x_3|x_1,x_2) \cdots p(x_n|x_1,\ldots,x_{n-1})
+p(x_1, x_2, \ldots, x_d) = p(x_1) \cdot p(x_2 \mid x_1) \cdot p(x_3 \mid x_1,x_2) \cdots p(x_d \mid x_1,\ldots,x_{d-1})
 $$
 
 During generation, the model samples step by step:
 
 1. Sample $x_1 \sim p(x_1)$
-2. Sample $x_2 \sim p(x_2|x_1)$
-3. Sample $x_3 \sim p(x_3|x_1,x_2)$
+2. Sample $x_2 \sim p(x_2 \mid x_1)$
+3. Sample $x_3 \sim p(x_3 \mid x_1,x_2)$
 4. Continue until all pixels generated
 
 **Key Idea**
 
 Autoregressive models turn image generation into a sequence prediction problem.
 
-Each conditional $p(x_i|x_1,\ldots,x_{i-1})$ is modeled by a neural network (typically a masked CNN or Transformer). This sequential factorization turns the complex problem of modeling high-dimensional distributions into a series of simpler conditional distributions.
+Each conditional $p(x_i \mid x_1,\ldots,x_{i-1})$ is modeled by a neural network (typically a masked CNN or Transformer). This sequential factorization turns the complex problem of modeling high-dimensional distributions into a series of simpler conditional distributions.
 
 Figure the figure illustrates the autoregressive generation process. The model generates pixels one by one, conditioning on all previously generated pixels. This allows for exact likelihood computation, but the sequential nature makes sampling slow and limits parallelization.
 
@@ -3950,15 +3950,15 @@ The demo illustrates the defining property of autoregressive models: every value
 
 GANs, see (goodfellow_generative_2014), frame generative modeling as an **adversarial game** between two neural networks: a **generator** $g(\vect{z})$ that creates fake samples, and a **discriminator** $d(\vect{x})$ that tries to distinguish real data from generated fakes (see the figure). This adversarial setup drives both networks to improve: the generator learns to create increasingly realistic samples, while the discriminator becomes better at spotting fakes.
 
-GAN idea: The generator creates fake samples from random noise $z \sim \mathcal{N}(0, I)$, while the discriminator judges whether samples are real or fake. From [Link](https://microsoft.github.io/GenStudio/)
+GAN idea: The generator creates fake samples from random noise $\vect{z} \sim \mathcal{N}(\vect{0}, \m{I})$, while the discriminator judges whether samples are real or fake. From [Link](https://microsoft.github.io/GenStudio/)
 
 The GAN training objective can be expressed as a minimax game:
 
 $$
-\min_{g} \max_{d} \mathbb{E}_{\vect{x} \sim p_{data}}[\log d(\vect{x})] + \mathbb{E}_{\vect{z} \sim p_z}[\log(1 - d(g(\vect{z})))]
+\min_{g} \max_{d} \mathbb{E}_{\vect{x} \sim p_{\text{data}}}[\log d(\vect{x})] + \mathbb{E}_{\vect{z} \sim p_z}[\log(1 - d(g(\vect{z})))]
 $$
 
-The discriminator $d$ maximizes its ability to correctly classify real ($d(\vect{x}) \approx 1$) vs. fake ($d(g(\vect{z})) \approx 0$) samples. The generator $G$ minimizes the discriminator's success, trying to produce samples where $d(g(\vect{z})) \approx 1$ (fooling the discriminator). See the figure for an illustration.
+The discriminator $d$ maximizes its ability to correctly classify real ($d(\vect{x}) \approx 1$) vs. fake ($d(g(\vect{z})) \approx 0$) samples. The generator $g$ minimizes the discriminator's success, trying to produce samples where $d(g(\vect{z})) \approx 1$ (fooling the discriminator). See the figure for an illustration.
 
 In practice, training alternates between:
 1. **Discriminator step**: Update $d$ to better distinguish real from fake
@@ -4003,24 +4003,24 @@ Notably, a continuous generator can represent this distribution exactly: flow ma
 
 Variational Autoencoders (VAEs) (Kingma2014) take a different approach to generative modeling, building on the autoencoder architecture (see the figure) but with a crucial probabilistic twist.
 
-VAE architecture: The encoder maps inputs to latent distributions $q(z|x)$, while the decoder reconstructs from latent samples. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
+VAE architecture: The encoder maps inputs to latent distributions $q(\vect{z} \mid \vect{x})$, while the decoder reconstructs from latent samples. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
 
 A VAE learns two networks that perform (approximate) inverse operations:
 
-- **Encoder** $q_{\psi}(z|x)$: Maps data $x$ to a distribution over latent codes $z$
-- **Decoder** $p_{\theta}(x|z)$: Maps latent codes $z$ back to data $x$
+- **Encoder** $q_{\psi}(\vect{z} \mid \vect{x})$: Maps data $\vect{x}$ to a distribution over latent codes $\vect{z}$
+- **Decoder** $p_{\theta}(\vect{x} \mid \vect{z})$: Maps latent codes $\vect{z}$ back to data $\vect{x}$
 
 Unlike standard autoencoders, VAEs enforce structure on the latent space through probabilistic modeling (see the figure), ensuring that randomly sampled latent codes produce meaningful outputs.
 
-VAE computational graph: The encoder outputs mean $\mu$ and variance $\sigma^2$ for each latent dimension. The **reparameterization trick** ($z = \mu + \epsilon \cdot \sigma$, where $\epsilon \sim \mathcal{N}(0, 1)$) enables gradient-based optimization. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
+VAE computational graph: The encoder outputs mean $\vect{\mu}$ and variance $\vect{\sigma}^2$ for each latent dimension. The **reparameterization trick** ($\vect{z} = \vect{\mu} + \vect{\epsilon} \odot \vect{\sigma}$, where $\vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$) enables gradient-based optimization. From [Source](https://lilianweng.github.io/posts/2018-08-12-vae/).
 
 VAEs optimize the **Evidence Lower Bound (ELBO)**, which consists of two terms:
 
 $$
-\text{ELBO} = \underbrace{\mathbb{E}_{z \sim q_{\psi}(z|x)}[\log p_{\theta}(x|z)]}_{\text{Reconstruction}} - \underbrace{\text{KL}(q_{\psi}(z|x) \| p(z))}_{\text{Regularization}}
+\text{ELBO} = \underbrace{\mathbb{E}_{\vect{z} \sim q_{\psi}(\vect{z} \mid \vect{x})}[\log p_{\theta}(\vect{x} \mid \vect{z})]}_{\text{Reconstruction}} - \underbrace{D_{\mathrm{KL}}(q_{\psi}(\vect{z} \mid \vect{x}) \,\Vert\, p(\vect{z}))}_{\text{Regularization}}
 $$
 
-The **reconstruction term** ensures the decoder can recover the input from the latent code. The **KL regularization term** (typically with prior $p(z) = \mathcal{N}(0, I)$) prevents the latent space from developing "gaps and tendrils"—ensuring that random samples from $\mathcal{N}(0, I)$ decode to meaningful outputs.
+The **reconstruction term** ensures the decoder can recover the input from the latent code. The **KL regularization term** (typically with prior $p(\vect{z}) = \mathcal{N}(\vect{0}, \m{I})$) prevents the latent space from developing "gaps and tendrils"—ensuring that random samples from $\mathcal{N}(\vect{0}, \m{I})$ decode to meaningful outputs.
 
 This balance is key to VAE behavior: the reconstruction loss wants to use the latent space flexibly, while KL regularization pushes latent codes toward a standard normal distribution. The result is a **structured, continuous latent space** where interpolation and attribute manipulation work smoothly.
 
@@ -4077,12 +4077,12 @@ The forward process at step $t$ can be written as:
 +
 \sqrt{\beta_t}\vect{\epsilon}_t,
 \quad
-\vect{\epsilon}_t \sim \mathcal{N}(\mathbf{0}, \mathbfit{I})
+\vect{\epsilon}_t \sim \mathcal{N}(\vect{0}, \m{I})
 \end{equation}
 
 where $\beta_t$ controls the noise level (**the noise schedule**). This process
 gradually degrades the clean image $\vect{x}_0$ into an almost pure-noise image
-$\vect{x}_T \approx \mathcal{N}(\mathbf{0}, \mathbfit{I})$.
+$\vect{x}_T \approx \mathcal{N}(\vect{0}, \m{I})$.
 
 Common noise schedules, such as linear or cosine schedules, start with small
 $\beta_t$ values and gradually increase them. This produces a smooth transition
@@ -4101,7 +4101,7 @@ A neural network learns to gradually remove noise, step by step. Starting from
 pure noise
 
 $$
-\vect{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbfit{I}),
+\vect{x}_T \sim \mathcal{N}(\vect{0}, \m{I}),
 $$
 
 the model denoises iteratively to produce a realistic sample
@@ -4182,7 +4182,7 @@ Flow-based models take yet another perspective: they **transform** a simple dist
 
 ### Normalizing Flows
 
-A normalizing flow (rezende_variational_2016; dinh_density_2017) is an **invertible** neural network $f_\theta$ that maps a latent vector $\vect{z} \sim p(\vect{z}) = \mathcal{N}(\mathbf{0}, \m{I})$ to an image $\vect{x} = f_\theta(\vect{z})$. Because $f_\theta$ is invertible, every image $\vect{x}$ corresponds to exactly one latent vector $\vect{z} = f_\theta^{-1}(\vect{x})$. In contrast to VAEs and GANs, the latent vector has the same dimensionality as the image.
+A normalizing flow (rezende_variational_2016; dinh_density_2017) is an **invertible** neural network $f_\theta$ that maps a latent vector $\vect{z} \sim p(\vect{z}) = \mathcal{N}(\vect{0}, \m{I})$ to an image $\vect{x} = f_\theta(\vect{z})$. Because $f_\theta$ is invertible, every image $\vect{x}$ corresponds to exactly one latent vector $\vect{z} = f_\theta^{-1}(\vect{x})$. In contrast to VAEs and GANs, the latent vector has the same dimensionality as the image.
 
 Invertibility allows computing the exact likelihood with the **change of variables** formula:
 
@@ -4192,7 +4192,7 @@ $$
 
 The first term measures how likely the corresponding latent vector is under the Gaussian. The second term, the log-determinant of the Jacobian, accounts for how much the transformation stretches or compresses space: a region that is compressed into a small volume must receive a higher density. The model is trained by maximizing the equation on the training data, i.e. by maximum likelihood.
 
-The price is a restricted architecture. For a general neural network, computing the determinant of the $d \times d$ Jacobian is prohibitively expensive (for a $256 \times 256 \times 3$ image, $d \approx 200{,}000$). Normalizing flows therefore only use layers that are invertible and have a cheap determinant, such as the coupling layers of RealNVP (dinh_density_2017) and Glow (kingma_glow_2018). Sampling requires a single pass through the network, but the sample quality of normalizing flows lags behind GANs and diffusion models.
+The price is a restricted architecture. For a general neural network, computing the determinant of the $d \times d$ Jacobian is prohibitively expensive (for a $3 \times 256 \times 256$ image, $d \approx 200{,}000$). Normalizing flows therefore only use layers that are invertible and have a cheap determinant, such as the coupling layers of RealNVP (dinh_density_2017) and Glow (kingma_glow_2018). Sampling requires a single pass through the network, but the sample quality of normalizing flows lags behind GANs and diffusion models.
 
 **Key Idea**
 
@@ -4200,7 +4200,7 @@ Normalizing flows trade architectural flexibility for exact likelihoods: every l
 
 ### Flow Matching
 
-Instead of a fixed number of invertible layers, one can describe the transformation from noise to data as a **continuous process** over time $t \in [0, 1]$. A neural network $v_\theta(\vect{x}_t, t)$ predicts a **velocity**: in which direction, and how fast, the point $\vect{x}_t$ should move at time $t$. Starting from noise $\vect{x}_0 \sim \mathcal{N}(\mathbf{0}, \m{I})$, a sample is generated by following the velocity field until $t = 1$, i.e. by solving an ordinary differential equation (ODE):
+Instead of a fixed number of invertible layers, one can describe the transformation from noise to data as a **continuous process** over time $t \in [0, 1]$. A neural network $v_\theta(\vect{x}_t, t)$ predicts a **velocity**: in which direction, and how fast, the point $\vect{x}_t$ should move at time $t$. Starting from noise $\vect{x}_0 \sim \mathcal{N}(\vect{0}, \m{I})$, a sample is generated by following the velocity field until $t = 1$, i.e. by solving an ordinary differential equation (ODE):
 
 $$
 \frac{d\vect{x}_t}{dt} = v_\theta(\vect{x}_t, t)
@@ -4208,7 +4208,7 @@ $$
 
 Such models are known as continuous normalizing flows (chen_neural_2018). For a long time, they were expensive to train, because the ODE had to be simulated during training. **Flow matching** (lipman_flow_2023; liu_flow_2022) solves this problem with a surprisingly simple training procedure. Note that, in contrast to the diffusion notation above, $t = 0$ denotes noise and $t = 1$ denotes data.
 
-During training, we pair a training image $\vect{x}_1$ with a random noise image $\vect{x}_0 = \vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \m{I})$ and connect them with a straight line:
+During training, we pair a training image $\vect{x}_1$ with a random noise image $\vect{x}_0 = \vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$ and connect them with a straight line:
 
 $$
 \vect{x}_t = (1 - t)\, \vect{\epsilon} + t\, \vect{x}_1
@@ -4353,7 +4353,7 @@ pixel-space setting, the model starts from random noise and gradually denoises i
 into an image:
 
 $$
-\vect{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbfit{I})
+\vect{x}_T \sim \mathcal{N}(\vect{0}, \m{I})
 \quad \rightarrow \quad
 \vect{x}_{T-1}
 \quad \rightarrow \quad
@@ -4518,7 +4518,7 @@ $$
 v_\theta(\vect{x}_t, t) \approx \vect{x}_1 - \vect{\epsilon}
 $$
 
-where $\vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \m{I})$ is noise, $\vect{x}_1$ is a training image (or its latent), and $t \in [0, 1]$. In practice, both formulations start from Gaussian noise, apply the network iteratively, and can use either architecture. Flow matching, however, often requires fewer sampling steps, because its trajectories from noise to data are straighter.
+where $\vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$ is noise, $\vect{x}_1$ is a training image (or its latent), and $t \in [0, 1]$. In practice, both formulations start from Gaussian noise, apply the network iteratively, and can use either architecture. Flow matching, however, often requires fewer sampling steps, because its trajectories from noise to data are straighter.
 
 Stable Diffusion 3 is a typical example that combines all three ideas: a VAE latent space, a transformer denoiser, and a rectified flow objective (esser_scaling_2024). The widely used FLUX models follow the same recipe and also use flow matching for instruction-based editing (labs_flux1_2025). Modern image generation is therefore not simply "classical denoising implemented with transformers".
 
@@ -4700,7 +4700,7 @@ LoRA is a lightweight fine-tuning method. Instead of updating all model weights,
 it freezes the base model and learns a small low-rank update:
 
 $$
-\Delta W = BA
+\Delta \m{W} = \m{B}\m{A}
 $$
 
 The result is a small adapter that can be loaded on top of the base model.

@@ -217,7 +217,7 @@ Marco Willi
 <h2>The Patch Embedding Pipeline</h2>
 <ol type="1">
 <li class="fragment"><strong>Divide</strong> image into a grid of patches</li>
-<li class="fragment"><strong>Flatten</strong> each patch (<span class="math inline">\(16 \times 16 \times 3 = 768\)</span>)</li>
+<li class="fragment"><strong>Flatten</strong> each patch (<span class="math inline">\(3 \times 16 \times 16 = 768\)</span>)</li>
 <li class="fragment"><strong>Project</strong> through a learnable linear layer → embedding of dim <span class="math inline">\(D\)</span></li>
 <li class="fragment"><strong>Add positional embeddings</strong> — encode spatial position</li>
 <li class="fragment"><strong>Prepend [CLS] token</strong> — image-level representation (à la BERT)</li>

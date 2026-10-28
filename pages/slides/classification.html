@@ -224,12 +224,12 @@ Figure&nbsp;1: Different variants of classification.
 <h2>Softmax Classifier</h2>
 <p>Softmax converts logits into class probabilities:</p>
 <p><span class="math display">\[
-P(Y = k \mid X = \mathbf{x}^{(i)}) = \sigma(\mathbf{z})_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}
+P(y = k \mid \mathbf{x}^{(i)}) = \mathrm{softmax}(\mathbf{z})_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}
 \]</span></p>
 <div class="fragment">
 <ul>
 <li><span class="math inline">\(\mathbf{z}\)</span> logits: unbounded class scores</li>
-<li><span class="math inline">\(\sigma(\mathbf{z})\)</span> probabilities: positive and sum to 1</li>
+<li><span class="math inline">\(\mathrm{softmax}(\mathbf{z})\)</span> probabilities: positive and sum to 1</li>
 <li>Larger logits receive larger probabilities</li>
 </ul>
 </div>
@@ -282,7 +282,7 @@ Figure&nbsp;2: Logits are arbitrary real-valued scores. Softmax converts them in
 <p>For one sample with one-hot label <span class="math inline">\(\mathbf{y}\)</span> and predicted probabilities <span class="math inline">\(\hat{\mathbf{y}}\)</span>:</p>
 <p><span class="math display">\[
 CE(\mathbf{y}, \hat{\mathbf{y}})
-= -\sum_{j=1}^K y_j \log \hat{y}_j
+= -\sum_{k=1}^K y_k \log \hat{y}_k
 \]</span></p>
 <div class="fragment">
 <p>Because <span class="math inline">\(\mathbf{y}\)</span> is one-hot, only the true class <span class="math inline">\(c\)</span> contributes:</p>
@@ -474,11 +474,11 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 <h2>Residual Connections</h2>
 
 <img data-src="../../assets/images/classification/residual_connection.jpg" style="width:55.0%" class="r-stretch quarto-figure-center" id="fig-classification-residual-connection"><p class="caption">Source: <span class="citation" data-cites="johnson_eecs_2019">Johnson (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p><p><span class="math display">\[
-\mathbf{x}_{l+1} = \mathbf{x}_l + F(\mathbf{x}_l)
+\mathbf{x}^{(l+1)} = \mathbf{x}^{(l)} + F(\mathbf{x}^{(l)})
 \]</span></p>
 <div class="fragment">
 <p>Learn the <strong>change</strong>, not the full transformation.</p>
-<p>If a layer has nothing to add: <span class="math inline">\(F(\mathbf{x}_l) \approx 0\)</span> → identity.</p>
+<p>If a layer has nothing to add: <span class="math inline">\(F(\mathbf{x}^{(l)}) \approx 0\)</span> → identity.</p>
 </div>
 </section>
 <section id="why-residuals-work" class="slide level2" data-visibility="uncounted">

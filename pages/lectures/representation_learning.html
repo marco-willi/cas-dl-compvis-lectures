@@ -611,7 +611,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 </figure>
 </div>
 <p>It is easy for humans to describe the image. For example:</p>
-<div id="f9fcecfd" class="cell" data-execution_count="1">
+<div id="0e9f98d6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">A photograph of an elephant facing the camera.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">The elephant has large tusks and ears and is standing in a flat savannah.</span></span>
@@ -638,7 +638,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 <li>Channels: 3 (RGB)</li>
 <li>Bits per pixel: 8 bits per channel</li>
 </ul>
-<div id="0875e57d" class="cell" data-execution_count="2">
+<div id="88b43748" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="dataframe table table-sm table-striped align-middle caption-top small">
 <thead>
@@ -676,7 +676,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 </div>
 </div>
 <p>We can also say: By describing the image we <strong>represent</strong> the image with natural language, instead of the raw pixels. This is exactly what <strong>Representation Learning</strong> is interested in: How can we find compact representations (also <em>embeddings</em>) wich are significantly smaller than the raw, original representations while retaining <em>relevant</em> information?</p>
-<p>One motivation is the dramatic mismatch between the set of all <em>possible</em> images and the set of <em>natural</em> images. As illustrated in <a href="#fig-rl-set-of-images" class="quarto-xref">Figure&nbsp;2</a>, natural images occupy only a tiny fraction of the full pixel space. For instance, for RGB images of size <span class="math inline">\(256 \times 256\)</span> pixels with 255 possible intensity values per channel, the total number of possible images is <span class="math inline">\(255^{256 \times 256 \times 3}\)</span>, an astronomically large number, effectively infinite from a practical standpoint. A well-chosen embedding space exploits this structure, placing semantically similar images close together regardless of lighting, pose, or viewpoint.</p>
+<p>One motivation is the dramatic mismatch between the set of all <em>possible</em> images and the set of <em>natural</em> images. As illustrated in <a href="#fig-rl-set-of-images" class="quarto-xref">Figure&nbsp;2</a>, natural images occupy only a tiny fraction of the full pixel space. For instance, for RGB images of size <span class="math inline">\(256 \times 256\)</span> pixels with 255 possible intensity values per channel, the total number of possible images is <span class="math inline">\(255^{3 \times 256 \times 256}\)</span>, an astronomically large number, effectively infinite from a practical standpoint. A well-chosen embedding space exploits this structure, placing semantically similar images close together regardless of lighting, pose, or viewpoint.</p>
 <div id="fig-rl-set-of-images" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Set of example images illustrating representation learning concepts">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rl-set-of-images-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -884,13 +884,13 @@ Figure&nbsp;6: The same DINOv3 embeddings reduced to two dimensions with six dif
 <img src="../../assets/images/representation_learning/data_and_representation_space.png" class="img-fluid figure-img" style="width:80.0%" alt="Mapping from data space to representation space via encoder">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-data-representation-spaces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7: <strong>Data Space vs Representation Space:</strong> The encoder <span class="math inline">\(f\)</span> transforms high-dimensional input samples <span class="math inline">\(\mathbf{x}_i\)</span> from data space into compact representations <span class="math inline">\(\mathbf{z}_i\)</span> in representation space, where semantic relationships become explicit through distances and clustering.
+Figure&nbsp;7: <strong>Data Space vs Representation Space:</strong> The encoder <span class="math inline">\(f\)</span> transforms high-dimensional input samples <span class="math inline">\(\mathbf{x}^{(i)}\)</span> from data space into compact representations <span class="math inline">\(\mathbf{z}^{(i)}\)</span> in representation space, where semantic relationships become explicit through distances and clustering.
 </figcaption>
 </figure>
 </div>
 <p>Good representations balance two competing objectives:</p>
 <ul>
-<li><strong>Invariance:</strong> <span class="math inline">\(\|f(\mathbf{x}) - f(g(\mathbf{x}))\|_2 &lt; \epsilon\)</span> for nuisance transforms <span class="math inline">\(g\)</span> such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.</li>
+<li><strong>Invariance:</strong> <span class="math inline">\(\|f(\mathbf{x}) - f(t(\mathbf{x}))\|_2 &lt; \epsilon\)</span> for nuisance transforms <span class="math inline">\(t\)</span> such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.</li>
 <li><strong>Selectivity:</strong> <span class="math inline">\(\|f(\mathbf{x}_i) - f(\mathbf{x}_j)\|_2 &gt; \delta\)</span> for semantically distinct inputs. The representation must distinguish images that differ in ways that matter.</li>
 </ul>
 <p>The critical point is that “nuisance” is task-dependent. For product retrieval, color is discriminative: a color-invariant embedding would make a red shoe and a white shoe indistinguishable. For medical imaging, orientation is often meaningful: a rotation-invariant embedding could destroy diagnostic information. A good representation discards only what the downstream task truly does not need.</p>
@@ -910,7 +910,7 @@ Figure&nbsp;7: <strong>Data Space vs Representation Space:</strong> The encoder 
 <p>Here is an overview of desirable properties:</p>
 <p><strong>Invariance &amp; Selectivity Balance</strong></p>
 <ul>
-<li><strong>Invariance:</strong> <span class="math inline">\(\|f(\mathbf{x}) - f(g(\mathbf{x}))\|_2 &lt; \epsilon\)</span> for nuisance transform <span class="math inline">\(g\)</span> (lighting, pose)</li>
+<li><strong>Invariance:</strong> <span class="math inline">\(\|f(\mathbf{x}) - f(t(\mathbf{x}))\|_2 &lt; \epsilon\)</span> for nuisance transform <span class="math inline">\(t\)</span> (lighting, pose)</li>
 <li><strong>Selectivity:</strong> <span class="math inline">\(\|f(\mathbf{x}_i) - f(\mathbf{x}_j)\|_2 &gt; \delta\)</span> for semantically different <span class="math inline">\(\mathbf{x}_i, \mathbf{x}_j\)</span></li>
 <li><em>Trade-off:</em> Too much invariance → loss of discriminative details</li>
 <li><em>Sweet spot:</em> Preserve task-relevant variations, discard irrelevant ones</li>
@@ -979,9 +979,9 @@ Figure&nbsp;8: Supervised pre-training: the encoder extracts features and a clas
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Composite objective.</strong> CLIP jointly trains an <strong>image encoder</strong> <span class="math inline">\(f_\theta\)</span> and a <strong>text encoder</strong> <span class="math inline">\(g_\phi\)</span> to align matched image–text pairs using a <strong>symmetric contrastive (InfoNCE) loss</strong> with a learned temperature.</p>
-<p><strong>Setup.</strong> For a batch of <span class="math inline">\(N\)</span> paired samples <span class="math inline">\(\{(x_i, y_i)\}_{i=1}^N\)</span>:</p>
+<p><strong>Setup.</strong> For a batch of <span class="math inline">\(N\)</span> paired samples <span class="math inline">\(\{(\mathbf{x}_i, y_i)\}_{i=1}^N\)</span>:</p>
 <ul>
-<li>Image features: <span class="math inline">\(\tilde{\mathbf{v}}_i = \frac{f_\theta(x_i)}{\|f_\theta(x_i)\|}\)</span></li>
+<li>Image features: <span class="math inline">\(\tilde{\mathbf{v}}_i = \frac{f_\theta(\mathbf{x}_i)}{\|f_\theta(\mathbf{x}_i)\|}\)</span></li>
 <li>Text features: <span class="math inline">\(\tilde{\mathbf{t}}_i = \frac{g_\phi(y_i)}{\|g_\phi(y_i)\|}\)</span></li>
 <li>Learned logit scale: <span class="math inline">\(\alpha = \exp(s)\)</span> with parameter <span class="math inline">\(s\)</span> (equivalently temperature <span class="math inline">\(\tau = 1/\alpha\)</span>)</li>
 <li>Similarities (cosine scaled): <span class="math inline">\(s_{ij} = \alpha \, \tilde{\mathbf{v}}_i^\top \tilde{\mathbf{t}}_j\)</span></li>
@@ -1035,19 +1035,19 @@ Figure&nbsp;9: CLIP contrastive pre-training: image and text encoders produce no
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><strong>Setup.</strong> Given an image <span class="math inline">\(x\)</span>, MAE patchifies it and <strong>masks</strong> a large subset of patches <span class="math inline">\(\mathcal{M}\)</span> (typically <span class="math inline">\(\sim 75\%\)</span>), keeping visible patches <span class="math inline">\(\mathcal{V}\)</span>.</p>
+<p><strong>Setup.</strong> Given an image <span class="math inline">\(\mathbf{x}\)</span>, MAE patchifies it and <strong>masks</strong> a large subset of patches <span class="math inline">\(\mathcal{M}\)</span> (typically <span class="math inline">\(\sim 75\%\)</span>), keeping visible patches <span class="math inline">\(\mathcal{V}\)</span>.</p>
 <ul>
-<li>Patchify: <span class="math inline">\(X = \mathrm{Patchify}(x) \in \mathbb{R}^{P \times d}\)</span> with <span class="math inline">\(P\)</span> patches and patch-dimension <span class="math inline">\(d\)</span>.</li>
-<li>Split: <span class="math inline">\(X = \{X_{\mathcal{V}}, X_{\mathcal{M}}\}\)</span>.</li>
-<li><strong>Encoder</strong> <span class="math inline">\(E_\theta\)</span> processes only visible tokens <span class="math inline">\(X_{\mathcal{V}}\)</span> to produce latents <span class="math inline">\(H = E_\theta(X_{\mathcal{V}})\)</span>.</li>
-<li><strong>Decoder</strong> <span class="math inline">\(D_\phi\)</span> receives <span class="math inline">\(H\)</span> plus learned mask tokens at masked positions and predicts <span class="math inline">\(\hat{X}_{\mathcal{M}} = D_\phi(H, \text{mask tokens})\)</span>.</li>
+<li>Patchify: <span class="math inline">\(\mathbf{X} = \mathrm{Patchify}(\mathbf{x}) \in \mathbb{R}^{P \times d}\)</span> with <span class="math inline">\(P\)</span> patches and patch-dimension <span class="math inline">\(d\)</span>.</li>
+<li>Split: <span class="math inline">\(\mathbf{X} = \{\mathbf{X}_{\mathcal{V}}, \mathbf{X}_{\mathcal{M}}\}\)</span>.</li>
+<li><strong>Encoder</strong> <span class="math inline">\(E_\theta\)</span> processes only visible tokens <span class="math inline">\(\mathbf{X}_{\mathcal{V}}\)</span> to produce latents <span class="math inline">\(\mathbf{H} = E_\theta(\mathbf{X}_{\mathcal{V}})\)</span>.</li>
+<li><strong>Decoder</strong> <span class="math inline">\(D_\phi\)</span> receives <span class="math inline">\(\mathbf{H}\)</span> plus learned mask tokens at masked positions and predicts <span class="math inline">\(\hat{\mathbf{X}}_{\mathcal{M}} = D_\phi(\mathbf{H}, \text{mask tokens})\)</span>.</li>
 </ul>
 <p><strong>Reconstruction loss (masked patches only).</strong> <span class="math display">\[\begin{equation}
 \mathcal{L}_{\text{MAE}}
 =
 \frac{1}{|\mathcal{M}|} \sum_{p \in \mathcal{M}}
-\left\| \hat{X}_{p} - \tilde{X}_{p} \right\|_2^2 ,
-\end{equation}\]</span> where <span class="math inline">\(\tilde{X}\)</span> are <strong>normalized pixel targets</strong> (per-channel mean/variance normalization) in patch space. The high mask ratio combined with an asymmetric encoder/decoder yields efficient pretraining and strong transfer.</p>
+\left\| \hat{\mathbf{X}}_{p} - \tilde{\mathbf{X}}_{p} \right\|_2^2 ,
+\end{equation}\]</span> where <span class="math inline">\(\tilde{\mathbf{X}}\)</span> are <strong>normalized pixel targets</strong> (per-channel mean/variance normalization) in patch space. The high mask ratio combined with an asymmetric encoder/decoder yields efficient pretraining and strong transfer.</p>
 </div>
 </div>
 </div>
@@ -1079,14 +1079,14 @@ Figure&nbsp;10: MAE pre-training: a large fraction of patches is masked; the enc
 <div class="callout-body-container callout-body">
 <p><strong>Core Idea:</strong> InfoNCE maximizes mutual information between positive pairs while contrasting against negative samples.</p>
 <p><strong>Mathematical Form:</strong> <span class="math display">\[
-\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}\right]
+\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(\mathrm{sim}(\mathbf{z}_i, \mathbf{z}_i^+)/\tau)}{\exp(\mathrm{sim}(\mathbf{z}_i, \mathbf{z}_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\mathrm{sim}(\mathbf{z}_i, \mathbf{z}_j^-)/\tau)}\right]
 \]</span></p>
 <p><strong>Components:</strong></p>
 <ul>
-<li><span class="math inline">\(z_i\)</span>: Anchor embedding (encoded from image <span class="math inline">\(x_i\)</span>)</li>
-<li><span class="math inline">\(z_i^+\)</span>: Positive embedding (different augmentation of same image)</li>
-<li><span class="math inline">\(z_j^-\)</span>: Negative embeddings (from different images in batch)</li>
-<li><span class="math inline">\(\text{sim}(\cdot, \cdot)\)</span>: Cosine similarity</li>
+<li><span class="math inline">\(\mathbf{z}_i\)</span>: Anchor embedding (encoded from image <span class="math inline">\(\mathbf{x}_i\)</span>)</li>
+<li><span class="math inline">\(\mathbf{z}_i^+\)</span>: Positive embedding (different augmentation of same image)</li>
+<li><span class="math inline">\(\mathbf{z}_j^-\)</span>: Negative embeddings (from different images in batch)</li>
+<li><span class="math inline">\(\mathrm{sim}(\cdot, \cdot)\)</span>: Cosine similarity</li>
 <li><span class="math inline">\(\tau\)</span>: Temperature parameter; typical values <span class="math inline">\(\tau \in [0.07, 0.5]\)</span></li>
 </ul>
 <p>Large batch sizes (256–4096) are required to provide sufficient negatives.</p>
@@ -1144,19 +1144,19 @@ Figure&nbsp;12: The four components of the DINOv3 composite objective. <strong>A
 + \lambda_{\text{KoLeo}} \underbrace{\mathcal{L}_{\text{KoLeo}}}_{\text{uniformity on }[\text{CLS}]}
 + \lambda_{\text{Gram}} \underbrace{\mathcal{L}_{\text{Gram}}}_{\text{refinement}}.
 \end{align}\]</span></p>
-<p><strong>Global DINO (distribution matching, no negatives).</strong> Student probabilities <span class="math inline">\(p_s=\mathrm{softmax}(g_s(z_s)/\tau_s)\)</span>; teacher targets <span class="math inline">\(q_t=\mathrm{stopgrad}\!\left[\mathrm{softmax}\!\left((g_t(z_t)-c)/\tau_t\right)\right]\)</span> with centering <span class="math inline">\(c\)</span> and temperatures <span class="math inline">\(\tau_s,\tau_t\)</span>. <span class="math display">\[\begin{equation}
-\mathcal{L}_{\text{DINO}} \;=\; - \sum_{k} q_t^{(k)} \log p_s^{(k)}
+<p><strong>Global DINO (distribution matching, no negatives).</strong> Student probabilities <span class="math inline">\(p_s=\mathrm{softmax}(g_s(\mathbf{z}_s)/\tau_s)\)</span>; teacher targets <span class="math inline">\(q_t=\mathrm{stopgrad}\!\left[\mathrm{softmax}\!\left((g_t(\mathbf{z}_t)-c)/\tau_t\right)\right]\)</span> with centering <span class="math inline">\(c\)</span> and temperatures <span class="math inline">\(\tau_s,\tau_t\)</span>. <span class="math display">\[\begin{equation}
+\mathcal{L}_{\text{DINO}} \;=\; - \sum_{k} q_{t,k} \log p_{s,k}
 \quad \text{(summed over pairs of student/teacher crops).}
 \end{equation}\]</span></p>
 <p><strong>Local iBOT (masked token prediction).</strong> <span class="math display">\[\begin{equation}
-\mathcal{L}_{\text{iBOT}} \;=\; - \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}}\sum_{k} q_{t,m}^{(k)} \log p_{s,m}^{(k)} .
+\mathcal{L}_{\text{iBOT}} \;=\; - \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}}\sum_{k} q_{t,m,k} \log p_{s,m,k} .
 \end{equation}\]</span></p>
 <p><strong>KoLeo (feature uniformity).</strong> <span class="math display">\[\begin{equation}
 \mathcal{L}_{\text{KoLeo}} \;\approx\; -\frac{1}{N}\sum_{i=1}^{N} \log d_i
-\quad \text{with } d_i \text{ the nearest-neighbour distance of } z^{[\text{CLS}]}_i .
+\quad \text{with } d_i \text{ the nearest-neighbour distance of } \mathbf{z}^{[\text{CLS}]}_i .
 \end{equation}\]</span></p>
-<p><strong>Gram anchoring (refinement step).</strong> With <span class="math inline">\(\ell_2\)</span>-normalized patch features <span class="math inline">\(\tilde{Z}_s, \tilde{Z}_g \in \mathbb{R}^{P \times D}\)</span> of the student and of the Gram teacher (an earlier checkpoint) and Gram matrices <span class="math inline">\(G(\tilde{Z})=\tilde{Z}\tilde{Z}^\top\)</span>: <span class="math display">\[\begin{equation}
-\mathcal{L}_{\text{Gram}} \;=\; \big\| G(\tilde{Z}_s) - G(\tilde{Z}_g) \big\|_F^2 .
+<p><strong>Gram anchoring (refinement step).</strong> With <span class="math inline">\(\ell_2\)</span>-normalized patch features <span class="math inline">\(\tilde{\mathbf{Z}}_s, \tilde{\mathbf{Z}}_g \in \mathbb{R}^{P \times D}\)</span> of the student and of the Gram teacher (an earlier checkpoint) and Gram matrices <span class="math inline">\(G(\tilde{\mathbf{Z}})=\tilde{\mathbf{Z}}\tilde{\mathbf{Z}}^\top\)</span>: <span class="math display">\[\begin{equation}
+\mathcal{L}_{\text{Gram}} \;=\; \big\| G(\tilde{\mathbf{Z}}_s) - G(\tilde{\mathbf{Z}}_g) \big\|_F^2 .
 \end{equation}\]</span></p>
 <p>Teacher is an EMA of the student; teachers view only <strong>global crops</strong>; iBOT masks a subset of student patches. Gram anchoring is applied in a late refinement phase to restore patch-level consistency.</p>
 </div>
@@ -1270,10 +1270,10 @@ Figure&nbsp;15: Example images used for the representation comparison.
 <p><strong>Similarity Metrics:</strong></p>
 <p>For images represented as vectors <span class="math inline">\(\mathbf{z}_i, \mathbf{z}_j \in \mathbb{R}^d\)</span>:</p>
 <ul>
-<li><p><strong>Euclidean Distance (Pixel Space):</strong> <span class="math display">\[d_{\text{L2}}(\mathbf{z}_i, \mathbf{z}_j) = \|\mathbf{z}_i - \mathbf{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_i^{(k)} - z_j^{(k)})^2}\]</span></p></li>
-<li><p><strong>Cosine Similarity:</strong> <span class="math display">\[\text{sim}_{\cos}(\mathbf{z}_i, \mathbf{z}_j) = \frac{\mathbf{z}_i^\top \mathbf{z}_j}{\|\mathbf{z}_i\|_2 \|\mathbf{z}_j\|_2} = \frac{\sum_{k=1}^d z_i^{(k)} z_j^{(k)}}{\sqrt{\sum_{k=1}^d (z_i^{(k)})^2} \sqrt{\sum_{k=1}^d (z_j^{(k)})^2}}\]</span></p></li>
+<li><p><strong>Euclidean Distance (Pixel Space):</strong> <span class="math display">\[d_{\text{L2}}(\mathbf{z}_i, \mathbf{z}_j) = \|\mathbf{z}_i - \mathbf{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_{i,k} - z_{j,k})^2}\]</span></p></li>
+<li><p><strong>Cosine Similarity:</strong> <span class="math display">\[\mathrm{sim}_{\cos}(\mathbf{z}_i, \mathbf{z}_j) = \frac{\mathbf{z}_i^\top \mathbf{z}_j}{\|\mathbf{z}_i\|_2 \|\mathbf{z}_j\|_2} = \frac{\sum_{k=1}^d z_{i,k} z_{j,k}}{\sqrt{\sum_{k=1}^d (z_{i,k})^2} \sqrt{\sum_{k=1}^d (z_{j,k})^2}}\]</span></p></li>
 </ul>
-<p>where <span class="math inline">\(\text{sim}_{\cos} \in [-1, 1]\)</span> with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.</p>
+<p>where <span class="math inline">\(\mathrm{sim}_{\cos} \in [-1, 1]\)</span> with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.</p>
 </div>
 </div>
 </div>
@@ -1469,7 +1469,7 @@ Click for Discussion
 \end{equation}\]</span></p>
 <p>The most similar images are then retrieved by nearest-neighbour search, commonly using cosine similarity:</p>
 <p><span class="math display">\[\begin{equation}
-\text{sim}_{\cos}(\mathbf{z}_q, \mathbf{z}_i)
+\mathrm{sim}_{\cos}(\mathbf{z}_q, \mathbf{z}_i)
 =
 \frac{\mathbf{z}_q^\top \mathbf{z}_i}
 {\|\mathbf{z}_q\|_2 \|\mathbf{z}_i\|_2}
@@ -1525,7 +1525,7 @@ Figure&nbsp;20: DINOv3 embeddings (ViT-B/16, [CLS] token) of ABO product images,
 <summary>
 Click for Answer
 </summary>
-<p><strong>Answer:</strong> Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in <a href="#fig-rl-similarity-pixel-space" class="quarto-xref">Figure&nbsp;16</a>, pixel distances cannot distinguish between “different elephants in similar lighting” vs “same elephant in different lighting”: both create similar pixel-level differences. Good representations compress the enormous space of possible images (<span class="math inline">\(255^{H \times W \times C}\)</span> combinations) into a semantic coordinate system where distances reflect meaning.</p>
+<p><strong>Answer:</strong> Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in <a href="#fig-rl-similarity-pixel-space" class="quarto-xref">Figure&nbsp;16</a>, pixel distances cannot distinguish between “different elephants in similar lighting” vs “same elephant in different lighting”: both create similar pixel-level differences. Good representations compress the enormous space of possible images (<span class="math inline">\(255^{C \times H \times W}\)</span> combinations) into a semantic coordinate system where distances reflect meaning.</p>
 </details>
 </div>
 </div>
@@ -1547,7 +1547,7 @@ Click for Answer
 <p><strong>Answer:</strong></p>
 <p><strong>The Trade-off:</strong> Good representations must balance two competing goals:</p>
 <ul>
-<li><strong>Invariance:</strong> <span class="math inline">\(\|f(\mathbf{x}) - f(g(\mathbf{x}))\|_2 &lt; \epsilon\)</span> for nuisance transforms <span class="math inline">\(g\)</span> (lighting, pose changes)</li>
+<li><strong>Invariance:</strong> <span class="math inline">\(\|f(\mathbf{x}) - f(t(\mathbf{x}))\|_2 &lt; \epsilon\)</span> for nuisance transforms <span class="math inline">\(t\)</span> (lighting, pose changes)</li>
 <li><strong>Selectivity:</strong> <span class="math inline">\(\|f(\mathbf{x}_i) - f(\mathbf{x}_j)\|_2 &gt; \delta\)</span> for semantically different inputs</li>
 </ul>
 <p><strong>Concrete Example - Flower Classification:</strong> If representations are completely <strong>color-invariant</strong> (treating all colors as identical), distinguishing between red roses and yellow roses becomes impossible, even though color is the primary discriminative feature. The model would collapse all flower images to similar embeddings regardless of color, destroying task-critical information.</p>
@@ -1581,7 +1581,7 @@ Click for Answer
 <p><strong>Contrastive Learning (SimCLR):</strong></p>
 <ul>
 <li>Requires large batches (256-4096) to provide sufficient negative pairs</li>
-<li>InfoNCE loss: <span class="math inline">\(\mathcal{L} = -\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}\)</span></li>
+<li>InfoNCE loss: <span class="math inline">\(\mathcal{L}_{\text{InfoNCE}} = -\log \frac{\exp(\mathrm{sim}(\mathbf{z}_i, \mathbf{z}_i^+)/\tau)}{\exp(\mathrm{sim}(\mathbf{z}_i, \mathbf{z}_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\mathrm{sim}(\mathbf{z}_i, \mathbf{z}_j^-)/\tau)}\)</span></li>
 <li>Computational cost and memory scale with batch size</li>
 <li>Needs careful negative mining strategies</li>
 </ul>
@@ -1633,7 +1633,7 @@ Click for Answer
 <li><strong>Dense prediction:</strong> “Generate depth map for each pixel” — requires preserved spatial information</li>
 </ul></li>
 </ul>
-<p><strong>Key Difference:</strong> Global embeddings through pooling (e.g., Global Average Pooling: <span class="math inline">\(\text{GAP}(X) = \frac{1}{H \times W}\sum_{i,j} X_{i,j}\)</span>) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.</p>
+<p><strong>Key Difference:</strong> Global embeddings through pooling (e.g., Global Average Pooling: <span class="math inline">\(\text{GAP}(\mathbf{\mathsf{X}}) = \frac{1}{H \times W}\sum_{i,j} \mathbf{\mathsf{X}}_{:,i,j}\)</span>) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.</p>
 <p><strong>Practical Tip:</strong> Many modern architectures (DINOv3, ViTs) provide <strong>both</strong> — use the [CLS] token for global tasks and patch tokens for dense tasks.</p>
 </details>
 </div>
@@ -2278,7 +2278,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>We can also say: By describing the image we **represent** the image with natural language, instead of the raw pixels. This is exactly what **Representation Learning** is interested in: How can we find compact representations (also _embeddings_) wich are significantly smaller than the raw, original representations while retaining _relevant_ information?</span>
 <span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>One motivation is the dramatic mismatch between the set of all *possible* images and the set of *natural* images. As illustrated in @fig-rl-set-of-images, natural images occupy only a tiny fraction of the full pixel space. For instance, for RGB images of size $256 \times 256$ pixels with 255 possible intensity values per channel, the total number of possible images is $255^{256 \times 256 \times 3}$, an astronomically large number, effectively infinite from a practical standpoint. A well-chosen embedding space exploits this structure, placing semantically similar images close together regardless of lighting, pose, or viewpoint.</span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>One motivation is the dramatic mismatch between the set of all *possible* images and the set of *natural* images. As illustrated in @fig-rl-set-of-images, natural images occupy only a tiny fraction of the full pixel space. For instance, for RGB images of size $256 \times 256$ pixels with 255 possible intensity values per channel, the total number of possible images is $255^{3 \times 256 \times 256}$, an astronomically large number, effectively infinite from a practical standpoint. A well-chosen embedding space exploits this structure, placing semantically similar images close together regardless of lighting, pose, or viewpoint.</span>
 <span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>::: {#fig-rl-set-of-images}</span>
 <span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}set_of_images.png)</span>{fig-alt="Set of example images illustrating representation learning concepts" width=600}</span>
@@ -2401,13 +2401,13 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-269"><a href="#cb2-269" aria-hidden="true" tabindex="-1"></a>::: {#fig-data-representation-spaces}</span>
 <span id="cb2-270"><a href="#cb2-270" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}data_and_representation_space.png)</span>{fig-alt="Mapping from data space to representation space via encoder" width=80%}</span>
 <span id="cb2-271"><a href="#cb2-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-272"><a href="#cb2-272" aria-hidden="true" tabindex="-1"></a>**Data Space vs Representation Space:** The encoder $f$ transforms high-dimensional input samples $\vect{x}_i$ from data space into compact representations $\vect{z}_i$ in representation space, where semantic relationships become explicit through distances and clustering.</span>
+<span id="cb2-272"><a href="#cb2-272" aria-hidden="true" tabindex="-1"></a>**Data Space vs Representation Space:** The encoder $f$ transforms high-dimensional input samples $\vect{x}^{(i)}$ from data space into compact representations $\vect{z}^{(i)}$ in representation space, where semantic relationships become explicit through distances and clustering.</span>
 <span id="cb2-273"><a href="#cb2-273" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-274"><a href="#cb2-274" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-275"><a href="#cb2-275" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-276"><a href="#cb2-276" aria-hidden="true" tabindex="-1"></a>Good representations balance two competing objectives:</span>
 <span id="cb2-277"><a href="#cb2-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-278"><a href="#cb2-278" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariance:** $<span class="sc">\|</span>f(\vect{x}) - f(g(\vect{x}))<span class="sc">\|</span>_2 &lt; \epsilon$ for nuisance transforms $g$ such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.</span>
+<span id="cb2-278"><a href="#cb2-278" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariance:** $<span class="sc">\|</span>f(\vect{x}) - f(t(\vect{x}))<span class="sc">\|</span>_2 &lt; \epsilon$ for nuisance transforms $t$ such as lighting changes, horizontal flips, or small crops. The representation should not change when irrelevant properties of the image change.</span>
 <span id="cb2-279"><a href="#cb2-279" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Selectivity:** $<span class="sc">\|</span>f(\vect{x}_i) - f(\vect{x}_j)<span class="sc">\|</span>_2 &gt; \delta$ for semantically distinct inputs. The representation must distinguish images that differ in ways that matter.</span>
 <span id="cb2-280"><a href="#cb2-280" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-281"><a href="#cb2-281" aria-hidden="true" tabindex="-1"></a>The critical point is that "nuisance" is task-dependent. For product retrieval, color is discriminative: a color-invariant embedding would make a red shoe and a white shoe indistinguishable. For medical imaging, orientation is often meaningful: a rotation-invariant embedding could destroy diagnostic information. A good representation discards only what the downstream task truly does not need.</span>
@@ -2421,7 +2421,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-289"><a href="#cb2-289" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-290"><a href="#cb2-290" aria-hidden="true" tabindex="-1"></a>**Invariance &amp; Selectivity Balance**</span>
 <span id="cb2-291"><a href="#cb2-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-292"><a href="#cb2-292" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariance:** $<span class="sc">\|</span>f(\vect{x}) - f(g(\vect{x}))<span class="sc">\|</span>_2 &lt; \epsilon$ for nuisance transform $g$ (lighting, pose)</span>
+<span id="cb2-292"><a href="#cb2-292" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariance:** $<span class="sc">\|</span>f(\vect{x}) - f(t(\vect{x}))<span class="sc">\|</span>_2 &lt; \epsilon$ for nuisance transform $t$ (lighting, pose)</span>
 <span id="cb2-293"><a href="#cb2-293" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Selectivity:** $<span class="sc">\|</span>f(\vect{x}_i) - f(\vect{x}_j)<span class="sc">\|</span>_2 &gt; \delta$ for semantically different $\vect{x}_i, \vect{x}_j$</span>
 <span id="cb2-294"><a href="#cb2-294" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>*Trade-off:* Too much invariance → loss of discriminative details</span>
 <span id="cb2-295"><a href="#cb2-295" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>*Sweet spot:* Preserve task-relevant variations, discard irrelevant ones</span>
@@ -2474,12 +2474,12 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-342"><a href="#cb2-342" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-343"><a href="#cb2-343" aria-hidden="true" tabindex="-1"></a>**Composite objective.** CLIP jointly trains an **image encoder** $f_\theta$ and a **text encoder** $g_\phi$ to align matched image–text pairs using a **symmetric contrastive (InfoNCE) loss** with a learned temperature.</span>
 <span id="cb2-344"><a href="#cb2-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-345"><a href="#cb2-345" aria-hidden="true" tabindex="-1"></a>**Setup.** For a batch of $N$ paired samples $<span class="sc">\{</span>(x_i, y_i)<span class="sc">\}</span>_{i=1}^N$:</span>
+<span id="cb2-345"><a href="#cb2-345" aria-hidden="true" tabindex="-1"></a>**Setup.** For a batch of $N$ paired samples $<span class="sc">\{</span>(\vect{x}_i, y_i)\}_{i=1}^N$:</span>
 <span id="cb2-346"><a href="#cb2-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-347"><a href="#cb2-347" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Image features: $\tilde{\mathbf{v}}_i = \frac{f_\theta(x_i)}{\|f_\theta(x_i)<span class="sc">\|</span>}$</span>
-<span id="cb2-348"><a href="#cb2-348" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Text features: $\tilde{\mathbf{t}}_i = \frac{g_\phi(y_i)}{\|g_\phi(y_i)<span class="sc">\|</span>}$</span>
+<span id="cb2-347"><a href="#cb2-347" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Image features: $\tilde{\vect{v}}_i = \frac{f_\theta(\vect{x}_i)}{\|f_\theta(\vect{x}_i)<span class="sc">\|</span>}$</span>
+<span id="cb2-348"><a href="#cb2-348" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Text features: $\tilde{\vect{t}}_i = \frac{g_\phi(y_i)}{\|g_\phi(y_i)<span class="sc">\|</span>}$</span>
 <span id="cb2-349"><a href="#cb2-349" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Learned logit scale: $\alpha = \exp(s)$ with parameter $s$ (equivalently temperature $\tau = 1/\alpha$)</span>
-<span id="cb2-350"><a href="#cb2-350" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Similarities (cosine scaled): $s_{ij} = \alpha \, \tilde{\mathbf{v}}_i^\top \tilde{\mathbf{t}}_j$</span>
+<span id="cb2-350"><a href="#cb2-350" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Similarities (cosine scaled): $s_{ij} = \alpha \, \tilde{\vect{v}}_i^\top \tilde{\vect{t}}_j$</span>
 <span id="cb2-351"><a href="#cb2-351" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-352"><a href="#cb2-352" aria-hidden="true" tabindex="-1"></a>**Image-to-text loss (with in-batch negatives).**</span>
 <span id="cb2-353"><a href="#cb2-353" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
@@ -2503,7 +2503,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-371"><a href="#cb2-371" aria-hidden="true" tabindex="-1"></a>= \tfrac{1}{2} \left( \mathcal{L}_{i \to t} + \mathcal{L}_{t \to i} \right) \, .</span>
 <span id="cb2-372"><a href="#cb2-372" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
 <span id="cb2-373"><a href="#cb2-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-374"><a href="#cb2-374" aria-hidden="true" tabindex="-1"></a>*Inference note:* zero-shot classification uses text prompts $y_c =$ "a photo of a $<span class="sc">\{</span>class<span class="sc">\}</span>$" to form class prototypes $\tilde{\mathbf{t}}_c$ and picks $\arg\max_c \tilde{\mathbf{v}}^\top \tilde{\mathbf{t}}_c$.</span>
+<span id="cb2-374"><a href="#cb2-374" aria-hidden="true" tabindex="-1"></a>*Inference note:* zero-shot classification uses text prompts $y_c =$ "a photo of a $<span class="sc">\{</span>class<span class="sc">\}</span>$" to form class prototypes $\tilde{\vect{t}}_c$ and picks $\arg\max_c \tilde{\vect{v}}^\top \tilde{\vect{t}}_c$.</span>
 <span id="cb2-375"><a href="#cb2-375" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-376"><a href="#cb2-376" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-377"><a href="#cb2-377" aria-hidden="true" tabindex="-1"></a>::: {#fig-clip-contrastive}</span>
@@ -2522,21 +2522,21 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-390"><a href="#cb2-390" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-391"><a href="#cb2-391" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="(Optional) Masked Autoencoding Loss" collapse="true"}</span>
 <span id="cb2-392"><a href="#cb2-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-393"><a href="#cb2-393" aria-hidden="true" tabindex="-1"></a>**Setup.** Given an image $x$, MAE patchifies it and **masks** a large subset of patches $\mathcal{M}$ (typically $\sim 75\%$), keeping visible patches $\mathcal{V}$.</span>
+<span id="cb2-393"><a href="#cb2-393" aria-hidden="true" tabindex="-1"></a>**Setup.** Given an image $\vect{x}$, MAE patchifies it and **masks** a large subset of patches $\mathcal{M}$ (typically $\sim 75\%$), keeping visible patches $\mathcal{V}$.</span>
 <span id="cb2-394"><a href="#cb2-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-395"><a href="#cb2-395" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Patchify: $X = \mathrm{Patchify}(x) \in \mathbb{R}^{P \times d}$ with $P$ patches and patch-dimension $d$.</span>
-<span id="cb2-396"><a href="#cb2-396" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Split: $X = <span class="sc">\{</span>X_{\mathcal{V}}, X_{\mathcal{M}}<span class="sc">\}</span>$.</span>
-<span id="cb2-397"><a href="#cb2-397" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Encoder** $E_\theta$ processes only visible tokens $X_{\mathcal{V}}$ to produce latents $H = E_\theta(X_{\mathcal{V}})$.</span>
-<span id="cb2-398"><a href="#cb2-398" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Decoder** $D_\phi$ receives $H$ plus learned mask tokens at masked positions and predicts $\hat{X}_{\mathcal{M}} = D_\phi(H, \text{mask tokens})$.</span>
+<span id="cb2-395"><a href="#cb2-395" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Patchify: $\m{X} = \mathrm{Patchify}(\vect{x}) \in \mathbb{R}^{P \times d}$ with $P$ patches and patch-dimension $d$.</span>
+<span id="cb2-396"><a href="#cb2-396" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Split: $\m{X} = <span class="sc">\{</span>\m{X}_{\mathcal{V}}, \m{X}_{\mathcal{M}}<span class="sc">\}</span>$.</span>
+<span id="cb2-397"><a href="#cb2-397" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Encoder** $E_\theta$ processes only visible tokens $\m{X}_{\mathcal{V}}$ to produce latents $\m{H} = E_\theta(\m{X}_{\mathcal{V}})$.</span>
+<span id="cb2-398"><a href="#cb2-398" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Decoder** $D_\phi$ receives $\m{H}$ plus learned mask tokens at masked positions and predicts $\hat{\m{X}}_{\mathcal{M}} = D_\phi(\m{H}, \text{mask tokens})$.</span>
 <span id="cb2-399"><a href="#cb2-399" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-400"><a href="#cb2-400" aria-hidden="true" tabindex="-1"></a>**Reconstruction loss (masked patches only).**</span>
 <span id="cb2-401"><a href="#cb2-401" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
 <span id="cb2-402"><a href="#cb2-402" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{MAE}}</span>
 <span id="cb2-403"><a href="#cb2-403" aria-hidden="true" tabindex="-1"></a>=</span>
 <span id="cb2-404"><a href="#cb2-404" aria-hidden="true" tabindex="-1"></a>\frac{1}{|\mathcal{M}|} \sum_{p \in \mathcal{M}}</span>
-<span id="cb2-405"><a href="#cb2-405" aria-hidden="true" tabindex="-1"></a>\left<span class="sc">\|</span> \hat{X}_{p} - \tilde{X}_{p} \right<span class="sc">\|</span>_2^2 ,</span>
+<span id="cb2-405"><a href="#cb2-405" aria-hidden="true" tabindex="-1"></a>\left<span class="sc">\|</span> \hat{\m{X}}_{p} - \tilde{\m{X}}_{p} \right<span class="sc">\|</span>_2^2 ,</span>
 <span id="cb2-406"><a href="#cb2-406" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
-<span id="cb2-407"><a href="#cb2-407" aria-hidden="true" tabindex="-1"></a>where $\tilde{X}$ are **normalized pixel targets** (per-channel mean/variance normalization) in patch space. The high mask ratio combined with an asymmetric encoder/decoder yields efficient pretraining and strong transfer.</span>
+<span id="cb2-407"><a href="#cb2-407" aria-hidden="true" tabindex="-1"></a>where $\tilde{\m{X}}$ are **normalized pixel targets** (per-channel mean/variance normalization) in patch space. The high mask ratio combined with an asymmetric encoder/decoder yields efficient pretraining and strong transfer.</span>
 <span id="cb2-408"><a href="#cb2-408" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-409"><a href="#cb2-409" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-410"><a href="#cb2-410" aria-hidden="true" tabindex="-1"></a>::: {#fig-mae-architecture}</span>
@@ -2555,15 +2555,15 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-423"><a href="#cb2-423" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-424"><a href="#cb2-424" aria-hidden="true" tabindex="-1"></a>**Mathematical Form:**</span>
 <span id="cb2-425"><a href="#cb2-425" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-426"><a href="#cb2-426" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}\right]</span>
+<span id="cb2-426"><a href="#cb2-426" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E}\left[\log \frac{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau)}{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\mathrm{sim}(\vect{z}_i, \vect{z}_j^-)/\tau)}\right]</span>
 <span id="cb2-427"><a href="#cb2-427" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb2-428"><a href="#cb2-428" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-429"><a href="#cb2-429" aria-hidden="true" tabindex="-1"></a>**Components:**</span>
 <span id="cb2-430"><a href="#cb2-430" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-431"><a href="#cb2-431" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$z_i$: Anchor embedding (encoded from image $x_i$)</span>
-<span id="cb2-432"><a href="#cb2-432" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$z_i^+$: Positive embedding (different augmentation of same image)</span>
-<span id="cb2-433"><a href="#cb2-433" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$z_j^-$: Negative embeddings (from different images in batch)</span>
-<span id="cb2-434"><a href="#cb2-434" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\text{sim}(\cdot, \cdot)$: Cosine similarity</span>
+<span id="cb2-431"><a href="#cb2-431" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\vect{z}_i$: Anchor embedding (encoded from image $\vect{x}_i$)</span>
+<span id="cb2-432"><a href="#cb2-432" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\vect{z}_i^+$: Positive embedding (different augmentation of same image)</span>
+<span id="cb2-433"><a href="#cb2-433" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\vect{z}_j^-$: Negative embeddings (from different images in batch)</span>
+<span id="cb2-434"><a href="#cb2-434" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\mathrm{sim}(\cdot, \cdot)$: Cosine similarity</span>
 <span id="cb2-435"><a href="#cb2-435" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\tau$: Temperature parameter; typical values $\tau \in <span class="co">[</span><span class="ot">0.07, 0.5</span><span class="co">]</span>$</span>
 <span id="cb2-436"><a href="#cb2-436" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-437"><a href="#cb2-437" aria-hidden="true" tabindex="-1"></a>Large batch sizes (256–4096) are required to provide sufficient negatives.</span>
@@ -2601,28 +2601,28 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-469"><a href="#cb2-469" aria-hidden="true" tabindex="-1"></a>\end{align}</span>
 <span id="cb2-470"><a href="#cb2-470" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-471"><a href="#cb2-471" aria-hidden="true" tabindex="-1"></a>**Global DINO (distribution matching, no negatives).**</span>
-<span id="cb2-472"><a href="#cb2-472" aria-hidden="true" tabindex="-1"></a>Student probabilities $p_s=\mathrm{softmax}(g_s(z_s)/\tau_s)$; teacher targets</span>
-<span id="cb2-473"><a href="#cb2-473" aria-hidden="true" tabindex="-1"></a>$q_t=\mathrm{stopgrad}<span class="sc">\!</span>\left<span class="co">[</span><span class="ot">\mathrm{softmax}\!\left((g_t(z_t)-c)/\tau_t\right)\right</span><span class="co">]</span>$ with centering $c$ and temperatures $\tau_s,\tau_t$.</span>
+<span id="cb2-472"><a href="#cb2-472" aria-hidden="true" tabindex="-1"></a>Student probabilities $p_s=\mathrm{softmax}(g_s(\vect{z}_s)/\tau_s)$; teacher targets</span>
+<span id="cb2-473"><a href="#cb2-473" aria-hidden="true" tabindex="-1"></a>$q_t=\mathrm{stopgrad}<span class="sc">\!</span>\left<span class="co">[</span><span class="ot">\mathrm{softmax}\!\left((g_t(\vect{z}_t)-c)/\tau_t\right)\right</span><span class="co">]</span>$ with centering $c$ and temperatures $\tau_s,\tau_t$.</span>
 <span id="cb2-474"><a href="#cb2-474" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
-<span id="cb2-475"><a href="#cb2-475" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{DINO}} \;=\; - \sum_{k} q_t^{(k)} \log p_s^{(k)}</span>
+<span id="cb2-475"><a href="#cb2-475" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{DINO}} \;=\; - \sum_{k} q_{t,k} \log p_{s,k}</span>
 <span id="cb2-476"><a href="#cb2-476" aria-hidden="true" tabindex="-1"></a>\quad \text{(summed over pairs of student/teacher crops).}</span>
 <span id="cb2-477"><a href="#cb2-477" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
 <span id="cb2-478"><a href="#cb2-478" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-479"><a href="#cb2-479" aria-hidden="true" tabindex="-1"></a>**Local iBOT (masked token prediction).**</span>
 <span id="cb2-480"><a href="#cb2-480" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
-<span id="cb2-481"><a href="#cb2-481" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{iBOT}} \;=\; - \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}}\sum_{k} q_{t,m}^{(k)} \log p_{s,m}^{(k)} .</span>
+<span id="cb2-481"><a href="#cb2-481" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{iBOT}} \;=\; - \frac{1}{|\mathcal{M}|}\sum_{m \in \mathcal{M}}\sum_{k} q_{t,m,k} \log p_{s,m,k} .</span>
 <span id="cb2-482"><a href="#cb2-482" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
 <span id="cb2-483"><a href="#cb2-483" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-484"><a href="#cb2-484" aria-hidden="true" tabindex="-1"></a>**KoLeo (feature uniformity).**</span>
 <span id="cb2-485"><a href="#cb2-485" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
 <span id="cb2-486"><a href="#cb2-486" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{KoLeo}} \;\approx\; -\frac{1}{N}\sum_{i=1}^{N} \log d_i</span>
-<span id="cb2-487"><a href="#cb2-487" aria-hidden="true" tabindex="-1"></a>\quad \text{with } d_i \text{ the nearest-neighbour distance of } z^{<span class="co">[</span><span class="ot">\text{CLS}</span><span class="co">]</span>}_i .</span>
+<span id="cb2-487"><a href="#cb2-487" aria-hidden="true" tabindex="-1"></a>\quad \text{with } d_i \text{ the nearest-neighbour distance of } \vect{z}^{<span class="co">[</span><span class="ot">\text{CLS}</span><span class="co">]</span>}_i .</span>
 <span id="cb2-488"><a href="#cb2-488" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
 <span id="cb2-489"><a href="#cb2-489" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-490"><a href="#cb2-490" aria-hidden="true" tabindex="-1"></a>**Gram anchoring (refinement step).**</span>
-<span id="cb2-491"><a href="#cb2-491" aria-hidden="true" tabindex="-1"></a>With $\ell_2$-normalized patch features $\tilde{Z}_s, \tilde{Z}_g \in \mathbb{R}^{P \times D}$ of the student and of the Gram teacher (an earlier checkpoint) and Gram matrices $G(\tilde{Z})=\tilde{Z}\tilde{Z}^\top$:</span>
+<span id="cb2-491"><a href="#cb2-491" aria-hidden="true" tabindex="-1"></a>With $\ell_2$-normalized patch features $\tilde{\m{Z}}_s, \tilde{\m{Z}}_g \in \mathbb{R}^{P \times D}$ of the student and of the Gram teacher (an earlier checkpoint) and Gram matrices $G(\tilde{\m{Z}})=\tilde{\m{Z}}\tilde{\m{Z}}^\top$:</span>
 <span id="cb2-492"><a href="#cb2-492" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
-<span id="cb2-493"><a href="#cb2-493" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{Gram}} \;=\; \big<span class="sc">\|</span> G(\tilde{Z}_s) - G(\tilde{Z}_g) \big<span class="sc">\|</span>_F^2 .</span>
+<span id="cb2-493"><a href="#cb2-493" aria-hidden="true" tabindex="-1"></a>\mathcal{L}_{\text{Gram}} \;=\; \big<span class="sc">\|</span> G(\tilde{\m{Z}}_s) - G(\tilde{\m{Z}}_g) \big<span class="sc">\|</span>_F^2 .</span>
 <span id="cb2-494"><a href="#cb2-494" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
 <span id="cb2-495"><a href="#cb2-495" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-496"><a href="#cb2-496" aria-hidden="true" tabindex="-1"></a>Teacher is an EMA of the student; teachers view only **global crops**; iBOT masks a subset of student patches. Gram anchoring is applied in a late refinement phase to restore patch-level consistency.</span>
@@ -2707,12 +2707,12 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-575"><a href="#cb2-575" aria-hidden="true" tabindex="-1"></a>For images represented as vectors $\vect{z}_i, \vect{z}_j \in \mathbb{R}^d$:</span>
 <span id="cb2-576"><a href="#cb2-576" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-577"><a href="#cb2-577" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Euclidean Distance (Pixel Space):**</span>
-<span id="cb2-578"><a href="#cb2-578" aria-hidden="true" tabindex="-1"></a>    $$d_{\text{L2}}(\vect{z}_i, \vect{z}_j) = \|\vect{z}_i - \vect{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_i^{(k)} - z_j^{(k)})^2}$$</span>
+<span id="cb2-578"><a href="#cb2-578" aria-hidden="true" tabindex="-1"></a>    $$d_{\text{L2}}(\vect{z}_i, \vect{z}_j) = \|\vect{z}_i - \vect{z}_j\|_2 = \sqrt{\sum_{k=1}^d (z_{i,k} - z_{j,k})^2}$$</span>
 <span id="cb2-579"><a href="#cb2-579" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-580"><a href="#cb2-580" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cosine Similarity:**</span>
-<span id="cb2-581"><a href="#cb2-581" aria-hidden="true" tabindex="-1"></a>    $$\text{sim}_{\cos}(\vect{z}_i, \vect{z}_j) = \frac{\vect{z}_i^\top \vect{z}_j}{\|\vect{z}_i\|_2 \|\vect{z}_j\|_2} = \frac{\sum_{k=1}^d z_i^{(k)} z_j^{(k)}}{\sqrt{\sum_{k=1}^d (z_i^{(k)})^2} \sqrt{\sum_{k=1}^d (z_j^{(k)})^2}}$$</span>
+<span id="cb2-581"><a href="#cb2-581" aria-hidden="true" tabindex="-1"></a>    $$\mathrm{sim}_{\cos}(\vect{z}_i, \vect{z}_j) = \frac{\vect{z}_i^\top \vect{z}_j}{\|\vect{z}_i\|_2 \|\vect{z}_j\|_2} = \frac{\sum_{k=1}^d z_{i,k} z_{j,k}}{\sqrt{\sum_{k=1}^d (z_{i,k})^2} \sqrt{\sum_{k=1}^d (z_{j,k})^2}}$$</span>
 <span id="cb2-582"><a href="#cb2-582" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-583"><a href="#cb2-583" aria-hidden="true" tabindex="-1"></a>where $\text{sim}_{\cos} \in <span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$ with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.</span>
+<span id="cb2-583"><a href="#cb2-583" aria-hidden="true" tabindex="-1"></a>where $\mathrm{sim}_{\cos} \in <span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$ with 1 indicating perfect alignment, 0 indicating orthogonality, and -1 indicating opposite directions.</span>
 <span id="cb2-584"><a href="#cb2-584" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-585"><a href="#cb2-585" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-586"><a href="#cb2-586" aria-hidden="true" tabindex="-1"></a></span>
@@ -2856,7 +2856,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-724"><a href="#cb2-724" aria-hidden="true" tabindex="-1"></a>The most similar images are then retrieved by nearest-neighbour search, commonly using cosine similarity:</span>
 <span id="cb2-725"><a href="#cb2-725" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-726"><a href="#cb2-726" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
-<span id="cb2-727"><a href="#cb2-727" aria-hidden="true" tabindex="-1"></a>\text{sim}_{\cos}(\vect{z}_q, \vect{z}_i)</span>
+<span id="cb2-727"><a href="#cb2-727" aria-hidden="true" tabindex="-1"></a>\mathrm{sim}_{\cos}(\vect{z}_q, \vect{z}_i)</span>
 <span id="cb2-728"><a href="#cb2-728" aria-hidden="true" tabindex="-1"></a>=</span>
 <span id="cb2-729"><a href="#cb2-729" aria-hidden="true" tabindex="-1"></a>\frac{\vect{z}_q^\top \vect{z}_i}</span>
 <span id="cb2-730"><a href="#cb2-730" aria-hidden="true" tabindex="-1"></a>{<span class="sc">\|</span>\vect{z}_q<span class="sc">\|</span>_2 <span class="sc">\|</span>\vect{z}_i<span class="sc">\|</span>_2}</span>
@@ -2904,7 +2904,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-772"><a href="#cb2-772" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb2-773"><a href="#cb2-773" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for Answer<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb2-774"><a href="#cb2-774" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-775"><a href="#cb2-775" aria-hidden="true" tabindex="-1"></a>**Answer:** Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in @fig-rl-similarity-pixel-space, pixel distances cannot distinguish between "different elephants in similar lighting" vs "same elephant in different lighting": both create similar pixel-level differences. Good representations compress the enormous space of possible images ($255^{H \times W \times C}$ combinations) into a semantic coordinate system where distances reflect meaning.</span>
+<span id="cb2-775"><a href="#cb2-775" aria-hidden="true" tabindex="-1"></a>**Answer:** Pixel-space representations measure low-level appearance differences (exact color values, lighting conditions, spatial alignment) rather than high-level semantic content. Two images of the same object under different lighting or poses will have large pixel-level distances despite being semantically identical. For example, in @fig-rl-similarity-pixel-space, pixel distances cannot distinguish between "different elephants in similar lighting" vs "same elephant in different lighting": both create similar pixel-level differences. Good representations compress the enormous space of possible images ($255^{C \times H \times W}$ combinations) into a semantic coordinate system where distances reflect meaning.</span>
 <span id="cb2-776"><a href="#cb2-776" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-777"><a href="#cb2-777" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb2-778"><a href="#cb2-778" aria-hidden="true" tabindex="-1"></a>:::</span>
@@ -2919,7 +2919,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-787"><a href="#cb2-787" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-788"><a href="#cb2-788" aria-hidden="true" tabindex="-1"></a>**The Trade-off:** Good representations must balance two competing goals:</span>
 <span id="cb2-789"><a href="#cb2-789" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-790"><a href="#cb2-790" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariance:** $<span class="sc">\|</span>f(\vect{x}) - f(g(\vect{x}))<span class="sc">\|</span>_2 &lt; \epsilon$ for nuisance transforms $g$ (lighting, pose changes)</span>
+<span id="cb2-790"><a href="#cb2-790" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariance:** $<span class="sc">\|</span>f(\vect{x}) - f(t(\vect{x}))<span class="sc">\|</span>_2 &lt; \epsilon$ for nuisance transforms $t$ (lighting, pose changes)</span>
 <span id="cb2-791"><a href="#cb2-791" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Selectivity:** $<span class="sc">\|</span>f(\vect{x}_i) - f(\vect{x}_j)<span class="sc">\|</span>_2 &gt; \delta$ for semantically different inputs</span>
 <span id="cb2-792"><a href="#cb2-792" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-793"><a href="#cb2-793" aria-hidden="true" tabindex="-1"></a>**Concrete Example - Flower Classification:**</span>
@@ -2949,7 +2949,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-817"><a href="#cb2-817" aria-hidden="true" tabindex="-1"></a>**Contrastive Learning (SimCLR):**</span>
 <span id="cb2-818"><a href="#cb2-818" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-819"><a href="#cb2-819" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Requires large batches (256-4096) to provide sufficient negative pairs</span>
-<span id="cb2-820"><a href="#cb2-820" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>InfoNCE loss: $\mathcal{L} = -\log \frac{\exp(\text{sim}(z_i, z_i^+)/\tau)}{\exp(\text{sim}(z_i, z_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\text{sim}(z_i, z_j^-)/\tau)}$</span>
+<span id="cb2-820"><a href="#cb2-820" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>InfoNCE loss: $\mathcal{L}_{\text{InfoNCE}} = -\log \frac{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau)}{\exp(\mathrm{sim}(\vect{z}_i, \vect{z}_i^+)/\tau) + \sum_{j=1}^{N-1} \exp(\mathrm{sim}(\vect{z}_i, \vect{z}_j^-)/\tau)}$</span>
 <span id="cb2-821"><a href="#cb2-821" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Computational cost and memory scale with batch size</span>
 <span id="cb2-822"><a href="#cb2-822" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Needs careful negative mining strategies</span>
 <span id="cb2-823"><a href="#cb2-823" aria-hidden="true" tabindex="-1"></a></span>
@@ -2990,7 +2990,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-858"><a href="#cb2-858" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Object detection:** "Find all bounding boxes containing cars" — need localization</span>
 <span id="cb2-859"><a href="#cb2-859" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Dense prediction:** "Generate depth map for each pixel" — requires preserved spatial information</span>
 <span id="cb2-860"><a href="#cb2-860" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-861"><a href="#cb2-861" aria-hidden="true" tabindex="-1"></a>**Key Difference:** Global embeddings through pooling (e.g., Global Average Pooling: $\text{GAP}(X) = \frac{1}{H \times W}\sum_{i,j} X_{i,j}$) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.</span>
+<span id="cb2-861"><a href="#cb2-861" aria-hidden="true" tabindex="-1"></a>**Key Difference:** Global embeddings through pooling (e.g., Global Average Pooling: $\text{GAP}(\tensor{X}) = \frac{1}{H \times W}\sum_{i,j} \tensor{X}_{:,i,j}$) discard spatial structure for efficiency, while local features maintain the spatial grid of patch embeddings.</span>
 <span id="cb2-862"><a href="#cb2-862" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-863"><a href="#cb2-863" aria-hidden="true" tabindex="-1"></a>**Practical Tip:** Many modern architectures (DINOv3, ViTs) provide **both** — use the <span class="co">[</span><span class="ot">CLS</span><span class="co">]</span> token for global tasks and patch tokens for dense tasks.</span>
 <span id="cb2-864"><a href="#cb2-864" aria-hidden="true" tabindex="-1"></a></span>

@@ -572,7 +572,7 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <p><strong>Why CNNs? The Problem with MLPs on Images</strong></p>
 <ul>
-<li>Images are high-dimensional (e.g., <span class="math inline">\(224 \times 224 \times 3 = 150{,}528\)</span> pixels)</li>
+<li>Images are high-dimensional (e.g., <span class="math inline">\(3 \times 224 \times 224 = 150{,}528\)</span> pixels)</li>
 <li>MLPs flatten images, losing spatial structure</li>
 <li>Fully connected layers require millions of parameters</li>
 <li>MLPs don’t exploit natural image properties (locality, translation invariance)</li>
@@ -585,8 +585,8 @@ window.Quarto = {
 </ol>
 <p><strong>Invariance vs Equivariance</strong></p>
 <ul>
-<li><strong>Invariant</strong>: <span class="math inline">\(f(g(\mathbf{x})) = f(\mathbf{x})\)</span> — output unchanged by transformation (needed for <em>classification</em>)</li>
-<li><strong>Equivariant</strong>: <span class="math inline">\(f(g(\mathbf{x})) = g(f(\mathbf{x}))\)</span> — output transforms with input (needed for <em>detection</em>, <em>segmentation</em>)</li>
+<li><strong>Invariant</strong>: <span class="math inline">\(f(t(\mathbf{x})) = f(\mathbf{x})\)</span> — output unchanged by transformation (needed for <em>classification</em>)</li>
+<li><strong>Equivariant</strong>: <span class="math inline">\(f(t(\mathbf{x})) = t(f(\mathbf{x}))\)</span> — output transforms with input (needed for <em>detection</em>, <em>segmentation</em>)</li>
 <li>CNNs are naturally translation equivariant; add pooling for invariance</li>
 </ul>
 <p><strong>Core Operation: Convolution</strong></p>
@@ -623,7 +623,7 @@ window.Quarto = {
 <h2 data-number="1" class="anchored" data-anchor-id="why-cnns-work-for-images"><span class="header-section-number">1</span> Why CNNs Work for Images</h2>
 <p>Images have unique properties that make them challenging for standard neural networks:</p>
 <ul>
-<li><strong>High-Dimensional</strong>: An RGB image of size <span class="math inline">\(224 \times 224\)</span> has <span class="math inline">\(224 \times 224 \times 3 = 150{,}528\)</span> values</li>
+<li><strong>High-Dimensional</strong>: An RGB image of size <span class="math inline">\(224 \times 224\)</span> has <span class="math inline">\(3 \times 224 \times 224 = 150{,}528\)</span> values</li>
 <li><strong>Locality</strong>: Nearby pixels are statistically related (edges, textures, objects)</li>
 <li><strong>Stability under transformations</strong>: Interpretation of an image does not change under many geometric transformations. A cat should be recognized regardless of its position in the image.</li>
 <li><strong>Hierarchical Structure</strong>: Images contain features at multiple scales (pixels → edges → textures → objects)</li>
@@ -667,7 +667,7 @@ Click for answer
 <p>Even though Convolutional Neural Networks (CNNs) are much better suited to model images than Multi-Layer Perceptrons (MLPs), we start by investigating the properties and difficulties of modeling images with MLPs. This will help understand how properties embedded in the architecture of CNNs (inductive biases) make them much more suitable for computer vision tasks.</p>
 <section id="mlps-and-images" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="mlps-and-images"><span class="header-section-number">1.1</span> MLPs and Images</h3>
-<p>The input to an MLP is a vector <span class="math inline">\(\mathbf{x}^{(i)}\)</span>, which is transformed through multiple hidden layers to the output layer. The fully connected layers can only process 1-D vectors. Therefore, images <span class="math inline">\(\in \mathbb{R}^{H \times W \times C}\)</span> must be flattened into 1-D vectors <span class="math inline">\(\in \mathbb{R}^p\)</span>, where <span class="math inline">\(p= H \times W \times C\)</span>. This causes MLPs to become very large when applied to high-dimensional inputs such as images. See <a href="#fig-cnn-mlp" class="quarto-xref">Figure&nbsp;2</a> for an illustration.</p>
+<p>The input to an MLP is a vector <span class="math inline">\(\mathbf{x}^{(i)}\)</span>, which is transformed through multiple hidden layers to the output layer. The fully connected layers can only process 1-D vectors. Therefore, images <span class="math inline">\(\in \mathbb{R}^{C \times H \times W}\)</span> must be flattened into 1-D vectors <span class="math inline">\(\in \mathbb{R}^d\)</span>, where <span class="math inline">\(d = C \times H \times W\)</span>. This causes MLPs to become very large when applied to high-dimensional inputs such as images. See <a href="#fig-cnn-mlp" class="quarto-xref">Figure&nbsp;2</a> for an illustration.</p>
 <div id="fig-cnn-mlp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cnn-mlp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -700,7 +700,7 @@ Figure&nbsp;4: Illustration of weight matrix <span class="math inline">\(\mathbf
 </figcaption>
 </figure>
 </div>
-<p>Often the patterns we want to learn are not stationary. Ideally we want to recognize them under translations of the inputs, e.g., <span class="math inline">\(g(\mathbf{x})\)</span> where <span class="math inline">\(g()\)</span> is a spatial translation. <a href="#fig-cnns-mlp-pattern-shift" class="quarto-xref">Figure&nbsp;5</a> illustrates the problem, where the same pattern appears at different spatial positions.</p>
+<p>Often the patterns we want to learn are not stationary. Ideally we want to recognize them under translations of the inputs, e.g., <span class="math inline">\(t(\mathbf{x})\)</span> where <span class="math inline">\(t()\)</span> is a spatial translation. <a href="#fig-cnns-mlp-pattern-shift" class="quarto-xref">Figure&nbsp;5</a> illustrates the problem, where the same pattern appears at different spatial positions.</p>
 <div id="fig-cnns-mlp-pattern-shift" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cnns-mlp-pattern-shift-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -764,8 +764,8 @@ This is why MLPs with the same number of parameters perform much worse on image 
 <section id="sec-cnn-invariance" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="sec-cnn-invariance"><span class="header-section-number">1.2</span> Invariance and Equivariance</h3>
 <p>For many tasks involving image data, small variations in the input (<span class="math inline">\(\mathbf{x}\)</span>) should either <strong>not</strong> change the model output (<span class="math inline">\(f(\mathbf{x})\)</span>), <em>invariance</em>, or should change the output <strong>in tandem</strong> with the input changes, <em>equivariance</em>.</p>
-<p>A function <span class="math inline">\(f(\mathbf{x})\)</span> is <strong>invariant</strong> to transformation <span class="math inline">\(g(\mathbf{x})\)</span> if: <span class="math display">\[f(g(\mathbf{x})) = f(\mathbf{x})\]</span></p>
-<p>A function <span class="math inline">\(f(\mathbf{x})\)</span> is <strong>equivariant</strong> to transformation <span class="math inline">\(g(\mathbf{x})\)</span> if: <span class="math display">\[f(g(\mathbf{x})) = g(f(\mathbf{x}))\]</span></p>
+<p>A function <span class="math inline">\(f(\mathbf{x})\)</span> is <strong>invariant</strong> to transformation <span class="math inline">\(t(\mathbf{x})\)</span> if: <span class="math display">\[f(t(\mathbf{x})) = f(\mathbf{x})\]</span></p>
+<p>A function <span class="math inline">\(f(\mathbf{x})\)</span> is <strong>equivariant</strong> to transformation <span class="math inline">\(t(\mathbf{x})\)</span> if: <span class="math display">\[f(t(\mathbf{x})) = t(f(\mathbf{x}))\]</span></p>
 <div class="callout callout-style-default callout-important callout-titled" title="Intuition">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1316,8 +1316,8 @@ Click for comprehensive answer
 Click for solutions
 </summary>
 <ol type="1">
-<li><span class="math inline">\(p = 2\)</span>, <span class="math inline">\(s = 1\)</span>, <span class="math inline">\(d = 1\)</span>: <span class="math inline">\(o = \lfloor (9 + 4 - 4 - 1)/1 + 1 \rfloor = 9\)</span>. In general, <span class="math inline">\(p = (k-1)/2\)</span> preserves the size for <span class="math inline">\(s = d = 1\)</span>.</li>
-<li><span class="math inline">\(p = 1\)</span>, <span class="math inline">\(s = 2\)</span>: <span class="math inline">\(o = \lfloor (9 + 2 - 2 - 1)/2 + 1 \rfloor = 5\)</span>. Without padding, <span class="math inline">\(s = 2\)</span> gives <span class="math inline">\(o = 4\)</span>.</li>
+<li><span class="math inline">\(p = 2\)</span>, <span class="math inline">\(s = 1\)</span>, <span class="math inline">\(d = 1\)</span>: <span class="math inline">\(o = \lfloor(9 + 4 - 4 - 1)/1 + 1\rfloor = 9\)</span>. In general, <span class="math inline">\(p = (k-1)/2\)</span> preserves the size for <span class="math inline">\(s = d = 1\)</span>.</li>
+<li><span class="math inline">\(p = 1\)</span>, <span class="math inline">\(s = 2\)</span>: <span class="math inline">\(o = \lfloor(9 + 2 - 2 - 1)/2 + 1\rfloor = 5\)</span>. Without padding, <span class="math inline">\(s = 2\)</span> gives <span class="math inline">\(o = 4\)</span>.</li>
 <li>Dilation <span class="math inline">\(d = 3\)</span>: the effective kernel size is <span class="math inline">\(d \cdot (k-1) + 1 = 7\)</span>, while the kernel still has only 9 weights. With <span class="math inline">\(p = 0\)</span> and <span class="math inline">\(s = 1\)</span> the output cell <span class="math inline">\((1, 1)\)</span> reads rows and columns 1, 4 and 7, which span the whole T. Note that it <em>reads</em> only 9 of the 49 cells.</li>
 <li>Preset “Identity” with <span class="math inline">\(p = (k-1)/2 \cdot d\)</span>, e.g.&nbsp;<span class="math inline">\(k = 3\)</span>, <span class="math inline">\(p = 1\)</span> (or a <span class="math inline">\(1 \times 1\)</span> kernel with weight 1 and <span class="math inline">\(p = 0\)</span>).</li>
 <li>A kernel that subtracts the cell above from the center cell, with <span class="math inline">\(p = 1\)</span> and ReLU: <span class="math display">\[
@@ -1371,10 +1371,10 @@ Click for step-by-step solution
 </summary>
 <p><strong>Step-by-step solution</strong>:</p>
 <ol type="1">
-<li>Apply the formula: <span class="math inline">\(o = \lfloor \frac{i + 2p - d(k-1) - 1}{s} + 1 \rfloor\)</span></li>
-<li>Substitute: <span class="math inline">\(o = \lfloor \frac{32 + 2(1) - 1(3-1) - 1}{2} + 1 \rfloor\)</span></li>
-<li>Simplify: <span class="math inline">\(o = \lfloor \frac{32 + 2 - 2 - 1}{2} + 1 \rfloor\)</span></li>
-<li>Calculate: <span class="math inline">\(o = \lfloor \frac{31}{2} + 1 \rfloor = \lfloor 15.5 + 1 \rfloor = 16\)</span></li>
+<li>Apply the formula: <span class="math inline">\(o = \lfloor\frac{i + 2p - d(k-1) - 1}{s} + 1\rfloor\)</span></li>
+<li>Substitute: <span class="math inline">\(o = \lfloor\frac{32 + 2(1) - 1(3-1) - 1}{2} + 1\rfloor\)</span></li>
+<li>Simplify: <span class="math inline">\(o = \lfloor\frac{32 + 2 - 2 - 1}{2} + 1\rfloor\)</span></li>
+<li>Calculate: <span class="math inline">\(o = \lfloor\frac{31}{2} + 1\rfloor = \lfloor 15.5 + 1\rfloor = 16\)</span></li>
 </ol>
 <p><strong>Answer</strong>: <span class="math inline">\(o = 16\)</span></p>
 <p><strong>Intuition</strong>: With stride 2, we’re roughly halving the spatial dimensions, but padding helps maintain some size.</p>
@@ -1427,7 +1427,7 @@ Click for solutions
 <li><strong>Filter weights</strong>: <span class="math inline">\((5 \times 5) \times 3 \times 64 = 4{,}800\)</span></li>
 <li><strong>Bias parameters</strong>: <span class="math inline">\(64\)</span> (one per output channel)</li>
 <li><strong>Total parameters</strong>: <span class="math inline">\(4{,}800 + 64 = 4{,}864\)</span></li>
-<li><strong>Fully connected alternative</strong>: <span class="math inline">\((32 \times 32 \times 3) \times 64 = 196{,}608\)</span></li>
+<li><strong>Fully connected alternative</strong>: <span class="math inline">\((3 \times 32 \times 32) \times 64 = 196{,}608\)</span></li>
 </ol>
 <p><strong>Insight</strong>: The CNN uses <strong>40× fewer parameters</strong> while being more effective for images!</p>
 </details>
@@ -1501,7 +1501,7 @@ r_0 = \sum_{l=1}^L \left( (k_l - 1) \prod_{i=1}^{l-1} s_i \right) + 1
 </div>
 <div class="callout-body-container callout-body">
 <iframe name="receptive-field" loading="lazy" data-auto-height="" src="../../demos/cnns/receptive_field/index.html" width="100%" height="700" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: receptive field of stacked convolutions"></iframe>
-<p>All maps are drawn with the same size, so that the marked regions line up spatially; maps with fewer activations (after a stride of 2) have larger cells. Each layer uses the padding <span class="math inline">\(p_l = \lfloor k_l / 2 \rfloor\)</span>. A dashed frame indicates that the receptive field reaches into the zero-padding. With “Shade by number of paths”, activations are shaded by how many paths connect them to the selected activation: central inputs contribute through many more paths than those at the border of the receptive field. <a href="../../demos/cnns/receptive_field/index.html" target="_blank">Open the demo in a new tab</a> or view the <a href="https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/receptive_field">source code</a>.</p>
+<p>All maps are drawn with the same size, so that the marked regions line up spatially; maps with fewer activations (after a stride of 2) have larger cells. Each layer uses the padding <span class="math inline">\(p_l = \lfloor k_l / 2\rfloor\)</span>. A dashed frame indicates that the receptive field reaches into the zero-padding. With “Shade by number of paths”, activations are shaded by how many paths connect them to the selected activation: central inputs contribute through many more paths than those at the border of the receptive field. <a href="../../demos/cnns/receptive_field/index.html" target="_blank">Open the demo in a new tab</a> or view the <a href="https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/receptive_field">source code</a>.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note">
@@ -1639,7 +1639,7 @@ Click for solutions
 </summary>
 <ol type="1">
 <li>The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its <span class="math inline">\(64 \times 14 \times 14\)</span> input. Only the weights for the top-left positions have been trained (see the weight map in “Look inside”); the others still have their random initial values. The MLP has the same problem directly on the pixels.</li>
-<li>The activation maps shift together with the input: <span class="math inline">\(f(g(\mathbf{x})) = g(f(\mathbf{x}))\)</span>, i.e.&nbsp;translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two <span class="math inline">\(2 \times 2\)</span> max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.</li>
+<li>The activation maps shift together with the input: <span class="math inline">\(f(t(\mathbf{x})) = t(f(\mathbf{x}))\)</span>, i.e.&nbsp;translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two <span class="math inline">\(2 \times 2\)</span> max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.</li>
 <li>The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride <span class="citation" data-cites="azulay_why_2019 zhang_making_2019">(<a href="#ref-azulay_why_2019" role="doc-biblioref">Azulay and Weiss 2019</a>; <a href="#ref-zhang_making_2019" role="doc-biblioref">Zhang 2019</a>)</span>, and because of the zero-padding at the image border.</li>
 <li>The MLP has to learn every position from data, i.e.&nbsp;the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.</li>
 </ol>
@@ -2174,7 +2174,7 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>**Why CNNs? The Problem with MLPs on Images**</span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Images are high-dimensional (e.g., $224 \times 224 \times 3 = 150{,}528$ pixels)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Images are high-dimensional (e.g., $3 \times 224 \times 224 = 150{,}528$ pixels)</span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>MLPs flatten images, losing spatial structure</span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Fully connected layers require millions of parameters</span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>MLPs don't exploit natural image properties (locality, translation invariance)</span>
@@ -2187,8 +2187,8 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>**Invariance vs Equivariance**</span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariant**: $f(g(\vect{x})) = f(\vect{x})$ — output unchanged by transformation (needed for *classification*)</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Equivariant**: $f(g(\vect{x})) = g(f(\vect{x}))$ — output transforms with input (needed for *detection*, *segmentation*)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invariant**: $f(t(\vect{x})) = f(\vect{x})$ — output unchanged by transformation (needed for *classification*)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Equivariant**: $f(t(\vect{x})) = t(f(\vect{x}))$ — output transforms with input (needed for *detection*, *segmentation*)</span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>CNNs are naturally translation equivariant; add pooling for invariance</span>
 <span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>**Core Operation: Convolution**</span>
@@ -2233,7 +2233,7 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>Images have unique properties that make them challenging for standard neural networks:</span>
 <span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**High-Dimensional**: An RGB image of size $224 \times 224$ has $224 \times 224 \times 3 = 150{,}528$ values</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**High-Dimensional**: An RGB image of size $224 \times 224$ has $3 \times 224 \times 224 = 150{,}528$ values</span>
 <span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Locality**: Nearby pixels are statistically related (edges, textures, objects)</span>
 <span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Stability under transformations**: Interpretation of an image does not change under many geometric transformations. A cat should be recognized regardless of its position in the image.</span>
 <span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Hierarchical Structure**: Images contain features at multiple scales (pixels → edges → textures → objects)</span>
@@ -2270,7 +2270,7 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### MLPs and Images</span></span>
 <span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>The input to an MLP is a vector $\vect{x}^{(i)}$, which is transformed through multiple hidden layers to the output layer. The fully connected layers can only process 1-D vectors. Therefore, images $\in \mathbb{R}^{H \times W \times C}$ must be flattened into 1-D vectors $\in \mathbb{R}^p$, where $p= H \times W \times C$. This causes MLPs to become very large when applied to high-dimensional inputs such as images. See @fig-cnn-mlp for an illustration.</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>The input to an MLP is a vector $\vect{x}^{(i)}$, which is transformed through multiple hidden layers to the output layer. The fully connected layers can only process 1-D vectors. Therefore, images $\in \mathbb{R}^{C \times H \times W}$ must be flattened into 1-D vectors $\in \mathbb{R}^d$, where $d = C \times H \times W$. This causes MLPs to become very large when applied to high-dimensional inputs such as images. See @fig-cnn-mlp for an illustration.</span>
 <span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>:::{#fig-cnn-mlp}</span>
@@ -2301,7 +2301,7 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>Often the patterns we want to learn are not stationary. Ideally we want to recognize them under translations of the inputs, e.g., $g(\vect{x})$ where $g()$ is a spatial translation. @fig-cnns-mlp-pattern-shift illustrates the problem, where the same pattern appears at different spatial positions.</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>Often the patterns we want to learn are not stationary. Ideally we want to recognize them under translations of the inputs, e.g., $t(\vect{x})$ where $t()$ is a spatial translation. @fig-cnns-mlp-pattern-shift illustrates the problem, where the same pattern appears at different spatial positions.</span>
 <span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>::: {#fig-cnns-mlp-pattern-shift}</span>
@@ -2354,11 +2354,11 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>For many tasks involving image data, small variations in the input ($\vect{x}$) should either **not** change the model output ($f(\vect{x})$), _invariance_, or should change the output **in tandem** with the input changes, _equivariance_.</span>
 <span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>A function $f(\vect{x})$ is **invariant** to transformation $g(\vect{x})$ if:</span>
-<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>$$f(g(\vect{x})) = f(\vect{x})$$</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>A function $f(\vect{x})$ is **invariant** to transformation $t(\vect{x})$ if:</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>$$f(t(\vect{x})) = f(\vect{x})$$</span>
 <span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>A function $f(\vect{x})$ is **equivariant** to transformation $g(\vect{x})$ if:</span>
-<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>$$f(g(\vect{x})) = g(f(\vect{x}))$$</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>A function $f(\vect{x})$ is **equivariant** to transformation $t(\vect{x})$ if:</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>$$f(t(\vect{x})) = t(f(\vect{x}))$$</span>
 <span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="Intuition"}</span>
 <span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
@@ -2690,8 +2690,8 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-542"><a href="#cb1-542" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb1-543"><a href="#cb1-543" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for solutions<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb1-544"><a href="#cb1-544" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-545"><a href="#cb1-545" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>$p = 2$, $s = 1$, $d = 1$: $o = \lfloor (9 + 4 - 4 - 1)/1 + 1 \rfloor = 9$. In general, $p = (k-1)/2$ preserves the size for $s = d = 1$.</span>
-<span id="cb1-546"><a href="#cb1-546" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>$p = 1$, $s = 2$: $o = \lfloor (9 + 2 - 2 - 1)/2 + 1 \rfloor = 5$. Without padding, $s = 2$ gives $o = 4$.</span>
+<span id="cb1-545"><a href="#cb1-545" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>$p = 2$, $s = 1$, $d = 1$: $o = \floor{(9 + 4 - 4 - 1)/1 + 1} = 9$. In general, $p = (k-1)/2$ preserves the size for $s = d = 1$.</span>
+<span id="cb1-546"><a href="#cb1-546" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>$p = 1$, $s = 2$: $o = \floor{(9 + 2 - 2 - 1)/2 + 1} = 5$. Without padding, $s = 2$ gives $o = 4$.</span>
 <span id="cb1-547"><a href="#cb1-547" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Dilation $d = 3$: the effective kernel size is $d \cdot (k-1) + 1 = 7$, while the kernel still has only 9 weights. With $p = 0$ and $s = 1$ the output cell $(1, 1)$ reads rows and columns 1, 4 and 7, which span the whole T. Note that it *reads* only 9 of the 49 cells.</span>
 <span id="cb1-548"><a href="#cb1-548" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Preset "Identity" with $p = (k-1)/2 \cdot d$, e.g. $k = 3$, $p = 1$ (or a $1 \times 1$ kernel with weight 1 and $p = 0$).</span>
 <span id="cb1-549"><a href="#cb1-549" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>A kernel that subtracts the cell above from the center cell, with $p = 1$ and ReLU:</span>
@@ -2738,10 +2738,10 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-590"><a href="#cb1-590" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-591"><a href="#cb1-591" aria-hidden="true" tabindex="-1"></a>**Step-by-step solution**:</span>
 <span id="cb1-592"><a href="#cb1-592" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-593"><a href="#cb1-593" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Apply the formula: $o = \lfloor \frac{i + 2p - d(k-1) - 1}{s} + 1 \rfloor$</span>
-<span id="cb1-594"><a href="#cb1-594" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Substitute: $o = \lfloor \frac{32 + 2(1) - 1(3-1) - 1}{2} + 1 \rfloor$</span>
-<span id="cb1-595"><a href="#cb1-595" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Simplify: $o = \lfloor \frac{32 + 2 - 2 - 1}{2} + 1 \rfloor$</span>
-<span id="cb1-596"><a href="#cb1-596" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Calculate: $o = \lfloor \frac{31}{2} + 1 \rfloor = \lfloor 15.5 + 1 \rfloor = 16$</span>
+<span id="cb1-593"><a href="#cb1-593" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Apply the formula: $o = \floor{\frac{i + 2p - d(k-1) - 1}{s} + 1}$</span>
+<span id="cb1-594"><a href="#cb1-594" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Substitute: $o = \floor{\frac{32 + 2(1) - 1(3-1) - 1}{2} + 1}$</span>
+<span id="cb1-595"><a href="#cb1-595" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Simplify: $o = \floor{\frac{32 + 2 - 2 - 1}{2} + 1}$</span>
+<span id="cb1-596"><a href="#cb1-596" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Calculate: $o = \floor{\frac{31}{2} + 1} = \floor{15.5 + 1} = 16$</span>
 <span id="cb1-597"><a href="#cb1-597" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-598"><a href="#cb1-598" aria-hidden="true" tabindex="-1"></a>**Answer**: $o = 16$</span>
 <span id="cb1-599"><a href="#cb1-599" aria-hidden="true" tabindex="-1"></a></span>
@@ -2789,7 +2789,7 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-641"><a href="#cb1-641" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Filter weights**: $(5 \times 5) \times 3 \times 64 = 4{,}800$</span>
 <span id="cb1-642"><a href="#cb1-642" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Bias parameters**: $64$ (one per output channel)</span>
 <span id="cb1-643"><a href="#cb1-643" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Total parameters**: $4{,}800 + 64 = 4{,}864$</span>
-<span id="cb1-644"><a href="#cb1-644" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Fully connected alternative**: $(32 \times 32 \times 3) \times 64 = 196{,}608$</span>
+<span id="cb1-644"><a href="#cb1-644" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Fully connected alternative**: $(3 \times 32 \times 32) \times 64 = 196{,}608$</span>
 <span id="cb1-645"><a href="#cb1-645" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-646"><a href="#cb1-646" aria-hidden="true" tabindex="-1"></a>**Insight**: The CNN uses **40× fewer parameters** while being more effective for images!</span>
 <span id="cb1-647"><a href="#cb1-647" aria-hidden="true" tabindex="-1"></a></span>
@@ -2858,7 +2858,7 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-710"><a href="#cb1-710" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;iframe name="receptive-field" loading="lazy" data-auto-height src="../../demos/cnns/receptive_field/index.html" width="100%" height="700" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: receptive field of stacked convolutions"&gt;&lt;/iframe&gt;</span></span>
 <span id="cb1-711"><a href="#cb1-711" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb1-712"><a href="#cb1-712" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-713"><a href="#cb1-713" aria-hidden="true" tabindex="-1"></a>All maps are drawn with the same size, so that the marked regions line up spatially; maps with fewer activations (after a stride of 2) have larger cells. Each layer uses the padding $p_l = \lfloor k_l / 2 \rfloor$. A dashed frame indicates that the receptive field reaches into the zero-padding. With "Shade by number of paths", activations are shaded by how many paths connect them to the selected activation: central inputs contribute through many more paths than those at the border of the receptive field. <span class="co">[</span><span class="ot">Open the demo in a new tab</span><span class="co">](../../demos/cnns/receptive_field/index.html)</span>{target="_blank"} or view the <span class="co">[</span><span class="ot">source code</span><span class="co">](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/receptive_field)</span>.</span>
+<span id="cb1-713"><a href="#cb1-713" aria-hidden="true" tabindex="-1"></a>All maps are drawn with the same size, so that the marked regions line up spatially; maps with fewer activations (after a stride of 2) have larger cells. Each layer uses the padding $p_l = \floor{k_l / 2}$. A dashed frame indicates that the receptive field reaches into the zero-padding. With "Shade by number of paths", activations are shaded by how many paths connect them to the selected activation: central inputs contribute through many more paths than those at the border of the receptive field. <span class="co">[</span><span class="ot">Open the demo in a new tab</span><span class="co">](../../demos/cnns/receptive_field/index.html)</span>{target="_blank"} or view the <span class="co">[</span><span class="ot">source code</span><span class="co">](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/receptive_field)</span>.</span>
 <span id="cb1-714"><a href="#cb1-714" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-715"><a href="#cb1-715" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-716"><a href="#cb1-716" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
@@ -2961,7 +2961,7 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-813"><a href="#cb1-813" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for solutions<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
 <span id="cb1-814"><a href="#cb1-814" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-815"><a href="#cb1-815" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its $64 \times 14 \times 14$ input. Only the weights for the top-left positions have been trained (see the weight map in "Look inside"); the others still have their random initial values. The MLP has the same problem directly on the pixels.</span>
-<span id="cb1-816"><a href="#cb1-816" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>The activation maps shift together with the input: $f(g(\vect{x})) = g(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.</span>
+<span id="cb1-816"><a href="#cb1-816" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>The activation maps shift together with the input: $f(t(\vect{x})) = t(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.</span>
 <span id="cb1-817"><a href="#cb1-817" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride <span class="co">[</span><span class="ot">@azulay_why_2019; @zhang_making_2019</span><span class="co">]</span>, and because of the zero-padding at the image border.</span>
 <span id="cb1-818"><a href="#cb1-818" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>The MLP has to learn every position from data, i.e. the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.</span>
 <span id="cb1-819"><a href="#cb1-819" aria-hidden="true" tabindex="-1"></a></span>

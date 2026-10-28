@@ -194,7 +194,7 @@ Marco Willi
 <section id="factorization" class="slide level2">
 <h2>Factorization</h2>
 <div class="fragment">
-<p><span class="math display">\[p(x_1, \ldots, x_n) = p(x_1)\, p(x_2|x_1)\, p(x_3|x_1, x_2) \cdots p(x_n|x_1, \ldots, x_{n-1})\]</span></p>
+<p><span class="math display">\[p(x_1, \ldots, x_d) = p(x_1)\, p(x_2 \mid x_1)\, p(x_3 \mid x_1, x_2) \cdots p(x_d \mid x_1, \ldots, x_{d-1})\]</span></p>
 </div>
 <div class="fragment">
 <p>Each conditional <span class="math inline">\(p(x_i \mid x_1, \ldots, x_{i-1})\)</span> is modeled by a neural network (masked CNN or Transformer).</p>
@@ -304,7 +304,7 @@ Marco Willi
 <h2>Reparameterization Trick</h2>
 <img data-src="../../assets/images/genai_models/vae_illustration2.png" class="r-stretch">
 <div class="fragment">
-<p><span class="math display">\[\mathbf{z} = \mathbf{\mu} + \mathbf{\epsilon} \cdot \mathbf{\sigma}, \qquad \mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})\]</span></p>
+<p><span class="math display">\[\mathbf{z} = \mathbf{\mu} + \mathbf{\epsilon} \odot \mathbf{\sigma}, \qquad \mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})\]</span></p>
 </div>
 <div class="fragment">
 <p>Lets gradients flow through stochastic sampling.</p>
@@ -313,7 +313,7 @@ Marco Willi
 <section id="elbo-objective" class="slide level2">
 <h2>ELBO Objective</h2>
 <div class="fragment">
-<p><span class="math display">\[\text{ELBO} = \underbrace{\mathbb{E}_{\mathbf{z} \sim q_{\psi}(\mathbf{z}|\mathbf{x})}[\log p_{\theta}(\mathbf{x}|\mathbf{z})]}_{\text{Reconstruction}} - \underbrace{\text{KL}(q_{\psi}(\mathbf{z}|\mathbf{x}) \,\|\, p(\mathbf{z}))}_{\text{Regularization}}\]</span></p>
+<p><span class="math display">\[\text{ELBO} = \underbrace{\mathbb{E}_{\mathbf{z} \sim q_{\psi}(\mathbf{z} \mid \mathbf{x})}[\log p_{\theta}(\mathbf{x} \mid \mathbf{z})]}_{\text{Reconstruction}} - \underbrace{D_{\mathrm{KL}}(q_{\psi}(\mathbf{z} \mid \mathbf{x}) \,\Vert\, p(\mathbf{z}))}_{\text{Regularization}}\]</span></p>
 </div>
 <ul>
 <li class="fragment"><strong>Reconstruction</strong> — decoder must recover the input</li>

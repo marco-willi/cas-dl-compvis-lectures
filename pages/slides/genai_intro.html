@@ -565,15 +565,15 @@ Marco Willi
 <section id="density-models" class="slide level2">
 <h2>Density Models</h2>
 <div class="fragment">
-<p>Learn <span class="math inline">\(p_{\theta}: \mathbf{x} \to [0, \infty)\)</span> with normalization:</p>
-<p><span class="math display">\[\int_{\mathbf{x}} p_{\theta}(\mathbf{x})\, d\mathbf{x} = 1\]</span></p>
+<p>Learn <span class="math inline">\(p_{\theta}: \mathcal{X} \to [0, \infty)\)</span> over the image space <span class="math inline">\(\mathcal{X}\)</span> with normalization:</p>
+<p><span class="math display">\[\int_{\mathcal{X}} p_{\theta}(\mathbf{x})\, d\mathbf{x} = 1\]</span></p>
 </div>
 <div class="fragment">
 <p>Goal: <span class="math inline">\(p_{\theta} \approx p_{\text{data}}\)</span>.</p>
 </div>
 <div class="fragment">
 <p><strong>Maximum likelihood objective:</strong></p>
-<p><span class="math display">\[\underset{\theta}{\arg\max} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\mathbf{x}^{(i)})\]</span></p>
+<p><span class="math display">\[\arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\mathbf{x}^{(i)})\]</span></p>
 </div>
 <div class="fragment">
 <p><strong>Examples:</strong> VAEs, normalizing flows, autoregressive models.</p>

@@ -213,7 +213,7 @@ Marco Willi
 </blockquote>
 </div>
 <div class="fragment">
-<div id="6ef947ca" class="cell" data-execution_count="1">
+<div id="1ea83a26" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="dataframe table table-sm table-striped align-middle caption-top">
 <thead>
@@ -256,7 +256,7 @@ Marco Willi
 <h2>The Vastness of Image Space</h2>
 
 <img data-src="../../assets/images/representation_learning/set_of_images.png" class="r-stretch quarto-figure-center"><p class="caption">Illustrated are the set of all possible images and the subset of natural images</p><div class="fragment">
-<p>Total possible <span class="math inline">\(256\times256\)</span> RGB images: <span class="math inline">\(256^{256 \times 256 \times 3}\)</span> ≈ <strong>infinite</strong></p>
+<p>Total possible <span class="math inline">\(256\times256\)</span> RGB images: <span class="math inline">\(256^{3 \times 256 \times 256}\)</span> ≈ <strong>infinite</strong></p>
 </div>
 <div class="fragment">
 <p>Natural images: (<em>relatively</em>) <strong>tiny subset</strong> of this space</p>
@@ -412,7 +412,7 @@ Marco Willi
 <h2>What Makes Good Representations?</h2>
 <h3 id="invariance-selectivity-balance">Invariance &amp; Selectivity Balance</h3>
 <ul>
-<li class="fragment"><p><strong>Invariance:</strong> <span class="math inline">\(\|f(\mathbf{x}) - f(g(\mathbf{x}))\|_2 &lt; \epsilon\)</span> for nuisance transform <span class="math inline">\(g\)</span> (lighting, pose)</p></li>
+<li class="fragment"><p><strong>Invariance:</strong> <span class="math inline">\(\|f(\mathbf{x}) - f(t(\mathbf{x}))\|_2 &lt; \epsilon\)</span> for nuisance transform <span class="math inline">\(t\)</span> (lighting, pose)</p></li>
 <li class="fragment"><p><strong>Selectivity:</strong> <span class="math inline">\(\|f(\mathbf{x}_i) - f(\mathbf{x}_j)\|_2 &gt; \delta\)</span> for semantically different <span class="math inline">\(\mathbf{x}_i, \mathbf{x}_j\)</span></p></li>
 <li class="fragment"><p><em>Trade-off:</em> Too much invariance → loss of discriminative details</p></li>
 <li class="fragment"><p><em>Sweet spot:</em> Preserve task-relevant variations, discard irrelevant ones</p></li>
@@ -758,7 +758,7 @@ Shared embedding space for images and text
 <div class="fragment">
 <ol start="3" type="1">
 <li>Retrieve nearest neighbours: <span class="math display">\[
-\operatorname{topk}_i \; \text{sim}_{\cos}(\mathbf{z}_q, \mathbf{z}_i)
+\operatorname{topk}_i \; \mathrm{sim}_{\cos}(\mathbf{z}_q, \mathbf{z}_i)
 \]</span></li>
 </ol>
 </div>

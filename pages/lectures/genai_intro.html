@@ -918,7 +918,7 @@ Table&nbsp;1: Milestones of image generation.
 <section id="sec-genai-intro-what-is" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="sec-genai-intro-what-is"><span class="header-section-number">2</span> What Is Generative Modelling?</h2>
 <p>Let’s contrast generative modelling with a classification task (see <a href="#fig-genai-intro-basics-classifier" class="quarto-xref">Figure&nbsp;17</a>). As a simplified mental picture, let’s denote <span class="math inline">\(f(\mathbf{x}) = \mathbf{y}\)</span> for a classifier, and <span class="math inline">\(g(\mathbf{y}) = \mathbf{x}\)</span> for a generative model.</p>
-<p>In classification the model has as input an image <span class="math inline">\(\mathbf{x}^{(i)}\)</span> and models a probability distribution over all classes <span class="math inline">\(\mathbf{\hat{y}}^{(i)}\)</span> which ideally assigns a high probability to the true label <span class="math inline">\(\mathbf{y}^{(i)}\)</span>.</p>
+<p>In classification the model has as input an image <span class="math inline">\(\mathbf{x}^{(i)}\)</span> and models a probability distribution over all classes <span class="math inline">\(\hat{\mathbf{y}}^{(i)}\)</span> which ideally assigns a high probability to the true label <span class="math inline">\(\mathbf{y}^{(i)}\)</span>.</p>
 <div id="fig-genai-intro-basics-classifier" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-genai-intro-basics-classifier-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1314,7 +1314,7 @@ p_{\theta}(\mathbf{x}) \approx p_{\text{data}}(\mathbf{x})
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Images take (approximately) continuous values, so <span class="math inline">\(p_{\text{data}}\)</span> and <span class="math inline">\(p_{\theta}\)</span> are probability <strong>density</strong> functions over the image space <span class="math inline">\(\mathcal{X}\)</span>, for example <span class="math inline">\(\mathcal{X} = \mathbb{R}^{H \times W \times 3}\)</span>. A density <span class="math inline">\(p: \mathcal{X} \to [0, \infty)\)</span> must integrate to one:</p>
+<p>Images take (approximately) continuous values, so <span class="math inline">\(p_{\text{data}}\)</span> and <span class="math inline">\(p_{\theta}\)</span> are probability <strong>density</strong> functions over the image space <span class="math inline">\(\mathcal{X}\)</span>, for example <span class="math inline">\(\mathcal{X} = \mathbb{R}^{3 \times H \times W}\)</span>. A density <span class="math inline">\(p: \mathcal{X} \to [0, \infty)\)</span> must integrate to one:</p>
 <p><span class="math display">\[
 \int_{\mathcal{X}} p(\mathbf{x}) \, d\mathbf{x} = 1
 \]</span></p>
@@ -1376,7 +1376,7 @@ Figure&nbsp;27: Fidelity vs.&nbsp;coverage for a bimodal target distribution (bl
 <h3 data-number="4.1" class="anchored" data-anchor-id="maximum-likelihood"><span class="header-section-number">4.1</span> Maximum Likelihood</h3>
 <p>How can we make <span class="math inline">\(p_{\theta}\)</span> similar to <span class="math inline">\(p_{\text{data}}\)</span> if we only have samples from <span class="math inline">\(p_{\text{data}}\)</span>? A classic approach is <strong>maximum likelihood estimation</strong>: we choose the parameters <span class="math inline">\(\theta\)</span> such that the training data is as likely as possible under the model:</p>
 <p><span id="eq-genai-intro-mle"><span class="math display">\[
-\theta^{*} = \underset{\theta}{\arg\max} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\mathbf{x}^{(i)})
+\theta^{*} = \arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\mathbf{x}^{(i)})
 \tag{3}\]</span></span></p>
 <p>It can be shown that, for a large number of training samples, this is equivalent to minimizing the Kullback-Leibler divergence <span class="math inline">\(D_{\mathrm{KL}}(p_{\text{data}} \,\|\, p_{\theta})\)</span>, a measure of the difference between the two distributions. Maximum likelihood strongly penalizes a model that assigns a low density to any real training example, which encourages coverage. It requires, however, that <span class="math inline">\(p_{\theta}(\mathbf{x})\)</span> can be evaluated (or at least bounded) for a given image.</p>
 <p><a href="#fig-genai-intro-density-model" class="quarto-xref">Figure&nbsp;28</a> illustrates how the modelled distribution improves by increasing the likelihood of observing the training data.</p>
@@ -2707,7 +2707,7 @@ Yuksekgonul, Mert, Federico Bianchi, Pratyusha Kalluri, Dan Jurafsky, and James 
 <span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>Let's contrast generative modelling with a classification task (see @fig-genai-intro-basics-classifier). As a simplified mental picture, let's denote $f(\vect{x}) = \vect{y}$ for a classifier, and $g(\vect{y}) = \vect{x}$ for a generative model.</span>
 <span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>In classification the model has as input an image $\vect{x}^{(i)}$ and models a probability distribution over all classes $\vect{\hat{y}}^{(i)}$ which ideally assigns a high probability to the true label $\vect{y}^{(i)}$.</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>In classification the model has as input an image $\vect{x}^{(i)}$ and models a probability distribution over all classes $\hat{\vect{y}}^{(i)}$ which ideally assigns a high probability to the true label $\vect{y}^{(i)}$.</span>
 <span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>::: {#fig-genai-intro-basics-classifier}</span>
@@ -2771,7 +2771,7 @@ Yuksekgonul, Mert, Federico Bianchi, Pratyusha Kalluri, Dan Jurafsky, and James 
 <span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>Generative modelling with a diverse set of outputs.</span>
 <span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>One way to achieve this is to give the generative model an additional random input $\vect{z} \sim p(\vect{z})$ and to generate samples using $g_{\theta}(\vect{z}, \vect{y})$. Typically, $p(\vect{z})$ is a simple distribution that is easy to sample from, such as a standard Gaussian: $\vect{z} \sim \mathcal{N}(\mathbf{0}, \m{I})$. Each new draw of $\vect{z}$ yields a new output.</span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>One way to achieve this is to give the generative model an additional random input $\vect{z} \sim p(\vect{z})$ and to generate samples using $g_{\theta}(\vect{z}, \vect{y})$. Typically, $p(\vect{z})$ is a simple distribution that is easy to sample from, such as a standard Gaussian: $\vect{z} \sim \mathcal{N}(\vect{0}, \m{I})$. Each new draw of $\vect{z}$ yields a new output.</span>
 <span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>@fig-genai-intro-conditional-generation shows the resulting conditional generator: it combines the same condition $\vect{c}$ with different random inputs $\vect{z}^{(1)}, \vect{z}^{(2)}, \vect{z}^{(3)}$ and produces a different, plausible image for each of them. In contrast to the classifier in @fig-genai-intro-classification, the output is not a distribution over a few classes but a sample from a distribution over images.</span>
 <span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a></span>
@@ -2930,7 +2930,7 @@ Yuksekgonul, Mert, Federico Bianchi, Pratyusha Kalluri, Dan Jurafsky, and James 
 <span id="cb1-467"><a href="#cb1-467" aria-hidden="true" tabindex="-1"></a>Some models define $p_{\theta}$ explicitly as a formula that can be evaluated. Others define it only implicitly, through their sampling procedure.</span>
 <span id="cb1-468"><a href="#cb1-468" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-469"><a href="#cb1-469" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Probability densities"}</span>
-<span id="cb1-470"><a href="#cb1-470" aria-hidden="true" tabindex="-1"></a>Images take (approximately) continuous values, so $p_{\text{data}}$ and $p_{\theta}$ are probability **density** functions over the image space $\mathcal{X}$, for example $\mathcal{X} = \mathbb{R}^{H \times W \times 3}$. A density $p: \mathcal{X} \to [0, \infty)$ must integrate to one:</span>
+<span id="cb1-470"><a href="#cb1-470" aria-hidden="true" tabindex="-1"></a>Images take (approximately) continuous values, so $p_{\text{data}}$ and $p_{\theta}$ are probability **density** functions over the image space $\mathcal{X}$, for example $\mathcal{X} = \mathbb{R}^{3 \times H \times W}$. A density $p: \mathcal{X} \to [0, \infty)$ must integrate to one:</span>
 <span id="cb1-471"><a href="#cb1-471" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-472"><a href="#cb1-472" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb1-473"><a href="#cb1-473" aria-hidden="true" tabindex="-1"></a>\int_{\mathcal{X}} p(\vect{x}) \, d\vect{x} = 1</span>
@@ -2981,7 +2981,7 @@ Yuksekgonul, Mert, Federico Bianchi, Pratyusha Kalluri, Dan Jurafsky, and James 
 <span id="cb1-518"><a href="#cb1-518" aria-hidden="true" tabindex="-1"></a>How can we make $p_{\theta}$ similar to $p_{\text{data}}$ if we only have samples from $p_{\text{data}}$? A classic approach is **maximum likelihood estimation**: we choose the parameters $\theta$ such that the training data is as likely as possible under the model:</span>
 <span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-520"><a href="#cb1-520" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb1-521"><a href="#cb1-521" aria-hidden="true" tabindex="-1"></a>\theta^{*} = \underset{\theta}{\arg\max} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})</span>
+<span id="cb1-521"><a href="#cb1-521" aria-hidden="true" tabindex="-1"></a>\theta^{*} = \arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})</span>
 <span id="cb1-522"><a href="#cb1-522" aria-hidden="true" tabindex="-1"></a>$$ {#eq-genai-intro-mle}</span>
 <span id="cb1-523"><a href="#cb1-523" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-524"><a href="#cb1-524" aria-hidden="true" tabindex="-1"></a>It can be shown that, for a large number of training samples, this is equivalent to minimizing the Kullback-Leibler divergence $D_{\mathrm{KL}}(p_{\text{data}} \,<span class="sc">\|</span>\, p_{\theta})$, a measure of the difference between the two distributions. Maximum likelihood strongly penalizes a model that assigns a low density to any real training example, which encourages coverage. It requires, however, that $p_{\theta}(\vect{x})$ can be evaluated (or at least bounded) for a given image.</span>

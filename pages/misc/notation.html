@@ -62,7 +62,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -457,12 +476,20 @@ window.Quarto = {
    
   <ul>
   <li><a href="#numbers-and-arrays" id="toc-numbers-and-arrays" class="nav-link active" data-scroll-target="#numbers-and-arrays"><span class="header-section-number">1</span> Numbers and Arrays</a></li>
-  <li><a href="#indexing" id="toc-indexing" class="nav-link" data-scroll-target="#indexing"><span class="header-section-number">2</span> Indexing</a></li>
-  <li><a href="#datasets-and-distributions" id="toc-datasets-and-distributions" class="nav-link" data-scroll-target="#datasets-and-distributions"><span class="header-section-number">3</span> Datasets and Distributions</a></li>
-  <li><a href="#probability-theory" id="toc-probability-theory" class="nav-link" data-scroll-target="#probability-theory"><span class="header-section-number">4</span> Probability Theory</a></li>
+  <li><a href="#sets" id="toc-sets" class="nav-link" data-scroll-target="#sets"><span class="header-section-number">2</span> Sets</a></li>
+  <li><a href="#indexing" id="toc-indexing" class="nav-link" data-scroll-target="#indexing"><span class="header-section-number">3</span> Indexing</a></li>
+  <li><a href="#linear-algebra-operations" id="toc-linear-algebra-operations" class="nav-link" data-scroll-target="#linear-algebra-operations"><span class="header-section-number">4</span> Linear Algebra Operations</a></li>
   <li><a href="#calculus" id="toc-calculus" class="nav-link" data-scroll-target="#calculus"><span class="header-section-number">5</span> Calculus</a></li>
-  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="header-section-number">6</span> Functions</a></li>
-  <li><a href="#deep-learning" id="toc-deep-learning" class="nav-link" data-scroll-target="#deep-learning"><span class="header-section-number">7</span> Deep Learning</a></li>
+  <li><a href="#probability-and-information-theory" id="toc-probability-and-information-theory" class="nav-link" data-scroll-target="#probability-and-information-theory"><span class="header-section-number">6</span> Probability and Information Theory</a></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="header-section-number">7</span> Functions</a></li>
+  <li><a href="#datasets-and-learning" id="toc-datasets-and-learning" class="nav-link" data-scroll-target="#datasets-and-learning"><span class="header-section-number">8</span> Datasets and Learning</a></li>
+  <li><a href="#course-specific-notation" id="toc-course-specific-notation" class="nav-link" data-scroll-target="#course-specific-notation"><span class="header-section-number">9</span> Course-Specific Notation</a>
+  <ul class="collapse">
+  <li><a href="#images-and-cnns" id="toc-images-and-cnns" class="nav-link" data-scroll-target="#images-and-cnns"><span class="header-section-number">9.1</span> Images and CNNs</a></li>
+  <li><a href="#representation-learning" id="toc-representation-learning" class="nav-link" data-scroll-target="#representation-learning"><span class="header-section-number">9.2</span> Representation Learning</a></li>
+  <li><a href="#generative-models" id="toc-generative-models" class="nav-link" data-scroll-target="#generative-models"><span class="header-section-number">9.3</span> Generative Models</a></li>
+  </ul></li>
+  <li><a href="#deviations-from-the-deep-learning-book" id="toc-deviations-from-the-deep-learning-book" class="nav-link" data-scroll-target="#deviations-from-the-deep-learning-book"><span class="header-section-number">10</span> Deviations from the Deep Learning Book</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/marco-willi/cas-dl-compvis-lectures/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -504,6 +531,7 @@ window.Quarto = {
 <!---
 https://www.overleaf.com/learn/latex/Mathematical_fonts
 -->
+<p>The notation follows the <a href="https://www.deeplearningbook.org/contents/notation.html">Deep Learning Book</a> <span class="citation" data-cites="goodfellow_deep_2016">(<a href="#ref-goodfellow_deep_2016" role="doc-biblioref">Goodfellow et al. 2016</a>)</span> where possible. Deviations and course-specific symbols are listed at the end of this page.</p>
 <section id="numbers-and-arrays" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="numbers-and-arrays"><span class="header-section-number">1</span> Numbers and Arrays</h2>
 <table class="caption-top table">
@@ -543,42 +571,75 @@ https://www.overleaf.com/learn/latex/Mathematical_fonts
 <td>Identity matrix with dimensionality implied by context</td>
 </tr>
 <tr class="odd">
+<td><span class="math inline">\(\mathbf{0}\)</span></td>
+<td>Vector of zeros with dimensionality implied by context</td>
+</tr>
+<tr class="even">
 <td><span class="math inline">\(\mathbf{e}^{(i)}\)</span></td>
 <td>Standard basis vector <span class="math inline">\([0,\dots,0,1,0,\dots,0]\)</span> with a 1 at position <span class="math inline">\(i\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(\text{diag}(\mathbf{a})\)</span></td>
 <td>A square, diagonal matrix with diagonal entries given by <span class="math inline">\(\mathbf{a}\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(\textnormal{a}\)</span></td>
 <td>A scalar random variable</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(\mathbf{a}\)</span></td>
 <td>A vector-valued random variable</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathbf{A}\)</span></td>
-<td>A matrix-valued random variable</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\theta\)</span></td>
 <td>Parameters of a model</td>
 </tr>
+</tbody>
+</table>
+</section>
+<section id="sets" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="sets"><span class="header-section-number">2</span> Sets</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 71%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
 <tr class="odd">
-<td><span class="math inline">\(f(\theta, \mathbf{x})\)</span></td>
-<td>A function (model) with paramters <span class="math inline">\(\theta\)</span> and data <span class="math inline">\(\mathbf{x}\)</span></td>
+<td><span class="math inline">\(\mathcal{A}\)</span></td>
+<td>A set</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\mathbf{A} \odot \mathbf{B}\)</span></td>
-<td>Element-wise (Hadamard) product of <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span></td>
+<td><span class="math inline">\(\mathbb{R}\)</span></td>
+<td>The set of real numbers</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbb{R}^{d}\)</span>, <span class="math inline">\(\mathbb{R}^{m \times n}\)</span></td>
+<td>The set of real vectors with <span class="math inline">\(d\)</span> entries, of real matrices with <span class="math inline">\(m\)</span> rows and <span class="math inline">\(n\)</span> columns</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\{0, 1, \dots, n\}\)</span></td>
+<td>The set of all integers between <span class="math inline">\(0\)</span> and <span class="math inline">\(n\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\([a, b]\)</span></td>
+<td>The real interval including <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((a, b]\)</span></td>
+<td>The real interval excluding <span class="math inline">\(a\)</span> but including <span class="math inline">\(b\)</span></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="indexing" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="indexing"><span class="header-section-number">2</span> Indexing</h2>
+<section id="indexing" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="indexing"><span class="header-section-number">3</span> Indexing</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 28%">
@@ -599,11 +660,27 @@ https://www.overleaf.com/learn/latex/Mathematical_fonts
 <td><span class="math inline">\(A_{i,j}\)</span></td>
 <td>Element <span class="math inline">\(i, j\)</span> of matrix <span class="math inline">\(\mathbf{A}\)</span></td>
 </tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{A}_{i,:}\)</span></td>
+<td>Row <span class="math inline">\(i\)</span> of matrix <span class="math inline">\(\mathbf{A}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{A}_{:,i}\)</span></td>
+<td>Column <span class="math inline">\(i\)</span> of matrix <span class="math inline">\(\mathbf{A}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{\mathsf{A}}_{i,j,k}\)</span></td>
+<td>Element <span class="math inline">\((i, j, k)\)</span> of a 3-D tensor <span class="math inline">\(\mathbf{\mathsf{A}}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{W}^{(l)}\)</span>, <span class="math inline">\(\mathbf{h}^{(l)}\)</span></td>
+<td>Weights and activations of layer <span class="math inline">\(l\)</span></td>
+</tr>
 </tbody>
 </table>
 </section>
-<section id="datasets-and-distributions" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="datasets-and-distributions"><span class="header-section-number">3</span> Datasets and Distributions</h2>
+<section id="linear-algebra-operations" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="linear-algebra-operations"><span class="header-section-number">4</span> Linear Algebra Operations</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 28%">
@@ -617,57 +694,20 @@ https://www.overleaf.com/learn/latex/Mathematical_fonts
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">\(\mathbf{X}\)</span></td>
-<td>The design matrix with dimensionality <span class="math inline">\(nxp\)</span> with <span class="math inline">\(n\)</span> samples with <span class="math inline">\(p\)</span> features.</td>
+<td><span class="math inline">\(\mathbf{A}^\top\)</span></td>
+<td>Transpose of matrix <span class="math inline">\(\mathbf{A}\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\mathbf{x}^{(i)}\)</span></td>
-<td>The i-th training example.</td>
+<td><span class="math inline">\(\mathbf{A} \odot \mathbf{B}\)</span></td>
+<td>Element-wise (Hadamard) product of <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\mathbf{y}^{(i)}\)</span></td>
-<td>The label-vector for the i-th training example.</td>
+<td><span class="math inline">\(\det(\mathbf{A})\)</span></td>
+<td>Determinant of <span class="math inline">\(\mathbf{A}\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(y^{(i)}\)</span></td>
-<td>The label for the i-th training example.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="probability-theory" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="probability-theory"><span class="header-section-number">4</span> Probability Theory</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 28%">
-<col style="width: 71%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Syntax</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(P(x)\)</span></td>
-<td>A probability distribution over a discrete variable.</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(p(x)\)</span></td>
-<td>A probability distribution over a contiuous variable or over a variable whose type has not been specified.</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\mathbb{E}_{x \sim P} [ f(x) ]\text{ or } \mathbb{E} f(x)\)</span></td>
-<td>Expectation of <span class="math inline">\(f(x)\)</span> with respect to <span class="math inline">\(P(x)\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\mathcal{N} ( \mathbf{x} ; \mu , \Sigma)\)</span></td>
-<td>Gaussian distribution over <span class="math inline">\(\mathbf{x}\)</span> with mean <span class="math inline">\(\mu\)</span> and covariance <span class="math inline">\(\Sigma\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(x \sim \mathcal{N} (\mu , \sigma)\)</span></td>
-<td>Gaussian distribution over <span class="math inline">\(x\)</span> with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma\)</span></td>
+<td><span class="math inline">\(\operatorname{tr}(\mathbf{A})\)</span></td>
+<td>Trace of <span class="math inline">\(\mathbf{A}\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -687,43 +727,30 @@ https://www.overleaf.com/learn/latex/Mathematical_fonts
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">\(\nabla_{\mathbf{w}} J\)</span></td>
-<td>Gradient of <span class="math inline">\(J\)</span> with respect to <span class="math inline">\(\mathbf{w}\)</span></td>
+<td><span class="math inline">\(\frac{dy}{dx}\)</span></td>
+<td>Derivative of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\(x\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\frac{\partial J}{\partial w}\)</span></td>
-<td>Partial derivative of <span class="math inline">\(J\)</span> with respect to <span class="math inline">\(w\)</span></td>
+<td><span class="math inline">\(\frac{\partial y}{\partial x}\)</span></td>
+<td>Partial derivative of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\nabla_{\mathbf{x}} y\)</span></td>
+<td>Gradient of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\(\mathbf{x}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\frac{\partial f}{\partial \mathbf{x}} \in \mathbb{R}^{m \times n}\)</span></td>
+<td>Jacobian matrix of <span class="math inline">\(f: \mathbb{R}^n \rightarrow \mathbb{R}^m\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\int f(\mathbf{x}) \, d\mathbf{x}\)</span></td>
+<td>Definite integral over the entire domain of <span class="math inline">\(\mathbf{x}\)</span></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="functions" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="functions"><span class="header-section-number">6</span> Functions</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Syntax</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(\log x\)</span></td>
-<td>The natural logarithm of <span class="math inline">\(x\)</span>.</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\lVert \mathbf{x} \rVert_p\)</span></td>
-<td><span class="math inline">\(L^p\)</span> norm of <span class="math inline">\(\mathbf{x}\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\lVert \mathbf{x} \rVert\)</span></td>
-<td><span class="math inline">\(L^2\)</span> norm of <span class="math inline">\(\mathbf{x}\)</span></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="deep-learning" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="deep-learning"><span class="header-section-number">7</span> Deep Learning</h2>
+<section id="probability-and-information-theory" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="probability-and-information-theory"><span class="header-section-number">6</span> Probability and Information Theory</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 28%">
@@ -737,18 +764,320 @@ https://www.overleaf.com/learn/latex/Mathematical_fonts
 </thead>
 <tbody>
 <tr class="odd">
-<td>NCHW</td>
-<td>The input format of images and activations in PyTorch. N: number of images (batch size), C: number of channels, H: height, W: width</td>
+<td><span class="math inline">\(P(x)\)</span></td>
+<td>A probability distribution over a discrete variable</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p(x)\)</span></td>
+<td>A probability distribution over a continuous variable or over a variable whose type has not been specified</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(p(\mathbf{x} \mid \mathbf{y})\)</span></td>
+<td>Conditional distribution of <span class="math inline">\(\mathbf{x}\)</span> given <span class="math inline">\(\mathbf{y}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{x} \sim p\)</span></td>
+<td><span class="math inline">\(\mathbf{x}\)</span> is sampled from (has distribution) <span class="math inline">\(p\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbb{E}_{\mathbf{x} \sim p} [ f(\mathbf{x}) ]\)</span></td>
+<td>Expectation of <span class="math inline">\(f(\mathbf{x})\)</span> with respect to <span class="math inline">\(p(\mathbf{x})\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D_{\mathrm{KL}}(P \,\Vert\, Q)\)</span></td>
+<td>Kullback-Leibler divergence of <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{N}(\mathbf{x}; \mathbf{\mu}, \mathbf{\Sigma})\)</span></td>
+<td>Gaussian distribution over <span class="math inline">\(\mathbf{x}\)</span> with mean <span class="math inline">\(\mathbf{\mu}\)</span> and covariance <span class="math inline">\(\mathbf{\Sigma}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{N}(x; \mu, \sigma^2)\)</span></td>
+<td>Gaussian distribution over <span class="math inline">\(x\)</span> with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})\)</span></td>
+<td><span class="math inline">\(\mathbf{z}\)</span> is sampled from a standard Gaussian</td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="functions" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="functions"><span class="header-section-number">7</span> Functions</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 71%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(f: \mathcal{A} \rightarrow \mathcal{B}\)</span></td>
+<td>The function <span class="math inline">\(f\)</span> with domain <span class="math inline">\(\mathcal{A}\)</span> and range <span class="math inline">\(\mathcal{B}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(f \circ g\)</span></td>
+<td>Composition of the functions <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(f_\theta(\mathbf{x})\)</span></td>
+<td>A function (model) of <span class="math inline">\(\mathbf{x}\)</span> with parameters <span class="math inline">\(\theta\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\log x\)</span></td>
+<td>The natural logarithm of <span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sigma(x)\)</span></td>
+<td>Logistic sigmoid, <span class="math inline">\(\frac{1}{1 + \exp(-x)}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathrm{softmax}(\mathbf{z})\)</span></td>
+<td>Softmax, <span class="math inline">\(\mathrm{softmax}(\mathbf{z})_k = \frac{\exp(z_k)}{\sum_{j=1}^K \exp(z_j)}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathrm{ReLU}(x)\)</span></td>
+<td>Rectified linear unit, <span class="math inline">\(\max(0, x)\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lVert \mathbf{x} \rVert_p\)</span></td>
+<td><span class="math inline">\(L^p\)</span> norm of <span class="math inline">\(\mathbf{x}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\lVert \mathbf{x} \rVert\)</span></td>
+<td><span class="math inline">\(L^2\)</span> norm of <span class="math inline">\(\mathbf{x}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lfloor x\rfloor\)</span></td>
+<td><span class="math inline">\(x\)</span> rounded down to the nearest integer</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\arg\min_{\theta} f(\theta)\)</span></td>
+<td>The value of <span class="math inline">\(\theta\)</span> that minimizes <span class="math inline">\(f(\theta)\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="datasets-and-learning" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="datasets-and-learning"><span class="header-section-number">8</span> Datasets and Learning</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 71%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(N\)</span></td>
+<td>Number of training examples</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(d\)</span></td>
+<td>Number of input features (dimensionality of <span class="math inline">\(\mathbf{x}\)</span>)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(K\)</span></td>
+<td>Number of classes</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{D} = \{(\mathbf{x}^{(i)}, y^{(i)})\}_{i=1}^N\)</span></td>
+<td>A training set</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{x}^{(i)}\)</span></td>
+<td>The <span class="math inline">\(i\)</span>-th training example</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(y^{(i)}\)</span>, <span class="math inline">\(\mathbf{y}^{(i)}\)</span></td>
+<td>The target (label or label vector) of the <span class="math inline">\(i\)</span>-th training example</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\hat{y}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span></td>
+<td>A model prediction</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{X} \in \mathbb{R}^{N \times d}\)</span></td>
+<td>The design matrix, with example <span class="math inline">\(\mathbf{x}^{(i)}\)</span> in row <span class="math inline">\(\mathbf{X}_{i,:}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(p_{\text{data}}\)</span></td>
+<td>The data-generating distribution</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(L(\hat{y}, y)\)</span></td>
+<td>Loss of a single example</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(J(\theta)\)</span></td>
+<td>Cost (objective): the loss averaged over the training set</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\theta^*\)</span></td>
+<td>Optimal parameters, <span class="math inline">\(\theta^* = \arg\min_{\theta} J(\theta)\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="course-specific-notation" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="course-specific-notation"><span class="header-section-number">9</span> Course-Specific Notation</h2>
+<p>The following symbols are not covered by the Deep Learning Book.</p>
+<section id="images-and-cnns" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="images-and-cnns"><span class="header-section-number">9.1</span> Images and CNNs</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 71%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(C \times H \times W\)</span></td>
+<td>Shape of an image or activation map: channels, height, width</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(N \times C \times H \times W\)</span></td>
+<td>Shape of a batch of <span class="math inline">\(N\)</span> images (NCHW, the format used by PyTorch)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(C_{in}\)</span>, <span class="math inline">\(C_{out}\)</span></td>
+<td>Number of input and output channels of a layer</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(i\)</span>, <span class="math inline">\(o\)</span></td>
+<td>Spatial input and output size of a convolution</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(k\)</span>, <span class="math inline">\(s\)</span>, <span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span></td>
+<td>Kernel size, stride, padding, dilation</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(K * I\)</span></td>
+<td>Convolution (implemented as cross-correlation) of input <span class="math inline">\(I\)</span> with kernel <span class="math inline">\(K\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(r_0\)</span></td>
+<td>Receptive field size</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="representation-learning" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="representation-learning"><span class="header-section-number">9.2</span> Representation Learning</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 71%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{z} = f(\mathbf{x})\)</span></td>
+<td>Representation (embedding) of <span class="math inline">\(\mathbf{x}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathrm{sim}(\mathbf{z}_i, \mathbf{z}_j)\)</span></td>
+<td>Similarity of two representations, usually cosine similarity</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\tau\)</span></td>
+<td>Temperature</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="generative-models" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="generative-models"><span class="header-section-number">9.3</span> Generative Models</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 71%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p_\theta(\mathbf{x})\)</span></td>
+<td>Model distribution with parameters <span class="math inline">\(\theta\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{z}\)</span></td>
+<td>Latent variable / random input of a generative model</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{c}\)</span></td>
+<td>Condition (e.g.&nbsp;class label, text prompt)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(g\)</span>, <span class="math inline">\(d\)</span></td>
+<td>Generator, discriminator</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(q_\psi(\mathbf{z} \mid \mathbf{x})\)</span></td>
+<td>Encoder (approximate posterior) of a VAE</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{x}_t\)</span>, <span class="math inline">\(T\)</span></td>
+<td>Sample at time step <span class="math inline">\(t\)</span>, number of time steps (diffusion, flows)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{\epsilon}\)</span></td>
+<td>Gaussian noise</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(v_\theta(\mathbf{x}_t, t)\)</span></td>
+<td>Velocity field (flow matching)</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="deviations-from-the-deep-learning-book" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="deviations-from-the-deep-learning-book"><span class="header-section-number">10</span> Deviations from the Deep Learning Book</h2>
+<ul>
+<li>Models are written as <span class="math inline">\(f_\theta(\mathbf{x})\)</span> instead of <span class="math inline">\(f(\mathbf{x}; \theta)\)</span>, as in most of the generative modelling literature.</li>
+<li>The number of training examples is <span class="math inline">\(N\)</span> (instead of <span class="math inline">\(m\)</span>) and the number of input features is <span class="math inline">\(d\)</span> (instead of <span class="math inline">\(n\)</span>).</li>
+<li>Sets are calligraphic (<span class="math inline">\(\mathcal{D}\)</span>) instead of blackboard bold.</li>
+<li>Vectors and matrices are upright bold (<span class="math inline">\(\mathbf{x}\)</span>, <span class="math inline">\(\mathbf{X}\)</span>) instead of bold italic.</li>
+<li>Pairs of examples in similarity and contrastive formulas are written as <span class="math inline">\(\mathbf{z}_i, \mathbf{z}_j\)</span> instead of <span class="math inline">\(\mathbf{z}^{(i)}, \mathbf{z}^{(j)}\)</span>, following the original papers.</li>
+<li>Named objectives from papers keep their symbol, e.g.&nbsp;<span class="math inline">\(\mathcal{L}_{\text{InfoNCE}}\)</span>.</li>
+<li>Time steps of diffusion models and flows are subscripts (<span class="math inline">\(\mathbf{x}_t\)</span>) instead of superscripts (<span class="math inline">\(\mathbf{x}^{(t)}\)</span>).</li>
+</ul>
 
 
 <!-- -->
 
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-goodfellow_deep_2016" class="csl-entry" role="listitem">
+Goodfellow, Ian, Yoshua Bengio, and Aaron Courville. 2016. <em>Deep <span>Learning</span></em>. MIT Press.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1227,79 +1556,168 @@ https://www.overleaf.com/learn/latex/Mathematical_fonts
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Numbers and Arrays</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>The notation follows the <span class="co">[</span><span class="ot">Deep Learning Book</span><span class="co">](https://www.deeplearningbook.org/contents/notation.html)</span> <span class="co">[</span><span class="ot">@goodfellow_deep_2016</span><span class="co">]</span> where possible. Deviations and course-specific symbols are listed at the end of this page.</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $a$    <span class="pp">|</span> A scalar (integer or real) <span class="pp">|</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{a}$ <span class="pp">|</span> A vector                   <span class="pp">|</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{A}$  <span class="pp">|</span> A matrix                   <span class="pp">|</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\tensor{A}$ <span class="pp">|</span> A tensor                   <span class="pp">|</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{I}_n$ <span class="pp">|</span> Identity matrix with $n$ rows and $n$ columns <span class="pp">|</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{I}$ <span class="pp">|</span> Identity matrix with dimensionality implied by context <span class="pp">|</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{e}^{(i)}$ <span class="pp">|</span> Standard basis vector $<span class="co">[</span><span class="ot">0,\dots,0,1,0,\dots,0</span><span class="co">]</span>$ with a 1 at position $i$ <span class="pp">|</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\text{diag}(\vect{a})$ <span class="pp">|</span> A square, diagonal matrix with diagonal entries given by $\vect{a}$ <span class="pp">|</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\rand{a}$ <span class="pp">|</span> A scalar random variable <span class="pp">|</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vrand{a}$ <span class="pp">|</span> A vector-valued random variable <span class="pp">|</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{A}$ <span class="pp">|</span> A matrix-valued random variable <span class="pp">|</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\theta$ <span class="pp">|</span> Parameters of a model <span class="pp">|</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $f(\theta, \vect{x})$ <span class="pp">|</span> A function (model) with paramters $\theta$ and data $\vect{x}$ <span class="pp">|</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{A} \odot \m{B}$ <span class="pp">|</span> Element-wise (Hadamard) product of $\m{A}$ and $\m{B}$ <span class="pp">|</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Numbers and Arrays</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $a$    <span class="pp">|</span> A scalar (integer or real) <span class="pp">|</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{a}$ <span class="pp">|</span> A vector                   <span class="pp">|</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{A}$  <span class="pp">|</span> A matrix                   <span class="pp">|</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\tensor{A}$ <span class="pp">|</span> A tensor                   <span class="pp">|</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{I}_n$ <span class="pp">|</span> Identity matrix with $n$ rows and $n$ columns <span class="pp">|</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{I}$ <span class="pp">|</span> Identity matrix with dimensionality implied by context <span class="pp">|</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{0}$ <span class="pp">|</span> Vector of zeros with dimensionality implied by context <span class="pp">|</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{e}^{(i)}$ <span class="pp">|</span> Standard basis vector $<span class="co">[</span><span class="ot">0,\dots,0,1,0,\dots,0</span><span class="co">]</span>$ with a 1 at position $i$ <span class="pp">|</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\text{diag}(\vect{a})$ <span class="pp">|</span> A square, diagonal matrix with diagonal entries given by $\vect{a}$ <span class="pp">|</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\rand{a}$ <span class="pp">|</span> A scalar random variable <span class="pp">|</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vrand{a}$ <span class="pp">|</span> A vector-valued random variable <span class="pp">|</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\theta$ <span class="pp">|</span> Parameters of a model <span class="pp">|</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Indexing</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sets</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $a_i$ <span class="pp">|</span> Element $i$ of vector $\vect{a}$, with indexing starting at 1 <span class="pp">|</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $A_{i,j}$ <span class="pp">|</span> Element $i, j$ of matrix $\m{A}$ <span class="pp">|</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## Datasets and Distributions</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{X}$ <span class="pp">|</span> The design matrix with dimensionality $nxp$ with $n$ samples with $p$ features. <span class="pp">|</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{x}^{(i)}$ <span class="pp">|</span> The i-th training example. <span class="pp">|</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{y}^{(i)}$ <span class="pp">|</span> The label-vector for the i-th training example. <span class="pp">|</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $y^{(i)}$ <span class="pp">|</span> The label for the i-th training example. <span class="pp">|</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## Probability Theory</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $P(x)$ <span class="pp">|</span> A probability distribution over a discrete variable. <span class="pp">|</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $p(x)$ <span class="pp">|</span> A probability distribution over a contiuous variable or over a variable whose type has not been specified. <span class="pp">|</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathbb{E}_{x \sim P} <span class="co">[</span><span class="ot"> f(x) </span><span class="co">]</span>\text{ or } \mathbb{E} f(x)$ <span class="pp">|</span> Expectation of $f(x)$ with respect to $P(x)$ <span class="pp">|</span></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathcal{N} ( \mathbf{x} ; \mu , \Sigma)$ <span class="pp">|</span> Gaussian distribution over $\mathbf{x}$ with mean $\mu$ and covariance $\Sigma$ <span class="pp">|</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $x \sim \mathcal{N} (\mu , \sigma)$ <span class="pp">|</span> Gaussian distribution over $x$ with mean $\mu$ and variance $\sigma$ <span class="pp">|</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## Calculus</span></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\nabla_{\vect{w}} J$ <span class="pp">|</span> Gradient of $J$ with respect to $\vect{w}$<span class="pp">|</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\frac{\partial J}{\partial w}$ <span class="pp">|</span> Partial derivative of $J$ with respect to $w$<span class="pp">|</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="fu">## Functions</span></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\log x$ <span class="pp">|</span> The natural logarithm of $x$. <span class="pp">|</span></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\lVert \mathbf{x} \rVert_p$ <span class="pp">|</span> $L^p$ norm of $\mathbf{x}$ <span class="pp">|</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\lVert \mathbf{x} \rVert$ <span class="pp">|</span> $L^2$ norm of $\mathbf{x}$ <span class="pp">|</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathcal{A}$ <span class="pp">|</span> A set <span class="pp">|</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathbb{R}$ <span class="pp">|</span> The set of real numbers <span class="pp">|</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathbb{R}^{d}$, $\mathbb{R}^{m \times n}$ <span class="pp">|</span> The set of real vectors with $d$ entries, of real matrices with $m$ rows and $n$ columns <span class="pp">|</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $<span class="sc">\{</span>0, 1, \dots, n<span class="sc">\}</span>$ <span class="pp">|</span> The set of all integers between $0$ and $n$ <span class="pp">|</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $<span class="co">[</span><span class="ot">a, b</span><span class="co">]</span>$ <span class="pp">|</span> The real interval including $a$ and $b$ <span class="pp">|</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $(a, b]$ <span class="pp">|</span> The real interval excluding $a$ but including $b$ <span class="pp">|</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Indexing</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $a_i$ <span class="pp">|</span> Element $i$ of vector $\vect{a}$, with indexing starting at 1 <span class="pp">|</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $A_{i,j}$ <span class="pp">|</span> Element $i, j$ of matrix $\m{A}$ <span class="pp">|</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{A}_{i,:}$ <span class="pp">|</span> Row $i$ of matrix $\m{A}$ <span class="pp">|</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{A}_{:,i}$ <span class="pp">|</span> Column $i$ of matrix $\m{A}$ <span class="pp">|</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\tensor{A}_{i,j,k}$ <span class="pp">|</span> Element $(i, j, k)$ of a 3-D tensor $\tensor{A}$ <span class="pp">|</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{W}^{(l)}$, $\vect{h}^{(l)}$ <span class="pp">|</span> Weights and activations of layer $l$ <span class="pp">|</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Linear Algebra Operations</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{A}^\top$ <span class="pp">|</span> Transpose of matrix $\m{A}$ <span class="pp">|</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{A} \odot \m{B}$ <span class="pp">|</span> Element-wise (Hadamard) product of $\m{A}$ and $\m{B}$ <span class="pp">|</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\det(\m{A})$ <span class="pp">|</span> Determinant of $\m{A}$ <span class="pp">|</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\operatorname{tr}(\m{A})$ <span class="pp">|</span> Trace of $\m{A}$ <span class="pp">|</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="fu">## Calculus</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\frac{dy}{dx}$ <span class="pp">|</span> Derivative of $y$ with respect to $x$ <span class="pp">|</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\frac{\partial y}{\partial x}$ <span class="pp">|</span> Partial derivative of $y$ with respect to $x$ <span class="pp">|</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\nabla_{\vect{x}} y$ <span class="pp">|</span> Gradient of $y$ with respect to $\vect{x}$ <span class="pp">|</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\frac{\partial f}{\partial \vect{x}} \in \mathbb{R}^{m \times n}$ <span class="pp">|</span> Jacobian matrix of $f: \mathbb{R}^n \rightarrow \mathbb{R}^m$ <span class="pp">|</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\int f(\vect{x}) \, d\vect{x}$ <span class="pp">|</span> Definite integral over the entire domain of $\vect{x}$ <span class="pp">|</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## Probability and Information Theory</span></span>
 <span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="fu">## Deep Learning</span></span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> NCHW <span class="pp">|</span> The input format of images and activations in PyTorch. N: number of images (batch size), C: number of channels, H: height, W: width<span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $P(x)$ <span class="pp">|</span> A probability distribution over a discrete variable <span class="pp">|</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $p(x)$ <span class="pp">|</span> A probability distribution over a continuous variable or over a variable whose type has not been specified <span class="pp">|</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $p(\vect{x} \mid \vect{y})$ <span class="pp">|</span> Conditional distribution of $\vect{x}$ given $\vect{y}$ <span class="pp">|</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{x} \sim p$ <span class="pp">|</span> $\vect{x}$ is sampled from (has distribution) $p$ <span class="pp">|</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathbb{E}_{\vect{x} \sim p} <span class="co">[</span><span class="ot"> f(\vect{x}) </span><span class="co">]</span>$ <span class="pp">|</span> Expectation of $f(\vect{x})$ with respect to $p(\vect{x})$ <span class="pp">|</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $D_{\mathrm{KL}}(P \,\Vert\, Q)$ <span class="pp">|</span> Kullback-Leibler divergence of $P$ and $Q$ <span class="pp">|</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathcal{N}(\vect{x}; \vect{\mu}, \m{\Sigma})$ <span class="pp">|</span> Gaussian distribution over $\vect{x}$ with mean $\vect{\mu}$ and covariance $\m{\Sigma}$ <span class="pp">|</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathcal{N}(x; \mu, \sigma^2)$ <span class="pp">|</span> Gaussian distribution over $x$ with mean $\mu$ and variance $\sigma^2$ <span class="pp">|</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{z} \sim \mathcal{N}(\vect{0}, \m{I})$ <span class="pp">|</span> $\vect{z}$ is sampled from a standard Gaussian <span class="pp">|</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## Functions</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $f: \mathcal{A} \rightarrow \mathcal{B}$ <span class="pp">|</span> The function $f$ with domain $\mathcal{A}$ and range $\mathcal{B}$ <span class="pp">|</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $f \circ g$ <span class="pp">|</span> Composition of the functions $f$ and $g$ <span class="pp">|</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $f_\theta(\vect{x})$ <span class="pp">|</span> A function (model) of $\vect{x}$ with parameters $\theta$ <span class="pp">|</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\log x$ <span class="pp">|</span> The natural logarithm of $x$ <span class="pp">|</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\sigma(x)$ <span class="pp">|</span> Logistic sigmoid, $\frac{1}{1 + \exp(-x)}$ <span class="pp">|</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathrm{softmax}(\vect{z})$ <span class="pp">|</span> Softmax, $\mathrm{softmax}(\vect{z})_k = \frac{\exp(z_k)}{\sum_{j=1}^K \exp(z_j)}$ <span class="pp">|</span></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathrm{ReLU}(x)$ <span class="pp">|</span> Rectified linear unit, $\max(0, x)$ <span class="pp">|</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\lVert \vect{x} \rVert_p$ <span class="pp">|</span> $L^p$ norm of $\vect{x}$ <span class="pp">|</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\lVert \vect{x} \rVert$ <span class="pp">|</span> $L^2$ norm of $\vect{x}$ <span class="pp">|</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\floor{x}$ <span class="pp">|</span> $x$ rounded down to the nearest integer <span class="pp">|</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\arg\min_{\theta} f(\theta)$ <span class="pp">|</span> The value of $\theta$ that minimizes $f(\theta)$ <span class="pp">|</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="fu">## Datasets and Learning</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $N$ <span class="pp">|</span> Number of training examples <span class="pp">|</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $d$ <span class="pp">|</span> Number of input features (dimensionality of $\vect{x}$) <span class="pp">|</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $K$ <span class="pp">|</span> Number of classes <span class="pp">|</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathcal{D} = <span class="sc">\{</span>(\vect{x}^{(i)}, y^{(i)})<span class="sc">\}</span>_{i=1}^N$ <span class="pp">|</span> A training set <span class="pp">|</span></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{x}^{(i)}$ <span class="pp">|</span> The $i$-th training example <span class="pp">|</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $y^{(i)}$, $\vect{y}^{(i)}$ <span class="pp">|</span> The target (label or label vector) of the $i$-th training example <span class="pp">|</span></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\hat{y}$, $\hat{\vect{y}}$ <span class="pp">|</span> A model prediction <span class="pp">|</span></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\m{X} \in \mathbb{R}^{N \times d}$ <span class="pp">|</span> The design matrix, with example $\vect{x}^{(i)}$ in row $\m{X}_{i,:}$ <span class="pp">|</span></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $p_{\text{data}}$ <span class="pp">|</span> The data-generating distribution <span class="pp">|</span></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $L(\hat{y}, y)$ <span class="pp">|</span> Loss of a single example <span class="pp">|</span></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $J(\theta)$ <span class="pp">|</span> Cost (objective): the loss averaged over the training set <span class="pp">|</span></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\theta^*$ | Optimal parameters, $\theta^* = \arg\min_{\theta} J(\theta)$ <span class="pp">|</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="fu">## Course-Specific Notation</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>The following symbols are not covered by the Deep Learning Book.</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="fu">### Images and CNNs</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $C \times H \times W$ <span class="pp">|</span> Shape of an image or activation map: channels, height, width <span class="pp">|</span></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $N \times C \times H \times W$ <span class="pp">|</span> Shape of a batch of $N$ images (NCHW, the format used by PyTorch) <span class="pp">|</span></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $C_{in}$, $C_{out}$ <span class="pp">|</span> Number of input and output channels of a layer <span class="pp">|</span></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $i$, $o$ <span class="pp">|</span> Spatial input and output size of a convolution <span class="pp">|</span></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $k$, $s$, $p$, $d$ <span class="pp">|</span> Kernel size, stride, padding, dilation <span class="pp">|</span></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $K * I$ <span class="pp">|</span> Convolution (implemented as cross-correlation) of input $I$ with kernel $K$ <span class="pp">|</span></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $r_0$ <span class="pp">|</span> Receptive field size <span class="pp">|</span></span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="fu">### Representation Learning</span></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{z} = f(\vect{x})$ <span class="pp">|</span> Representation (embedding) of $\vect{x}$ <span class="pp">|</span></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mathrm{sim}(\vect{z}_i, \vect{z}_j)$ <span class="pp">|</span> Similarity of two representations, usually cosine similarity <span class="pp">|</span></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\tau$ <span class="pp">|</span> Temperature <span class="pp">|</span></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### Generative Models</span></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Syntax    <span class="pp">|</span> Description                <span class="pp">|</span></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------------------------|</span></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $p_\theta(\vect{x})$ <span class="pp">|</span> Model distribution with parameters $\theta$ <span class="pp">|</span></span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{z}$ <span class="pp">|</span> Latent variable / random input of a generative model <span class="pp">|</span></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{c}$ <span class="pp">|</span> Condition (e.g. class label, text prompt) <span class="pp">|</span></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $g$, $d$ <span class="pp">|</span> Generator, discriminator <span class="pp">|</span></span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $q_\psi(\vect{z} \mid \vect{x})$ <span class="pp">|</span> Encoder (approximate posterior) of a VAE <span class="pp">|</span></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{x}_t$, $T$ <span class="pp">|</span> Sample at time step $t$, number of time steps (diffusion, flows) <span class="pp">|</span></span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\vect{\epsilon}$ <span class="pp">|</span> Gaussian noise <span class="pp">|</span></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $v_\theta(\vect{x}_t, t)$ <span class="pp">|</span> Velocity field (flow matching) <span class="pp">|</span></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a><span class="fu">## Deviations from the Deep Learning Book</span></span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Models are written as $f_\theta(\vect{x})$ instead of $f(\vect{x}; \theta)$, as in most of the generative modelling literature.</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The number of training examples is $N$ (instead of $m$) and the number of input features is $d$ (instead of $n$).</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Sets are calligraphic ($\mathcal{D}$) instead of blackboard bold.</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Vectors and matrices are upright bold ($\vect{x}$, $\m{X}$) instead of bold italic.</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pairs of examples in similarity and contrastive formulas are written as $\vect{z}_i, \vect{z}_j$ instead of $\vect{z}^{(i)}, \vect{z}^{(j)}$, following the original papers.</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Named objectives from papers keep their symbol, e.g. $\mathcal{L}_{\text{InfoNCE}}$.</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Time steps of diffusion models and flows are subscripts ($\vect{x}_t$) instead of superscripts ($\vect{x}^{(t)}$).</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

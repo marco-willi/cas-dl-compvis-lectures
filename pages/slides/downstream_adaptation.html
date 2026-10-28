@@ -374,12 +374,12 @@ Figure&nbsp;1: Blue: frozen, orange: trainable, dashed orange: frozen + trainabl
 <section id="lora-low-rank-updates" class="slide level2">
 <h2>LoRA — Low-Rank Updates</h2>
 <p><span class="math display">\[
-W' = W + \frac{\alpha}{r}BA, \qquad
-B \in \mathbb{R}^{d_{out}\times r},\quad
-A \in \mathbb{R}^{r\times d_{in}}
+\mathbf{W}' = \mathbf{W} + \frac{\alpha}{r}\mathbf{B}\mathbf{A}, \qquad
+\mathbf{B} \in \mathbb{R}^{d_{out}\times r},\quad
+\mathbf{A} \in \mathbb{R}^{r\times d_{in}}
 \]</span></p>
 <ul>
-<li class="fragment"><span class="math inline">\(W\)</span> stays frozen; only <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span> and the head are trained</li>
+<li class="fragment"><span class="math inline">\(\mathbf{W}\)</span> stays frozen; only <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{B}\)</span> and the head are trained</li>
 <li class="fragment"><span class="math inline">\(r(d_{in}+d_{out})\)</span> instead of <span class="math inline">\(d_{out}d_{in}\)</span> parameters; rank <span class="math inline">\(r\)</span> controls capacity</li>
 <li class="fragment">Unlike adapters, LoRA inserts no new layer: it changes existing weights</li>
 <li class="fragment">Backprop still passes through the whole encoder</li>

@@ -658,7 +658,7 @@ Figure&nbsp;1: Lifespan of major deep learning frameworks, from first public rel
 <p>At the core of neural networks is the <em>Computational Graph</em>. It automatically embeds dependent operations in a <em>directed acyclic graph (DAG)</em>. Gradients are tracked as needed, allowing variables to be efficiently updated/trained.</p>
 <p><a href="#fig-infrastructure-comp-graph2" class="quarto-xref">Figure&nbsp;2</a> displays a graph, representing <a href="#eq-frameworks-graph" class="quarto-xref">Equation&nbsp;1</a>. An example with numpy is shown in <a href="#lst-frameworks-numpy-graph" class="quarto-xref">Listing&nbsp;1</a>, using random data to evaluate the function including the derivatives.</p>
 <p><span id="eq-frameworks-graph"><span class="math display">\[
-    f(\mathbf{A}, \mathbf{B}, \mathbf{C}) =  \sum_{ij} \big((\mathbf{A} \odot \mathbf{B}) + \mathbf{C}\big)_{ij}
+    f(\mathbf{A}, \mathbf{B}, \mathbf{C}) =  \sum_{i,j} \big((\mathbf{A} \odot \mathbf{B}) + \mathbf{C}\big)_{i,j}
 \tag{1}\]</span></span></p>
 <div id="fig-infrastructure-comp-graph2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -670,7 +670,7 @@ Figure&nbsp;2: Computational Graph.
 </figcaption>
 </figure>
 </div>
-<div id="2ab31f06" class="cell" data-execution_count="1">
+<div id="e76c70c5" class="cell" data-execution_count="1">
 <div id="lst-frameworks-numpy-graph" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-numpy-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -720,7 +720,7 @@ df/dc=
 </div>
 </div>
 <p><a href="#lst-frameworks-pytorch-graph" class="quarto-xref">Listing&nbsp;2</a> shows the same example in PyTorch. Using <code>x.backward()</code>, gradients with respect to <code>x</code> are computed for variables connected to <code>x</code>.</p>
-<div id="9a14ca6d" class="cell" data-execution_count="2">
+<div id="162de6ac" class="cell" data-execution_count="2">
 <div id="lst-frameworks-pytorch-graph" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-pytorch-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -765,7 +765,7 @@ Figure&nbsp;3: computational graph
 </div>
 </div>
 <p>To perform the computation on a GPU, a simple instruction suffices (see <a href="#lst-frameworks-gpu" class="quarto-xref">Listing&nbsp;3</a>). <code>torch.accelerator</code> detects the available hardware, such as an NVIDIA GPU (<code>cuda</code>) or Apple Silicon (<code>mps</code>).</p>
-<div id="508b0f04" class="cell" data-execution_count="4">
+<div id="765c0ce4" class="cell" data-execution_count="4">
 <div id="lst-frameworks-gpu" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-gpu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -833,7 +833,7 @@ Listing&nbsp;3: Move computations to GPU
 <h2 data-number="2.2" class="anchored" data-anchor-id="tensors"><span class="header-section-number">2.2</span> Tensors</h2>
 <p><a href="https://docs.pytorch.org/docs/stable/tensors.html"><code>torch.Tensor</code></a> is the central data structure in PyTorch. Essentially very similar to <code>numpy.array</code>, it can be easily loaded onto GPUs.</p>
 <p>Tensors can be created in various ways. For example, from lists:</p>
-<div id="aff4168f" class="cell" data-execution_count="5">
+<div id="b0e4dfe2" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [[<span class="dv">1</span>, <span class="dv">2</span>],[<span class="dv">3</span>, <span class="dv">4</span>]]</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>x_data <span class="op">=</span> torch.tensor(data)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -843,7 +843,7 @@ Listing&nbsp;3: Move computations to GPU
 </div>
 </div>
 <p>Or from numpy.ndarray:</p>
-<div id="19181d49" class="cell" data-execution_count="6">
+<div id="2cc8f0f9" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>np_array <span class="op">=</span> np.array(data)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>x_np <span class="op">=</span> torch.from_numpy(np_array)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x_np)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -853,7 +853,7 @@ Listing&nbsp;3: Move computations to GPU
 </div>
 </div>
 <p>Or from other tensors:</p>
-<div id="e74b8a19" class="cell" data-execution_count="7">
+<div id="5dc5ea69" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x_ones <span class="op">=</span> torch.ones_like(x_data) <span class="co"># retains the properties of x_data</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Ones Tensor: </span><span class="ch">\n</span><span class="ss"> </span><span class="sc">{</span>x_ones<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">"</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -865,13 +865,13 @@ Listing&nbsp;3: Move computations to GPU
         [1, 1]]) 
 
 Random Tensor: 
- tensor([[0.0659, 0.7256],
-        [0.6546, 0.5263]]) 
+ tensor([[0.2119, 0.6629],
+        [0.6448, 0.6978]]) 
 </code></pre>
 </div>
 </div>
 <p>Or with randomly generated numbers or constants:</p>
-<div id="a9837062" class="cell" data-execution_count="8">
+<div id="7884e678" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>shape <span class="op">=</span> (<span class="dv">2</span>,<span class="dv">3</span>,)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rand_tensor <span class="op">=</span> torch.rand(shape)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>ones_tensor <span class="op">=</span> torch.ones(shape)</span>
@@ -882,8 +882,8 @@ Random Tensor:
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Zeros Tensor: </span><span class="ch">\n</span><span class="ss"> </span><span class="sc">{</span>zeros_tensor<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Tensor: 
- tensor([[0.7016, 0.8830, 0.9072],
-        [0.7363, 0.3202, 0.4651]]) 
+ tensor([[0.4121, 0.9008, 0.7927],
+        [0.8836, 0.9555, 0.9306]]) 
 
 Ones Tensor: 
  tensor([[1., 1., 1.],
@@ -895,7 +895,7 @@ Zeros Tensor:
 </div>
 </div>
 <p>Tensor attributes:</p>
-<div id="7d59c990" class="cell" data-execution_count="9">
+<div id="715e6e37" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>tensor <span class="op">=</span> torch.rand(<span class="dv">3</span>,<span class="dv">4</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Shape of tensor: </span><span class="sc">{</span>tensor<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -909,7 +909,7 @@ Device tensor is stored on: cpu</code></pre>
 </div>
 <p>There are over 100 operations that can be performed on a tensor. The full list is available <a href="https://docs.pytorch.org/docs/stable/torch.html">here</a>.</p>
 <p>Indexing and Slicing:</p>
-<div id="177e9999" class="cell" data-execution_count="10">
+<div id="94488415" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tensor <span class="op">=</span> torch.ones(<span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"First row: </span><span class="sc">{</span>tensor[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"First column: </span><span class="sc">{</span>tensor[:, <span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -927,7 +927,7 @@ tensor([[1., 0., 1., 1.],
 </div>
 </div>
 <p>Joining tensors:</p>
-<div id="cb8a59bd" class="cell" data-execution_count="11">
+<div id="8c66587e" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>t1 <span class="op">=</span> torch.cat([tensor, tensor, tensor], dim<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -938,7 +938,7 @@ tensor([[1., 0., 1., 1.],
 </div>
 </div>
 <p>Arithmetic operations:</p>
-<div id="cc2ef260" class="cell" data-execution_count="12">
+<div id="110dacb9" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> tensor <span class="op">@</span> tensor.T</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> tensor.matmul(tensor.T)</span>
@@ -994,7 +994,7 @@ Figure&nbsp;4: Source: <a href="https://docs.pytorch.org/tutorials/beginner/basi
 </figure>
 </div>
 <p>The network from <a href="#fig-infrastructure-comp-graph" class="quarto-xref">Figure&nbsp;4</a> is defined in PyTorch code in <a href="#lst-frameworks-example-network" class="quarto-xref">Listing&nbsp;4</a>.</p>
-<div id="442ac5dd" class="cell" data-execution_count="13">
+<div id="92153307" class="cell" data-execution_count="13">
 <div id="lst-frameworks-example-network" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-example-network-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1014,17 +1014,17 @@ Listing&nbsp;4: Example computational graph.
 </div>
 </div>
 <p>We can now use Autograd to compute the gradient:</p>
-<div id="d52eaf0f" class="cell" data-execution_count="14">
+<div id="95d6439d" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>loss.backward()</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w.grad)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(b.grad)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>tensor([[0.3045, 0.0628, 0.0071],
-        [0.3045, 0.0628, 0.0071],
-        [0.3045, 0.0628, 0.0071],
-        [0.3045, 0.0628, 0.0071],
-        [0.3045, 0.0628, 0.0071]])
-tensor([0.3045, 0.0628, 0.0071])</code></pre>
+<pre><code>tensor([[0.3298, 0.2318, 0.3204],
+        [0.3298, 0.2318, 0.3204],
+        [0.3298, 0.2318, 0.3204],
+        [0.3298, 0.2318, 0.3204],
+        [0.3298, 0.2318, 0.3204]])
+tensor([0.3298, 0.2318, 0.3204])</code></pre>
 </div>
 </div>
 </section>
@@ -1063,7 +1063,7 @@ tensor([0.3045, 0.0628, 0.0071])</code></pre>
 </div>
 </div>
 <p><a href="#lst-frameworks-example-module" class="quarto-xref">Listing&nbsp;5</a> depicts an example of a class that inherits from <code>torch.nn.Module</code>.</p>
-<div id="7eeb97e8" class="cell" data-execution_count="15">
+<div id="4a63017a" class="cell" data-execution_count="15">
 <div id="lst-frameworks-example-module" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-example-module-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1093,7 +1093,7 @@ Listing&nbsp;5: Example nn.Module.
 </div>
 </div>
 <p>You can also visualize the model:</p>
-<div id="1c8c509b" class="cell" data-execution_count="16">
+<div id="80406b29" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NeuralNetwork()</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1110,7 +1110,7 @@ Listing&nbsp;5: Example nn.Module.
 </div>
 </div>
 <p>To use the model, you can pass input data. This will execute the <code>forward()</code> method, along with background operations.</p>
-<div id="ef1f2669" class="cell" data-execution_count="17">
+<div id="25131909" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> torch.rand(<span class="dv">1</span>, <span class="dv">28</span>, <span class="dv">28</span>)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> model(X)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>pred_probab <span class="op">=</span> nn.Softmax(dim<span class="op">=</span><span class="dv">1</span>)(logits)</span>
@@ -1121,7 +1121,7 @@ Listing&nbsp;5: Example nn.Module.
 </div>
 </div>
 <p>The executed operations will look like this:</p>
-<div id="cd36086f" class="cell" data-execution_count="18">
+<div id="072d55b0" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchviz <span class="im">import</span> make_dot</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>make_dot(logits)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
@@ -1133,7 +1133,7 @@ Listing&nbsp;5: Example nn.Module.
 </div>
 </div>
 <p>For more in-depth information about the model you can use the external library <a href="https://github.com/tyleryep/torchinfo">torchinfo</a> as seen in <a href="#lst-frameworks-example-torchinfo" class="quarto-xref">Listing&nbsp;6</a>.</p>
-<div id="7893a35f" class="cell" data-execution_count="19">
+<div id="2a92f166" class="cell" data-execution_count="19">
 <div id="lst-frameworks-example-torchinfo" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-example-torchinfo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1194,12 +1194,12 @@ Estimated Total Size (MB): 4.14
 <p><strong>Rule of thumb</strong>: Start with AdamW. SGD with momentum remains a strong alternative for CNNs, but usually requires more tuning of the learning rate schedule.</p>
 </div>
 </div>
-<div id="d70f39b9" class="cell" data-execution_count="20">
+<div id="30ef3bfd" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> optim</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> optim.SGD(model.parameters(), lr<span class="op">=</span><span class="fl">0.01</span>, momentum<span class="op">=</span><span class="fl">0.9</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can then use the optimizer to adjust the parameters by minimizing a loss function. See <a href="#lst-frameworks-example-optim" class="quarto-xref">Listing&nbsp;7</a> for an example.</p>
-<div id="c614a978" class="cell" data-execution_count="21">
+<div id="b7fa1b75" class="cell" data-execution_count="21">
 <div id="lst-frameworks-example-optim" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-example-optim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1268,7 +1268,7 @@ Listing&nbsp;7: Dummy iterations to minimize a loss function using an optimizer.
 <section id="training-loops" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="training-loops"><span class="header-section-number">2.6</span> Training Loops</h2>
 <p>Typically, you put together a training loop to train a model. A training loop iterates over batches of data and optimizes the model parameters with each iteration.</p>
-<div id="21b78579" class="cell" data-execution_count="22">
+<div id="d9f1dc5b" class="cell" data-execution_count="22">
 <div id="lst-frameworks-train-loop" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-train-loop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1315,7 +1315,7 @@ Listing&nbsp;8: Training and test loop.
 </figure>
 </div>
 </div>
-<div id="f2fe0701" class="cell" data-execution_count="23">
+<div id="7fbaa5bc" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> nn.CrossEntropyLoss()</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.SGD(model.parameters(), lr<span class="op">=</span>learning_rate)</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1362,7 +1362,7 @@ Note
 <section id="pre-trained-models" class="level2" data-number="2.7">
 <h2 data-number="2.7" class="anchored" data-anchor-id="pre-trained-models"><span class="header-section-number">2.7</span> Pre-trained models</h2>
 <p>Since training models can be time-consuming and expensive, pre-trained models are often used. They allow models to be adapted to a specific task more quickly and cost-effectively. In many areas, particularly NLP and computer vision, using pre-trained models is standard. PyTorch provides <a href="https://docs.pytorch.org/vision/stable/index.html"><code>torchvision</code></a> for computer vision applications. <code>torchvision</code> provides functionalities useful for modeling image data. Pre-trained models can also be easily integrated, as shown in <a href="#lst-frameworks-pre-trained-model" class="quarto-xref">Listing&nbsp;9</a>.</p>
-<div id="abd71227" class="cell" data-execution_count="24">
+<div id="f7719c9b" class="cell" data-execution_count="24">
 <div id="lst-frameworks-pre-trained-model" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-pre-trained-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1378,7 +1378,7 @@ Listing&nbsp;9: Example of importing ResNet-50 model with pre-trained weights fr
 </div>
 </div>
 <p>A much larger collection of pre-trained computer vision models is available via <a href="https://huggingface.co/docs/timm"><code>timm</code></a> (PyTorch Image Models) and the <a href="https://huggingface.co/models">Hugging Face Hub</a>. <a href="#lst-frameworks-timm" class="quarto-xref">Listing&nbsp;10</a> loads a pre-trained model and replaces its classification head for a task with 5 classes.</p>
-<div id="b0e09e86" class="cell" data-execution_count="25">
+<div id="1f59e2ea" class="cell" data-execution_count="25">
 <div id="lst-frameworks-timm" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-timm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1406,7 +1406,7 @@ Listing&nbsp;10: Loading a pre-trained model with timm.
 <h2 data-number="3.2" class="anchored" data-anchor-id="keras"><span class="header-section-number">3.2</span> Keras</h2>
 <p><a href="https://keras.io/">Keras</a> started as an independent high-level deep learning API designed to simplify model creation with a clean and intuitive syntax. Since 2017, it has been tightly integrated into TensorFlow as its official front-end (<code>tf.keras</code>). In 2023, <a href="https://keras.io/keras_3/">Keras 3</a> was released as a framework-agnostic version that runs on multiple backends: TensorFlow, JAX, and PyTorch.</p>
 <p>Keras focuses on ease of use, modularity, and rapid prototyping, making it an excellent choice for teaching, applied machine learning, and fast experimentation. See <a href="#lst-frameworks-example-keras" class="quarto-xref">Listing&nbsp;11</a> for example code using Keras 3.</p>
-<div id="d5c1cdad" class="cell" data-execution_count="26">
+<div id="f4496452" class="cell" data-execution_count="26">
 <div id="lst-frameworks-example-keras" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-example-keras-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1440,7 +1440,7 @@ Listing&nbsp;11: Example with Keras 3.
 <section id="jax" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="jax"><span class="header-section-number">3.3</span> Jax</h2>
 <p><a href="https://docs.jax.dev/">Jax</a> has gained significant popularity in recent years. Developed by researchers at Google, it is primarily used in research and foundation-model development. Jax provides a NumPy-like API with automatic differentiation (autodiff) and function transformations such as jit (for compilation) and vmap (for vectorization). It enables high-performance, composable numerical computing, and serves as the foundation for neural network libraries such as <a href="https://flax.readthedocs.io/en/stable/">Flax</a>. Flax’s current API, <em>NNX</em>, defines models as regular Python objects, similar to PyTorch. (DeepMind’s <a href="https://github.com/google-deepmind/dm-haiku">Haiku</a> is in maintenance mode and recommends Flax for new projects.) See <a href="#lst-frameworks-example-jax" class="quarto-xref">Listing&nbsp;12</a> for an example.</p>
-<div id="45c252f9" class="cell" data-execution_count="27">
+<div id="371f7fe7" class="cell" data-execution_count="27">
 <div id="lst-frameworks-example-jax" class="python cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-lst" id="lst-frameworks-example-jax-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1486,10 +1486,10 @@ Listing&nbsp;12: Example with JAX and Flax NNX.
 <section id="tensor-operations" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="tensor-operations"><span class="header-section-number">4.1</span> Tensor Operations</h2>
 <p>In neural networks, there are many tensor operations. Tensors are essentially multi-dimensional arrays, such as a scalar <span class="math inline">\(x\)</span>, a vector <span class="math inline">\(\mathbf{x}\)</span>, or a matrix <span class="math inline">\(\mathbf{X}\)</span>.</p>
-<p>A typical representative of a tensor operation is the matrix multiplication <span class="math inline">\(\mathbf{C} = \mathbf{A}\mathbf{B}\)</span>. It is everywhere in neural networks: a linear layer applied to a batch of inputs computes <span class="math inline">\(\mathbf{Y} = \mathbf{X}\mathbf{W}\)</span>, and convolutions are typically implemented as matrix multiplications as well.</p>
-<p><a href="#fig-infrastructure-matrix-mult" class="quarto-xref">Figure&nbsp;5</a> illustrates that each entry <span class="math inline">\(c_{ij}\)</span> only requires row <span class="math inline">\(i\)</span> of <span class="math inline">\(\mathbf{A}\)</span> and column <span class="math inline">\(j\)</span> of <span class="math inline">\(\mathbf{B}\)</span>:</p>
+<p>A typical representative of a tensor operation is the matrix multiplication <span class="math inline">\(\mathbf{C} = \mathbf{A}\mathbf{B}\)</span>. It is everywhere in neural networks: a linear layer applied to a batch of inputs computes <span class="math inline">\(\mathbf{Y} = \mathbf{X}\mathbf{W}^\top\)</span>, and convolutions are typically implemented as matrix multiplications as well.</p>
+<p><a href="#fig-infrastructure-matrix-mult" class="quarto-xref">Figure&nbsp;5</a> illustrates that each entry <span class="math inline">\(C_{i,j}\)</span> only requires row <span class="math inline">\(i\)</span> of <span class="math inline">\(\mathbf{A}\)</span> and column <span class="math inline">\(j\)</span> of <span class="math inline">\(\mathbf{B}\)</span>:</p>
 <p><span id="eq-frameworks-matmul"><span class="math display">\[
-c_{ij} = \sum_k a_{ik} \, b_{kj}
+C_{i,j} = \sum_k A_{i,k} \, B_{k,j}
 \tag{2}\]</span></span></p>
 <p>All entries of <span class="math inline">\(\mathbf{C}\)</span> are therefore independent of each other and can be computed in parallel.</p>
 <div id="fig-infrastructure-matrix-mult" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -2212,7 +2212,7 @@ Micikevicius, Paulius, Sharan Narang, Jonah Alben, et al. 2018. <em>Mixed <span>
 <span id="cb49-98"><a href="#cb49-98" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-99"><a href="#cb49-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-100"><a href="#cb49-100" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb49-101"><a href="#cb49-101" aria-hidden="true" tabindex="-1"></a>    f(\mathbf{A}, \mathbf{B}, \mathbf{C}) =  \sum_{ij} \big((\mathbf{A} \odot \mathbf{B}) + \mathbf{C}\big)_{ij}</span>
+<span id="cb49-101"><a href="#cb49-101" aria-hidden="true" tabindex="-1"></a>    f(\m{A}, \m{B}, \m{C}) =  \sum_{i,j} \big((\m{A} \odot \m{B}) + \m{C}\big)_{i,j}</span>
 <span id="cb49-102"><a href="#cb49-102" aria-hidden="true" tabindex="-1"></a>$$ {#eq-frameworks-graph}</span>
 <span id="cb49-103"><a href="#cb49-103" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-104"><a href="#cb49-104" aria-hidden="true" tabindex="-1"></a></span>
@@ -2880,22 +2880,22 @@ Micikevicius, Paulius, Sharan Narang, Jonah Alben, et al. 2018. <em>Mixed <span>
 <span id="cb49-820"><a href="#cb49-820" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-821"><a href="#cb49-821" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tensor Operations</span></span>
 <span id="cb49-822"><a href="#cb49-822" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-823"><a href="#cb49-823" aria-hidden="true" tabindex="-1"></a>In neural networks, there are many tensor operations. Tensors are essentially multi-dimensional arrays, such as a scalar $x$, a vector $\mathbf{x}$, or a matrix $\mathbf{X}$.</span>
+<span id="cb49-823"><a href="#cb49-823" aria-hidden="true" tabindex="-1"></a>In neural networks, there are many tensor operations. Tensors are essentially multi-dimensional arrays, such as a scalar $x$, a vector $\vect{x}$, or a matrix $\m{X}$.</span>
 <span id="cb49-824"><a href="#cb49-824" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-825"><a href="#cb49-825" aria-hidden="true" tabindex="-1"></a>A typical representative of a tensor operation is the matrix multiplication $\mathbf{C} = \mathbf{A}\mathbf{B}$. It is everywhere in neural networks: a linear layer applied to a batch of inputs computes $\mathbf{Y} = \mathbf{X}\mathbf{W}$, and convolutions are typically implemented as matrix multiplications as well.</span>
+<span id="cb49-825"><a href="#cb49-825" aria-hidden="true" tabindex="-1"></a>A typical representative of a tensor operation is the matrix multiplication $\m{C} = \m{A}\m{B}$. It is everywhere in neural networks: a linear layer applied to a batch of inputs computes $\m{Y} = \m{X}\m{W}^\top$, and convolutions are typically implemented as matrix multiplications as well.</span>
 <span id="cb49-826"><a href="#cb49-826" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-827"><a href="#cb49-827" aria-hidden="true" tabindex="-1"></a>@fig-infrastructure-matrix-mult illustrates that each entry $c_{ij}$ only requires row $i$ of $\mathbf{A}$ and column $j$ of $\mathbf{B}$:</span>
+<span id="cb49-827"><a href="#cb49-827" aria-hidden="true" tabindex="-1"></a>@fig-infrastructure-matrix-mult illustrates that each entry $C_{i,j}$ only requires row $i$ of $\m{A}$ and column $j$ of $\m{B}$:</span>
 <span id="cb49-828"><a href="#cb49-828" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-829"><a href="#cb49-829" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb49-830"><a href="#cb49-830" aria-hidden="true" tabindex="-1"></a>c_{ij} = \sum_k a_{ik} \, b_{kj}</span>
+<span id="cb49-830"><a href="#cb49-830" aria-hidden="true" tabindex="-1"></a>C_{i,j} = \sum_k A_{i,k} \, B_{k,j}</span>
 <span id="cb49-831"><a href="#cb49-831" aria-hidden="true" tabindex="-1"></a>$$ {#eq-frameworks-matmul}</span>
 <span id="cb49-832"><a href="#cb49-832" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-833"><a href="#cb49-833" aria-hidden="true" tabindex="-1"></a>All entries of $\mathbf{C}$ are therefore independent of each other and can be computed in parallel.</span>
+<span id="cb49-833"><a href="#cb49-833" aria-hidden="true" tabindex="-1"></a>All entries of $\m{C}$ are therefore independent of each other and can be computed in parallel.</span>
 <span id="cb49-834"><a href="#cb49-834" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-835"><a href="#cb49-835" aria-hidden="true" tabindex="-1"></a>::: {#fig-infrastructure-matrix-mult}</span>
 <span id="cb49-836"><a href="#cb49-836" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}matmul_parallel.png)</span>{width=700}</span>
 <span id="cb49-837"><a href="#cb49-837" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-838"><a href="#cb49-838" aria-hidden="true" tabindex="-1"></a>Matrix multiplication: each entry of $\mathbf{C}$ is an independent dot product of a row of $\mathbf{A}$ and a column of $\mathbf{B}$.</span>
+<span id="cb49-838"><a href="#cb49-838" aria-hidden="true" tabindex="-1"></a>Matrix multiplication: each entry of $\m{C}$ is an independent dot product of a row of $\m{A}$ and a column of $\m{B}$.</span>
 <span id="cb49-839"><a href="#cb49-839" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb49-840"><a href="#cb49-840" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-841"><a href="#cb49-841" aria-hidden="true" tabindex="-1"></a><span class="fu">## Graphics Processing Units (GPUs)</span></span>

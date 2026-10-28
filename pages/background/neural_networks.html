@@ -559,7 +559,7 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <p><strong>From Linear to Non-Linear:</strong></p>
 <ul>
-<li>Linear models: <span class="math inline">\(f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}\)</span> (limited to linear decision boundaries)</li>
+<li>Linear models: <span class="math inline">\(f(\vect{x}) = \m{W}\vect{x} + \vect{b}\)</span> (limited to linear decision boundaries)</li>
 <li>Neural networks add <strong>activation functions</strong> (ReLU, sigmoid, tanh) enabling non-linear mappings</li>
 <li>Without activation functions, multiple layers collapse to a single linear transformation</li>
 </ul>
@@ -579,7 +579,7 @@ window.Quarto = {
 <p><strong>Architecture Components:</strong></p>
 <ul>
 <li><strong>Multilayer Perceptron (MLP)</strong>: Fully connected layers with activation functions</li>
-<li><strong>Parameters</strong>: Weights <span class="math inline">\(\mathbf{W}\)</span> and biases <span class="math inline">\(\mathbf{b}\)</span> learned via optimization (backpropagation)</li>
+<li><strong>Parameters</strong>: Weights <span class="math inline">\(\m{W}\)</span> and biases <span class="math inline">\(\vect{b}\)</span> learned via optimization (backpropagation)</li>
 <li><strong>Example</strong>: 784 → 128 → 10 network has ~102K parameters (784×128 + 128×10 + biases)</li>
 </ul>
 <p><strong>Practical Implementation (PyTorch):</strong></p>
@@ -643,17 +643,17 @@ Figure&nbsp;3: A neural network with two <em>hidden layers</em>. The lines show 
 \tag{1}\]</span></span></p>
 <p>With the following elements:</p>
 <ul>
-<li>The <span class="math inline">\(i\)</span>-th data point <span class="math inline">\(\mathbf{x}^{(i)}\)</span> is a <span class="math inline">\(p\)</span>-dimensional vector: <span class="math inline">\(\in \mathbb{R}^{p \times 1}\)</span></li>
-<li>Model weights <span class="math inline">\(\mathbf{W} \in \mathbb{R}^{k \times p}\)</span> linearily project the data point to <span class="math inline">\(k\)</span> dimensions.</li>
+<li>The <span class="math inline">\(i\)</span>-th data point <span class="math inline">\(\mathbf{x}^{(i)}\)</span> is a <span class="math inline">\(d\)</span>-dimensional vector: <span class="math inline">\(\in \mathbb{R}^{d \times 1}\)</span></li>
+<li>Model weights <span class="math inline">\(\mathbf{W} \in \mathbb{R}^{k \times d}\)</span> linearily project the data point to <span class="math inline">\(k\)</span> dimensions.</li>
 <li>A bias term <span class="math inline">\(\mathbf{b} \in \mathbb{R}^{k \times 1}\)</span> is added to the result.</li>
 </ul>
 <p><span class="math inline">\(f(\mathbf{x}^{(i)})\)</span> is thus <span class="math inline">\(\in  \mathbb{R}^{k \times 1}\)</span>.</p>
 <p>The following parameters must be learned from training data using an optimization method: <span class="math inline">\(\mathbf{W}\)</span> and <span class="math inline">\(\mathbf{b}\)</span>.</p>
 <p>In neural networks, the linear model is extended with additional <em>layers</em>. <a href="#eq-nn-deep-linear-model" class="quarto-xref">Equation&nbsp;2</a> defines a neural network with two layers (one hidden layer <span class="math inline">\(\mathbf{W}^{(1)}, \mathbf{b}^{(1)}\)</span> and one output layer <span class="math inline">\(\mathbf{W}^{(2)}, \mathbf{b}^{(2)}\)</span>).</p>
 <p><span id="eq-nn-deep-linear-model"><span class="math display">\[
-   f(\mathbf{x}^{(i)}) = \mathbf{W}^{(2)} g\big(\mathbf{W}^{(1)} \mathbf{x}^{(i)}  +  \mathbf{b}^{(1)} \big)  +  \mathbf{b}^{(2)}
+   f(\mathbf{x}^{(i)}) = \mathbf{W}^{(2)} \phi\big(\mathbf{W}^{(1)} \mathbf{x}^{(i)}  +  \mathbf{b}^{(1)} \big)  +  \mathbf{b}^{(2)}
 \tag{2}\]</span></span></p>
-<p>Where <span class="math inline">\(g()\)</span> is an <em>activation function</em>, such as the <em>ReLU</em> function shown in <a href="#eq-nn-relu" class="quarto-xref">Equation&nbsp;3</a>. Only due to <em>activation functions</em> non-linear relationships can be modelled. Without activation functions, the model collapses to a simple linear model with one layer.</p>
+<p>Where <span class="math inline">\(\phi()\)</span> is an <em>activation function</em>, such as the <em>ReLU</em> function shown in <a href="#eq-nn-relu" class="quarto-xref">Equation&nbsp;3</a>. Only due to <em>activation functions</em> non-linear relationships can be modelled. Without activation functions, the model collapses to a simple linear model with one layer.</p>
 <p><span id="eq-nn-relu"><span class="math display">\[
 \text{ReLU}(x) = \begin{cases}
 x, &amp; \text{if } x \geq 0 \\
@@ -661,9 +661,9 @@ x, &amp; \text{if } x \geq 0 \\
 \end{cases}
 \tag{3}\]</span></span></p>
 <p>Every layer between the input and output layer is called a <em>hidden layer</em>.</p>
-<p>Typically, not just one data point is processed but a <em>mini-batch</em> of data, or even the entire dataset. The data points are arranged in a data matrix <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{n \times p}\)</span>. The linear model from <a href="#eq-nn-linear-model" class="quarto-xref">Equation&nbsp;1</a> can be rewritten in matrix notation as shown in <a href="#eq-nn-linear-model-matrix" class="quarto-xref">Equation&nbsp;4</a>.</p>
+<p>Typically, not just one data point is processed but a <em>mini-batch</em> of data, or even the entire dataset. The data points are arranged in a data matrix <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{N \times d}\)</span>. The linear model from <a href="#eq-nn-linear-model" class="quarto-xref">Equation&nbsp;1</a> can be rewritten in matrix notation as shown in <a href="#eq-nn-linear-model-matrix" class="quarto-xref">Equation&nbsp;4</a>.</p>
 <p><span id="eq-nn-linear-model-matrix"><span class="math display">\[
-   f( \mathbf{X}) = \mathbf{X} \mathbf{W}^T  +  \mathbf{b}^T
+   f( \mathbf{X}) = \mathbf{X} \mathbf{W}^\top  +  \mathbf{b}^\top
 \tag{4}\]</span></span></p>
 <p>The bias term <span class="math inline">\(\mathbf{b}\)</span> is <em>broadcast</em> (<a href="https://pytorch.org/docs/stable/notes/broadcasting.html">details here</a>), so it can be added to each projected input.</p>
 <section id="activation-functions" class="level3" data-number="3.1">
@@ -690,7 +690,7 @@ Figure&nbsp;4: Linear (left) vs non-linear (right) activation function.
 <img src="../../assets/images/neural_networks/mlp_shallow.jpg" class="img-fluid figure-img" width="800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nn-mlp-shallow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: A neural network with a <em>hidden layer</em>. The lines show connections between neurons and their weights <span class="math inline">\(w_{i,j}\)</span>.
+Figure&nbsp;5: A neural network with a <em>hidden layer</em>. The lines show connections between neurons and their weights <span class="math inline">\(W_{i,j}\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -789,7 +789,7 @@ Tip
 <section id="implementation-in-pytorch" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="implementation-in-pytorch"><span class="header-section-number">5</span> Implementation in PyTorch</h2>
 <p>The following code shows how we can implement a configurable neural network.</p>
-<div id="926309a5" class="cell" data-execution_count="2">
+<div id="69e45f2d" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
@@ -834,7 +834,7 @@ Tip
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can easily display the architecture details with <code>torchinfo</code></p>
-<div id="541c8adb" class="cell" data-execution_count="3">
+<div id="e857f8b0" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the model architecture</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchinfo <span class="im">import</span> summary</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>summary(model, input_size<span class="op">=</span>(<span class="dv">32</span>, <span class="dv">784</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1398,7 +1398,7 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>**From Linear to Non-Linear:**</span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Linear models: $f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}$ (limited to linear decision boundaries)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Linear models: $f(\vect{x}) = \m{W}\vect{x} + \vect{b}$ (limited to linear decision boundaries)</span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Neural networks add **activation functions** (ReLU, sigmoid, tanh) enabling non-linear mappings</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Without activation functions, multiple layers collapse to a single linear transformation</span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
@@ -1418,7 +1418,7 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>**Architecture Components:**</span>
 <span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Multilayer Perceptron (MLP)**: Fully connected layers with activation functions</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Parameters**: Weights $\mathbf{W}$ and biases $\mathbf{b}$ learned via optimization (backpropagation)</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Parameters**: Weights $\m{W}$ and biases $\vect{b}$ learned via optimization (backpropagation)</span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Example**: 784 → 128 → 10 network has ~102K parameters (784×128 + 128×10 + biases)</span>
 <span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>**Practical Implementation (PyTorch):**</span>
@@ -1484,16 +1484,16 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 <span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>In the following, we will describe neural networks mathematically. We start with a linear model. A linear model has the following form (see @eq-nn-linear-model):</span>
 <span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>   f(\mathbf{x}^{(i)}) = \mathbf{W} \mathbf{x}^{(i)}  +  \mathbf{b}</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>   f(\vect{x}^{(i)}) = \m{W} \vect{x}^{(i)}  +  \vect{b}</span>
 <span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>$$ {#eq-nn-linear-model}</span>
 <span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>With the following elements:</span>
 <span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The $i$-th data point $\vect{x}^{(i)}$ is a $p$-dimensional vector: $\in \mathbb{R}^{p \times 1}$</span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Model weights $\m{W} \in \mathbb{R}^{k \times p}$ linearily project the data point to $k$ dimensions.</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The $i$-th data point $\vect{x}^{(i)}$ is a $d$-dimensional vector: $\in \mathbb{R}^{d \times 1}$</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Model weights $\m{W} \in \mathbb{R}^{k \times d}$ linearily project the data point to $k$ dimensions.</span>
 <span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A bias term $\vect{b} \in \mathbb{R}^{k \times 1}$ is added to the result.</span>
 <span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>$f(\mathbf{x}^{(i)})$ is thus $\in  \mathbb{R}^{k \times 1}$.</span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>$f(\vect{x}^{(i)})$ is thus $\in  \mathbb{R}^{k \times 1}$.</span>
 <span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>The following parameters must be learned from training data using an optimization method: $\m{W}$ and $\vect{b}$.</span>
 <span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a></span>
@@ -1501,10 +1501,10 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 <span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>In neural networks, the linear model is extended with additional _layers_. @eq-nn-deep-linear-model defines a neural network with two layers (one hidden layer $\m{W}^{(1)}, \vect{b}^{(1)}$ and one output layer $\m{W}^{(2)}, \vect{b}^{(2)}$).</span>
 <span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>   f(\vect{x}^{(i)}) = \m{W}^{(2)} g\big(\m{W}^{(1)} \vect{x}^{(i)}  +  \vect{b}^{(1)} \big)  +  \vect{b}^{(2)}</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>   f(\vect{x}^{(i)}) = \m{W}^{(2)} \phi\big(\m{W}^{(1)} \vect{x}^{(i)}  +  \vect{b}^{(1)} \big)  +  \vect{b}^{(2)}</span>
 <span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>$$ {#eq-nn-deep-linear-model}</span>
 <span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>Where $g()$ is an _activation function_, such as the _ReLU_ function shown in @eq-nn-relu. Only due to _activation functions_ non-linear relationships can be modelled. Without activation functions, the model collapses to a simple linear model with one layer.</span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>Where $\phi()$ is an _activation function_, such as the _ReLU_ function shown in @eq-nn-relu. Only due to _activation functions_ non-linear relationships can be modelled. Without activation functions, the model collapses to a simple linear model with one layer.</span>
 <span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>\text{ReLU}(x) = \begin{cases}</span>
@@ -1517,10 +1517,10 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 <span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>Every layer between the input and output layer is called a _hidden layer_.</span>
 <span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>Typically, not just one data point is processed but a _mini-batch_ of data, or even the entire dataset. The data points are arranged in a data matrix $\m{X} \in \mathbb{R}^{n \times p}$. The linear model from @eq-nn-linear-model can be rewritten in matrix notation as shown in @eq-nn-linear-model-matrix.</span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>Typically, not just one data point is processed but a _mini-batch_ of data, or even the entire dataset. The data points are arranged in a data matrix $\m{X} \in \mathbb{R}^{N \times d}$. The linear model from @eq-nn-linear-model can be rewritten in matrix notation as shown in @eq-nn-linear-model-matrix.</span>
 <span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>   f( \m{X}) = \m{X} \m{W}^T  +  \vect{b}^T</span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>   f( \m{X}) = \m{X} \m{W}^\top  +  \vect{b}^\top</span>
 <span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>$$ {#eq-nn-linear-model-matrix}</span>
 <span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>The bias term $\vect{b}$ is _broadcast_ (<span class="co">[</span><span class="ot">details here</span><span class="co">](https://pytorch.org/docs/stable/notes/broadcasting.html)</span>), so it can be added to each projected input.</span>
@@ -1589,7 +1589,7 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 <span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}mlp_shallow.jpg)</span>{width=800}</span>
 <span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a>A neural network with a _hidden layer_. The lines show connections between neurons and their weights $w_{i,j}$.</span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a>A neural network with a _hidden layer_. The lines show connections between neurons and their weights $W_{i,j}$.</span>
 <span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Activation Function Cheat Sheet"}</span>

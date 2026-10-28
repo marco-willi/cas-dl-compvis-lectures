@@ -773,7 +773,7 @@ Figure&nbsp;2: Simplified view of the trainable components of an encoder with a 
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="32b125a9" class="cell" data-execution_count="1">
+<div id="7f874bb0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
@@ -820,7 +820,7 @@ Figure&nbsp;2: Simplified view of the trainable components of an encoder with a 
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="b3a885c0" class="cell" data-execution_count="2">
+<div id="7bd28d27" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> nn</span>
@@ -862,7 +862,7 @@ Figure&nbsp;2: Simplified view of the trainable components of an encoder with a 
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="a8264f68" class="cell" data-execution_count="3">
+<div id="aeefbca3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -903,7 +903,7 @@ Figure&nbsp;2: Simplified view of the trainable components of an encoder with a 
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="4bc47059" class="cell" data-execution_count="4">
+<div id="fcb3c0ad" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -925,13 +925,13 @@ Figure&nbsp;2: Simplified view of the trainable components of an encoder with a 
 </section>
 <section id="lora-parameter-efficient-fine-tuning" class="level3" data-number="3.5">
 <h3 data-number="3.5" class="anchored" data-anchor-id="lora-parameter-efficient-fine-tuning"><span class="header-section-number">3.5</span> LoRA (Parameter-Efficient Fine-Tuning)</h3>
-<p>LoRA <span class="citation" data-cites="hu_lora_2021">Hu et al. (<a href="#ref-hu_lora_2021" role="doc-biblioref">2021</a>)</span> adapts selected weight matrices without changing the original pretrained weights. For a weight matrix <span class="math inline">\(W \in \mathbb{R}^{d_{out}\times d_{in}}\)</span>, the effective weight is</p>
+<p>LoRA <span class="citation" data-cites="hu_lora_2021">Hu et al. (<a href="#ref-hu_lora_2021" role="doc-biblioref">2021</a>)</span> adapts selected weight matrices without changing the original pretrained weights. For a weight matrix <span class="math inline">\(\mathbf{W} \in \mathbb{R}^{d_{out}\times d_{in}}\)</span>, the effective weight is</p>
 <p><span class="math display">\[
-W' = W + \frac{\alpha}{r}BA, \qquad
-B \in \mathbb{R}^{d_{out}\times r},\quad
-A \in \mathbb{R}^{r\times d_{in}}.
+\mathbf{W}' = \mathbf{W} + \frac{\alpha}{r}\mathbf{B}\mathbf{A}, \qquad
+\mathbf{B} \in \mathbb{R}^{d_{out}\times r},\quad
+\mathbf{A} \in \mathbb{R}^{r\times d_{in}}.
 \]</span></p>
-<p>Only <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are trained (along with the task head). Instead of learning <span class="math inline">\(d_{out}d_{in}\)</span> parameters for an unconstrained update, the update uses <span class="math inline">\(r(d_{in}+d_{out})\)</span> parameters. The <strong>rank</strong> <span class="math inline">\(r\)</span> controls the capacity of the update. LoRA is particularly useful for adapting or maintaining several variants of a large pretrained model.</p>
+<p>Only <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span> are trained (along with the task head). Instead of learning <span class="math inline">\(d_{out}d_{in}\)</span> parameters for an unconstrained update, the update uses <span class="math inline">\(r(d_{in}+d_{out})\)</span> parameters. The <strong>rank</strong> <span class="math inline">\(r\)</span> controls the capacity of the update. LoRA is particularly useful for adapting or maintaining several variants of a large pretrained model.</p>
 <p>Unlike an ordinary bottleneck <strong>adapter</strong>, LoRA does not insert a new sequential processing layer. It adds a low-rank change to selected existing weight matrices.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Code: LoRA for a ViT classifier">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
@@ -945,7 +945,7 @@ A \in \mathbb{R}^{r\times d_{in}}.
 </div>
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="730eb975" class="cell" data-execution_count="5">
+<div id="ec101125" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoModelForImageClassification</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> peft <span class="im">import</span> LoraConfig, get_peft_model</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -972,8 +972,8 @@ A \in \mathbb{R}^{r\times d_{in}}.
 </div>
 </div>
 </div>
-<p>The saving is not guaranteed: for <span class="math inline">\(r &gt; \frac{d_{in}d_{out}}{d_{in}+d_{out}}\)</span> the factors have more parameters than <span class="math inline">\(W\)</span> itself.</p>
-<p>The following demo shows a frozen <span class="math inline">\(64 \times 64\)</span> matrix <span class="math inline">\(W\)</span> and the trainable factors <span class="math inline">\(B\)</span> and <span class="math inline">\(A\)</span> to scale. Change the rank <span class="math inline">\(r\)</span> and compare the parameter counts.</p>
+<p>The saving is not guaranteed: for <span class="math inline">\(r &gt; \frac{d_{in}d_{out}}{d_{in}+d_{out}}\)</span> the factors have more parameters than <span class="math inline">\(\mathbf{W}\)</span> itself.</p>
+<p>The following demo shows a frozen <span class="math inline">\(64 \times 64\)</span> matrix <span class="math inline">\(\mathbf{W}\)</span> and the trainable factors <span class="math inline">\(\mathbf{B}\)</span> and <span class="math inline">\(\mathbf{A}\)</span> to scale. Change the rank <span class="math inline">\(r\)</span> and compare the parameter counts.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="🎮 Interactive Demo: LoRA Rank Explorer">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1037,7 +1037,7 @@ Answer
 </tr>
 </tbody>
 </table>
-<strong>No</strong>, the savings in computation are not proportional. Each training step still computes the activations of the complete frozen network, and the backward pass still propagates gradients through the frozen layers to reach <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. LoRA mainly saves the gradients and optimizer states of the frozen weights and the storage for each adapted variant.
+<strong>No</strong>, the savings in computation are not proportional. Each training step still computes the activations of the complete frozen network, and the backward pass still propagates gradients through the frozen layers to reach <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span>. LoRA mainly saves the gradients and optimizer states of the frozen weights and the storage for each adapted variant.
 </details>
 </div>
 </div>
@@ -2427,15 +2427,15 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb6-288"><a href="#cb6-288" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-289"><a href="#cb6-289" aria-hidden="true" tabindex="-1"></a><span class="fu">### LoRA (Parameter-Efficient Fine-Tuning)</span></span>
 <span id="cb6-290"><a href="#cb6-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a>LoRA @hu_lora_2021 adapts selected weight matrices without changing the original pretrained weights. For a weight matrix $W \in \mathbb{R}^{d_{out}\times d_{in}}$, the effective weight is</span>
+<span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a>LoRA @hu_lora_2021 adapts selected weight matrices without changing the original pretrained weights. For a weight matrix $\m{W} \in \mathbb{R}^{d_{out}\times d_{in}}$, the effective weight is</span>
 <span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-293"><a href="#cb6-293" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a>W' = W + \frac{\alpha}{r}BA, \qquad</span>
-<span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a>B \in \mathbb{R}^{d_{out}\times r},\quad</span>
-<span id="cb6-296"><a href="#cb6-296" aria-hidden="true" tabindex="-1"></a>A \in \mathbb{R}^{r\times d_{in}}.</span>
+<span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a>\m{W}' = \m{W} + \frac{\alpha}{r}\m{B}\m{A}, \qquad</span>
+<span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a>\m{B} \in \mathbb{R}^{d_{out}\times r},\quad</span>
+<span id="cb6-296"><a href="#cb6-296" aria-hidden="true" tabindex="-1"></a>\m{A} \in \mathbb{R}^{r\times d_{in}}.</span>
 <span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb6-298"><a href="#cb6-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a>Only $A$ and $B$ are trained (along with the task head). Instead of learning $d_{out}d_{in}$ parameters for an unconstrained update, the update uses $r(d_{in}+d_{out})$ parameters. The **rank** $r$ controls the capacity of the update. LoRA is particularly useful for adapting or maintaining several variants of a large pretrained model.</span>
+<span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a>Only $\m{A}$ and $\m{B}$ are trained (along with the task head). Instead of learning $d_{out}d_{in}$ parameters for an unconstrained update, the update uses $r(d_{in}+d_{out})$ parameters. The **rank** $r$ controls the capacity of the update. LoRA is particularly useful for adapting or maintaining several variants of a large pretrained model.</span>
 <span id="cb6-300"><a href="#cb6-300" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-301"><a href="#cb6-301" aria-hidden="true" tabindex="-1"></a>Unlike an ordinary bottleneck **adapter**, LoRA does not insert a new sequential processing layer. It adds a low-rank change to selected existing weight matrices.</span>
 <span id="cb6-302"><a href="#cb6-302" aria-hidden="true" tabindex="-1"></a></span>
@@ -2470,10 +2470,10 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>Module names and training wrappers differ between architectures and library versions. Inspect the model's named modules when adapting the example to another backbone.</span>
 <span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a>The saving is not guaranteed: for $r &gt; \frac{d_{in}d_{out}}{d_{in}+d_{out}}$ the factors have more parameters than $W$ itself.</span>
+<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a>The saving is not guaranteed: for $r &gt; \frac{d_{in}d_{out}}{d_{in}+d_{out}}$ the factors have more parameters than $\m{W}$ itself.</span>
 <span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
-<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a>The following demo shows a frozen $64 \times 64$ matrix $W$ and the trainable factors $B$ and $A$ to scale. Change the rank $r$ and compare the parameter counts.</span>
+<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a>The following demo shows a frozen $64 \times 64$ matrix $\m{W}$ and the trainable factors $\m{B}$ and $\m{A}$ to scale. Change the rank $r$ and compare the parameter counts.</span>
 <span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="🎮 Interactive Demo: LoRA Rank Explorer"}</span>
 <span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a></span>
@@ -2503,7 +2503,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 16 <span class="pp">|</span> 24,576 <span class="pp">|</span> 4.17% <span class="pp">|</span></span>
 <span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 32 <span class="pp">|</span> 49,152 <span class="pp">|</span> 8.33% <span class="pp">|</span></span>
 <span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a>**No**, the savings in computation are not proportional. Each training step still computes the activations of the complete frozen network, and the backward pass still propagates gradients through the frozen layers to reach $A$ and $B$. LoRA mainly saves the gradients and optimizer states of the frozen weights and the storage for each adapted variant.</span>
+<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a>**No**, the savings in computation are not proportional. Each training step still computes the activations of the complete frozen network, and the backward pass still propagates gradients through the frozen layers to reach $\m{A}$ and $\m{B}$. LoRA mainly saves the gradients and optimizer states of the frozen weights and the storage for each adapted variant.</span>
 <span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
 <span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a></span>

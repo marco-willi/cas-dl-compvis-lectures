@@ -600,7 +600,7 @@ window.Quarto = {
 <h1 data-number="1"><span class="header-section-number">1</span> Motivation</h1>
 <p>Diffusion models learn to reverse a noising process. In the simplest pixel-space setting, the model starts from random noise and gradually denoises it into an image:</p>
 <p><span class="math display">\[
-\mathbf{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbfit{I})
+\mathbf{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbf{I})
 \quad \rightarrow \quad
 \mathbf{x}_{T-1}
 \quad \rightarrow \quad
@@ -1139,7 +1139,7 @@ high detail, commercial photography</code></pre>
 <h2 data-number="4.3" class="anchored" data-anchor-id="when-lora-still-makes-sense"><span class="header-section-number">4.3</span> When LoRA Still Makes Sense</h2>
 <p>LoRA is a lightweight fine-tuning method. Instead of updating all model weights, it freezes the base model and learns a small low-rank update:</p>
 <p><span class="math display">\[
-\Delta W = BA
+\Delta \mathbf{W} = \mathbf{B}\mathbf{A}
 \]</span></p>
 <p>The result is a small adapter that can be loaded on top of the base model.</p>
 <p>LoRA is useful when the goal is not just one good image, but a reusable image generator with a persistent bias toward a subject, style, or domain.</p>
@@ -2231,7 +2231,7 @@ Zhao, Bing, Chenfei Wu, Deqing Li, et al. 2026. <em>Qwen-<span>Image</span>-2.0 
 <span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>into an image:</span>
 <span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>\vect{x}_T \sim \mathcal{N}(\mathbf{0}, \mathbfit{I})</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>\vect{x}_T \sim \mathcal{N}(\vect{0}, \m{I})</span>
 <span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>\quad \rightarrow \quad</span>
 <span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>\vect{x}_{T-1}</span>
 <span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>\quad \rightarrow \quad</span>
@@ -2421,7 +2421,7 @@ Zhao, Bing, Chenfei Wu, Deqing Li, et al. 2026. <em>Qwen-<span>Image</span>-2.0 
 <span id="cb4-232"><a href="#cb4-232" aria-hidden="true" tabindex="-1"></a>v_\theta(\vect{x}_t, t) \approx \vect{x}_1 - \vect{\epsilon}</span>
 <span id="cb4-233"><a href="#cb4-233" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb4-234"><a href="#cb4-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-235"><a href="#cb4-235" aria-hidden="true" tabindex="-1"></a>where $\vect{\epsilon} \sim \mathcal{N}(\mathbf{0}, \m{I})$ is noise, $\vect{x}_1$ is a training image (or its latent), and $t \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. In practice, both formulations start from Gaussian noise, apply the network iteratively, and can use either architecture. Flow matching, however, often requires fewer sampling steps, because its trajectories from noise to data are straighter.</span>
+<span id="cb4-235"><a href="#cb4-235" aria-hidden="true" tabindex="-1"></a>where $\vect{\epsilon} \sim \mathcal{N}(\vect{0}, \m{I})$ is noise, $\vect{x}_1$ is a training image (or its latent), and $t \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$. In practice, both formulations start from Gaussian noise, apply the network iteratively, and can use either architecture. Flow matching, however, often requires fewer sampling steps, because its trajectories from noise to data are straighter.</span>
 <span id="cb4-236"><a href="#cb4-236" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-237"><a href="#cb4-237" aria-hidden="true" tabindex="-1"></a>Stable Diffusion 3 is a typical example that combines all three ideas: a VAE latent space, a transformer denoiser, and a rectified flow objective <span class="co">[</span><span class="ot">@esser_scaling_2024</span><span class="co">]</span>. The widely used FLUX models follow the same recipe and also use flow matching for instruction-based editing <span class="co">[</span><span class="ot">@labs_flux1_2025</span><span class="co">]</span>. Modern image generation is therefore not simply "classical denoising implemented with transformers".</span>
 <span id="cb4-238"><a href="#cb4-238" aria-hidden="true" tabindex="-1"></a></span>
@@ -2662,7 +2662,7 @@ Zhao, Bing, Chenfei Wu, Deqing Li, et al. 2026. <em>Qwen-<span>Image</span>-2.0 
 <span id="cb4-473"><a href="#cb4-473" aria-hidden="true" tabindex="-1"></a>it freezes the base model and learns a small low-rank update:</span>
 <span id="cb4-474"><a href="#cb4-474" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-475"><a href="#cb4-475" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb4-476"><a href="#cb4-476" aria-hidden="true" tabindex="-1"></a>\Delta W = BA</span>
+<span id="cb4-476"><a href="#cb4-476" aria-hidden="true" tabindex="-1"></a>\Delta \m{W} = \m{B}\m{A}</span>
 <span id="cb4-477"><a href="#cb4-477" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb4-478"><a href="#cb4-478" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-479"><a href="#cb4-479" aria-hidden="true" tabindex="-1"></a>The result is a small adapter that can be loaded on top of the base model.</span>

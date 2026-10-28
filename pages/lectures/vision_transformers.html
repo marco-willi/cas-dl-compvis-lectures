@@ -652,7 +652,7 @@ window.Quarto = {
 <p>The process works as follows:</p>
 <ol type="1">
 <li><strong>Divide</strong> the image into a grid of non-overlapping patches. For a 224×224 image with patch size 16×16, this produces <span class="math inline">\(\frac{224}{16} \times \frac{224}{16} = 196\)</span> patches.</li>
-<li><strong>Flatten</strong> each patch into a 1-D vector. A 16×16 RGB patch becomes a vector of length <span class="math inline">\(16 \times 16 \times 3 = 768\)</span>.</li>
+<li><strong>Flatten</strong> each patch into a 1-D vector. A 16×16 RGB patch becomes a vector of length <span class="math inline">\(3 \times 16 \times 16 = 768\)</span>.</li>
 <li><strong>Project</strong> each flattened patch through a learnable linear layer to produce a patch embedding of dimension <span class="math inline">\(D\)</span> (typically 768).</li>
 <li><strong>Add positional embeddings</strong> — learned vectors that encode the spatial position of each patch in the grid.</li>
 <li><strong>Prepend a [CLS] token</strong> — a special learnable embedding whose output after the transformer serves as the image-level representation for classification (the same concept as in BERT).</li>
@@ -726,7 +726,7 @@ Key considerations
 Click for result
 </summary>
 <p><strong>Correct answer:</strong> 2 — a convolution with kernel size and stride equal to the patch size.</p>
-<p>With a stride equal to the kernel size, the windows do not overlap: each window covers exactly one patch. Each of the 768 filters has <span class="math inline">\(16 \times 16 \times 3\)</span> weights, so its output at one position is the dot product of one filter with the flattened patch — exactly one entry of the linear projection. All filters together correspond to the projection matrix <span class="math inline">\(\mathbf{E}\)</span>, and like <span class="math inline">\(\mathbf{E}\)</span>, they are shared across all patches. Both variants have the same number of parameters: <span class="math inline">\(768 \cdot (16 \cdot 16 \cdot 3) + 768 = 590{,}592\)</span> (weights and biases).</p>
+<p>With a stride equal to the kernel size, the windows do not overlap: each window covers exactly one patch. Each of the 768 filters has <span class="math inline">\(3 \times 16 \times 16\)</span> weights, so its output at one position is the dot product of one filter with the flattened patch — exactly one entry of the linear projection. All filters together correspond to the projection matrix <span class="math inline">\(\mathbf{E}\)</span>, and like <span class="math inline">\(\mathbf{E}\)</span>, they are shared across all patches. Both variants have the same number of parameters: <span class="math inline">\(768 \cdot (16 \cdot 16 \cdot 3) + 768 = 590{,}592\)</span> (weights and biases).</p>
 <p>The convolution outputs a 768×14×14 activation map for a 224×224 image, which is flattened into a sequence of 196 embeddings. This is how ViTs are typically implemented in practice, for example in <a href="https://github.com/huggingface/pytorch-image-models">timm</a>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>patch_embed <span class="op">=</span> nn.Conv2d(in_channels<span class="op">=</span><span class="dv">3</span>, out_channels<span class="op">=</span><span class="dv">768</span>, kernel_size<span class="op">=</span><span class="dv">16</span>, stride<span class="op">=</span><span class="dv">16</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> patch_embed(images)  <span class="co"># (B, 768, 14, 14)</span></span>
@@ -928,7 +928,7 @@ Key considerations
 <section id="in-practice" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="in-practice"><span class="header-section-number">5.2</span> In Practice</h3>
 <p>Both architectures are readily available through libraries such as <a href="https://github.com/huggingface/pytorch-image-models">timm</a>, which provides hundreds of pretrained models.</p>
-<div id="281843d3" class="cell" data-execution_count="1">
+<div id="355ea33e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load a pretrained CNN</span></span>
@@ -1532,7 +1532,7 @@ Werff, Tobias van der. 2024. <em><span>CNN</span> Vs. <span>Vision</span> <span>
 <span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>The process works as follows:</span>
 <span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Divide** the image into a grid of non-overlapping patches. For a 224×224 image with patch size 16×16, this produces $\frac{224}{16} \times \frac{224}{16} = 196$ patches.</span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Flatten** each patch into a 1-D vector. A 16×16 RGB patch becomes a vector of length $16 \times 16 \times 3 = 768$.</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Flatten** each patch into a 1-D vector. A 16×16 RGB patch becomes a vector of length $3 \times 16 \times 16 = 768$.</span>
 <span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Project** each flattened patch through a learnable linear layer to produce a patch embedding of dimension $D$ (typically 768).</span>
 <span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Add positional embeddings** — learned vectors that encode the spatial position of each patch in the grid.</span>
 <span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Prepend a [CLS] token** — a special learnable embedding whose output after the transformer serves as the image-level representation for classification (the same concept as in BERT).</span>
@@ -1594,7 +1594,7 @@ Werff, Tobias van der. 2024. <em><span>CNN</span> Vs. <span>Vision</span> <span>
 <span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>**Correct answer:** 2 — a convolution with kernel size and stride equal to the patch size.</span>
 <span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>With a stride equal to the kernel size, the windows do not overlap: each window covers exactly one patch. Each of the 768 filters has $16 \times 16 \times 3$ weights, so its output at one position is the dot product of one filter with the flattened patch — exactly one entry of the linear projection. All filters together correspond to the projection matrix $\m{E}$, and like $\m{E}$, they are shared across all patches. Both variants have the same number of parameters: $768 \cdot (16 \cdot 16 \cdot 3) + 768 = 590{,}592$ (weights and biases).</span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>With a stride equal to the kernel size, the windows do not overlap: each window covers exactly one patch. Each of the 768 filters has $3 \times 16 \times 16$ weights, so its output at one position is the dot product of one filter with the flattened patch — exactly one entry of the linear projection. All filters together correspond to the projection matrix $\m{E}$, and like $\m{E}$, they are shared across all patches. Both variants have the same number of parameters: $768 \cdot (16 \cdot 16 \cdot 3) + 768 = 590{,}592$ (weights and biases).</span>
 <span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a>The convolution outputs a 768×14×14 activation map for a 224×224 image, which is flattened into a sequence of 196 embeddings. This is how ViTs are typically implemented in practice, for example in <span class="co">[</span><span class="ot">timm</span><span class="co">](https://github.com/huggingface/pytorch-image-models)</span>:</span>
 <span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a></span>
