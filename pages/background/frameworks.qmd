@@ -10,7 +10,9 @@ After this lecture you should be able to:
 - Explain the role of computational graphs and automatic differentiation in deep learning frameworks.
 - Construct and inspect tensors, modules, and optimization loops in PyTorch.
 - Distinguish autograd vs manual gradient computation and identify common pitfalls (forgetting zero_grad, device mismatches).
-- Describe core hardware considerations (GPU parallelism, data loading bottlenecks, CUDA/cuDNN impact).
+- Explain why tensor operations such as matrix multiplication are well suited for GPUs.
+- Describe core hardware considerations (GPU memory, mixed precision, data loading bottlenecks, CUDA/cuDNN impact).
+- Distinguish data parallelism (DDP, FSDP) from model parallelism.
 - Load and adapt pre-trained models responsibly for downstream tasks.
 :::
 
@@ -38,7 +40,7 @@ for X_batch, y_batch in dataloader:
 
 - **nn.Module**: Base class for all neural network layers and models
 - **Loss Functions**: MSE, CrossEntropy, etc. (in `torch.nn`)
-- **Optimizers**: SGD, Adam, etc. (in `torch.optim`)
+- **Optimizers**: SGD, AdamW, etc. (in `torch.optim`)
 - **DataLoader**: Efficient batching and shuffling of datasets
 
 **Common Patterns:**
@@ -46,13 +48,16 @@ for X_batch, y_batch in dataloader:
 - Use `model.eval()` and `torch.no_grad()` for inference/validation
 - Move data and model to same device: `X.to(device)`, `model.to(device)`
 - Save/load models: `torch.save(model.state_dict(), path)`
+- Speed up training with mixed precision (`torch.autocast`) and `torch.compile`
 
 **Hardware Considerations:**
 
-- GPUs enable parallel computation essential for deep learning
+- GPUs enable parallel computation essential for deep learning: each output of a matrix multiplication is an independent dot product
+- Tensor Cores and low-precision formats (BF16, FP8) provide most of the speed of modern GPUs
+- GPU memory (VRAM) is often the limiting factor: model, activations, and optimizer state must fit
 - CUDA/cuDNN optimize neural network operations on NVIDIA GPUs
-- Data loading can be a bottleneck (GPU starvation) - use multi-threaded data loaders
-- GPU parallelism: data parallelism (model copies) vs model parallelism (split model)
+- Data loading can be a bottleneck (GPU starvation) - use multiple workers (`num_workers`)
+- GPU parallelism: data parallelism (DDP, FSDP) vs model parallelism (pipeline, tensor parallelism)
 
 **Best Practices:**
 
@@ -71,12 +76,12 @@ $$
 
 # Deep Learning Software
 
-There are a variety of Deep Learning frameworks. These frameworks allow for easy configuration, training, and deploying of neural networks. They are often developed via Python API. @fig-infrastructure-frameworks shows some frameworks.
+There are a variety of Deep Learning frameworks. These frameworks allow for easy configuration, training, and deploying of neural networks. They are often developed via Python API. @fig-infrastructure-frameworks illustrates how the landscape has evolved: many early frameworks have been discontinued or merged.
 
 ::: {#fig-infrastructure-frameworks}
-![]({{< meta params.images_path >}}frameworks.png){width=600}
+![]({{< meta params.images_path >}}framework_timeline.png){width=700}
 
-Frameworks (from @li_cs231n_2022).
+Lifespan of major deep learning frameworks, from first public release to end of active development. Sources: [Theano](https://syncedreview.com/2017/09/29/rip-theano/), [Caffe2](https://github.com/caffe2/caffe2/issues/2439), [CNTK](https://learn.microsoft.com/en-us/cognitive-toolkit/releasenotes/cntk_2_7_release_notes), [Chainer](https://chainer.org/announcement/2019/12/05/released-v7.html), [MXNet](https://attic.apache.org/projects/mxnet.html), [Keras 3](https://keras.io/keras_3/).
 :::
 
 Key features of such frameworks are:
@@ -148,10 +153,6 @@ print("df/dc=\n", df_dc)
 #| lst-cap: Automatic differentiation with pytorch
 import torch
 
-np.random.seed(123)
-
-H, W = 2, 3
-
 a = torch.tensor(a, requires_grad=True)
 b = torch.tensor(b, requires_grad=True)
 c = torch.tensor(c, requires_grad=True)
@@ -179,14 +180,14 @@ make_dot(f, params={'a': a, 'b': b, 'c': c, 'f':f , 'd': d, 'e':e })
 :::
 
 
-To perform the computation on a GPU, a simple instruction (see @lst-frameworks-gpu).
+To perform the computation on a GPU, a simple instruction suffices (see @lst-frameworks-gpu). `torch.accelerator` detects the available hardware, such as an NVIDIA GPU (`cuda`) or Apple Silicon (`mps`).
 
 ```{python}
 # | eval: true
 # | echo: true
 # | lst-label: lst-frameworks-gpu
 # | lst-cap: Move computations to GPU
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = torch.accelerator.current_accelerator() if torch.accelerator.is_available() else "cpu"
 print(f"Using {device} device")
 
 a = a.to(device=device)
@@ -227,7 +228,7 @@ PyTorch is built around three core concepts:
 
 ## Tensors
 
-[`torch.Tensor`](https://pytorch.org/docs/stable/tensors.html) is the central data structure in PyTorch. Essentially very similar to `numpy.array`, it can be easily loaded onto GPUs.
+[`torch.Tensor`](https://docs.pytorch.org/docs/stable/tensors.html) is the central data structure in PyTorch. Essentially very similar to `numpy.array`, it can be easily loaded onto GPUs.
 
 Tensors can be created in various ways. For example, from lists:
 
@@ -288,7 +289,7 @@ print(f"Datatype of tensor: {tensor.dtype}")
 print(f"Device tensor is stored on: {tensor.device}")
 ```
 
-There are over 100 operations that can be performed on a tensor. The full list is available [here](https://pytorch.org/docs/stable/torch.html).
+There are over 100 operations that can be performed on a tensor. The full list is available [here](https://docs.pytorch.org/docs/stable/torch.html).
 
 Indexing and Slicing:
 
@@ -336,7 +337,7 @@ torch.mul(tensor, tensor, out=z3)
 ## Autograd
 
 To train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an _auto-diff_ functionality:
-[`torch.autograd`](https://pytorch.org/docs/stable/autograd.html). This can automatically compute gradients for a _computational graph_.
+[`torch.autograd`](https://docs.pytorch.org/docs/stable/autograd.html). This can automatically compute gradients for a _computational graph_.
 
 ::: {.callout-tip title="Autograd Key Points"}
 - Set `requires_grad=True` on tensors you want to track for gradient computation
@@ -350,7 +351,7 @@ The following is an example using a 1-layer neural network (see @fig-infrastruct
 ::: {#fig-infrastructure-comp-graph}
 ![]({{< meta params.images_path >}}comp-graph.jpg){width=600}
 
-Source: [PyTorch](https://pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html)
+Source: [PyTorch](https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html)
 :::
 
 The network from @fig-infrastructure-comp-graph is defined in PyTorch code in @lst-frameworks-example-network.
@@ -382,7 +383,7 @@ print(b.grad)
 
 ## torch.nn
 
-PyTorch provides various building blocks for creating neural networks. These are available in [`torch.nn`](https://pytorch.org/docs/stable/nn.html). Additionally, you can define any compositions of such building blocks that inherit from [`torch.nn.Module`](https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module). A neural network is typically a `torch.nn.Module`. Each module implements the `forward()` method to define how data is processed.
+PyTorch provides various building blocks for creating neural networks. These are available in [`torch.nn`](https://docs.pytorch.org/docs/stable/nn.html). Additionally, you can define any compositions of such building blocks that inherit from [`torch.nn.Module`](https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module). A neural network is typically a `torch.nn.Module`. Each module implements the `forward()` method to define how data is processed.
 
 ::: {.callout-tip title="Building Blocks in torch.nn"}
 **Common layers:**
@@ -416,7 +417,7 @@ from torch import nn
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
-        super(NeuralNetwork, self).__init__()
+        super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
             nn.Linear(28*28, 512),
@@ -478,17 +479,15 @@ summary(model, input_size=(128, 1, 28, 28))
 
 ## torch.optim
 
-To optimize the parameters of a model, you need an optimization algorithm. [`torch.optim`](https://pytorch.org/docs/stable/optim.html) implements various algorithms, such as _Stochastic Gradient Descent_ or the often used _Adam Optimizer_.
+To optimize the parameters of a model, you need an optimization algorithm. [`torch.optim`](https://docs.pytorch.org/docs/stable/optim.html) implements various algorithms, such as _Stochastic Gradient Descent_ or the often used _AdamW Optimizer_.
 
-<!-- TODO: validate rule of thumb -> better use adamw alaways -->
 ::: {.callout-tip title="Common Optimizers"}
 - **SGD**: Basic stochastic gradient descent (with optional momentum)
-- **Adam**: Adaptive learning rates, good default choice
-- **AdamW**: Adam with weight decay, often better for transformers (see @loshchilov_decoupled_2019)
-- **RMSprop**: Adaptive learning rates, good for RNNs
+- **Adam**: Adaptive learning rates per parameter
+- **AdamW**: Adam with decoupled weight decay (see @loshchilov_decoupled_2019), the de-facto standard for modern architectures
 - **Learning rate schedulers**: Adjust learning rate during training (e.g., `torch.optim.lr_scheduler`)
 
-**Rule of thumb**: Start with Adam, then try SGD with momentum if you need better generalization.
+**Rule of thumb**: Start with AdamW. SGD with momentum remains a strong alternative for CNNs, but usually requires more tuning of the learning rate schedule.
 :::
 
 ```{python}
@@ -536,15 +535,15 @@ for batch in dataloader:
 **Pitfall 2: Device mismatch**
 ```python
 # ❌ Wrong - model on GPU, data on CPU
-model = model.cuda()
+model = model.to(device)
 for batch_x, batch_y in dataloader:
     pred = model(batch_x)  # Error!
 
 # ✅ Correct
-model = model.cuda()
+model = model.to(device)
 for batch_x, batch_y in dataloader:
-    batch_x = batch_x.cuda()
-    batch_y = batch_y.cuda()
+    batch_x = batch_x.to(device)
+    batch_y = batch_y.to(device)
     pred = model(batch_x)
 ```
 
@@ -630,10 +629,29 @@ print("Done!")
 High-level APIs such as [Lightning](https://lightning.ai/) and [Keras](https://keras.io/) provide many functionalities to simplify managing training loops. It is highly recommended to use such libraries to reduce boiler-plate code. However, it depends on the individual complexity of a project to what degree such libraries are useful.
 :::
 
+::: {.callout-tip title="Performance Tips"}
+
+**Mixed precision**: Most computations can run in 16-bit (`bfloat16`) instead of 32-bit floating point [@micikevicius_mixed_2018]. This roughly halves memory consumption and makes use of the GPU's [Tensor Cores](#sec-frameworks-tensor-cores).
+
+```python
+with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
+    pred = model(X)
+    loss = loss_fn(pred, y)
+loss.backward()
+```
+
+**Compilation**: `torch.compile` (PyTorch 2.x) traces the model and generates optimized GPU kernels, e.g., by fusing several operations into one. It is a one-line change and often yields a noticeable speed-up.
+
+```python
+model = torch.compile(model)
+```
+
+:::
+
 
 ## Pre-trained models
 
-Since training models can be time-consuming and expensive, pre-trained models are often used. They allow models to be adapted to a specific task more quickly and cost-effectively. In many areas, particularly NLP and computer vision, using pre-trained models is standard. PyTorch provides [`torchvision`](https://pytorch.org/vision/stable/index.html) for computer vision applications. `torchvision` provides functionalities useful for modeling image data. Pre-trained models can also be easily integrated, as shown in @lst-frameworks-pre-trained-model.
+Since training models can be time-consuming and expensive, pre-trained models are often used. They allow models to be adapted to a specific task more quickly and cost-effectively. In many areas, particularly NLP and computer vision, using pre-trained models is standard. PyTorch provides [`torchvision`](https://docs.pytorch.org/vision/stable/index.html) for computer vision applications. `torchvision` provides functionalities useful for modeling image data. Pre-trained models can also be easily integrated, as shown in @lst-frameworks-pre-trained-model.
 
 ```{python}
 #| eval: False
@@ -645,6 +663,18 @@ from torchvision.models import resnet50, ResNet50_Weights
 
 weights = ResNet50_Weights.IMAGENET1K_V2
 model = resnet50(weights=weights)
+```
+
+A much larger collection of pre-trained computer vision models is available via [`timm`](https://huggingface.co/docs/timm) (PyTorch Image Models) and the [Hugging Face Hub](https://huggingface.co/models). @lst-frameworks-timm loads a pre-trained model and replaces its classification head for a task with 5 classes.
+
+```{python}
+#| eval: false
+#| echo: true
+#| lst-label: lst-frameworks-timm
+#| lst-cap: Loading a pre-trained model with timm.
+import timm
+
+model = timm.create_model("convnext_tiny", pretrained=True, num_classes=5)
 ```
 
 # Other Frameworks
@@ -660,25 +690,28 @@ In recent years, however, TensorFlow’s low-level API has become less popular i
 
 ## Keras
 [Keras](https://keras.io/) started as an independent high-level deep learning API designed to simplify model creation with a clean and intuitive syntax.
-Since 2017, it has been tightly integrated into TensorFlow as its official front-end (tf.keras), and in 2023, Keras Core was introduced, a framework-agnostic version that can run on multiple backends such as TensorFlow, JAX, and PyTorch.
+Since 2017, it has been tightly integrated into TensorFlow as its official front-end (`tf.keras`). In 2023, [Keras 3](https://keras.io/keras_3/) was released as a framework-agnostic version that runs on multiple backends: TensorFlow, JAX, and PyTorch.
 
-Keras focuses on ease of use, modularity, and rapid prototyping, making it an excellent choice for teaching, applied machine learning, and fast experimentation, while still being production-ready through TensorFlow’s ecosystem.  See @lst-frameworks-example-tf for example code using Keras.
+Keras focuses on ease of use, modularity, and rapid prototyping, making it an excellent choice for teaching, applied machine learning, and fast experimentation. See @lst-frameworks-example-keras for example code using Keras 3.
 
 ```{python}
 #| eval: false
 #| echo: true
-#| lst-label: lst-frameworks-example-tf
-#| lst-cap: Example with TensorFlow.
-import tensorflow as tf
+#| lst-label: lst-frameworks-example-keras
+#| lst-cap: Example with Keras 3.
+import os
+os.environ["KERAS_BACKEND"] = "jax"  # or "tensorflow", "torch"
 
-class NeuralNetwork(tf.keras.Model):
+import keras
+
+class NeuralNetwork(keras.Model):
     def __init__(self):
-        super(NeuralNetwork, self).__init__()
-        self.flatten = tf.keras.layers.Flatten()
-        self.linear_relu_stack = tf.keras.Sequential([
-            tf.keras.layers.Dense(512, activation='relu'),
-            tf.keras.layers.Dense(512, activation='relu'),
-            tf.keras.layers.Dense(10)  # No activation for logits
+        super().__init__()
+        self.flatten = keras.layers.Flatten()
+        self.linear_relu_stack = keras.Sequential([
+            keras.layers.Dense(512, activation="relu"),
+            keras.layers.Dense(512, activation="relu"),
+            keras.layers.Dense(10)  # No activation for logits
         ])
 
     def call(self, x):
@@ -689,28 +722,30 @@ class NeuralNetwork(tf.keras.Model):
 
 ## Jax
 
-[Jax](https://jax.readthedocs.io/en/latest/) has gained significant popularity in recent years. Developed by researchers at Google, it is primarily used in research and foundation-model development. Jax provides a NumPy-like API with automatic differentiation (autodiff) and function transformations such as jit (for compilation) and vmap (for vectorization). It enables high-performance, composable numerical computing, and serves as the foundation for frameworks such as [Flax (Neural Networks)](https://flax.readthedocs.io/en/stable/) and [Haiku (ML Research)](https://dm-haiku.readthedocs.io/en/latest/). See @lst-frameworks-example-jax for an example using [Flax](https://flax.readthedocs.io/en/latest/).
+[Jax](https://docs.jax.dev/) has gained significant popularity in recent years. Developed by researchers at Google, it is primarily used in research and foundation-model development. Jax provides a NumPy-like API with automatic differentiation (autodiff) and function transformations such as jit (for compilation) and vmap (for vectorization). It enables high-performance, composable numerical computing, and serves as the foundation for neural network libraries such as [Flax](https://flax.readthedocs.io/en/stable/). Flax's current API, _NNX_, defines models as regular Python objects, similar to PyTorch. (DeepMind's [Haiku](https://github.com/google-deepmind/dm-haiku) is in maintenance mode and recommends Flax for new projects.) See @lst-frameworks-example-jax for an example.
 
 
 ```{python}
 #| eval: false
 #| echo: true
 #| lst-label: lst-frameworks-example-jax
-#| lst-cap: Example with JAX and flax.
-from flax import linen as nn
-import jax.numpy as jnp
+#| lst-cap: Example with JAX and Flax NNX.
+from flax import nnx
 
-class NeuralNetwork(nn.Module):
-    @nn.compact
+class NeuralNetwork(nnx.Module):
+    def __init__(self, rngs: nnx.Rngs):
+        self.linear1 = nnx.Linear(28 * 28, 512, rngs=rngs)
+        self.linear2 = nnx.Linear(512, 512, rngs=rngs)
+        self.linear3 = nnx.Linear(512, 10, rngs=rngs)
+
     def __call__(self, x):
         x = x.reshape((x.shape[0], -1))  # Flatten the input
-        x = nn.Dense(512)(x)
-        x = nn.relu(x)
-        x = nn.Dense(512)(x)
-        x = nn.relu(x)
-        logits = nn.Dense(10)(x)
+        x = nnx.relu(self.linear1(x))
+        x = nnx.relu(self.linear2(x))
+        logits = self.linear3(x)
         return logits
 
+model = NeuralNetwork(rngs=nnx.Rngs(0))
 ```
 
 
@@ -720,7 +755,7 @@ class NeuralNetwork(nn.Module):
 [`Scikit-Learn`](https://scikit-learn.org/stable/) is THE machine learning framework in Python. However, Scikit-Learn never covered the area of neural networks and lacks auto-diff functionality. Therefore, Scikit-Learn is irrelevant when training neural networks. However, Scikit-Learn functionalities are often used to carry out the machine learning process, such as splitting datasets into train, validation, and test sets. Also, visualizations, such as the confusion matrix or calculating metrics, can be done via Scikit-Learn.
 
 ## ONNX
-y§
+
 [ONNX](https://onnx.ai/) (Open Neural Network Exchange) is an open format to represent machine learning models. It allows models trained in one framework to be transferred to another. Trained models can also be deployed on various platforms.
 
 ## Monitoring
@@ -733,34 +768,56 @@ When training models, monitoring the training process, debugging, and logging hy
 
 In neural networks, there are many tensor operations. Tensors are essentially multi-dimensional arrays, such as a scalar $x$, a vector $\mathbf{x}$, or a matrix $\mathbf{X}$.
 
-@fig-infrastructure-matrix-mult illustrates a matrix multiplication, a typical representative of a tensor operation. As you can see, the calculations (entries of the matrix $\mathbf{A}\mathbf{C}$) are independent of each other and can be fully parallelized.
+A typical representative of a tensor operation is the matrix multiplication $\mathbf{C} = \mathbf{A}\mathbf{B}$. It is everywhere in neural networks: a linear layer applied to a batch of inputs computes $\mathbf{Y} = \mathbf{X}\mathbf{W}$, and convolutions are typically implemented as matrix multiplications as well.
+
+@fig-infrastructure-matrix-mult illustrates that each entry $c_{ij}$ only requires row $i$ of $\mathbf{A}$ and column $j$ of $\mathbf{B}$:
+
+$$
+c_{ij} = \sum_k a_{ik} \, b_{kj}
+$$ {#eq-frameworks-matmul}
+
+All entries of $\mathbf{C}$ are therefore independent of each other and can be computed in parallel.
 
 ::: {#fig-infrastructure-matrix-mult}
-![]({{< meta params.images_path >}}matrix_mult.png){width=600}
+![]({{< meta params.images_path >}}matmul_parallel.png){width=700}
 
-Matrix Multiplication (from @li_cs231n_2022).
+Matrix multiplication: each entry of $\mathbf{C}$ is an independent dot product of a row of $\mathbf{A}$ and a column of $\mathbf{B}$.
 :::
 
 ## Graphics Processing Units (GPUs)
 
 GPUs have made deep learning possible in the first place. With their parallel structure, they can efficiently compute parallelizable tasks such as tensor operations.
 
-CPUs have far fewer cores than GPUs, but they are faster and can handle more complex tasks. CPUs are therefore ideal for sequential tasks. GPUs have many more cores, which are less complex and slower. Therefore, GPUs are excellent for parallel tasks. @fig-infrastructure-cpu-vs-gpu illustrates the differences.
+CPUs have far fewer cores than GPUs, but they are faster and can handle more complex tasks. CPUs are therefore ideal for sequential tasks. GPUs have many more cores, which are less complex and slower. Therefore, GPUs are excellent for parallel tasks. @tbl-frameworks-cpu-vs-gpu illustrates the differences.
 
-::: {#fig-infrastructure-cpu-vs-gpu}
-![]({{< meta params.images_path >}}cpu_vs_gpu.png){width=600}
+| | Cores | Clock (boost) | Memory | Throughput FP32 |
+|---|---|---|---|---|
+| **CPU** (AMD Ryzen 9 9950X) | 16 | 5.7 GHz | System RAM | ~5 TFLOPS |
+| **Consumer GPU** (NVIDIA RTX 5090) | 21,760 | 2.4 GHz | 32 GB GDDR7 | ~105 TFLOPS |
+| **Datacenter GPU** (NVIDIA H100 SXM) | 16,896 | 2.0 GHz | 80 GB HBM3 | ~67 TFLOPS |
 
-CPU vs GPU example (from @li_cs231n_2022).
-:::
+: CPU vs GPU (2026). Throughput values are theoretical peak values; the CPU value is an estimate assuming AVX-512 vector instructions on all cores. Sources: [AMD](https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x.html), [RTX 5090](https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/), [H100](https://www.nvidia.com/en-us/data-center/h100/). {#tbl-frameworks-cpu-vs-gpu}
+
+Interestingly, the datacenter GPU has a lower FP32 throughput than the consumer GPU. Its strengths lie elsewhere: large and fast memory, fast interconnects between GPUs, and very high throughput in low precision (see below).
+
+### Tensor Cores & Low Precision {#sec-frameworks-tensor-cores}
+
+Since 2017, NVIDIA GPUs contain _Tensor Cores_: specialized units that compute small matrix multiplications in a single step. They operate on low-precision number formats such as FP16, BF16, or FP8. For example, an H100 reaches roughly 990 TFLOPS in BF16 on its Tensor Cores, about 15 times its FP32 throughput. Most of the speed-up of modern deep learning hardware comes from these units, which is why training in mixed precision [@micikevicius_mixed_2018] (see the Performance Tips above) is standard practice.
+
+Other hardware for deep learning includes Apple Silicon (via PyTorch's `mps` backend), AMD GPUs (via [ROCm](https://rocm.docs.amd.com/)), and Google's TPUs.
+
+### GPU Memory
+
+In practice, the GPU memory (VRAM) is often the limiting factor rather than the compute. During training, the model parameters, the gradients, the optimizer state (AdamW stores two additional values per parameter), and the intermediate activations of the forward pass must fit into memory. Common levers are: reducing the batch size, mixed precision, and _gradient checkpointing_, which recomputes activations during the backward pass instead of storing them.
 
 ## CUDA & cuDNN
 
-[CUDA](https://developer.nvidia.com/cuda-toolkit) is an API by Nvidia to perform computations on the GPU. It allows parallelizable tasks to be implemented efficiently. [cuDNN](https://developer.nvidia.com/cudnn) is a library that efficiently executes certain operations, such as convolutions, in neural networks on the GPU. cuDNN is based on CUDA and significantly accelerates the training of neural networks. @fig-infrastructure-speed-gpu-cpu illustrates speed differences when training various neural networks with CPU, GPU, and optimized cuDNN.
+[CUDA](https://developer.nvidia.com/cuda-toolkit) is an API by Nvidia to perform computations on the GPU. It allows parallelizable tasks to be implemented efficiently. [cuDNN](https://developer.nvidia.com/cudnn) is a library that efficiently executes certain operations, such as convolutions, in neural networks on the GPU. cuDNN is based on CUDA and significantly accelerates the training of neural networks. @fig-infrastructure-speed-gpu-cpu illustrates speed differences when training various neural networks with CPU, GPU, and optimized cuDNN. While the hardware in this benchmark is dated, the relative differences still apply.
 
 ::: {#fig-infrastructure-speed-gpu-cpu}
 ![]({{< meta params.images_path >}}speed_gpu_cpu.png){width=600}
 
-Speed comparison (from @li_cs231n_2022, data from [Link](https://github.com/jcjohnson/cnn-benchmarks))
+Speed comparison, 2016 benchmark (from @li_cs231n_2022, data from [Link](https://github.com/jcjohnson/cnn-benchmarks))
 :::
 
 ## Data Loading
@@ -779,7 +836,7 @@ A crucial bottleneck in practice is the transfer of data (such as images) from t
 Source: @li_cs231n_2022
 :::
 
-Deep learning frameworks like PyTorch implement special classes that allow data to be prepared in multiple threads. Sometimes a certain number of CPU cores is needed to supply a GPU with enough data. @fig-infrastructure-gpu-starvation shows a starved GPU: You can clearly see that the utilization repeatedly drops to 0 because the GPU has to wait for data.
+Deep learning frameworks like PyTorch implement special classes that allow data to be prepared in multiple processes. In PyTorch, the `DataLoader` provides the relevant settings: `num_workers` (number of parallel worker processes), `pin_memory=True` (faster transfer to the GPU), and `persistent_workers=True` (keep workers alive between epochs). Sometimes a certain number of CPU cores is needed to supply a GPU with enough data. @fig-infrastructure-gpu-starvation shows a starved GPU: You can clearly see that the utilization repeatedly drops to 0 because the GPU has to wait for data.
 
 ::: {#fig-infrastructure-gpu-starvation}
 ![]({{< meta params.images_path >}}gpu_starvation.png){width=600}
@@ -790,6 +847,8 @@ The Y-axis shows the GPU utilization in percentage, while the X-axis represents 
 ## GPU Parallelism
 
 Models can also be trained on multiple GPUs. There are two main paradigms: _data parallelism_ and _model parallelism_ (see @fig-infrastructure-parallelism ). With _data parallelism_, each GPU has a copy of the model, and each GPU is trained on different data batches. With _model parallelism_, the model is split across multiple GPUs. Models can be trained on a server with multiple GPUs or even over the network (_distributed_). ML frameworks provide functionalities to handle these.
+
+In PyTorch, data parallelism is implemented with [`DistributedDataParallel` (DDP)](https://docs.pytorch.org/docs/stable/notes/ddp.html); the older `nn.DataParallel` is discouraged. If a full model copy (including gradients and optimizer state) does not fit on a single GPU, [_Fully Sharded Data Parallel_ (FSDP)](https://docs.pytorch.org/docs/stable/fsdp.html) splits (_shards_) these across GPUs while keeping the data-parallel training scheme. Model parallelism itself comes in two main forms: _pipeline parallelism_ (different layers on different GPUs) and _tensor parallelism_ (a single layer's matrix multiplication split across GPUs). The largest models combine all of these.
 
 ::: {#fig-infrastructure-parallelism}
 ![]({{< meta params.images_path >}}parallelism.jpg){width=600}
