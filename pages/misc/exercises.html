@@ -62,7 +62,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -542,16 +561,23 @@ gtag('config', 'G-0D0M41JVKL', { 'anonymize_ip': true});
 <li><strong>Classes (16):</strong> e.g.&nbsp;eastern_gartersnake, song_sparrow, meadow_vole, white-footed_mouse, masked_shrew, common_five-lined_skink, long-tailed_weasel, virginia_opossum</li>
 <li><strong>Total:</strong> ~13,000 images (9,186 / 2,000 / 1,822), max 1024 px (1024x720)</li>
 </ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../assets/images/exercises/osu_examples.png" class="img-fluid figure-img"></p>
+<figcaption>Ohio Small Animals examples</figcaption>
+</figure>
+</div>
 </section>
 <section id="amazon-berkeley-objects-abo-furniture" class="level2">
 <h2 class="anchored" data-anchor-id="amazon-berkeley-objects-abo-furniture">Amazon Berkeley Objects (ABO) Furniture</h2>
-<p>A curated subset of the Amazon Berkeley Objects dataset, restricted to six furniture categories (bed, chair, lamp, sofa, storage, table) with multiple views per item, ~25k centre-cropped 224×224 JPEGs. The multi-view structure makes it well-suited for image retrieval. Used as the <strong>default</strong> dataset in</p>
+<p>A curated subset of the Amazon Berkeley Objects dataset, restricted to six furniture categories (bed, chair, lamp, sofa, storage, table) with multiple views per item, ~25k centre-cropped 224×224 JPEGs. The multi-view structure makes it well-suited for image retrieval.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../assets/images/exercises/abo_bed.jpg" class="img-fluid figure-img"></p>
 <figcaption>ABO bed — e-commerce product photo</figcaption>
 </figure>
 </div>
+<p>Source: <a href="https://amazon-berkeley-objects.s3.amazonaws.com/index.html">Amazon Berkeley Objects</a>, see <span class="citation" data-cites="collins_abo_2022"><span class="nocase">Collins et al.</span> (<a href="#ref-collins_abo_2022" role="doc-biblioref">2022</a>)</span>.</p>
 </section>
 <section id="deepfashion-in-shop-retrieval" class="level2">
 <h2 class="anchored" data-anchor-id="deepfashion-in-shop-retrieval">DeepFashion (In-Shop Retrieval)</h2>
@@ -664,9 +690,14 @@ gtag('config', 'G-0D0M41JVKL', { 'anonymize_ip': true});
 
 <!-- -->
 
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-collins_abo_2022" class="csl-entry" role="listitem">
+<span class="nocase">Collins, Jasmine, Shubham Goel, Kenan Deng, et al.</span> 2022. <span>“Abo: <span>Dataset</span> and Benchmarks for Real-World 3d Object Understanding.”</span> <em>2022 <span>IEEE</span>/<span>CVF</span> <span>Conference</span> on <span>Computer</span> <span>Vision</span> and <span>Pattern</span> <span>Recognition</span> (<span>CVPR</span>)</em>, 21094–104.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1215,91 +1246,97 @@ gtag('config', 'G-0D0M41JVKL', { 'anonymize_ip': true});
 <span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>  white-footed_mouse, masked_shrew, common_five-lined_skink, long-tailed_weasel, virginia_opossum</span>
 <span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Total:** ~13,000 images (9,186 / 2,000 / 1,822), max 1024 px (1024x720)</span>
 <span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Amazon Berkeley Objects (ABO) Furniture</span></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>A curated subset of the Amazon Berkeley Objects dataset, restricted to six</span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>furniture categories (bed, chair, lamp, sofa, storage, table) with multiple</span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>views per item, ~25k centre-cropped 224×224 JPEGs. The multi-view structure makes it well-suited for image retrieval.</span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>Used as the **default** dataset in</span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="al">![ABO bed — e-commerce product photo]({{&lt; meta params.images_path &gt;}}abo_bed.jpg)</span></span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## DeepFashion (In-Shop Retrieval)</span></span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>A 5-class coarse-label subset (dresses, outerwear, pants, skirts, tops) of</span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>the DeepFashion In-Shop Clothes Retrieval Benchmark from MMLAB/CUHK, ~3300</span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>images split by item ID so all views of one product stay in the same split.</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="al">![Ohio Small Animals examples]({{&lt; meta params.images_path &gt;}}osu_examples.png)</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## Amazon Berkeley Objects (ABO) Furniture</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>A curated subset of the Amazon Berkeley Objects dataset, restricted to six</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>furniture categories (bed, chair, lamp, sofa, storage, table) with multiple</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>views per item, ~25k centre-cropped 224×224 JPEGs. The multi-view structure makes it well-suited for image retrieval.</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="al">![ABO bed — e-commerce product photo]({{&lt; meta params.images_path &gt;}}abo_bed.jpg)</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>Source: <span class="co">[</span><span class="ot">Amazon Berkeley Objects</span><span class="co">](https://amazon-berkeley-objects.s3.amazonaws.com/index.html)</span>, see @collins_abo_2022.</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="al">![DeepFashion pants — in-shop catalogue photo]({{&lt; meta params.images_path &gt;}}deepfashion_pants.jpg)</span></span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## AMI-Br (Atypical Mitotic Figures — Breast)</span></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>128×128 histopathology patches of mitotic figures from human breast cancer</span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>slides (subset of TUPAC16 + MIDOG21), with binary labels for normal vs.</span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>atypical mitoses. Used in as a small, domain-shifted target task for parameter-efficient fine-tuning (LoRA).</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## DeepFashion (In-Shop Retrieval)</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>A 5-class coarse-label subset (dresses, outerwear, pants, skirts, tops) of</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>the DeepFashion In-Shop Clothes Retrieval Benchmark from MMLAB/CUHK, ~3300</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>images split by item ID so all views of one product stay in the same split.</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="al">![DeepFashion pants — in-shop catalogue photo]({{&lt; meta params.images_path &gt;}}deepfashion_pants.jpg)</span></span>
 <span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="al">![AMI-Br]({{&lt; meta params.images_path &gt;}}ami_br_normal.png)</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="fu">## AMI-Br (Atypical Mitotic Figures — Breast)</span></span>
 <span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="fu">## Microsoft Cats vs Dogs</span></span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>The full Microsoft/Kaggle Cats and Dogs dataset (~25,000 colour photos of cats</span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>and dogs). Two corrupt source images (<span class="in">`Cat/666.jpg`</span>, <span class="in">`Dog/11702.jpg`</span>) are</span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>removed during preparation. Classes are balanced (50/50). Images are</span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>variable-size JPEGs, typically 150-500 px on the longer side.</span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Source:** Microsoft (<span class="ot">&lt;https://www.microsoft.com/en-us/download/details.aspx?id=54765&gt;</span>)</span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**License:** Microsoft Terms of Use (educational/non-commercial)</span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Split:** stratified 70/15/15, seed 42</span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classes:** Cat, Dog (~12,500 each)</span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Total:** ~25,000 images</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>128×128 histopathology patches of mitotic figures from human breast cancer</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>slides (subset of TUPAC16 + MIDOG21), with binary labels for normal vs.</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>atypical mitoses. Used in as a small, domain-shifted target task for parameter-efficient fine-tuning (LoRA).</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="al">![AMI-Br]({{&lt; meta params.images_path &gt;}}ami_br_normal.png)</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="fu">## Microsoft Cats vs Dogs</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>The full Microsoft/Kaggle Cats and Dogs dataset (~25,000 colour photos of cats</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>and dogs). Two corrupt source images (<span class="in">`Cat/666.jpg`</span>, <span class="in">`Dog/11702.jpg`</span>) are</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>removed during preparation. Classes are balanced (50/50). Images are</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>variable-size JPEGs, typically 150-500 px on the longer side.</span>
 <span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol=2}</span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="al">![Cat]({{&lt; meta params.images_path &gt;}}cat.jpg)</span>{width=300}</span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="al">![Dog]({{&lt; meta params.images_path &gt;}}dog.jpg)</span>{width=300}</span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Source:** Microsoft (<span class="ot">&lt;https://www.microsoft.com/en-us/download/details.aspx?id=54765&gt;</span>)</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**License:** Microsoft Terms of Use (educational/non-commercial)</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Split:** stratified 70/15/15, seed 42</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classes:** Cat, Dog (~12,500 each)</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Total:** ~25,000 images</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Concrete Cracks</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol=2}</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="al">![Cat]({{&lt; meta params.images_path &gt;}}cat.jpg)</span>{width=300}</span>
 <span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>The Ozgenel et al. Concrete Crack Images dataset (~40,000 227x227 JPEG images</span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>of concrete surfaces), with binary labels for intact (Negative) vs. cracked</span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>(Positive) surfaces. Well suited for teaching binary classification and</span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>industrial defect detection.</span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Source:** Mendeley Data, doi: 10.17632/5y9wdsg2zt.2</span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**License:** Creative Commons Attribution 4.0 (CC BY 4.0)</span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Split:** stratified 70/15/15, seed 42</span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classes:** Negative (~20,000), Positive (~20,000)</span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Total:** ~40,000 images, 227x227 px</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="al">![Dog]({{&lt; meta params.images_path &gt;}}dog.jpg)</span>{width=300}</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## Concrete Cracks</span></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>The Ozgenel et al. Concrete Crack Images dataset (~40,000 227x227 JPEG images</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>of concrete surfaces), with binary labels for intact (Negative) vs. cracked</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>(Positive) surfaces. Well suited for teaching binary classification and</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>industrial defect detection.</span>
 <span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="al">![Concrete Cracks — cracked surface example]({{&lt; meta params.images_path &gt;}}crack_example.jpg)</span></span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## EuroSAT RGB</span></span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>The EuroSAT land-use classification dataset (RGB variant, ~27,000 images across</span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>10 classes from Sentinel-2 satellite imagery). Images are 64x64 px, making</span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>this an interesting case for discussing domain shift from ImageNet pretraining.</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Source:** Mendeley Data, doi: 10.17632/5y9wdsg2zt.2</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**License:** Creative Commons Attribution 4.0 (CC BY 4.0)</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Split:** stratified 70/15/15, seed 42</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classes:** Negative (~20,000), Positive (~20,000)</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Total:** ~40,000 images, 227x227 px</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a><span class="al">![Concrete Cracks — cracked surface example]({{&lt; meta params.images_path &gt;}}crack_example.jpg)</span></span>
 <span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Source:** Zenodo record 7711810 (<span class="ot">&lt;https://zenodo.org/records/7711810&gt;</span>)</span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**License:** MIT License</span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Attribution:** Helber et al. (2019), IEEE JSTARS, doi: 10.1109/JSTARS.2019.2918242</span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Split:** stratified 70/15/15, seed 42</span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classes (10):** AnnualCrop, Forest, HerbaceousVegetation, Highway, Industrial,</span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>  Pasture, PermanentCrop, Residential, River, SeaLake (~1,900-3,000 each)</span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Total:** ~27,000 images, 64x64 px</span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol=3}</span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="al">![EuroSAT — permanent crop]({{&lt; meta params.images_path &gt;}}sat_crop.jpg)</span>{width=200}</span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="al">![EuroSAT — forest]({{&lt; meta params.images_path &gt;}}sat_forest.jpg)</span>{width=200}</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="fu">## EuroSAT RGB</span></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>The EuroSAT land-use classification dataset (RGB variant, ~27,000 images across</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>10 classes from Sentinel-2 satellite imagery). Images are 64x64 px, making</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>this an interesting case for discussing domain shift from ImageNet pretraining.</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Source:** Zenodo record 7711810 (<span class="ot">&lt;https://zenodo.org/records/7711810&gt;</span>)</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**License:** MIT License</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Attribution:** Helber et al. (2019), IEEE JSTARS, doi: 10.1109/JSTARS.2019.2918242</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Split:** stratified 70/15/15, seed 42</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classes (10):** AnnualCrop, Forest, HerbaceousVegetation, Highway, Industrial,</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>  Pasture, PermanentCrop, Residential, River, SeaLake (~1,900-3,000 each)</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Total:** ~27,000 images, 64x64 px</span>
 <span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a><span class="al">![EuroSAT — highway]({{&lt; meta params.images_path &gt;}}sat_highway.jpg)</span>{width=200}</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol=3}</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="al">![EuroSAT — permanent crop]({{&lt; meta params.images_path &gt;}}sat_crop.jpg)</span>{width=200}</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="al">![EuroSAT — forest]({{&lt; meta params.images_path &gt;}}sat_forest.jpg)</span>{width=200}</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="al">![EuroSAT — highway]({{&lt; meta params.images_path &gt;}}sat_highway.jpg)</span>{width=200}</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
