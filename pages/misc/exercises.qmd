@@ -83,14 +83,20 @@ images are night-time infrared (grayscale).
   white-footed_mouse, masked_shrew, common_five-lined_skink, long-tailed_weasel, virginia_opossum
 - **Total:** ~13,000 images (9,186 / 2,000 / 1,822), max 1024 px (1024x720)
 
+
+![Ohio Small Animals examples]({{< meta params.images_path >}}osu_examples.png)
+
+
 ## Amazon Berkeley Objects (ABO) Furniture
 
 A curated subset of the Amazon Berkeley Objects dataset, restricted to six
 furniture categories (bed, chair, lamp, sofa, storage, table) with multiple
 views per item, ~25k centre-cropped 224×224 JPEGs. The multi-view structure makes it well-suited for image retrieval.
-Used as the **default** dataset in
 
 ![ABO bed — e-commerce product photo]({{< meta params.images_path >}}abo_bed.jpg)
+
+Source: [Amazon Berkeley Objects](https://amazon-berkeley-objects.s3.amazonaws.com/index.html), see @collins_abo_2022.
+
 
 ## DeepFashion (In-Shop Retrieval)
 

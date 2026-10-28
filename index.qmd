@@ -5,13 +5,7 @@ number-sections: false
 
 Herzlich willkommen zum Modul **Computer Vision mit Deep Learning**!
 
-Hier finden Sie Unterlagen und aktuelle Informationen zum Modul.
-
-[Modul Computer Vision mit DL](https://www.fhnw.ch/de/weiterbildung/informatik/fachvertiefungsmodule-data-science/computer-vision-mit-deep-learning)
-
-[CAS Page](https://www.fhnw.ch/de/weiterbildung/informatik/cas-deep-learning)
-
-Inhalte zu Objekt-Detektion, Segmentierung und dem CV Lab sind nicht Teil von dieser Page und werden separat behandelt.
+Das Modul ist Teil des [CAS Agentic AI & Deep Learning](https://www.fhnw.ch/de/weiterbildung/informatik/cas-deep-learning) der FHNW ([Modulbeschreibung](https://www.fhnw.ch/de/weiterbildung/informatik/fachvertiefungsmodule-data-science/computer-vision-mit-deep-learning)). Hier finden Sie Unterlagen und aktuelle Informationen zum Modul (Inhalte zu Objekt-Detektion, Segmentierung und dem CV Lab sind nicht Teil von dieser Page und werden separat behandelt).
 
 ```{=html}
 <div class="hero-demo">
