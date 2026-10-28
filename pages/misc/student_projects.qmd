@@ -16,20 +16,20 @@ The following project ideas provide potential starting points for projects. Feel
 
 The following datasets are well-suited for project work. Size and task type vary considerably — choose a dataset that matches your available compute and the scope of your project.
 
-| Dataset | Task Type | Size | Notes |
-|---|---|---|---|
-| EuroSAT RGB | Classification | ~27k images, 10 classes | 64×64 px, domain shift from ImageNet |
-| Microsoft Cats vs Dogs | Binary Classification | ~25k images | Large, clean, balanced |
-| Concrete Cracks | Binary Classification | ~40k images | Industrial defect detection |
-| Food-101 (subset) | Classification | ~10k (10 classes) | Noisy labels, large full dataset |
-| CCT20 | Classification | 1,600 images, 8 classes | Small course subset; larger full dataset available |
-| Snapshot Serengeti | Classification | ~2.6M images, 48 classes | Large-scale; use a curated subset |
-| Amazon Berkeley Objects (ABO) | Image Retrieval | ~25k images, 6 categories | Multi-view per item |
-| DeepFashion (In-Shop) | Image Retrieval | ~3,300 images, 5 classes | Item-level train/test splits |
-| UT-Zappos50K | Image Retrieval | ~50k shoe images, 4 categories | Same shoe in several colours; material labels |
-| AMI-Br | Binary Classification | Small (histopathology patches) | Domain shift; suited for LoRA/PEFT |
-| FFHQ | Super Resolution | Up to 70k face images | Aligned faces, narrow domain |
-| CLIC | Super Resolution | ~2k high-res photographs | Diverse scenes; train on crops |
+| Dataset | Task Type | Size | Notes | Link |
+|---|---|---|---|---|
+| EuroSAT RGB | Classification | ~27k images, 10 classes | 64×64 px, domain shift from ImageNet | [GitHub](https://github.com/phelber/eurosat) |
+| Microsoft Cats vs Dogs | Binary Classification | ~25k images | Large, clean, balanced | [Microsoft](https://www.microsoft.com/en-us/download/details.aspx?id=54765) |
+| Concrete Cracks | Binary Classification | ~40k images | Industrial defect detection | [Mendeley Data](https://data.mendeley.com/datasets/5y9wdsg2zt/2) |
+| Food-101 (subset) | Classification | ~10k (10 classes) | Noisy labels, large full dataset | [ETH Zurich](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/) |
+| CCT20 | Classification | 1,600 images, 8 classes | Small course subset; larger full dataset available | [LILA BC](https://lila.science/datasets/caltech-camera-traps) |
+| Snapshot Serengeti | Classification | ~2.6M images, 48 classes | Large-scale; use a curated subset | [LILA BC](https://lila.science/datasets/snapshot-serengeti) |
+| Amazon Berkeley Objects (ABO) | Image Retrieval | ~25k images, 6 categories | Multi-view per item | [ABO](https://amazon-berkeley-objects.s3.amazonaws.com/index.html) |
+| DeepFashion (In-Shop) | Image Retrieval | ~3,300 images, 5 classes | Item-level train/test splits | [CUHK](https://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html) |
+| UT-Zappos50K | Image Retrieval | ~50k shoe images, 4 categories | Same shoe in several colours; material labels | [UT Austin](https://vision.cs.utexas.edu/projects/finegrained/utzap50k/) |
+| AMI-Br | Binary Classification | Small (histopathology patches) | Domain shift; suited for LoRA/PEFT | [GitHub](https://github.com/DeepMicroscopy/AMi-Br) |
+| FFHQ | Super Resolution | Up to 70k face images | Aligned faces, narrow domain | [GitHub](https://github.com/NVlabs/ffhq-dataset) |
+| CLIC | Super Resolution | ~2k high-res photographs | Diverse scenes; train on crops | [CLIC](https://archive.compression.cc/datasets/) |
 
 ::: {.callout-note}
 Snapshot Serengeti is large, work with a curated subset and account for class imbalance in your evaluation (F1, weighted metrics, confusion matrices). AMI-Br is intentionally small and best suited for parameter-efficient fine-tuning experiments. MNIST is available but too simple to constitute a meaningful project. Additional camera trap datasets can be found at [LILA BC](https://lila.science/datasets#project-descriptions).
@@ -88,7 +88,7 @@ Source: [Link](https://github.com/phelber/eurosat)
 Source: [Link](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/)
 :::
 
-**Difficulty/Effort**: Low - Medium
+**Difficulty/Effort**: Low
 
 
 ### Age Estimation from Faces
@@ -107,7 +107,7 @@ Source: [Link](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/)
 Source: [Link](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/)
 :::
 
-**Difficulty/Effort**: Medium - High
+**Difficulty/Effort**: Low - Medium
 
 
 ### Wildlife Camera Trap Classification
@@ -159,7 +159,7 @@ Source: Mendeley / Özgenel et al.
 **Dataset**: AMI-Br (128×128 histopathology patches, binary labels). The dataset is intentionally small — robustness to seed variation is part of the analysis.
 
 :::{#fig-sp-ami}
-![]({{< meta params.images_path >}}ami_br_normal.png){width=600}
+![]({{< meta params.images_path >}}ami_br_normal.png){width=400}
 
 Source: AMI-Br / TUPAC16 + MIDOG21
 :::
@@ -188,9 +188,9 @@ Source: Amazon Berkeley Objects
 **Difficulty/Effort**: Low - Medium
 
 
-### Controllable Product Recommender
+### Visual Product Recommender
 
-**Goal**: Build a visual recommender for shoes: given a query image, return similar products. The user can control with sliders which attribute types matter: colour, form or material. For example: "same shape and material, any colour" or "same colour, any shape".
+**Goal**: Build a visual recommender for shoes: given a query image, return similar products. The user should be able to control the recommendations with sliders to adujust the importance of: colour, form or material. For example: "same shape and material, any colour" or "same colour, any shape".
 
 **Approach**: Start with zero-shot CLIP embeddings. Define a set of text prompts per attribute type (e.g. colour names, shoe types, materials) and derive one similarity per attribute type from them, e.g. by projecting the image embeddings onto the subspace spanned by the text embeddings of that attribute. Normalise the similarities (z-scores) and combine them with the slider weights. Try also the opposite: remove an attribute subspace from the image embedding to make the recommender ignore that attribute. Optionally, train small linear heads on the frozen embeddings using the existing labels (material, sub-category) and compare.
 

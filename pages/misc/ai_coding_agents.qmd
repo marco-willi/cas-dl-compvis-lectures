@@ -44,7 +44,7 @@ $$
 
 **Takeaways**
 
-- **Use AI deliberately** · **Stay cognitively engaged** · **Take responsibility for results**
+- **Use AI deliberately** · **Stay cognitively engaged** · **Take responsibility for results** · **Declare AI use**
 
 :::
 
@@ -53,30 +53,26 @@ $$
 
 AI coding assistants have evolved rapidly: from autocompleting a single line, to generating whole functions from a comment, to **agents** that work autonomously on an entire codebase. An agent might receive a complex task in natural language ("fine-tune a DINOv3 model on my camera trap images"), inspects the repository and the data, writes code, runs it, reads error messages and outputs, and iterates.
 
-Using AI tools in education obviously has benefits and risks. AI tools can help learn faster, explore more, and build far more ambitious projects than would otherwise be possible given the available time. At the same time, an agent can produce a complete, working project without any understanding.
-**Accomplishing more does not automatically mean learning more.** Effective use depends on which cognitive activities you delegate and which you keep.
+Using AI tools in education has benefits and obvious risks. AI tools can help learn faster & in a more tailored way, explore more, and build far more ambitious projects than would otherwise be possible. At the same time, an agent can produce a complete, working project without any understanding.
 
-In practice AI tools also change **where expertise is needed**. Writing a data loader from scratch becomes less important; problem formulation, experimental design, evaluation, and critical interpretation however remain cruicial. Implementation skills do not become obsolete: understanding software and model internals is essential to diagnose subtle failures. As discussed in the [Training Guide](practical.qmd), training neural networks **fails silently** — and recognizing such failures requires exactly the knowledge this course aims to teach.
+Importantly, **accomplishing more does not automatically mean learning more.** Effective use of AI tools depends on which cognitive activities you delegate and which you keep.
+
+In practice AI tools also change **what kind of expertise is needed**. Writing a data loader from scratch becomes less important: problem formulation, experimental design, evaluation, and critical interpretation however remain crucial. Implementation skills do not become obsolete: understanding software and model internals is essential to diagnose subtle failures. As discussed in the [Training Guide](practical.qmd), training neural networks **fails silently** and recognizing such failures requires exactly the knowledge this course aims to teach.
+
+One example of such an occurence happened when I used an AI coding agent to create an interactive demo to visualize attention maps of a pre-trained model. I noticed that attention for the three register tokens was identical, which did not make sense to me. After investigating, it turns out that this was an actual bug in the pre-trained model itself. In this case the coding agent did not cause the issue but was unable to detect it either.
 
 This page first focuses on how to use AI for learning, then on how to use coding agents in applied projects, and finally on how to verify results — your own and the agent's.
 
-
 ## What is an AI Coding Agent?
 
-A coding agent combines a large language model (LLM) with **tools** and a **loop**. In contrast to a chat interface that only returns text, an agent can act on its environment:
+A coding agent combines a large language model (LLM) with an **agent harness**: software that provides **tools**, manages context, and orchestrates an iterative **agent loop**. Unlike a simple chat interface, an agent can act on its environment:
 
-- **Read**: inspect files, search the codebase, read documentation and dataset metadata
+- **Read**: inspect files, search codebases and documentation
 - **Write**: create and edit files
-- **Execute**: run scripts, tests, experiments, shell commands, install packages
-- **Iterate**: observe outputs (a stack trace, a metric, a plot) and decide on the next step
+- **Execute**: run scripts, tests, experiments and shell commands
+- **Iterate**: observe results and decide on the next step
 
-An agent can support three different activities:
-
-- **Code generation**: producing code that implements a requested operation ("write a function computing IoU").
-- **Agentic software engineering**: navigating a repository, making changes, running checks, and iterating toward a goal ("add mixed-precision training and make sure all tests pass").
-- **Agent-assisted scientific work**: helping to formulate hypotheses, design experiments, identify methodological risks, and interpret results ("investigate whether the dataset contains correlated observations and recommend a split").
-
-The same tool can also act as a tutor that explains, asks questions, and gives hints. This leads to the central question: what role should AI play when the goal is learning?
+The harness enables the LLM to repeatedly **plan → act → observe → adapt** until a goal is reached.
 
 
 ## AI for Learning
@@ -88,7 +84,7 @@ Consider two ways of spending 40 minutes:
 - Debugging a tensor shape mismatch in a PyTorch training loop.
 - Investigating why a model trained on camera trap images fails at a new camera location.
 
-It is tempting to call the first a waste of time and the second a "productive" effort. But debugging a shape mismatch can be a good learning experience: it reveals how convolutional layers transform spatial dimensions, how batches are represented, or how broadcasting works. Personally, I used to write comments in the code to document input and output shapes which helped me understand and debug the flow of data through a neural network.
+It is tempting to call the first a waste of time and the second a "productive" effort. But debugging a shape mismatch can be a good learning experience: it might reveal how convolutional layers transform spatial dimensions, how batches are represented, or how broadcasting works. Personally, I used to write comments in the code to document (expected) input and output shapes which helped me understand and debug the flow of data through a neural network.
 
  Whether effort is productive is **not a property of the task, but of the learning objective**:
 
@@ -101,7 +97,7 @@ It is tempting to call the first a waste of time and the second a "productive" e
 | Evaluate a classifier | Understand evaluation metrics | Compute examples by hand |
 | Evaluate a classifier | Compare pretrained backbones | Delegate metric computation, validate the protocol yourself |
 
-A consequence that is particularly relevant in continuing education: participants with different backgrounds may appropriately use **different levels of assistance on the same exercise**. A software engineer may delegate the training loop and focus on evaluation design; someone new to Python may learn most by writing the training loop with AI as a tutor.
+In this module, participants with different backgrounds & skills come together and thus benefit from **different levels of assistance on the same exercise**. A software engineer may delegate the training loop and focus on evaluation design, someone new to Python may learn most by writing the training loop with AI as a tutor.
 
 ### What Do We Know?
 
@@ -116,6 +112,8 @@ Beyond experimental findings, educational institutions are formulating **pedagog
 These are best read as a framework for designing good learning practices — not as proof that AI inevitably reduces learning. At the same time, the report notes that "the potential of these technologies to augment work across campus is immense".
 
 Universities worldwide face this tension ([The New York Times, 2026](https://www.nytimes.com/2026/09/15/us/universities-ai-warnings-enthusiasm.html)): AI proficiency is increasingly seen as a professional necessity, yet education aims to develop exactly the reasoning that can be delegated. The same reporting cites a study of 26,000 secondary-school students in which AI adoption raised homework scores by 18% but lowered scores on secure exams by 20% — performing well *with* AI is not the same as having learned. Ohio State's president frames the central question as "What is OK to offload to A.I., and what is not? The answer to that depends on the field and depends on your stage of learning." The University of Sydney's "two-lane approach" responds by combining both: some assessments under secure conditions without AI, others that *require* AI use.
+
+FHNW addresses this in its [Digital Skills Map with AI focus](https://www.fhnw.ch/plattformen/newlearning/digital-skills-fhnw/): existing digital competencies remain valid but must be "newly applied, reflected, and responsibly shaped" when working with AI. The map is explicitly an orientation for individual development, not a requirements profile. This page focuses on a subset — critically assessing AI output, using AI for learning, and producing ML systems responsibly.
 
 My recommendation is to strike a balance: learn both to solve selected problems on your own and to solve more ambitious problems effectively with AI.
 
@@ -247,7 +245,7 @@ In industry and research — and in your course project — coding agents are in
 - **Silent changes to experimental conditions**: updating a dependency, changing a seed, modifying a dataset filter, or switching a checkpoint — each reasonable on its own, yet invalidating a comparison between experiments.
 - **Outdated or hallucinated APIs**: deprecated arguments (`pretrained=True` instead of `weights=...`), non-existent model identifiers, and — worst — a silent fallback to random initialization when the pretrained weights cannot be loaded.
 - **Supply chain**: hallucinated package names can be registered by attackers ("slopsquatting", see @spracklen_we_2025-1).
-- **Prompt injection and data exposure**: agents read untrusted content — READMEs, documentation, dependencies, issues — that may contain instructions attempting to influence what the agent executes or discloses. Repository content or data may also be transmitted to external services. For confidential datasets (e.g. medical images), this deserves explicit attention.
+- **Prompt injection and data exposure**: agents read untrusted content — READMEs, documentation, dependencies, issues — that may contain instructions attempting to influence what the agent executes or discloses. Repository content or data may also be transmitted to external services. For confidential datasets (e.g. medical images), this deserves explicit attention — see FHNW's short guide [KI und Datenschutz](https://www.fhnw.ch/plattformen/newlearning/kuenstliche-intelligenz-und-datenschutz/).
 - **Review burden and ownership**: large agent-generated changes are hard to review; if nobody understands the pipeline, diagnosing failures becomes difficult.
 
 ### Collaboration Modes
@@ -322,7 +320,7 @@ train_idx, test_idx = next(splitter.split(df, groups=df["location_id"]))
 
 Note that `GroupShuffleSplit` creates a single holdout split that keeps groups separate; it does not guarantee class balance or representativeness. Check the class distribution of the resulting splits, or use `StratifiedGroupKFold`.
 
-The same structure appears with multiple images per patient, per product, or overlapping tiles of a satellite scene. The general principle: **a train/test split encodes an assumption about the deployment distribution**. An agent can be tasked to investigate what constitutes an independent observation — but deciding which deployment scenario matters is your responsibility.
+The same structure appears with multiple images per patient, per product, or overlapping tiles of a satellite scene. The general principle: **a train/test split encodes an assumption about the deployment distribution**. An agent can be tasked to investigate what constitutes an independent observation — but deciding which deployment scenario matters is your responsibility. Note also that agents themselves can carry biases from their training data into such defaults (see FHNW's [KI und Bias](https://www.fhnw.ch/plattformen/newlearning/kuenstliche-intelligenz-und-bias/)).
 
 ### Example 2: Augmentations Encode Assumptions
 
@@ -529,11 +527,12 @@ The last category is the hardest to automate — and the one this course aims to
 
 ## Takeaways
 
-AI tools will keep improving, and many of the specific failure modes on this page may become less frequent. Three principles are more durable than guidance tied to any particular tool or model generation:
+AI tools will keep improving, and many of the specific failure modes on this page may become less frequent. Four principles are more durable than guidance tied to any particular tool or model generation:
 
 - **Use AI deliberately**: choose its role based on what you are trying to learn, not merely on what can be automated.
 - **Stay cognitively engaged**: ask questions, make predictions, challenge explanations, and regularly work independently.
 - **Take responsibility for results**: understand the assumptions, validate important claims, and be able to explain what the system does and why.
+- **Declare AI use**: state which parts of your project were AI-assisted and how you verified them — transparency is part of FHNW's digital competence framework and of most FHNW guidelines on written work.
 
 ## References
 
