@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero Similarity</title>
+<!--
+  Hero demo for the welcome page: point at something in a photo and see which areas DINOv3
+  finds similar. The features are precomputed (tools/export_features.py) and shipped as a
+  script, so there are no network requests; works from file:// and on GitHub Pages. Embed via
+  iframe:
+
+    <iframe src="demos/welcome/hero_similarity/index.html" width="100%" height="560"
+            data-auto-height style="border: 0;" title="Interaktive Demo: DINOv3 Ähnlichkeit"></iframe>
+
+  Each photo is one scene (data/<key>.js, data/<key>.jpg); with more than one, buttons below
+  the photo switch between them. Interface: app.js.
+-->
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #5b6472;
+    --line: #d5d9e0;
+    --panel: #f6f7f9;
+    --accent: #0891b2;
+    --accent-fill: #cffafe;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  noscript p, .error { padding: 0.5rem 0.7rem; border: 1px solid #ea580c; border-radius: 0.3rem; background: #ffedd5; }
+  button {
+    font: inherit;
+    color: inherit;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-fill); font-weight: 600; }
+  .picker { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; font-size: 0.85rem; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .view { margin: 0; }
+  /* Photo and map side by side; caption under the photo, legend and buttons under the map */
+  .stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "photo map" "caption side";
+    gap: 0.4rem 0.5rem;
+    align-items: start;
+  }
+  #view { grid-area: photo; }
+  #map { grid-area: map; }
+  .stage figcaption { grid-area: caption; }
+  .side { grid-area: side; }
+  .stage canvas { display: block; width: 100%; border-radius: 0.4rem; cursor: crosshair; touch-action: none; }
+  .legend { display: grid; grid-template-columns: auto 1fr auto; gap: 0.4rem; align-items: center; font-size: 0.8rem; color: var(--muted); }
+  .legend .bar {
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    background: linear-gradient(90deg, #3b4cc0, #5d7ce6, #82a6fb, #aac7fd, #cdd9ec, #ead4c8, #f7b89c, #f18d6f, #d95847, #b40426);
+  }
+  .view figcaption { font-size: 0.85rem; color: var(--muted); }
+  .credit { margin: 0.4rem 0 0; font-size: 0.75rem; color: var(--muted); }
+  .view figcaption strong { color: var(--ink); font-weight: 600; }
+  @media (max-width: 560px) {
+    .stage { grid-template-columns: 1fr; grid-template-areas: "photo" "map" "side" "caption"; }
+  }
+</style>
+</head>
+<body>
+
+<noscript><p>Diese Demo braucht JavaScript.</p></noscript>
+<p class="error" id="error" role="alert" hidden></p>
+
+<div id="app" hidden>
+  <figure class="view">
+    <div class="stage">
+      <canvas id="view" tabindex="0"
+              aria-label="Foto mit Tieren. Der Punkt unter dem Kreuz ist die Anfrage. Pfeiltasten verschieben den Punkt."></canvas>
+      <canvas id="map" aria-label="Ähnlichkeitskarte: warm ist ähnlich zum Punkt unter dem Kreuz, kühl unähnlich."></canvas>
+      <figcaption><strong>Zeigen Sie auf ein Tier oder den Hintergrund.</strong> Rechts: wie ähnlich ein ohne Labels
+        trainiertes Modell jede Bildstelle zum Punkt unter dem Kreuz findet. Mehr dazu in Lektion 5.</figcaption>
+      <div class="side">
+        <div class="legend"><span>unähnlich</span><span class="bar"></span><span>ähnlich</span></div>
+        <div class="picker" id="picker" role="group" aria-label="Foto"></div>
+        <p class="credit" id="credit"></p>
+      </div>
+    </div>
+  </figure>
+</div>
+
+<script src="data/savanna.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

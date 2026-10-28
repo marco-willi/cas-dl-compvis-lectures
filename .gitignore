@@ -104,6 +104,9 @@ demos/vision_transformers/*
 !demos/representation_learning/
 demos/representation_learning/*
 !demos/representation_learning/patch_similarity/
+!demos/welcome/
+demos/welcome/*
+!demos/welcome/hero_similarity/
 # Allow actual demo notebooks and qmd
 # !demos/**/*.ipynb
 # !demos/**/*.qmd
