@@ -75,7 +75,7 @@ The notation follows the [Deep Learning Book](https://www.deeplearningbook.org/c
 | $\frac{\partial y}{\partial x}$ | Partial derivative of $y$ with respect to $x$ |
 | $\nabla_{\vect{x}} y$ | Gradient of $y$ with respect to $\vect{x}$ |
 | $\frac{\partial f}{\partial \vect{x}} \in \mathbb{R}^{m \times n}$ | Jacobian matrix of $f: \mathbb{R}^n \rightarrow \mathbb{R}^m$ |
-| $\int_{\mathcal{S}} f(\vect{x}) \, d\vect{x}$ | Definite integral over the set $\mathcal{S}$ |
+| $\int f(\vect{x}) \, d\vect{x}$ | Definite integral over the entire domain of $\vect{x}$ |
 
 
 ## Probability and Information Theory
