@@ -16,7 +16,7 @@ from pathlib import Path
 import yaml
 
 SECTIONS = ["Background & Preparation", "Lectures"]
-EXTRA_PAGES = ["pages/lectures/practical.qmd"]
+EXTRA_PAGES = ["pages/misc/practical.qmd"]
 QUIZ_PAGE = "pages/misc/quiz.qmd"
 
 HEADER = """# {title} — Course Notes

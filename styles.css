@@ -16,3 +16,21 @@
   background-color: transparent !important;
   background: transparent !important;
 }
+
+/* Course map on the welcome page */
+.course-map {
+  width: 100%;
+  height: auto;
+}
+
+.course-map a {
+  text-decoration: none;
+}
+
+.course-map a rect {
+  transition: fill 0.15s;
+}
+
+.course-map a:hover rect {
+  fill: #f7f7f7;
+}

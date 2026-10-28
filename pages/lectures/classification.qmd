@@ -526,7 +526,7 @@ You train a classifier for camera-trap images with the classes empty, deer, fox,
 </details>
 :::
 
-The [Training Guide](practical.qmd#data-augmentation) covers augmentation libraries and practical recipes, such as how much augmentation to use when fine-tuning a pretrained model.
+The [Training Guide](../misc/practical.qmd#data-augmentation) covers augmentation libraries and practical recipes, such as how much augmentation to use when fine-tuning a pretrained model.
 
 
 ## References

@@ -10,32 +10,23 @@ $$
 $$
 :::
 
-::: {.callout-tip title="Learning Objectives" collapse="true"}
-After reading this guide you should be able to:
-
-- Apply a systematic recipe for training deep learning models from data inspection through regularization.
-- Identify common issues in image datasets: corrupted images, class imbalance, ambiguous labels, and resolution requirements.
-- Set up a debugging pipeline using input-independent baselines, batch overfitting, and input visualization.
-- Select appropriate regularization techniques — data augmentation, early stopping, weight decay, transfer learning — for a given scenario.
-- Choose a modern pretrained backbone (DINOv2/v3, SigLIP, ConvNeXt-V2, SAM, EVA) and decide on a fine-tuning strategy given dataset size and domain.
-:::
-
 ::: {.callout-tip title="TLDR Recap" collapse="true"}
 
 **4-Step Training Recipe**
 
-1. **Know the data** — inspect distributions, corrupted samples, class imbalance, label quality
-2. **Build a baseline pipeline** — define metrics, fix random seeds, verify with simple models
-3. **Overfit first** — achieve strong training performance before worrying about generalization
-4. **Regularize** — augmentation, early stopping, weight decay, transfer learning
+1. **Know the data** — inspect samples, class distribution, corrupted or ambiguous images, resolution needs, label quality
+2. **Build a baseline pipeline** — define metrics and splits, fix random seeds, run an input-independent baseline, overfit a single batch
+3. **Overfit first** — use an established architecture ("don't be a hero") and Adam; reach strong training performance before worrying about generalization
+4. **Regularize** — more data, augmentation, early stopping, weight decay, transfer learning
 
 **Key Insights**
 
-- ML frameworks are "leaky abstractions" — bad hyperparameters fail silently, not loudly
-- An input-independent baseline reveals whether a model is learning from the data at all
-- Data augmentation is the most practical form of regularization for image tasks
+- ML frameworks are "leaky abstractions" — training fails silently, not loudly
+- An input-independent baseline reveals whether a model is learning from the data at all; a human baseline sets a performance ceiling
+- More labeled data is the best regularizer; augmentation is the most practical substitute (minimal when fine-tuning, heavier when training from scratch)
 - Transfer learning is the default starting point — pre-trained features generalize well
-- Modern pretrained backbones (DINOv2/v3, SigLIP, ConvNeXt-V2) dramatically outperform ImageNet-only pretraining; choose based on task, domain, and compute budget
+- Modern pretrained backbones (DINOv3, CLIP variants, ConvNeXt-V2, SAM3) outperform ImageNet-only pretraining; DINOv3 is a strong default, available via `timm`
+- Track a fixed set of validation images over training to catch failures that aggregate metrics hide
 
 **Weight Decay**
 

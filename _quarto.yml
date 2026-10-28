@@ -34,6 +34,8 @@ project:
     - demos/representation_learning/patch_similarity/**
     - "!demos/representation_learning/*/tools/**"
     - "!demos/representation_learning/*/README.md"
+    - demos/welcome/hero_similarity/**
+    - "!demos/welcome/*/tools/**"
   render:
     #- "*.qmd"
     - pages/lectures/*.qmd
@@ -89,7 +91,7 @@ website:
       - text: "Home"
         href: index.qmd
       # ------ Background & Preparation------------ #
-      - section: Background & Preparation
+      - section: Preparation
         contents:
           - pages/background/machine_learning.qmd
           - pages/background/neural_networks.qmd
@@ -120,19 +122,12 @@ website:
           - pages/slides/genai_intro.qmd
           - pages/slides/genai_models.qmd
           - pages/slides/genai_practical.qmd
-      # ------ Exercises ---------------------------- #
-      - text: "Exercises"
-        href: pages/misc/exercises.qmd
-      # ------ Training Guide -------------------- #
-      - text: "Training Guide"
-        href: pages/lectures/practical.qmd
-      # ------ Project Ideas -------------------- #
-      - text: "Project Ideas"
-        href: pages/misc/student_projects.qmd
-      # # ------ Quiz & Exam Prep---------------------------- #
-      - text: "Quiz & Exam Prep"
-        href: pages/misc/quiz.qmd
-
+      - section: Practice
+        contents:
+          - pages/misc/exercises.qmd
+          - pages/misc/practical.qmd
+          - pages/misc/quiz.qmd
+          - pages/misc/student_projects.qmd
       # ------ Misc ---------------------------- #
       - section: Resources
         contents:
