@@ -3,7 +3,6 @@ title: "Computer Vision mit Deep Learning"
 number-sections: false
 ---
 
-
 Herzlich willkommen zum Modul **Computer Vision mit Deep Learning**!
 
 Hier finden Sie Unterlagen und aktuelle Informationen zum Modul.
@@ -14,6 +13,11 @@ Hier finden Sie Unterlagen und aktuelle Informationen zum Modul.
 
 Inhalte zu Objekt-Detektion, Segmentierung und dem CV Lab sind nicht Teil von dieser Page und werden separat behandelt.
 
+```{=html}
+<div class="hero-demo">
+<iframe name="hero-similarity" data-auto-height src="demos/welcome/hero_similarity/index.html" width="100%" height="420" style="border: 0;" title="Interaktive Demo: DINOv3 Ähnlichkeit"></iframe>
+</div>
+```
 
 ## Kursübersicht
 
@@ -56,13 +60,28 @@ Inhalte zu Objekt-Detektion, Segmentierung und dem CV Lab sind nicht Teil von di
 
 ## Lernziele
 
-- Die fundamentalen Herausforderungen beim Modellieren von Bilddaten verstehen
-- Convolutional Neural Networks verstehen, implementieren und trainieren können
-- Foundation-Models als Grundlage für viele Vision Tasks verstehen und einsetzten können
-- Bildklassifikation verstehen und systematisch umsetzen können
-- Generative Modelle verstehen und praktische Anwendungen mit modernen Generative AI Modellen umsetzen können
-- Mit Deep Learning Frameworks umgehen und Libraries verwenden können
-- Praktische Anwendung umsetzen, vorstellen und erklären können
+Nach dem Kurs könnt ihr ...
+
+**Tag 1: Grundlagen**
+
+- die besonderen Herausforderungen von Bilddaten (hohe Dimensionalität, Variabilität in Blickwinkel, ...) beschreiben und einen Bilddatensatz systematisch untersuchen und für die Modellierung aufbereiten.
+- den Aufbau von Convolutional Neural Networks (Convolutions, Activations, Layers) erklären und begründen, warum CNNs für Bilddaten geeignet sind.
+- ein Bildklassifikationsmodell in PyTorch nach einem systematischen Vorgehen trainieren, evaluieren und typische Fallstricke vermeiden.
+
+**Tag 2: Representations und moderne Backbones**
+
+- mit vortrainierten Modellen Embeddings extrahieren und für Aufgaben wie die Retrieval nutzen.
+- eine geeignete Strategie zur Adaptation vortrainierter Modelle (k-NN, Linear Probe, LoRA, Fine-Tuning) anhand von Datenmenge und Domäne auswählen und anwenden.
+- CNNs und Vision Transformers vergleichen und einen passenden Backbone für einen Anwendungsfall begründet auswählen.
+
+**Tag 3: Generative AI**
+
+- die Funktionsweise der wichtigsten Familien generativer Modelle (autoregressive Modelle, GANs, VAEs, Diffusion- und Flow-Modelle) erklären und ihre Stärken und Schwächen vergleichen.
+- moderne generative Bildmodelle über APIs und Open-Weight-Modelle einsetzen und deren Grenzen und Risiken (Halluzinationen, Bias, ...) kritisch beurteilen.
+
+**Projekt**
+
+- eine eigene Computer-Vision-Anwendung konzipieren, umsetzen und Ergebnisse nachvollziehbar präsentieren.
 
 ## Ablauf
 

@@ -195,7 +195,7 @@ Source: AMI-Br / TUPAC16 + MIDOG21
 
 **Focus**: Compare against bicubic interpolation as a trivial baseline. Evaluate with PSNR and SSIM, and inspect the results visually: which details does the model recover, and where does it produce blurry or wrong structures? Discuss the limits of pixel-wise losses (e.g. MSE) for perceived image quality.
 
-Finally, compare your best model against one or two API-based generative upscalers on a small test set (e.g. 20–50 images), e.g. an image editing model prompted to upscale the image, or a diffusion-based upscaler via Replicate / fal.ai. These models typically produce sharper, more pleasing images, but are the added details faithful to the original? Compare PSNR/SSIM with a perceptual metric (e.g. LPIPS) and look for hallucinated details (e.g. changed facial features, invented text or textures).
+Finally, compare your best model against one or two API-based generative upscalers on a small test set (e.g. 20–50 images). Are the added details faithful to the original? Look for hallucinated details (e.g. changed facial features, invented text or textures).
 
 **Dataset**: Choose one of the following:
 
@@ -213,7 +213,7 @@ Source: [FFHQ](https://github.com/NVlabs/ffhq-dataset)
 
 ## Generative Projects
 
-These projects build a workflow around existing generative models, no training required. Using an image generation API (e.g. Gemini, OpenAI, or FLUX via Replicate / fal.ai) is fine and recommended, as it avoids GPU setup. Generating a few nice images is easy. The real work is defining what "good" means, measuring it, and comparing variants systematically.
+These projects build a workflow around existing generative models, no training required. Using an image generation API (e.g. Gemini, OpenAI, or FLUX) is fine and recommended, as it avoids GPU setup. Generating a few nice images is easy. The real work is defining what "good" means, measuring it, and comparing variants systematically.
 
 ::: {.callout-tip title="AI Assistants"}
 AI coding assistants may be used for the implementation (API calls, pipeline, evaluation scripts). This frees time for workflow design and evaluation, which is where the focus of these projects lies. Fix the experimental grid (inputs × variants × repetitions) in advance and estimate the number of API calls and cost before you start.
@@ -229,7 +229,7 @@ AI coding assistants may be used for the implementation (API calls, pipeline, ev
 2. *Multiple views*: the same, but with 2–3 source views of the product as input. Does more context improve fidelity?
 3. *Cut-out + compositing*: segment the product (e.g. background removal or SAM), keep its pixels fixed, and only generate the background (inpainting / outpainting). This guarantees fidelity, but does the result still look realistic?
 
-Optionally, compare two different models or prompt formulations for the best variant.
+Compare different models or prompt formulations for the best variant.
 
 **Focus**:
 
@@ -238,12 +238,17 @@ Optionally, compare two different models or prompt formulations for the best var
 - *Realism and overall quality*: a vision-language model as judge (e.g. a fixed rubric with scores 1–5), validated against your own ratings on a subset. How well do the judge and you agree?
 - *Failure analysis*: when does the product change (geometry, colour, texture)? Are scale, perspective and shadows plausible? Break down all metrics by product category and environment: which products and scenes are systematically hard?
 
-**Dataset**: 50–100 products from Amazon Berkeley Objects (ABO), which provides multiple views per item, and a fixed list of 5 environments (several hundred generated images in total). Choose the products to be diverse: different categories (e.g. chairs, sofas, tables, lamps, rugs, shelves), sizes, and deliberately difficult cases such as thin structures, glass, reflective metal, patterned fabric, or text and logos. Run small pilot experiments on a few products first, then scale up the final comparison.
+**Dataset**:
+
+- anything between 20 and 50 products could work
+- [Amazon Berkeley Objects (ABO)](https://amazon-berkeley-objects.s3.amazonaws.com/index.html) provides multiple views per item and can be queried and filtered
+- Build your own: you can browse online stores and collect your product images manually
+- Choose more than one product category and deliberately difficult cases such as thin structures, glass, reflective metal, patterned fabric, or text and logos. Run small pilot experiments on a few products first, then scale up the final comparison.
 
 :::{#fig-sp-sofa}
 ![]({{< meta params.images_path >}}sofa_example.webp){width=600}
 
-Example of a cut-out product image (sofa on a white background). Source: [Pfister](https://www.pfister.ch/de/produkt/m0061818/sofa-soria-mayor)
+Example of a cut-out product image. Source: [Pfister](https://www.pfister.ch/de/produkt/m0061818/sofa-soria-mayor)
 :::
 
 **Difficulty/Effort**: Medium - High
@@ -269,6 +274,13 @@ Use a common image-generation API for both scenarios where possible. Coding agen
 - *Failure analysis*: Identify representative failures and investigate which dishes or visual characteristics are particularly challenging.
 
 **Dataset**: Curate 8–12 diverse dishes using photographs from [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:Food), Food-101 or your own photographs. Include soups, salads, main courses and desserts, ideally with different backgrounds, lighting conditions and camera angles. Write a short menu description and identify the key ingredients for each dish. Start with 2–3 dishes to test the workflow before processing the full collection.
+
+:::{#fig-sp-burger}
+![]({{< meta params.images_path >}}burger.jpg){width=400}
+
+Example of a food image. Source: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Windows_7_Whopper_-_Burger_King.jpg)
+:::
+
 
 **Deliverable**: A small, visually consistent menu gallery, a side-by-side comparison of original, generated and edited images, and a short evaluation of the methods, trade-offs and typical failures.
 
