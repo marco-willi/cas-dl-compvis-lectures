@@ -488,7 +488,7 @@ window.Quarto = {
   <li><a href="#retrieval-and-recommendation-projects" id="toc-retrieval-and-recommendation-projects" class="nav-link" data-scroll-target="#retrieval-and-recommendation-projects"><span class="header-section-number">3</span> Retrieval and Recommendation Projects</a>
   <ul class="collapse">
   <li><a href="#product-image-retrieval" id="toc-product-image-retrieval" class="nav-link" data-scroll-target="#product-image-retrieval"><span class="header-section-number">3.1</span> Product Image Retrieval</a></li>
-  <li><a href="#controllable-product-recommender" id="toc-controllable-product-recommender" class="nav-link" data-scroll-target="#controllable-product-recommender"><span class="header-section-number">3.2</span> Controllable Product Recommender</a></li>
+  <li><a href="#visual-product-recommender" id="toc-visual-product-recommender" class="nav-link" data-scroll-target="#visual-product-recommender"><span class="header-section-number">3.2</span> Visual Product Recommender</a></li>
   </ul></li>
   <li><a href="#image-to-image-projects" id="toc-image-to-image-projects" class="nav-link" data-scroll-target="#image-to-image-projects"><span class="header-section-number">4</span> Image-to-Image Projects</a>
   <ul class="collapse">
@@ -546,18 +546,13 @@ window.Quarto = {
 <h2 data-number="1" class="anchored" data-anchor-id="available-datasets"><span class="header-section-number">1</span> Available Datasets</h2>
 <p>The following datasets are well-suited for project work. Size and task type vary considerably — choose a dataset that matches your available compute and the scope of your project.</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Dataset</th>
 <th>Task Type</th>
 <th>Size</th>
 <th>Notes</th>
+<th>Link</th>
 </tr>
 </thead>
 <tbody>
@@ -566,72 +561,84 @@ window.Quarto = {
 <td>Classification</td>
 <td>~27k images, 10 classes</td>
 <td>64×64 px, domain shift from ImageNet</td>
+<td><a href="https://github.com/phelber/eurosat">GitHub</a></td>
 </tr>
 <tr class="even">
 <td>Microsoft Cats vs Dogs</td>
 <td>Binary Classification</td>
 <td>~25k images</td>
 <td>Large, clean, balanced</td>
+<td><a href="https://www.microsoft.com/en-us/download/details.aspx?id=54765">Microsoft</a></td>
 </tr>
 <tr class="odd">
 <td>Concrete Cracks</td>
 <td>Binary Classification</td>
 <td>~40k images</td>
 <td>Industrial defect detection</td>
+<td><a href="https://data.mendeley.com/datasets/5y9wdsg2zt/2">Mendeley Data</a></td>
 </tr>
 <tr class="even">
 <td>Food-101 (subset)</td>
 <td>Classification</td>
 <td>~10k (10 classes)</td>
 <td>Noisy labels, large full dataset</td>
+<td><a href="https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/">ETH Zurich</a></td>
 </tr>
 <tr class="odd">
 <td>CCT20</td>
 <td>Classification</td>
 <td>1,600 images, 8 classes</td>
 <td>Small course subset; larger full dataset available</td>
+<td><a href="https://lila.science/datasets/caltech-camera-traps">LILA BC</a></td>
 </tr>
 <tr class="even">
 <td>Snapshot Serengeti</td>
 <td>Classification</td>
 <td>~2.6M images, 48 classes</td>
 <td>Large-scale; use a curated subset</td>
+<td><a href="https://lila.science/datasets/snapshot-serengeti">LILA BC</a></td>
 </tr>
 <tr class="odd">
 <td>Amazon Berkeley Objects (ABO)</td>
 <td>Image Retrieval</td>
 <td>~25k images, 6 categories</td>
 <td>Multi-view per item</td>
+<td><a href="https://amazon-berkeley-objects.s3.amazonaws.com/index.html">ABO</a></td>
 </tr>
 <tr class="even">
 <td>DeepFashion (In-Shop)</td>
 <td>Image Retrieval</td>
 <td>~3,300 images, 5 classes</td>
 <td>Item-level train/test splits</td>
+<td><a href="https://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html">CUHK</a></td>
 </tr>
 <tr class="odd">
 <td>UT-Zappos50K</td>
 <td>Image Retrieval</td>
 <td>~50k shoe images, 4 categories</td>
 <td>Same shoe in several colours; material labels</td>
+<td><a href="https://vision.cs.utexas.edu/projects/finegrained/utzap50k/">UT Austin</a></td>
 </tr>
 <tr class="even">
 <td>AMI-Br</td>
 <td>Binary Classification</td>
 <td>Small (histopathology patches)</td>
 <td>Domain shift; suited for LoRA/PEFT</td>
+<td><a href="https://github.com/DeepMicroscopy/AMi-Br">GitHub</a></td>
 </tr>
 <tr class="odd">
 <td>FFHQ</td>
 <td>Super Resolution</td>
 <td>Up to 70k face images</td>
 <td>Aligned faces, narrow domain</td>
+<td><a href="https://github.com/NVlabs/ffhq-dataset">GitHub</a></td>
 </tr>
 <tr class="even">
 <td>CLIC</td>
 <td>Super Resolution</td>
 <td>~2k high-res photographs</td>
 <td>Diverse scenes; train on crops</td>
+<td><a href="https://archive.compression.cc/datasets/">CLIC</a></td>
 </tr>
 </tbody>
 </table>
@@ -703,7 +710,7 @@ Figure&nbsp;2: Source: <a href="https://data.vision.ee.ethz.ch/cvl/datasets_extr
 </figcaption>
 </figure>
 </div>
-<p><strong>Difficulty/Effort</strong>: Low - Medium</p>
+<p><strong>Difficulty/Effort</strong>: Low</p>
 </section>
 <section id="age-estimation-from-faces" class="level3" data-number="2.3">
 <h3 data-number="2.3" class="anchored" data-anchor-id="age-estimation-from-faces"><span class="header-section-number">2.3</span> Age Estimation from Faces</h3>
@@ -721,7 +728,7 @@ Figure&nbsp;3: Source: <a href="https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-w
 </figcaption>
 </figure>
 </div>
-<p><strong>Difficulty/Effort</strong>: Medium - High</p>
+<p><strong>Difficulty/Effort</strong>: Low - Medium</p>
 </section>
 <section id="wildlife-camera-trap-classification" class="level3" data-number="2.4">
 <h3 data-number="2.4" class="anchored" data-anchor-id="wildlife-camera-trap-classification"><span class="header-section-number">2.4</span> Wildlife Camera Trap Classification</h3>
@@ -768,7 +775,7 @@ Figure&nbsp;5: Source: Mendeley / Özgenel et al.
 <div id="fig-sp-ami" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sp-ami-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../../assets/images/student_projects/ami_br_normal.png" class="img-fluid figure-img" width="600">
+<img src="../../assets/images/student_projects/ami_br_normal.png" class="img-fluid figure-img" width="400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sp-ami-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: Source: AMI-Br / TUPAC16 + MIDOG21
@@ -798,9 +805,9 @@ Figure&nbsp;7: Source: Amazon Berkeley Objects
 </div>
 <p><strong>Difficulty/Effort</strong>: Low - Medium</p>
 </section>
-<section id="controllable-product-recommender" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="controllable-product-recommender"><span class="header-section-number">3.2</span> Controllable Product Recommender</h3>
-<p><strong>Goal</strong>: Build a visual recommender for shoes: given a query image, return similar products. The user can control with sliders which attribute types matter: colour, form or material. For example: “same shape and material, any colour” or “same colour, any shape”.</p>
+<section id="visual-product-recommender" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="visual-product-recommender"><span class="header-section-number">3.2</span> Visual Product Recommender</h3>
+<p><strong>Goal</strong>: Build a visual recommender for shoes: given a query image, return similar products. The user should be able to control the recommendations with sliders to adujust the importance of: colour, form or material. For example: “same shape and material, any colour” or “same colour, any shape”.</p>
 <p><strong>Approach</strong>: Start with zero-shot CLIP embeddings. Define a set of text prompts per attribute type (e.g.&nbsp;colour names, shoe types, materials) and derive one similarity per attribute type from them, e.g.&nbsp;by projecting the image embeddings onto the subspace spanned by the text embeddings of that attribute. Normalise the similarities (z-scores) and combine them with the slider weights. Try also the opposite: remove an attribute subspace from the image embedding to make the recommender ignore that attribute. Optionally, train small linear heads on the frozen embeddings using the existing labels (material, sub-category) and compare.</p>
 <p><strong>Focus</strong>:</p>
 <ul>
@@ -1587,20 +1594,20 @@ Rothe, Rasmus, Radu Timofte, and Luc Van Gool. 2015. <span>“<span>DEX</span>: 
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>The following datasets are well-suited for project work. Size and task type vary considerably — choose a dataset that matches your available compute and the scope of your project.</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Dataset <span class="pp">|</span> Task Type <span class="pp">|</span> Size <span class="pp">|</span> Notes <span class="pp">|</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> EuroSAT RGB <span class="pp">|</span> Classification <span class="pp">|</span> ~27k images, 10 classes <span class="pp">|</span> 64×64 px, domain shift from ImageNet <span class="pp">|</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Microsoft Cats vs Dogs <span class="pp">|</span> Binary Classification <span class="pp">|</span> ~25k images <span class="pp">|</span> Large, clean, balanced <span class="pp">|</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Concrete Cracks <span class="pp">|</span> Binary Classification <span class="pp">|</span> ~40k images <span class="pp">|</span> Industrial defect detection <span class="pp">|</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Food-101 (subset) <span class="pp">|</span> Classification <span class="pp">|</span> ~10k (10 classes) <span class="pp">|</span> Noisy labels, large full dataset <span class="pp">|</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> CCT20 <span class="pp">|</span> Classification <span class="pp">|</span> 1,600 images, 8 classes <span class="pp">|</span> Small course subset; larger full dataset available <span class="pp">|</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Snapshot Serengeti <span class="pp">|</span> Classification <span class="pp">|</span> ~2.6M images, 48 classes <span class="pp">|</span> Large-scale; use a curated subset <span class="pp">|</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Amazon Berkeley Objects (ABO) <span class="pp">|</span> Image Retrieval <span class="pp">|</span> ~25k images, 6 categories <span class="pp">|</span> Multi-view per item <span class="pp">|</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> DeepFashion (In-Shop) <span class="pp">|</span> Image Retrieval <span class="pp">|</span> ~3,300 images, 5 classes <span class="pp">|</span> Item-level train/test splits <span class="pp">|</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> UT-Zappos50K <span class="pp">|</span> Image Retrieval <span class="pp">|</span> ~50k shoe images, 4 categories <span class="pp">|</span> Same shoe in several colours; material labels <span class="pp">|</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> AMI-Br <span class="pp">|</span> Binary Classification <span class="pp">|</span> Small (histopathology patches) <span class="pp">|</span> Domain shift; suited for LoRA/PEFT <span class="pp">|</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> FFHQ <span class="pp">|</span> Super Resolution <span class="pp">|</span> Up to 70k face images <span class="pp">|</span> Aligned faces, narrow domain <span class="pp">|</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> CLIC <span class="pp">|</span> Super Resolution <span class="pp">|</span> ~2k high-res photographs <span class="pp">|</span> Diverse scenes; train on crops <span class="pp">|</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Dataset <span class="pp">|</span> Task Type <span class="pp">|</span> Size <span class="pp">|</span> Notes <span class="pp">|</span> Link <span class="pp">|</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|---|</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> EuroSAT RGB <span class="pp">|</span> Classification <span class="pp">|</span> ~27k images, 10 classes <span class="pp">|</span> 64×64 px, domain shift from ImageNet <span class="pp">|</span> <span class="co">[</span><span class="ot">GitHub</span><span class="co">](https://github.com/phelber/eurosat)</span> <span class="pp">|</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Microsoft Cats vs Dogs <span class="pp">|</span> Binary Classification <span class="pp">|</span> ~25k images <span class="pp">|</span> Large, clean, balanced <span class="pp">|</span> <span class="co">[</span><span class="ot">Microsoft</span><span class="co">](https://www.microsoft.com/en-us/download/details.aspx?id=54765)</span> <span class="pp">|</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Concrete Cracks <span class="pp">|</span> Binary Classification <span class="pp">|</span> ~40k images <span class="pp">|</span> Industrial defect detection <span class="pp">|</span> <span class="co">[</span><span class="ot">Mendeley Data</span><span class="co">](https://data.mendeley.com/datasets/5y9wdsg2zt/2)</span> <span class="pp">|</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Food-101 (subset) <span class="pp">|</span> Classification <span class="pp">|</span> ~10k (10 classes) <span class="pp">|</span> Noisy labels, large full dataset <span class="pp">|</span> <span class="co">[</span><span class="ot">ETH Zurich</span><span class="co">](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/)</span> <span class="pp">|</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> CCT20 <span class="pp">|</span> Classification <span class="pp">|</span> 1,600 images, 8 classes <span class="pp">|</span> Small course subset; larger full dataset available <span class="pp">|</span> <span class="co">[</span><span class="ot">LILA BC</span><span class="co">](https://lila.science/datasets/caltech-camera-traps)</span> <span class="pp">|</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Snapshot Serengeti <span class="pp">|</span> Classification <span class="pp">|</span> ~2.6M images, 48 classes <span class="pp">|</span> Large-scale; use a curated subset <span class="pp">|</span> <span class="co">[</span><span class="ot">LILA BC</span><span class="co">](https://lila.science/datasets/snapshot-serengeti)</span> <span class="pp">|</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Amazon Berkeley Objects (ABO) <span class="pp">|</span> Image Retrieval <span class="pp">|</span> ~25k images, 6 categories <span class="pp">|</span> Multi-view per item <span class="pp">|</span> <span class="co">[</span><span class="ot">ABO</span><span class="co">](https://amazon-berkeley-objects.s3.amazonaws.com/index.html)</span> <span class="pp">|</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> DeepFashion (In-Shop) <span class="pp">|</span> Image Retrieval <span class="pp">|</span> ~3,300 images, 5 classes <span class="pp">|</span> Item-level train/test splits <span class="pp">|</span> <span class="co">[</span><span class="ot">CUHK</span><span class="co">](https://mmlab.ie.cuhk.edu.hk/projects/DeepFashion/InShopRetrieval.html)</span> <span class="pp">|</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> UT-Zappos50K <span class="pp">|</span> Image Retrieval <span class="pp">|</span> ~50k shoe images, 4 categories <span class="pp">|</span> Same shoe in several colours; material labels <span class="pp">|</span> <span class="co">[</span><span class="ot">UT Austin</span><span class="co">](https://vision.cs.utexas.edu/projects/finegrained/utzap50k/)</span> <span class="pp">|</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> AMI-Br <span class="pp">|</span> Binary Classification <span class="pp">|</span> Small (histopathology patches) <span class="pp">|</span> Domain shift; suited for LoRA/PEFT <span class="pp">|</span> <span class="co">[</span><span class="ot">GitHub</span><span class="co">](https://github.com/DeepMicroscopy/AMi-Br)</span> <span class="pp">|</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> FFHQ <span class="pp">|</span> Super Resolution <span class="pp">|</span> Up to 70k face images <span class="pp">|</span> Aligned faces, narrow domain <span class="pp">|</span> <span class="co">[</span><span class="ot">GitHub</span><span class="co">](https://github.com/NVlabs/ffhq-dataset)</span> <span class="pp">|</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> CLIC <span class="pp">|</span> Super Resolution <span class="pp">|</span> ~2k high-res photographs <span class="pp">|</span> Diverse scenes; train on crops <span class="pp">|</span> <span class="co">[</span><span class="ot">CLIC</span><span class="co">](https://archive.compression.cc/datasets/)</span> <span class="pp">|</span></span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>Snapshot Serengeti is large, work with a curated subset and account for class imbalance in your evaluation (F1, weighted metrics, confusion matrices). AMI-Br is intentionally small and best suited for parameter-efficient fine-tuning experiments. MNIST is available but too simple to constitute a meaningful project. Additional camera trap datasets can be found at <span class="co">[</span><span class="ot">LILA BC</span><span class="co">](https://lila.science/datasets#project-descriptions)</span>.</span>
@@ -1659,7 +1666,7 @@ Rothe, Rasmus, Radu Timofte, and Luc Van Gool. 2015. <span>“<span>DEX</span>: 
 <span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>Source: <span class="co">[</span><span class="ot">Link</span><span class="co">](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/)</span></span>
 <span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>**Difficulty/Effort**: Low - Medium</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>**Difficulty/Effort**: Low</span>
 <span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="fu">### Age Estimation from Faces</span></span>
@@ -1678,7 +1685,7 @@ Rothe, Rasmus, Radu Timofte, and Luc Van Gool. 2015. <span>“<span>DEX</span>: 
 <span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>Source: <span class="co">[</span><span class="ot">Link</span><span class="co">](https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/)</span></span>
 <span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>**Difficulty/Effort**: Medium - High</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>**Difficulty/Effort**: Low - Medium</span>
 <span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Wildlife Camera Trap Classification</span></span>
@@ -1730,7 +1737,7 @@ Rothe, Rasmus, Radu Timofte, and Luc Van Gool. 2015. <span>“<span>DEX</span>: 
 <span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>**Dataset**: AMI-Br (128×128 histopathology patches, binary labels). The dataset is intentionally small — robustness to seed variation is part of the analysis.</span>
 <span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>:::{#fig-sp-ami}</span>
-<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}ami_br_normal.png)</span>{width=600}</span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a><span class="al">![]({{&lt; meta params.images_path &gt;}}ami_br_normal.png)</span>{width=400}</span>
 <span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>Source: AMI-Br / TUPAC16 + MIDOG21</span>
 <span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>:::</span>
@@ -1759,9 +1766,9 @@ Rothe, Rasmus, Radu Timofte, and Luc Van Gool. 2015. <span>“<span>DEX</span>: 
 <span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a>**Difficulty/Effort**: Low - Medium</span>
 <span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a><span class="fu">### Controllable Product Recommender</span></span>
+<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visual Product Recommender</span></span>
 <span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>**Goal**: Build a visual recommender for shoes: given a query image, return similar products. The user can control with sliders which attribute types matter: colour, form or material. For example: "same shape and material, any colour" or "same colour, any shape".</span>
+<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>**Goal**: Build a visual recommender for shoes: given a query image, return similar products. The user should be able to control the recommendations with sliders to adujust the importance of: colour, form or material. For example: "same shape and material, any colour" or "same colour, any shape".</span>
 <span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a>**Approach**: Start with zero-shot CLIP embeddings. Define a set of text prompts per attribute type (e.g. colour names, shoe types, materials) and derive one similarity per attribute type from them, e.g. by projecting the image embeddings onto the subspace spanned by the text embeddings of that attribute. Normalise the similarities (z-scores) and combine them with the slider weights. Try also the opposite: remove an attribute subspace from the image embedding to make the recommender ignore that attribute. Optionally, train small linear heads on the frozen embeddings using the existing labels (material, sub-category) and compare.</span>
 <span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a></span>
