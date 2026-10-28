@@ -26,6 +26,7 @@ The following datasets are well-suited for project work. Size and task type vary
 | Snapshot Serengeti | Classification | ~2.6M images, 48 classes | Large-scale; use a curated subset |
 | Amazon Berkeley Objects (ABO) | Image Retrieval | ~25k images, 6 categories | Multi-view per item |
 | DeepFashion (In-Shop) | Image Retrieval | ~3,300 images, 5 classes | Item-level train/test splits |
+| UT-Zappos50K | Image Retrieval | ~50k shoe images, 4 categories | Same shoe in several colours; material labels |
 | AMI-Br | Binary Classification | Small (histopathology patches) | Domain shift; suited for LoRA/PEFT |
 | FFHQ | Super Resolution | Up to 70k face images | Aligned faces, narrow domain |
 | CLIC | Super Resolution | ~2k high-res photographs | Diverse scenes; train on crops |
@@ -147,6 +148,27 @@ Source: Mendeley / Özgenel et al.
 **Difficulty/Effort**: Low - Medium
 
 
+### Histopathology Fine-Tuning with LoRA
+
+**Goal**: Apply parameter-efficient fine-tuning to adapt a pretrained Vision Transformer to a medical imaging task — specifically, classifying normal vs. atypical mitotic figures in histopathology patches.
+
+**Approach**: Use a HuggingFace ViT backbone and apply LoRA adapters (rank 4–16). Compare three settings: frozen backbone (feature extractor), LoRA fine-tuning, and full fine-tuning. Discuss the domain shift from natural images (ImageNet pretraining) to H&E-stained histopathology patches.
+
+**Focus**: Parameter count vs. performance trade-off; convergence speed across settings; domain shift as a factor in choosing fine-tuning strategy. Because the dataset is small, report results across multiple random seeds.
+
+**Dataset**: AMI-Br (128×128 histopathology patches, binary labels). The dataset is intentionally small — robustness to seed variation is part of the analysis.
+
+:::{#fig-sp-ami}
+![]({{< meta params.images_path >}}ami_br_normal.png){width=600}
+
+Source: AMI-Br / TUPAC16 + MIDOG21
+:::
+
+**Difficulty/Effort**: High
+
+
+## Retrieval and Recommendation Projects
+
 ### Product Image Retrieval
 
 **Goal**: Build an image retrieval system that, given a query product image, returns the top-k most visually similar items from a gallery using learned embeddings.
@@ -166,23 +188,28 @@ Source: Amazon Berkeley Objects
 **Difficulty/Effort**: Low - Medium
 
 
-### Histopathology Fine-Tuning with LoRA
+### Controllable Product Recommender
 
-**Goal**: Apply parameter-efficient fine-tuning to adapt a pretrained Vision Transformer to a medical imaging task — specifically, classifying normal vs. atypical mitotic figures in histopathology patches.
+**Goal**: Build a visual recommender for shoes: given a query image, return similar products. The user can control with sliders which attribute types matter: colour, form or material. For example: "same shape and material, any colour" or "same colour, any shape".
 
-**Approach**: Use a HuggingFace ViT backbone and apply LoRA adapters (rank 4–16). Compare three settings: frozen backbone (feature extractor), LoRA fine-tuning, and full fine-tuning. Discuss the domain shift from natural images (ImageNet pretraining) to H&E-stained histopathology patches.
+**Approach**: Start with zero-shot CLIP embeddings. Define a set of text prompts per attribute type (e.g. colour names, shoe types, materials) and derive one similarity per attribute type from them, e.g. by projecting the image embeddings onto the subspace spanned by the text embeddings of that attribute. Normalise the similarities (z-scores) and combine them with the slider weights. Try also the opposite: remove an attribute subspace from the image embedding to make the recommender ignore that attribute. Optionally, train small linear heads on the frozen embeddings using the existing labels (material, sub-category) and compare.
 
-**Focus**: Parameter count vs. performance trade-off; convergence speed across settings; domain shift as a factor in choosing fine-tuning strategy. Because the dataset is small, report results across multiple random seeds.
+**Focus**:
 
-**Dataset**: AMI-Br (128×128 histopathology patches, binary labels). The dataset is intentionally small — robustness to seed variation is part of the analysis.
+- *Controllability*: does emphasising an attribute actually retrieve products that agree on it? Report precision@10 per attribute for each slider setting (colour-only, form-only, material-only, uniform) in a table and compare against plain CLIP similarity and chance level.
+- *Same product, different colour*: many shoes are available in several colours (see @fig-sp-zappos). With colour switched off, the other colours of the query shoe should rank high. This gives a natural test without extra labels.
+- *Missing labels*: there are no colour labels. Derive them from the pixels (white background) and check their quality on a small sample by hand.
+- *Failure analysis*: which attribute types work zero-shot and which do not? Do the sliders interact, e.g. does "material" partly retrieve the same shoe type?
 
-:::{#fig-sp-ami}
-![]({{< meta params.images_path >}}ami_br_normal.png){width=600}
+**Dataset**: UT-Zappos50K ([Link](https://vision.cs.utexas.edu/projects/finegrained/utzap50k/)), 50,025 catalogue images of shoes on a white background with labels for category, sub-category, material, closure and more. Academic use only. The images are small (136×136 px), so everything runs on a laptop GPU.
 
-Source: AMI-Br / TUPAC16 + MIDOG21
+:::{#fig-sp-zappos}
+![]({{< meta params.images_path >}}utzap50k_colorways.png){width=600}
+
+The same shoe (sub-category: oxfords, material: suede) in four colours. Source: [UT-Zappos50K](https://vision.cs.utexas.edu/projects/finegrained/utzap50k/)
 :::
 
-**Difficulty/Effort**: High
+**Difficulty/Effort**: Medium
 
 
 ## Image-to-Image Projects
