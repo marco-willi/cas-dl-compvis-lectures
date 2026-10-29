@@ -150,7 +150,7 @@ Face recognition technology, such as Apple's Face ID (@fig-intro-face-id), has b
 
 ::: {#fig-intro-face-id}
 
-{{< video https://www.youtube.com/embed/z-t1h0Y8vuM?si=qnEOYDmqyv8zGvMV start="50" width=600 height=400 >}}
+{{< video https://youtu.be/z-t1h0Y8vuM?si=3xX1OfNViqwKy7pS&t=51width=600 height=400 >}}
 
 [Example from Apple Face ID](https://support.apple.com/en-us/102381). Watch how the infrared dot projector creates a depth map of the face.
 :::

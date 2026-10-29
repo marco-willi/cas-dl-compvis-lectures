@@ -79,7 +79,7 @@ Apple's on-device safety features — sensitive content detection while preservi
 
 ## Face Recognition (Face ID)
 
-{{< video https://www.youtube.com/embed/z-t1h0Y8vuM?si=qnEOYDmqyv8zGvMV start="50" width=1200 height=600 >}}
+{{< video https://youtu.be/z-t1h0Y8vuM?si=3xX1OfNViqwKy7pS&t=51 width=1200 height=600 >}}
 
 [Apple Face ID](https://support.apple.com/en-us/102381) — infrared depth sensing creates a 3D facial map.
 
