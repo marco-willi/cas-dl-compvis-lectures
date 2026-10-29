@@ -484,7 +484,7 @@
     "href": "pages/slides/images_as_data.html#label-noise",
     "title": "2 - Images as Data",
     "section": "Label Noise",
-    "text": "Label Noise\n\n\nFigure 11: Wolf or large dog? Empty, or a tail at the edge of the frame?\n\nInter-annotator disagreement on borderline cases\nSystematic errors: annotators consistently confuse two classes\nAmbiguous category boundaries: class definitions overlap\n\n\nDeep networks can eventually memorize noisy labels (Arpit et al. 2017), so validation monitoring and data inspection matter.",
+    "text": "Label Noise\n\n\nFigure 11: Difficult to classify (left), and ambigous label (right) due to multiple possible classes.\n\nInter-annotator disagreement on borderline cases\nSystematic errors: annotators consistently confuse two classes\nAmbiguous category boundaries: class definitions overlap\n\n\nDeep networks can eventually memorize noisy labels (Arpit et al. 2017), so validation monitoring and data inspection matter.",
     "crumbs": [
       "Slides",
       "2 - Images as Data"
@@ -2339,7 +2339,7 @@
     "href": "pages/lectures/cnns.html#sec-cnn-recap-demo",
     "title": "3 - CNNs",
     "section": "3 Recap: Translation in MLPs and CNNs",
-    "text": "3 Recap: Translation in MLPs and CNNs\nThe following demo brings together the main ideas of this lecture: the limitations of MLPs on images, the translation equivariance of convolutions, and translation invariance through global average pooling. Three networks were trained on MNIST digits placed on a \\(56 \\times 56\\) canvas: an MLP, a CNN whose activation maps are flattened and passed to fully connected layers (CNN + FC), and a CNN with the same convolutional layers followed by global average pooling (CNN + GAP). Each network was trained on two types of training data, shown at the top of the demo: with “only top-left”, all digits are placed in the top-left corner; with “anywhere”, digits appear at random positions. Move the digit and observe which networks still recognize it.\n\n\n\n\n\n\nTip🎮 Interactive Demo: MLP vs CNN on Shifted Digits\n\n\n\n\n\n\nAll sections of the demo can be collapsed. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. “Look inside the CNNs” shows activation maps of the first and the last convolutional layer and the input of the classifier. Open the demo in a new tab or view the source code.\n\n\n\n\n\n\n\n\n\nNoteExercise: Translation Equivariance and Invariance\n\n\n\n\n\nUse the setting “only top-left” for tasks 1–3.\n\nMove the digit: drag the digit to the bottom-right corner. Which networks fail? Why does the CNN + FC fail, although its convolutions are translation equivariant?\nLook inside: open “Look inside the CNNs” and move the digit a few pixels. How do the activation maps of conv1 and conv3 change? Which property from Section 1.2 does this illustrate?\nCompare the heads: starting from the top-left position, move the digit by 1 pixel and by 4 pixels (arrow keys, with Shift for 4 pixels). Compare the reported change of the classifier input for CNN + FC and CNN + GAP. Why is the change for CNN + GAP small but not exactly zero?\nTrain on all positions: switch to “anywhere”. The MLP now recognizes digits everywhere. What is the price?\n\n\n\nClick for solutions\n\n\nThe MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its \\(64 \\times 14 \\times 14\\) input. Only the weights for the top-left positions have been trained (see the weight map in “Look inside”); the others still have their random initial values. The MLP has the same problem directly on the pixels.\nThe activation maps shift together with the input: \\(f(t(\\mathbf{x})) = t(f(\\mathbf{x}))\\), i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two \\(2 \\times 2\\) max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.\nThe input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride (Azulay and Weiss 2019; Zhang 2019), and because of the zero-padding at the image border.\nThe MLP has to learn every position from data, i.e. the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.",
+    "text": "3 Recap: Translation in MLPs and CNNs\nThe following demo brings together the main ideas of this lecture: the limitations of MLPs on images, the translation equivariance of convolutions, and translation invariance through global average pooling. Three networks were trained on MNIST digits placed on a \\(56 \\times 56\\) canvas: an MLP, a CNN whose activation maps are flattened and passed to fully connected layers (CNN + FC), and a CNN with the same convolutional layers followed by global average pooling (CNN + GAP). Each network was trained on two types of training data, shown at the top of the demo: with “only top-left”, all digits are placed in the top-left corner; with “anywhere”, digits appear at random positions. Move the digit and observe which networks still recognize it.\n\n\n\n\n\n\nTip🎮 Interactive Demo: MLP vs CNN on Shifted Digits\n\n\n\n\n\n\nAll sections of the demo can be collapsed. The section “Architectures” lists the layers, output shapes and parameter counts of the three networks. The section “Questions” contains the exercise below, with collapsible answers. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. “Look inside the CNNs” shows activation maps of the first and the last convolutional layer and the input of the classifier. Open the demo in a new tab or view the source code.",
     "crumbs": [
       "Lectures",
       "3 - CNNs"
@@ -2350,7 +2350,7 @@
     "href": "pages/lectures/cnns.html#references",
     "title": "3 - CNNs",
     "section": "4 References",
-    "text": "4 References\n\n\nAraujo, Andr&eacute;, Wade Norris, and Jack Sim. 2019. “Computing Receptive Fields of Convolutional Neural Networks.” Distill 4 (11): 10.23915/distill.00021. https://doi.org/10.23915/distill.00021.\n\n\nAzulay, Aharon, and Yair Weiss. 2019. Why Do Deep Convolutional Networks Generalize so Poorly to Small Image Transformations? arXiv. https://doi.org/10.48550/arXiv.1805.12177.\n\n\nDumoulin, Vincent, and Francesco Visin. 2016. “A Guide to Convolution Arithmetic for Deep Learning.” ArXiv e-Prints, March.\n\n\nJohnson, Justin. 2019. EECS 498-007 / 598-005: Deep Learning for Computer Vision. Lecture {Notes} / {Slides}. https://web.eecs.umich.edu/~justincj/teaching/eecs498/FA2019/.\n\n\nLi, Fei-Fei. 2022. CS231n Convolutional Neural Networks for Visual Recognition. Lecture {Notes}. https://cs231n.github.io.\n\n\nPrince, Simon J. D. 2023. Understanding Deep Learning. MIT Press. https://udlbook.github.io/udlbook/.\n\n\nZeiler, Matthew D., and Rob Fergus. 2014. “Visualizing and Understanding Convolutional Networks.” Lecture Notes in Computer Science (Including Subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics) 8689 LNCS (PART 1): 818–33. https://doi.org/10.1007/978-3-319-10590-1_53.\n\n\nZhang, Richard. 2019. Making Convolutional Networks Shift-Invariant Again. arXiv. https://doi.org/10.48550/arXiv.1904.11486.",
+    "text": "4 References\n\n\nAraujo, Andr&eacute;, Wade Norris, and Jack Sim. 2019. “Computing Receptive Fields of Convolutional Neural Networks.” Distill 4 (11): 10.23915/distill.00021. https://doi.org/10.23915/distill.00021.\n\n\nDumoulin, Vincent, and Francesco Visin. 2016. “A Guide to Convolution Arithmetic for Deep Learning.” ArXiv e-Prints, March.\n\n\nJohnson, Justin. 2019. EECS 498-007 / 598-005: Deep Learning for Computer Vision. Lecture {Notes} / {Slides}. https://web.eecs.umich.edu/~justincj/teaching/eecs498/FA2019/.\n\n\nLi, Fei-Fei. 2022. CS231n Convolutional Neural Networks for Visual Recognition. Lecture {Notes}. https://cs231n.github.io.\n\n\nPrince, Simon J. D. 2023. Understanding Deep Learning. MIT Press. https://udlbook.github.io/udlbook/.\n\n\nZeiler, Matthew D., and Rob Fergus. 2014. “Visualizing and Understanding Convolutional Networks.” Lecture Notes in Computer Science (Including Subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics) 8689 LNCS (PART 1): 818–33. https://doi.org/10.1007/978-3-319-10590-1_53.",
     "crumbs": [
       "Lectures",
       "3 - CNNs"
@@ -2823,7 +2823,7 @@
     "href": "pages/background/frameworks.html#tensors",
     "title": "3 - Software & Hardware",
     "section": "2.2 Tensors",
-    "text": "2.2 Tensors\ntorch.Tensor is the central data structure in PyTorch. Essentially very similar to numpy.array, it can be easily loaded onto GPUs.\nTensors can be created in various ways. For example, from lists:\n\ndata = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)\nprint(x_data)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from numpy.ndarray:\n\nnp_array = np.array(data)\nx_np = torch.from_numpy(np_array)\nprint(x_np)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from other tensors:\n\nx_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")\n\nOnes Tensor: \n tensor([[1, 1],\n        [1, 1]]) \n\nRandom Tensor: \n tensor([[0.7466, 0.9575],\n        [0.8000, 0.0751]]) \n\n\n\nOr with randomly generated numbers or constants:\n\nshape = (2,3,)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")\n\nRandom Tensor: \n tensor([[0.6154, 0.1047, 0.9672],\n        [0.0893, 0.2077, 0.2161]]) \n\nOnes Tensor: \n tensor([[1., 1., 1.],\n        [1., 1., 1.]]) \n\nZeros Tensor: \n tensor([[0., 0., 0.],\n        [0., 0., 0.]])\n\n\nTensor attributes:\n\ntensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")\n\nShape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu\n\n\nThere are over 100 operations that can be performed on a tensor. The full list is available here.\nIndexing and Slicing:\n\ntensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[:, -1]}\")\ntensor[:,1] = 0\nprint(tensor)\n\nFirst row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\n\nJoining tensors:\n\nt1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)\n\ntensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n\n\nArithmetic operations:\n\n# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)\n\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
+    "text": "2.2 Tensors\ntorch.Tensor is the central data structure in PyTorch. Essentially very similar to numpy.array, it can be easily loaded onto GPUs.\nTensors can be created in various ways. For example, from lists:\n\ndata = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)\nprint(x_data)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from numpy.ndarray:\n\nnp_array = np.array(data)\nx_np = torch.from_numpy(np_array)\nprint(x_np)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from other tensors:\n\nx_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")\n\nOnes Tensor: \n tensor([[1, 1],\n        [1, 1]]) \n\nRandom Tensor: \n tensor([[0.8820, 0.9657],\n        [0.8670, 0.9972]]) \n\n\n\nOr with randomly generated numbers or constants:\n\nshape = (2,3,)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")\n\nRandom Tensor: \n tensor([[0.2437, 0.8689, 0.6527],\n        [0.4426, 0.7962, 0.5349]]) \n\nOnes Tensor: \n tensor([[1., 1., 1.],\n        [1., 1., 1.]]) \n\nZeros Tensor: \n tensor([[0., 0., 0.],\n        [0., 0., 0.]])\n\n\nTensor attributes:\n\ntensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")\n\nShape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu\n\n\nThere are over 100 operations that can be performed on a tensor. The full list is available here.\nIndexing and Slicing:\n\ntensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[:, -1]}\")\ntensor[:,1] = 0\nprint(tensor)\n\nFirst row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\n\nJoining tensors:\n\nt1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)\n\ntensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n\n\nArithmetic operations:\n\n# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)\n\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
     "crumbs": [
       "Preparation",
       "3 - Software & Hardware"
@@ -2834,7 +2834,7 @@
     "href": "pages/background/frameworks.html#autograd",
     "title": "3 - Software & Hardware",
     "section": "2.3 Autograd",
-    "text": "2.3 Autograd\nTo train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an auto-diff functionality: torch.autograd. This can automatically compute gradients for a computational graph.\n\n\n\n\n\n\nTipAutograd Key Points\n\n\n\n\nSet requires_grad=True on tensors you want to track for gradient computation\nCall .backward() on a scalar loss to compute all gradients\nAccess gradients via .grad attribute of tensors\nUse torch.no_grad() context for inference to save memory and speed up computation\n\n\n\nThe following is an example using a 1-layer neural network (see Figure 4 ):\n\n\n\n\n\n\nFigure 4: Source: PyTorch\n\n\n\nThe network from Figure 4 is defined in PyTorch code in Listing 4.\n\n\n\n\nListing 4: Example computational graph.\n\n\nimport torch\n\nx = torch.ones(5)  # input tensor\ny = torch.zeros(3)  # expected output\nw = torch.randn(5, 3, requires_grad=True)\nb = torch.randn(3, requires_grad=True)\nz = torch.matmul(x, w)+b\nloss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)\n\n\n\n\nWe can now use Autograd to compute the gradient:\n\nloss.backward()\nprint(w.grad)\nprint(b.grad)\n\ntensor([[0.0941, 0.2131, 0.1434],\n        [0.0941, 0.2131, 0.1434],\n        [0.0941, 0.2131, 0.1434],\n        [0.0941, 0.2131, 0.1434],\n        [0.0941, 0.2131, 0.1434]])\ntensor([0.0941, 0.2131, 0.1434])",
+    "text": "2.3 Autograd\nTo train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an auto-diff functionality: torch.autograd. This can automatically compute gradients for a computational graph.\n\n\n\n\n\n\nTipAutograd Key Points\n\n\n\n\nSet requires_grad=True on tensors you want to track for gradient computation\nCall .backward() on a scalar loss to compute all gradients\nAccess gradients via .grad attribute of tensors\nUse torch.no_grad() context for inference to save memory and speed up computation\n\n\n\nThe following is an example using a 1-layer neural network (see Figure 4 ):\n\n\n\n\n\n\nFigure 4: Source: PyTorch\n\n\n\nThe network from Figure 4 is defined in PyTorch code in Listing 4.\n\n\n\n\nListing 4: Example computational graph.\n\n\nimport torch\n\nx = torch.ones(5)  # input tensor\ny = torch.zeros(3)  # expected output\nw = torch.randn(5, 3, requires_grad=True)\nb = torch.randn(3, requires_grad=True)\nz = torch.matmul(x, w)+b\nloss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)\n\n\n\n\nWe can now use Autograd to compute the gradient:\n\nloss.backward()\nprint(w.grad)\nprint(b.grad)\n\ntensor([[0.1137, 0.2663, 0.0668],\n        [0.1137, 0.2663, 0.0668],\n        [0.1137, 0.2663, 0.0668],\n        [0.1137, 0.2663, 0.0668],\n        [0.1137, 0.2663, 0.0668]])\ntensor([0.1137, 0.2663, 0.0668])",
     "crumbs": [
       "Preparation",
       "3 - Software & Hardware"
@@ -2845,7 +2845,7 @@
     "href": "pages/background/frameworks.html#torch.nn",
     "title": "3 - Software & Hardware",
     "section": "2.4 torch.nn",
-    "text": "2.4 torch.nn\nPyTorch provides various building blocks for creating neural networks. These are available in torch.nn. Additionally, you can define any compositions of such building blocks that inherit from torch.nn.Module. A neural network is typically a torch.nn.Module. Each module implements the forward() method to define how data is processed.\n\n\n\n\n\n\nTipBuilding Blocks in torch.nn\n\n\n\nCommon layers:\n\nnn.Linear: Fully connected layer\nnn.Conv2d: 2D convolutional layer\nnn.MaxPool2d: Max pooling layer\nnn.Dropout: Regularization via random dropout\nnn.BatchNorm2d: Batch normalization\n\nCommon activations:\n\nnn.ReLU(), nn.LeakyReLU(), nn.GELU()\nnn.Sigmoid(), nn.Softmax()\n\nLoss functions:\n\nnn.CrossEntropyLoss(): Classification\nnn.BCEWithLogitsLoss(): Binary classification\nnn.MSELoss(): Regression\n\n\n\nListing 5 depicts an example of a class that inherits from torch.nn.Module.\n\n\n\n\nListing 5: Example nn.Module.\n\n\nfrom torch import nn\n\nclass NeuralNetwork(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.flatten = nn.Flatten()\n        self.linear_relu_stack = nn.Sequential(\n            nn.Linear(28*28, 512),\n            nn.ReLU(),\n            nn.Linear(512, 512),\n            nn.ReLU(),\n            nn.Linear(512, 10),\n        )\n\n    def forward(self, x):\n        x = self.flatten(x)\n        logits = self.linear_relu_stack(x)\n        return logits\n\n\n\n\nYou can also visualize the model:\n\nmodel = NeuralNetwork()\nprint(model)\n\nNeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)\n\n\nTo use the model, you can pass input data. This will execute the forward() method, along with background operations.\n\nX = torch.rand(1, 28, 28)\nlogits = model(X)\npred_probab = nn.Softmax(dim=1)(logits)\ny_pred = pred_probab.argmax(1)\nprint(f\"Predicted class: {y_pred}\")\n\nPredicted class: tensor([4])\n\n\nThe executed operations will look like this:\n\nfrom torchviz import make_dot\nmake_dot(logits)\n\n\n\n\n\n\n\n\nFor more in-depth information about the model you can use the external library torchinfo as seen in Listing 6.\n\n\n\n\nListing 6: Example output of torchinfo.\n\n\nfrom torchinfo import summary\nmodel = NeuralNetwork()\nsummary(model, input_size=(128, 1, 28, 28))\n\n\n\n\n==========================================================================================\nLayer (type:depth-idx)                   Output Shape              Param #\n==========================================================================================\nNeuralNetwork                            [128, 10]                 --\n├─Flatten: 1-1                           [128, 784]                --\n├─Sequential: 1-2                        [128, 10]                 --\n│    └─Linear: 2-1                       [128, 512]                401,920\n│    └─ReLU: 2-2                         [128, 512]                --\n│    └─Linear: 2-3                       [128, 512]                262,656\n│    └─ReLU: 2-4                         [128, 512]                --\n│    └─Linear: 2-5                       [128, 10]                 5,130\n==========================================================================================\nTotal params: 669,706\nTrainable params: 669,706\nNon-trainable params: 0\nTotal mult-adds (Units.MEGABYTES): 85.72\n==========================================================================================\nInput size (MB): 0.40\nForward/backward pass size (MB): 1.06\nParams size (MB): 2.68\nEstimated Total Size (MB): 4.14\n==========================================================================================",
+    "text": "2.4 torch.nn\nPyTorch provides various building blocks for creating neural networks. These are available in torch.nn. Additionally, you can define any compositions of such building blocks that inherit from torch.nn.Module. A neural network is typically a torch.nn.Module. Each module implements the forward() method to define how data is processed.\n\n\n\n\n\n\nTipBuilding Blocks in torch.nn\n\n\n\nCommon layers:\n\nnn.Linear: Fully connected layer\nnn.Conv2d: 2D convolutional layer\nnn.MaxPool2d: Max pooling layer\nnn.Dropout: Regularization via random dropout\nnn.BatchNorm2d: Batch normalization\n\nCommon activations:\n\nnn.ReLU(), nn.LeakyReLU(), nn.GELU()\nnn.Sigmoid(), nn.Softmax()\n\nLoss functions:\n\nnn.CrossEntropyLoss(): Classification\nnn.BCEWithLogitsLoss(): Binary classification\nnn.MSELoss(): Regression\n\n\n\nListing 5 depicts an example of a class that inherits from torch.nn.Module.\n\n\n\n\nListing 5: Example nn.Module.\n\n\nfrom torch import nn\n\nclass NeuralNetwork(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.flatten = nn.Flatten()\n        self.linear_relu_stack = nn.Sequential(\n            nn.Linear(28*28, 512),\n            nn.ReLU(),\n            nn.Linear(512, 512),\n            nn.ReLU(),\n            nn.Linear(512, 10),\n        )\n\n    def forward(self, x):\n        x = self.flatten(x)\n        logits = self.linear_relu_stack(x)\n        return logits\n\n\n\n\nYou can also visualize the model:\n\nmodel = NeuralNetwork()\nprint(model)\n\nNeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)\n\n\nTo use the model, you can pass input data. This will execute the forward() method, along with background operations.\n\nX = torch.rand(1, 28, 28)\nlogits = model(X)\npred_probab = nn.Softmax(dim=1)(logits)\ny_pred = pred_probab.argmax(1)\nprint(f\"Predicted class: {y_pred}\")\n\nPredicted class: tensor([0])\n\n\nThe executed operations will look like this:\n\nfrom torchviz import make_dot\nmake_dot(logits)\n\n\n\n\n\n\n\n\nFor more in-depth information about the model you can use the external library torchinfo as seen in Listing 6.\n\n\n\n\nListing 6: Example output of torchinfo.\n\n\nfrom torchinfo import summary\nmodel = NeuralNetwork()\nsummary(model, input_size=(128, 1, 28, 28))\n\n\n\n\n==========================================================================================\nLayer (type:depth-idx)                   Output Shape              Param #\n==========================================================================================\nNeuralNetwork                            [128, 10]                 --\n├─Flatten: 1-1                           [128, 784]                --\n├─Sequential: 1-2                        [128, 10]                 --\n│    └─Linear: 2-1                       [128, 512]                401,920\n│    └─ReLU: 2-2                         [128, 512]                --\n│    └─Linear: 2-3                       [128, 512]                262,656\n│    └─ReLU: 2-4                         [128, 512]                --\n│    └─Linear: 2-5                       [128, 10]                 5,130\n==========================================================================================\nTotal params: 669,706\nTrainable params: 669,706\nNon-trainable params: 0\nTotal mult-adds (Units.MEGABYTES): 85.72\n==========================================================================================\nInput size (MB): 0.40\nForward/backward pass size (MB): 1.06\nParams size (MB): 2.68\nEstimated Total Size (MB): 4.14\n==========================================================================================",
     "crumbs": [
       "Preparation",
       "3 - Software & Hardware"
@@ -3479,22 +3479,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#demo-a-cnn-reads-digits",
-    "href": "pages/slides/cnns.html#demo-a-cnn-reads-digits",
+    "objectID": "pages/slides/cnns.html#mlps-and-how-they-learn",
+    "href": "pages/slides/cnns.html#mlps-and-how-they-learn",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Demo: A CNN Reads Digits",
-    "text": "Demo: A CNN Reads Digits\n\n\nSame test. What is different inside the network? Open in new tab",
+    "section": "MLPs and How they Learn",
+    "text": "MLPs and How they Learn\n\n\nQuestion: Can an MLP learn from images whose pixels are shuffled with a fixed permutation \\(\\mathbf{P}\\), i.e. \\(f(\\mathbf{P}\\mathbf{x})\\)?\n\n\nYes, equally well: an MLP does not use the neighbourhood of pixels. We need an architecture with inductive biases for images.",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#mlps-and-how-they-learn",
-    "href": "pages/slides/cnns.html#mlps-and-how-they-learn",
+    "objectID": "pages/slides/cnns.html#demo-a-cnn-reads-digits",
+    "href": "pages/slides/cnns.html#demo-a-cnn-reads-digits",
     "title": "3 - Convolutional Neural Networks",
-    "section": "MLPs and How they Learn",
-    "text": "MLPs and How they Learn\n\n\nQuestion: Can an MLP learn from images whose pixels are shuffled with a fixed permutation \\(\\mathbf{P}\\), i.e. \\(f(\\mathbf{P}\\mathbf{x})\\)?\n\n\nYes, equally well: an MLP does not use the neighbourhood of pixels. We need an architecture with inductive biases for images.",
+    "section": "Demo: A CNN Reads Digits",
+    "text": "Demo: A CNN Reads Digits\n\n\nSame test. What is different inside the network? Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3560,7 +3560,7 @@
     "href": "pages/slides/cnns.html#inductive-bias",
     "title": "3 - Convolutional Neural Networks",
     "section": "Inductive Bias",
-    "text": "Inductive Bias\n\nMLPs: minimal bias, very general, data-hungry\nCNNs: assume locality + translation equivariance\nTransformers: assume long-range dependencies\n\n\nChoosing an architecture = choosing which assumptions to bake in.",
+    "text": "Inductive Bias\n\nMLPs: minimal bias, very general, data-hungry\nCNNs: assume locality + translation equivariance\n\n\nChoosing an architecture = choosing which assumptions to bake in.",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3589,22 +3589,44 @@
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#convolution-on-multiple-channels",
-    "href": "pages/slides/cnns.html#convolution-on-multiple-channels",
+    "objectID": "pages/slides/cnns.html#convolution-layer-one-filter",
+    "href": "pages/slides/cnns.html#convolution-layer-one-filter",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Convolution on Multiple Channels",
-    "text": "Convolution on Multiple Channels\n\n\nEach channel’s filter slice is applied to its input channel; the per-channel sums plus the bias collapse to one output value.",
+    "section": "Convolution Layer: One Filter",
+    "text": "Convolution Layer: One Filter\n\nSource: Johnson (2019)",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#many-filters-many-activation-maps",
-    "href": "pages/slides/cnns.html#many-filters-many-activation-maps",
+    "objectID": "pages/slides/cnns.html#convolution-layer-two-filters",
+    "href": "pages/slides/cnns.html#convolution-layer-two-filters",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Many Filters, Many Activation Maps",
-    "text": "Many Filters, Many Activation Maps\n\n\nEach filter produces one activation map; \\(C_{out}\\) filters → \\(C_{out}\\) channels.",
+    "section": "Convolution Layer: Two Filters",
+    "text": "Convolution Layer: Two Filters\n\nSource: Johnson (2019)",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#convolution-layer-many-filters",
+    "href": "pages/slides/cnns.html#convolution-layer-many-filters",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Convolution Layer: Many Filters",
+    "text": "Convolution Layer: Many Filters\n\nSource: Johnson (2019)",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#convolution-layer-a-batch",
+    "href": "pages/slides/cnns.html#convolution-layer-a-batch",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Convolution Layer: A Batch",
+    "text": "Convolution Layer: A Batch\n\nSource: Johnson (2019)",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3627,6 +3649,72 @@
     "title": "3 - Convolutional Neural Networks",
     "section": "Convolution Hyperparameters",
     "text": "Convolution Hyperparameters\nKey parameters to configure a convolutional layer:\n\nKernel Size (\\(k\\)): Spatial extent (typically \\(3\\times3\\) or \\(5\\times5\\))\nPadding (\\(p\\)): Zero-padding added to input borders\nStride (\\(s\\)): Step size when moving the kernel\nDilation (\\(d\\)): Spacing between kernel elements",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#stride-1",
+    "href": "pages/slides/cnns.html#stride-1",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Stride 1",
+    "text": "Stride 1\n\nStride (1, 1). Left: input activations with the positions of the center pixel (red).",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#stride-2",
+    "href": "pages/slides/cnns.html#stride-2",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Stride 2",
+    "text": "Stride 2\n\nStride (2, 2): the activation map gets smaller.",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#padding",
+    "href": "pages/slides/cnns.html#padding",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Padding",
+    "text": "Padding\n\nLeft: input (yellow) with zero-padding (white border), middle: filter, right: output.",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#kernel-size-33",
+    "href": "pages/slides/cnns.html#kernel-size-33",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Kernel Size 3×3",
+    "text": "Kernel Size 3×3\n\nZero-padding and \\(3 \\times 3\\) kernel: spatial resolution unchanged.",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#kernel-size-55",
+    "href": "pages/slides/cnns.html#kernel-size-55",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Kernel Size 5×5",
+    "text": "Kernel Size 5×5\n\nZero-padding and \\(5 \\times 5\\) kernel: spatial resolution unchanged.",
+    "crumbs": [
+      "Slides",
+      "3 - Convolutional Neural Networks"
+    ]
+  },
+  {
+    "objectID": "pages/slides/cnns.html#dilation",
+    "href": "pages/slides/cnns.html#dilation",
+    "title": "3 - Convolutional Neural Networks",
+    "section": "Dilation",
+    "text": "Dilation\n\nKernel with dilation 2 (middle) applied to the input (left) to produce the output (right).",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3688,22 +3776,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#demo-receptive-field",
-    "href": "pages/slides/cnns.html#demo-receptive-field",
+    "objectID": "pages/slides/cnns.html#receptive-field-formula",
+    "href": "pages/slides/cnns.html#receptive-field-formula",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Demo: Receptive Field",
-    "text": "Demo: Receptive Field\n\n\n\n\nSelect an activation in the last layer: which inputs can influence it? Open in new tab",
+    "section": "Receptive Field: Formula",
+    "text": "Receptive Field: Formula\nThe receptive field of a CNN \\(r_0\\):\n\\[\\begin{equation}\nr_0 = \\sum_{l=1}^L \\left( (k_l - 1) \\prod_{i=1}^{l-1} s_i \\right) + 1\n\\end{equation}\\]\n\n\\(L\\): Total number of layers\n\\(k_l\\): Kernel size at layer \\(l\\)\n\\(s_i\\): Stride at layer \\(i\\), from layer 1 up to \\(l-1\\)",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
     ]
   },
   {
-    "objectID": "pages/slides/cnns.html#receptive-field-formula",
-    "href": "pages/slides/cnns.html#receptive-field-formula",
+    "objectID": "pages/slides/cnns.html#demo-receptive-field",
+    "href": "pages/slides/cnns.html#demo-receptive-field",
     "title": "3 - Convolutional Neural Networks",
-    "section": "Receptive Field: Formula",
-    "text": "Receptive Field: Formula\nThe receptive field of a CNN \\(r_0\\):\n\\[\\begin{equation}\nr_0 = \\sum_{l=1}^L \\left( (k_l - 1) \\prod_{i=1}^{l-1} s_i \\right) + 1\n\\end{equation}\\]\n\n\\(L\\): Total number of layers\n\\(k_l\\): Kernel size at layer \\(l\\)\n\\(s_i\\): Stride at layer \\(i\\), from layer 1 up to \\(l-1\\)",
+    "section": "Demo: Receptive Field",
+    "text": "Demo: Receptive Field\n\n\n\n\nSelect an activation in the last layer: which inputs can influence it? Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"
@@ -3813,7 +3901,7 @@
     "href": "pages/slides/cnns.html#demo-translation-in-mlps-and-cnns",
     "title": "3 - Convolutional Neural Networks",
     "section": "Demo: Translation in MLPs and CNNs",
-    "text": "Demo: Translation in MLPs and CNNs\n\n\n\n\nMove the digit: which network still recognizes it? Open in new tab",
+    "text": "Demo: Translation in MLPs and CNNs\n\n\n\n\nMove the digit: which network still recognizes it? Questions and answers: section “Questions” in the demo. Open in new tab",
     "crumbs": [
       "Slides",
       "3 - Convolutional Neural Networks"

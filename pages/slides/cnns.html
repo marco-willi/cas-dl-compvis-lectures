@@ -213,12 +213,6 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{C \times H \tim
 </iframe>
 <p>Draw a digit in the centre, then draw it small in a corner. Does the prediction hold? <a href="https://adamharley.com/nn_vis/mlp/2d.html" target="_blank">Open in new tab</a></p>
 </section>
-<section id="demo-a-cnn-reads-digits" class="slide level2">
-<h2>Demo: A CNN Reads Digits</h2>
-<iframe data-src="https://adamharley.com/nn_vis/cnn/2d.html" width="100%" height="820" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: CNN on MNIST (Adam Harley)">
-</iframe>
-<p>Same test. What is different inside the network? <a href="https://adamharley.com/nn_vis/cnn/2d.html" target="_blank">Open in new tab</a></p>
-</section>
 <section id="mlps-and-how-they-learn" class="slide level2">
 <h2>MLPs and How they Learn</h2>
 
@@ -228,6 +222,12 @@ Figure&nbsp;1: Image <span class="math inline">\(\in \mathbb{R}^{C \times H \tim
 <div class="fragment">
 <p>Yes, equally well: an MLP does not use the <strong>neighbourhood</strong> of pixels. We need an architecture with <strong>inductive biases</strong> for images.</p>
 </div>
+</section>
+<section id="demo-a-cnn-reads-digits" class="slide level2">
+<h2>Demo: A CNN Reads Digits</h2>
+<iframe data-src="https://adamharley.com/nn_vis/cnn/2d.html" width="100%" height="820" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: CNN on MNIST (Adam Harley)">
+</iframe>
+<p>Same test. What is different inside the network? <a href="https://adamharley.com/nn_vis/cnn/2d.html" target="_blank">Open in new tab</a></p>
 </section>
 <section id="invariance-and-equivariance" class="slide level2">
 <h2>Invariance and Equivariance</h2>
@@ -295,7 +295,7 @@ Figure&nbsp;2: A classifier should produce <strong>“cow”</strong> in all fou
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_equivariance_original.jpg" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_equivariance_original.jpg" style="width:50.0%"></p>
 <figcaption>Original</figcaption>
 </figure>
 </div>
@@ -303,7 +303,7 @@ Figure&nbsp;2: A classifier should produce <strong>“cow”</strong> in all fou
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_right.jpg" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_right.jpg" style="width:50.0%"></p>
 <figcaption>Shifted right</figcaption>
 </figure>
 </div>
@@ -313,7 +313,7 @@ Figure&nbsp;2: A classifier should produce <strong>“cow”</strong> in all fou
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_left.jpg" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_left.jpg" style="width:50.0%"></p>
 <figcaption>Shifted left</figcaption>
 </figure>
 </div>
@@ -321,7 +321,7 @@ Figure&nbsp;2: A classifier should produce <strong>“cow”</strong> in all fou
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_up.jpg" style="width:75.0%"></p>
+<p><img data-src="../../assets/images/cnns/cows2_equivariance_shift_up.jpg" style="width:50.0%"></p>
 <figcaption>Shifted up + right</figcaption>
 </figure>
 </div>
@@ -357,7 +357,6 @@ Figure&nbsp;3: The bounding boxes <strong>move with</strong> the cows.
 <ul>
 <li class="fragment">MLPs: minimal bias, very general, <strong>data-hungry</strong></li>
 <li class="fragment">CNNs: assume <strong>locality + translation equivariance</strong></li>
-<li class="fragment">Transformers: assume <strong>long-range dependencies</strong></li>
 </ul>
 <div class="fragment">
 <p>Choosing an architecture = choosing which assumptions to bake in.</p>
@@ -381,20 +380,22 @@ S(i, j) = (K * I)(i, j) = \sum_m \sum_n I(i + m, j + n) K(m, n) + b
 </div>
 <p>Find a kernel that detects horizontal edges. <a href="../../demos/convolution/index.html" target="_blank">Open in new tab</a></p>
 </section>
-<section id="convolution-on-multiple-channels" class="slide level2">
-<h2>Convolution on Multiple Channels</h2>
+<section id="convolution-layer-one-filter" class="slide level2">
+<h2>Convolution Layer: One Filter</h2>
 
-<img data-src="../../assets/images/cnns/conv_rgb_channels.png" style="width:75.0%" class="r-stretch"><div class="fragment">
-<p>Each channel’s filter slice is applied to its input channel; the per-channel sums plus the bias collapse to <strong>one</strong> output value.</p>
-</div>
-</section>
-<section id="many-filters-many-activation-maps" class="slide level2">
-<h2>Many Filters, Many Activation Maps</h2>
+<img data-src="../../assets/images/cnns/conv_activation_map.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Source: <span class="citation" data-cites="johnson_eecs_2019">Johnson (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p></section>
+<section id="convolution-layer-two-filters" class="slide level2">
+<h2>Convolution Layer: Two Filters</h2>
 
-<img data-src="../../assets/images/cnns/conv_multi_filter.png" style="width:80.0%" class="r-stretch"><div class="fragment">
-<p>Each filter produces one activation map; <span class="math inline">\(C_{out}\)</span> filters → <span class="math inline">\(C_{out}\)</span> channels.</p>
-</div>
-</section>
+<img data-src="../../assets/images/cnns/conv_activation_map2.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Source: <span class="citation" data-cites="johnson_eecs_2019">Johnson (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p></section>
+<section id="convolution-layer-many-filters" class="slide level2">
+<h2>Convolution Layer: Many Filters</h2>
+
+<img data-src="../../assets/images/cnns/conv_activation_map3.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Source: <span class="citation" data-cites="johnson_eecs_2019">Johnson (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p></section>
+<section id="convolution-layer-a-batch" class="slide level2">
+<h2>Convolution Layer: A Batch</h2>
+
+<img data-src="../../assets/images/cnns/conv_activation_map4.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Source: <span class="citation" data-cites="johnson_eecs_2019">Johnson (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span></p></section>
 <section id="convolutional-neural-networks" class="slide level2">
 <h2>Convolutional Neural Networks</h2>
 
@@ -414,6 +415,30 @@ S(i, j) = (K * I)(i, j) = \sum_m \sum_n I(i + m, j + n) K(m, n) + b
 <li class="fragment"><strong>Dilation</strong> (<span class="math inline">\(d\)</span>): Spacing between kernel elements</li>
 </ul>
 </section>
+<section id="stride-1" class="slide level2">
+<h2>Stride 1</h2>
+
+<img data-src="../../assets/images/cnns/stride1_example.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Stride (1, 1). Left: input activations with the positions of the center pixel (red).</p></section>
+<section id="stride-2" class="slide level2">
+<h2>Stride 2</h2>
+
+<img data-src="../../assets/images/cnns/stride2_example.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Stride (2, 2): the activation map gets smaller.</p></section>
+<section id="padding" class="slide level2">
+<h2>Padding</h2>
+
+<img data-src="../../assets/images/cnns/padding_example_result.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Left: input (yellow) with zero-padding (white border), middle: filter, right: output.</p></section>
+<section id="kernel-size-33" class="slide level2">
+<h2>Kernel Size 3×3</h2>
+
+<img data-src="../../assets/images/cnns/kernel_size_example_3x3.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Zero-padding and <span class="math inline">\(3 \times 3\)</span> kernel: spatial resolution unchanged.</p></section>
+<section id="kernel-size-55" class="slide level2">
+<h2>Kernel Size 5×5</h2>
+
+<img data-src="../../assets/images/cnns/kernel_size_example_5x5.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Zero-padding and <span class="math inline">\(5 \times 5\)</span> kernel: spatial resolution unchanged.</p></section>
+<section id="dilation" class="slide level2">
+<h2>Dilation</h2>
+
+<img data-src="../../assets/images/cnns/dilation_example.jpg" style="width:80.0%" class="r-stretch quarto-figure-center"><p class="caption">Kernel with dilation 2 (middle) applied to the input (left) to produce the output (right).</p></section>
 <section id="demo-convolution-parameters" class="slide level2">
 <h2>Demo: Convolution Parameters</h2>
 <div style="height: 835px;">
@@ -468,14 +493,6 @@ o = \left\lfloor \frac{i + 2p - d\cdot(k-1) - 1}{s} + 1 \right\rfloor
 </figure>
 </div>
 </section>
-<section id="demo-receptive-field" class="slide level2">
-<h2>Demo: Receptive Field</h2>
-<div style="height: 835px;">
-<iframe data-src="../../demos/cnns/receptive_field/index.html" width="1460" height="705" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.18); transform-origin: top left;" title="Interactive demo: receptive field of stacked convolutions">
-</iframe>
-</div>
-<p>Select an activation in the last layer: which inputs can influence it? <a href="../../demos/cnns/receptive_field/index.html" target="_blank">Open in new tab</a></p>
-</section>
 <section id="receptive-field-formula" class="slide level2">
 <h2>Receptive Field: Formula</h2>
 <p>The receptive field of a CNN <span class="math inline">\(r_0\)</span>:</p>
@@ -487,6 +504,14 @@ r_0 = \sum_{l=1}^L \left( (k_l - 1) \prod_{i=1}^{l-1} s_i \right) + 1
 <li><span class="math inline">\(k_l\)</span>: Kernel size at layer <span class="math inline">\(l\)</span></li>
 <li><span class="math inline">\(s_i\)</span>: Stride at layer <span class="math inline">\(i\)</span>, from layer 1 up to <span class="math inline">\(l-1\)</span></li>
 </ul>
+</section>
+<section id="demo-receptive-field" class="slide level2">
+<h2>Demo: Receptive Field</h2>
+<div style="height: 835px;">
+<iframe data-src="../../demos/cnns/receptive_field/index.html" width="1460" height="705" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.18); transform-origin: top left;" title="Interactive demo: receptive field of stacked convolutions">
+</iframe>
+</div>
+<p>Select an activation in the last layer: which inputs can influence it? <a href="../../demos/cnns/receptive_field/index.html" target="_blank">Open in new tab</a></p>
 </section>
 <section id="quiz-receptive-field" class="slide level2">
 <h2>Quiz: Receptive Field</h2>
@@ -572,7 +597,7 @@ r_0 = \sum_{l=1}^L \left( (k_l - 1) \prod_{i=1}^{l-1} s_i \right) + 1
 <iframe data-src="../../demos/cnns/cnns_vs_mlp_demo/index.html" width="1800" height="1290" style="border: 1px solid #ddd; border-radius: 6px; max-height: none; transform: scale(0.7); transform-origin: top left;" title="Interactive demo: MLP vs CNN on shifted MNIST digits">
 </iframe>
 </div>
-<p>Move the digit: which network still recognizes it? <a href="../../demos/cnns/cnns_vs_mlp_demo/index.html" target="_blank">Open in new tab</a></p>
+<p>Move the digit: which network still recognizes it? Questions and answers: section “Questions” in the demo. <a href="../../demos/cnns/cnns_vs_mlp_demo/index.html" target="_blank">Open in new tab</a></p>
 </section></section>
 <section id="references" class="title-slide slide level1 smaller scrollable">
 <h1>References</h1>

@@ -1610,40 +1610,7 @@ Figure&nbsp;27: Global average pooling: input (left) and output (right).
 <div id="callout-21" class="callout-21-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <iframe name="cnns-vs-mlp" loading="lazy" data-auto-height="" src="../../demos/cnns/cnns_vs_mlp_demo/index.html" width="100%" height="1080" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: MLP vs CNN on shifted MNIST digits"></iframe>
-<p>All sections of the demo can be collapsed. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. “Look inside the CNNs” shows activation maps of the first and the last convolutional layer and the input of the classifier. <a href="../../demos/cnns/cnns_vs_mlp_demo/index.html" target="_blank">Open the demo in a new tab</a> or view the <a href="https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/cnns_vs_mlp_demo">source code</a>.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Exercise: Translation Equivariance and Invariance">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Exercise: Translation Equivariance and Invariance
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Use the setting “only top-left” for tasks 1–3.</p>
-<ol type="1">
-<li><strong>Move the digit</strong>: drag the digit to the bottom-right corner. Which networks fail? Why does the CNN + FC fail, although its convolutions are translation equivariant?</li>
-<li><strong>Look inside</strong>: open “Look inside the CNNs” and move the digit a few pixels. How do the activation maps of conv1 and conv3 change? Which property from <a href="#sec-cnn-invariance" class="quarto-xref">Section&nbsp;1.2</a> does this illustrate?</li>
-<li><strong>Compare the heads</strong>: starting from the top-left position, move the digit by 1 pixel and by 4 pixels (arrow keys, with Shift for 4 pixels). Compare the reported change of the classifier input for CNN + FC and CNN + GAP. Why is the change for CNN + GAP small but not exactly zero?</li>
-<li><strong>Train on all positions</strong>: switch to “anywhere”. The MLP now recognizes digits everywhere. What is the price?</li>
-</ol>
-<details>
-<summary>
-Click for solutions
-</summary>
-<ol type="1">
-<li>The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its <span class="math inline">\(64 \times 14 \times 14\)</span> input. Only the weights for the top-left positions have been trained (see the weight map in “Look inside”); the others still have their random initial values. The MLP has the same problem directly on the pixels.</li>
-<li>The activation maps shift together with the input: <span class="math inline">\(f(t(\mathbf{x})) = t(f(\mathbf{x}))\)</span>, i.e.&nbsp;translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two <span class="math inline">\(2 \times 2\)</span> max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.</li>
-<li>The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride <span class="citation" data-cites="azulay_why_2019 zhang_making_2019">(<a href="#ref-azulay_why_2019" role="doc-biblioref">Azulay and Weiss 2019</a>; <a href="#ref-zhang_making_2019" role="doc-biblioref">Zhang 2019</a>)</span>, and because of the zero-padding at the image border.</li>
-<li>The MLP has to learn every position from data, i.e.&nbsp;the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.</li>
-</ol>
-</details>
+<p>All sections of the demo can be collapsed. The section “Architectures” lists the layers, output shapes and parameter counts of the three networks. The section “Questions” contains the exercise below, with collapsible answers. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. “Look inside the CNNs” shows activation maps of the first and the last convolutional layer and the input of the classifier. <a href="../../demos/cnns/cnns_vs_mlp_demo/index.html" target="_blank">Open the demo in a new tab</a> or view the <a href="https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/cnns_vs_mlp_demo">source code</a>.</p>
 </div>
 </div>
 </div>
@@ -1653,9 +1620,6 @@ Click for solutions
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-araujo_computing_2019" class="csl-entry" role="listitem">
 Araujo, Andr&amp;eacute;, Wade Norris, and Jack Sim. 2019. <span>“Computing <span>Receptive</span> <span>Fields</span> of <span>Convolutional</span> <span>Neural</span> <span>Networks</span>.”</span> <em>Distill</em> 4 (11): 10.23915/distill.00021. <a href="https://doi.org/10.23915/distill.00021">https://doi.org/10.23915/distill.00021</a>.
-</div>
-<div id="ref-azulay_why_2019" class="csl-entry" role="listitem">
-Azulay, Aharon, and Yair Weiss. 2019. <em>Why Do Deep Convolutional Networks Generalize so Poorly to Small Image Transformations?</em> arXiv. <a href="https://doi.org/10.48550/arXiv.1805.12177">https://doi.org/10.48550/arXiv.1805.12177</a>.
 </div>
 <div id="ref-dumoulin_guide_2016" class="csl-entry" role="listitem">
 Dumoulin, Vincent, and Francesco Visin. 2016. <span>“A Guide to Convolution Arithmetic for Deep Learning.”</span> <em>ArXiv e-Prints</em>, March.
@@ -1671,9 +1635,6 @@ Prince, Simon J. D. 2023. <em>Understanding <span>Deep</span> <span>Learning</sp
 </div>
 <div id="ref-Zeiler2014" class="csl-entry" role="listitem">
 Zeiler, Matthew D., and Rob Fergus. 2014. <span>“Visualizing and Understanding Convolutional Networks.”</span> <em>Lecture Notes in Computer Science (Including Subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)</em> 8689 LNCS (PART 1): 818–33. <a href="https://doi.org/10.1007/978-3-319-10590-1_53">https://doi.org/10.1007/978-3-319-10590-1_53</a>.
-</div>
-<div id="ref-zhang_making_2019" class="csl-entry" role="listitem">
-Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span> <span>Shift</span>-<span>Invariant</span> <span>Again</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.1904.11486">https://doi.org/10.48550/arXiv.1904.11486</a>.
 </div>
 </div>
 
@@ -2945,34 +2906,14 @@ Zhang, Richard. 2019. <em>Making <span>Convolutional</span> <span>Networks</span
 <span id="cb1-797"><a href="#cb1-797" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;iframe name="cnns-vs-mlp" loading="lazy" data-auto-height src="../../demos/cnns/cnns_vs_mlp_demo/index.html" width="100%" height="1080" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: MLP vs CNN on shifted MNIST digits"&gt;&lt;/iframe&gt;</span></span>
 <span id="cb1-798"><a href="#cb1-798" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb1-799"><a href="#cb1-799" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-800"><a href="#cb1-800" aria-hidden="true" tabindex="-1"></a>All sections of the demo can be collapsed. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. "Look inside the CNNs" shows activation maps of the first and the last convolutional layer and the input of the classifier. <span class="co">[</span><span class="ot">Open the demo in a new tab</span><span class="co">](../../demos/cnns/cnns_vs_mlp_demo/index.html)</span>{target="_blank"} or view the <span class="co">[</span><span class="ot">source code</span><span class="co">](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/cnns_vs_mlp_demo)</span>.</span>
+<span id="cb1-800"><a href="#cb1-800" aria-hidden="true" tabindex="-1"></a>All sections of the demo can be collapsed. The section "Architectures" lists the layers, output shapes and parameter counts of the three networks. The section "Questions" contains the exercise below, with collapsible answers. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. "Look inside the CNNs" shows activation maps of the first and the last convolutional layer and the input of the classifier. <span class="co">[</span><span class="ot">Open the demo in a new tab</span><span class="co">](../../demos/cnns/cnns_vs_mlp_demo/index.html)</span>{target="_blank"} or view the <span class="co">[</span><span class="ot">source code</span><span class="co">](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/cnns_vs_mlp_demo)</span>.</span>
 <span id="cb1-801"><a href="#cb1-801" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-802"><a href="#cb1-802" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-803"><a href="#cb1-803" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Exercise: Translation Equivariance and Invariance" collapse="true"}</span>
-<span id="cb1-804"><a href="#cb1-804" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-805"><a href="#cb1-805" aria-hidden="true" tabindex="-1"></a>Use the setting "only top-left" for tasks 1–3.</span>
-<span id="cb1-806"><a href="#cb1-806" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-807"><a href="#cb1-807" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Move the digit**: drag the digit to the bottom-right corner. Which networks fail? Why does the CNN + FC fail, although its convolutions are translation equivariant?</span>
-<span id="cb1-808"><a href="#cb1-808" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Look inside**: open "Look inside the CNNs" and move the digit a few pixels. How do the activation maps of conv1 and conv3 change? Which property from @sec-cnn-invariance does this illustrate?</span>
-<span id="cb1-809"><a href="#cb1-809" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Compare the heads**: starting from the top-left position, move the digit by 1 pixel and by 4 pixels (arrow keys, with Shift for 4 pixels). Compare the reported change of the classifier input for CNN + FC and CNN + GAP. Why is the change for CNN + GAP small but not exactly zero?</span>
-<span id="cb1-810"><a href="#cb1-810" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Train on all positions**: switch to "anywhere". The MLP now recognizes digits everywhere. What is the price?</span>
-<span id="cb1-811"><a href="#cb1-811" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-812"><a href="#cb1-812" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb1-813"><a href="#cb1-813" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">summary</span><span class="dt">&gt;</span>Click for solutions<span class="dt">&lt;/</span><span class="kw">summary</span><span class="dt">&gt;</span></span>
-<span id="cb1-814"><a href="#cb1-814" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-815"><a href="#cb1-815" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its $64 \times 14 \times 14$ input. Only the weights for the top-left positions have been trained (see the weight map in "Look inside"); the others still have their random initial values. The MLP has the same problem directly on the pixels.</span>
-<span id="cb1-816"><a href="#cb1-816" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>The activation maps shift together with the input: $f(t(\vect{x})) = t(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.</span>
-<span id="cb1-817"><a href="#cb1-817" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride <span class="co">[</span><span class="ot">@azulay_why_2019; @zhang_making_2019</span><span class="co">]</span>, and because of the zero-padding at the image border.</span>
-<span id="cb1-818"><a href="#cb1-818" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>The MLP has to learn every position from data, i.e. the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.</span>
-<span id="cb1-819"><a href="#cb1-819" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-820"><a href="#cb1-820" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>
-<span id="cb1-821"><a href="#cb1-821" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-822"><a href="#cb1-822" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-823"><a href="#cb1-823" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-824"><a href="#cb1-824" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
-<span id="cb1-825"><a href="#cb1-825" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-826"><a href="#cb1-826" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
-<span id="cb1-827"><a href="#cb1-827" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-803"><a href="#cb1-803" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-804"><a href="#cb1-804" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb1-805"><a href="#cb1-805" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-806"><a href="#cb1-806" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
+<span id="cb1-807"><a href="#cb1-807" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

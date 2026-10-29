@@ -1325,23 +1325,7 @@ The following demo brings together the main ideas of this lecture: the limitatio
 
 **🎮 Interactive Demo: MLP vs CNN on Shifted Digits**
 
-All sections of the demo can be collapsed. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. "Look inside the CNNs" shows activation maps of the first and the last convolutional layer and the input of the classifier. [Open the demo in a new tab](https://marco-willi.github.io/cas-dl-compvis-lectures/pages/demos/cnns/cnns_vs_mlp_demo/index.html) or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/cnns_vs_mlp_demo).
-
-**Exercise: Translation Equivariance and Invariance**
-
-Use the setting "only top-left" for tasks 1–3.
-
-1. **Move the digit**: drag the digit to the bottom-right corner. Which networks fail? Why does the CNN + FC fail, although its convolutions are translation equivariant?
-2. **Look inside**: open "Look inside the CNNs" and move the digit a few pixels. How do the activation maps of conv1 and conv3 change? Which property from the section does this illustrate?
-3. **Compare the heads**: starting from the top-left position, move the digit by 1 pixel and by 4 pixels (arrow keys, with Shift for 4 pixels). Compare the reported change of the classifier input for CNN + FC and CNN + GAP. Why is the change for CNN + GAP small but not exactly zero?
-4. **Train on all positions**: switch to "anywhere". The MLP now recognizes digits everywhere. What is the price?
-
-**Click for solutions**
-
-1. The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for 10 classes. The activation maps of the CNN + FC move with the digit, but the fully connected layer has separate weights for every position of its $64 \times 14 \times 14$ input. Only the weights for the top-left positions have been trained (see the weight map in "Look inside"); the others still have their random initial values. The MLP has the same problem directly on the pixels.
-2. The activation maps shift together with the input: $f(t(\vect{x})) = t(f(\vect{x}))$, i.e. translation equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two $2 \times 2$ max-poolings and therefore shifts by a quarter of the distance; for shifts that are not a multiple of 4 it only approximately keeps its pattern.
-3. The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more than 100 % after 4 pixels, because the values move to positions with different weights. Global average pooling averages over all positions, so its output changes by only about 5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of the stride (azulay_why_2019; zhang_making_2019), and because of the zero-padding at the image border.
-4. The MLP has to learn every position from data, i.e. the training data must contain the digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters. This is the inductive bias of convolutions at work.
+All sections of the demo can be collapsed. The section "Architectures" lists the layers, output shapes and parameter counts of the three networks. The section "Questions" contains the exercise below, with collapsible answers. The networks run in the browser. The accuracy maps show, for every position of the digit, the accuracy on 2,000 test images; the dashed orange box marks the positions seen during training. "Look inside the CNNs" shows activation maps of the first and the last convolutional layer and the input of the classifier. [Open the demo in a new tab](https://marco-willi.github.io/cas-dl-compvis-lectures/pages/demos/cnns/cnns_vs_mlp_demo/index.html) or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/cnns/cnns_vs_mlp_demo).
 
 
 # 4 - Image Classification
