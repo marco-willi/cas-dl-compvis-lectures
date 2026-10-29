@@ -2,138 +2,138 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/index.html</loc>
-    <lastmod>2026-10-28T21:11:30.618Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.489Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/representation_learning.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/images_as_data.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/genai_models.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/downstream_adaptation.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/classification.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/student_projects.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/practical.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/literature.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/exercises.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/about.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/background/machine_learning.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.489Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/vision_transformers.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/intro.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/genai_practical.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/genai_intro.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/cnns.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/classification.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/downstream_adaptation.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/genai_models.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/images_as_data.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/lectures/representation_learning.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.490Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/background/frameworks.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.489Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/background/neural_networks.html</loc>
-    <lastmod>2026-10-28T21:11:30.619Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.489Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/ai_coding_agents.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/links.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/notation.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/quiz.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/misc/tutor_prompt.html</loc>
-    <lastmod>2026-10-28T21:11:30.620Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.491Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/cnns.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/genai_intro.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/genai_practical.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/intro.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
   <url>
     <loc>https://marco-willi.github.io/cas-dl-compvis-lectures/pages/slides/vision_transformers.html</loc>
-    <lastmod>2026-10-28T21:11:30.621Z</lastmod>
+    <lastmod>2026-10-29T17:11:54.492Z</lastmod>
   </url>
 </urlset>
