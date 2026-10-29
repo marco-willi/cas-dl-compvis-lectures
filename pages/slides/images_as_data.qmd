@@ -207,7 +207,7 @@ Captures per class in the Kalahari dataset (log scale).
 ::: {#fig-iad-label-ambiguity}
 ![]({{< meta params.images_path >}}label_ambiguity.png){width=55%}
 
-Wolf or large dog? Empty, or a tail at the edge of the frame?
+Difficult to classify (left), and ambigous label (right) due to multiple possible classes.
 :::
 
 ::: {.incremental}

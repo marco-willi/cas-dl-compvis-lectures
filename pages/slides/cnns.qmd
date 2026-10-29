@@ -51,14 +51,6 @@ Flattening **destroys spatial structure**.
 
 Draw a digit in the centre, then draw it small in a corner. Does the prediction hold? [Open in new tab](https://adamharley.com/nn_vis/mlp/2d.html){target="_blank"}
 
-
-## Demo: A CNN Reads Digits
-
-<iframe data-src="https://adamharley.com/nn_vis/cnn/2d.html" width="100%" height="820" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: CNN on MNIST (Adam Harley)"></iframe>
-
-Same test. What is different inside the network? [Open in new tab](https://adamharley.com/nn_vis/cnn/2d.html){target="_blank"}
-
-
 ## MLPs and How they Learn
 
 ![]({{< meta params.images_path >}}mlp_images_examples_permutation.png){fig-align="center"}
@@ -70,6 +62,16 @@ Same test. What is different inside the network? [Open in new tab](https://adamh
 ::: {.fragment}
 Yes, equally well: an MLP does not use the **neighbourhood** of pixels. We need an architecture with **inductive biases** for images.
 :::
+
+
+## Demo: A CNN Reads Digits
+
+<iframe data-src="https://adamharley.com/nn_vis/cnn/2d.html" width="100%" height="820" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: CNN on MNIST (Adam Harley)"></iframe>
+
+Same test. What is different inside the network? [Open in new tab](https://adamharley.com/nn_vis/cnn/2d.html){target="_blank"}
+
+
+
 
 
 ## Invariance and Equivariance
@@ -107,13 +109,13 @@ A classifier should produce **"cow"** in all four cases.
 
 ::: {#fig-cnns-equivariance-example layout-ncol=2 fig-width=6}
 
-![Original]({{< meta params.images_path >}}cows2_equivariance_original.jpg){width=75%}
+![Original]({{< meta params.images_path >}}cows2_equivariance_original.jpg){width=50%}
 
-![Shifted right]({{< meta params.images_path >}}cows2_equivariance_shift_right.jpg){width=75%}
+![Shifted right]({{< meta params.images_path >}}cows2_equivariance_shift_right.jpg){width=50%}
 
-![Shifted left]({{< meta params.images_path >}}cows2_equivariance_shift_left.jpg){width=75%}
+![Shifted left]({{< meta params.images_path >}}cows2_equivariance_shift_left.jpg){width=50%}
 
-![Shifted up + right]({{< meta params.images_path >}}cows2_equivariance_shift_up.jpg){width=75%}
+![Shifted up + right]({{< meta params.images_path >}}cows2_equivariance_shift_up.jpg){width=50%}
 
 The bounding boxes **move with** the cows.
 :::
@@ -152,7 +154,6 @@ A neuron only connects to a small spatial patch of the input.
 ::: {.incremental}
 - MLPs:  minimal bias, very general, **data-hungry**
 - CNNs:  assume **locality + translation equivariance**
-- Transformers:  assume **long-range dependencies**
 :::
 
 ::: {.fragment}
@@ -187,22 +188,24 @@ $I$: input, $K$: kernel (smaller than $I$), $b$: bias
 Find a kernel that detects horizontal edges. [Open in new tab](../../demos/convolution/index.html){target="_blank"}
 
 
-## Convolution on Multiple Channels
+## Convolution Layer: One Filter
 
-![]({{< meta params.images_path >}}conv_rgb_channels.png){width=75%}
-
-::: {.fragment}
-Each channel's filter slice is applied to its input channel; the per-channel sums plus the bias collapse to **one** output value.
-:::
+![Source: @johnson_eecs_2019]({{< meta params.images_path >}}conv_activation_map.jpg){width=80%}
 
 
-## Many Filters, Many Activation Maps
+## Convolution Layer: Two Filters
 
-![]({{< meta params.images_path >}}conv_multi_filter.png){width=80%}
+![Source: @johnson_eecs_2019]({{< meta params.images_path >}}conv_activation_map2.jpg){width=80%}
 
-::: {.fragment}
-Each filter produces one activation map; $C_{out}$ filters → $C_{out}$ channels.
-:::
+
+## Convolution Layer: Many Filters
+
+![Source: @johnson_eecs_2019]({{< meta params.images_path >}}conv_activation_map3.jpg){width=80%}
+
+
+## Convolution Layer: A Batch
+
+![Source: @johnson_eecs_2019]({{< meta params.images_path >}}conv_activation_map4.jpg){width=80%}
 
 
 ## Convolutional Neural Networks
@@ -228,6 +231,36 @@ Key parameters to configure a convolutional layer:
 - **Stride** ($s$): Step size when moving the kernel
 - **Dilation** ($d$): Spacing between kernel elements
 :::
+
+
+## Stride 1
+
+![Stride (1, 1). Left: input activations with the positions of the center pixel (red).]({{< meta params.images_path >}}stride1_example.jpg){width=80%}
+
+
+## Stride 2
+
+![Stride (2, 2): the activation map gets smaller.]({{< meta params.images_path >}}stride2_example.jpg){width=80%}
+
+
+## Padding
+
+![Left: input (yellow) with zero-padding (white border), middle: filter, right: output.]({{< meta params.images_path >}}padding_example_result.jpg){width=80%}
+
+
+## Kernel Size 3×3
+
+![Zero-padding and $3 \times 3$ kernel: spatial resolution unchanged.]({{< meta params.images_path >}}kernel_size_example_3x3.jpg){width=80%}
+
+
+## Kernel Size 5×5
+
+![Zero-padding and $5 \times 5$ kernel: spatial resolution unchanged.]({{< meta params.images_path >}}kernel_size_example_5x5.jpg){width=80%}
+
+
+## Dilation
+
+![Kernel with dilation 2 (middle) applied to the input (left) to produce the output (right).]({{< meta params.images_path >}}dilation_example.jpg){width=80%}
 
 
 ## Demo: Convolution Parameters
@@ -290,15 +323,6 @@ Are convolutions translation invariant, equivariant, or both?
 ![Source: @johnson_eecs_2019]({{< meta params.images_path >}}conv_stacking.jpg){width=100% height=70%}
 
 
-## Demo: Receptive Field
-
-<div style="height: 835px;">
-<iframe data-src="../../demos/cnns/receptive_field/index.html" width="1460" height="705" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.18); transform-origin: top left;" title="Interactive demo: receptive field of stacked convolutions"></iframe>
-</div>
-
-Select an activation in the last layer: which inputs can influence it? [Open in new tab](../../demos/cnns/receptive_field/index.html){target="_blank"}
-
-
 ## Receptive Field: Formula
 
 The receptive field of a CNN $r_0$:
@@ -310,6 +334,15 @@ r_0 = \sum_{l=1}^L \left( (k_l - 1) \prod_{i=1}^{l-1} s_i \right) + 1
 - $L$: Total number of layers
 - $k_l$: Kernel size at layer $l$
 - $s_i$: Stride at layer $i$, from layer 1 up to $l-1$
+
+
+## Demo: Receptive Field
+
+<div style="height: 835px;">
+<iframe data-src="../../demos/cnns/receptive_field/index.html" width="1460" height="705" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.18); transform-origin: top left;" title="Interactive demo: receptive field of stacked convolutions"></iframe>
+</div>
+
+Select an activation in the last layer: which inputs can influence it? [Open in new tab](../../demos/cnns/receptive_field/index.html){target="_blank"}
 
 
 ## Quiz: Receptive Field
@@ -426,7 +459,7 @@ $(3 \times 3 \times 3 \times 16) + 16 = 432 + 16 = 448$ parameters
 <iframe data-src="../../demos/cnns/cnns_vs_mlp_demo/index.html" width="1800" height="1290" style="border: 1px solid #ddd; border-radius: 6px; max-height: none; transform: scale(0.7); transform-origin: top left;" title="Interactive demo: MLP vs CNN on shifted MNIST digits"></iframe>
 </div>
 
-Move the digit: which network still recognizes it? [Open in new tab](../../demos/cnns/cnns_vs_mlp_demo/index.html){target="_blank"}
+Move the digit: which network still recognizes it? Questions and answers: section "Questions" in the demo. [Open in new tab](../../demos/cnns/cnns_vs_mlp_demo/index.html){target="_blank"}
 
 
 # References

@@ -42,8 +42,11 @@ setting is selected.
 
 ## Usage
 
-The page has four collapsible sections: "Training data" (5 examples per type of training data,
-open), "Move the digit" (open), "Look inside the CNNs" and "Verification against Python" (closed).
+The page has six collapsible sections: "Training data" (5 examples per type of training data,
+open), "Architectures" (layer tables, closed), "Move the digit" (open), "Look inside the CNNs",
+"Questions" and "Verification against Python" (closed). The layer tables are static HTML: update
+them when the networks change. "Questions" repeats the exercise of the lecture, each answer collapsed; keep
+both in sync.
 
 - **Move the digit**: drag it, click elsewhere on the canvas, use the arrow keys (Shift: 4 px), or
   click on an accuracy map.

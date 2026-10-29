@@ -105,6 +105,29 @@
   details[open] > summary { margin-bottom: 0.4rem; }
   details > .note:first-of-type { margin-top: 0; }
 
+  /* Architectures: one layer table per network */
+  .archs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; align-items: start; }
+  .arch { padding: 0.5rem 0.6rem; border-radius: 0.4rem; background: var(--panel); }
+  .arch h3 { margin: 0 0 0.3rem; font-size: 0.9rem; }
+  .arch table { width: 100%; border-collapse: collapse; font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+  .arch th, .arch td { padding: 0.1rem 0.3rem; text-align: left; border-bottom: 1px solid var(--line); }
+  .arch th { color: var(--muted); font-weight: 400; }
+  .arch td:nth-child(2) { white-space: nowrap; }
+  .arch td:last-child, .arch th:last-child { text-align: right; }
+  .arch tr.sum td { border-bottom: 0; font-weight: 600; }
+  .arch tr.trunk td:first-child { border-left: 3px solid var(--accent); }
+
+  /* Questions: one collapsible per question, the answer collapsed inside */
+  .questions details { margin-top: 0; padding: 0.4rem 0 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; font-size: inherit; }
+  .questions details[open] { padding-bottom: 0.2rem; }
+  .questions details summary { font-size: 0.85rem; }
+  .questions details > p, .questions details li { margin: 0.2rem 0; }
+  .questions details details { margin-top: 0.3rem; padding: 0.3rem 0.6rem; border: 0; border-radius: 0.3rem; background: var(--panel); }
+  .questions details details summary { font-weight: 400; color: var(--muted); }
+  .questions details details[open] > summary { margin-bottom: 0.2rem; }
+  .questions ul { margin: 0.2rem 0; padding-left: 1.2rem; }
+  .questions a { color: inherit; }
+
   /* Training data examples */
   .examples { display: grid; gap: 0.5rem; }
   .example-row { display: grid; grid-template-columns: 10rem minmax(0, 1fr); column-gap: 0.8rem; align-items: center; }
@@ -137,6 +160,7 @@
     .card > :not(.map) { grid-column: 1; }
     .card .map { grid-column: 2; grid-row: 1 / span 4; margin-top: 0; }
     .card .map-caption { grid-column: 1 / -1; }
+    .archs { grid-template-columns: 1fr; }
     .fmaps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .fmaps .head { grid-column: 1 / -1; }
   }
@@ -158,6 +182,60 @@
     <div class="example-row"><b>only top-left</b><span>every digit at position (dx, dy) = (0, 0)</span><div class="thumbs" id="examples-tl"></div></div>
     <div class="example-row"><b>anywhere</b><span>random position, dx and dy between 0 and 28</span><div class="thumbs" id="examples-all"></div></div>
   </div>
+</details>
+
+<details id="archs">
+  <summary>Architectures</summary>
+  <p class="note">Output shapes as C × H × W for one input image of 1 × 56 × 56. Both CNNs share the
+     same convolutional layers (orange): "same" padding keeps the spatial size, each 2 × 2
+     max-pooling (stride 2) halves it. They differ only in the head after conv3.</p>
+  <div class="archs">
+    <div class="arch">
+      <h3>MLP</h3>
+      <table>
+        <tr><th>Layer</th><th>Output</th><th>Parameters</th></tr>
+        <tr><td>Flatten</td><td>3,136</td><td>0</td></tr>
+        <tr><td>Linear + ReLU</td><td>128</td><td>401,536</td></tr>
+        <tr><td>Linear</td><td>10</td><td>1,290</td></tr>
+        <tr class="sum"><td>Total</td><td></td><td>402,826</td></tr>
+      </table>
+    </div>
+    <div class="arch">
+      <h3>CNN + FC</h3>
+      <table>
+        <tr><th>Layer</th><th>Output</th><th>Parameters</th></tr>
+        <tr class="trunk"><td>conv1 5 × 5, pad 2 + ReLU</td><td>16 × 56 × 56</td><td>416</td></tr>
+        <tr class="trunk"><td>MaxPool 2 × 2</td><td>16 × 28 × 28</td><td>0</td></tr>
+        <tr class="trunk"><td>conv2 5 × 5, pad 2 + ReLU</td><td>32 × 28 × 28</td><td>12,832</td></tr>
+        <tr class="trunk"><td>MaxPool 2 × 2</td><td>32 × 14 × 14</td><td>0</td></tr>
+        <tr class="trunk"><td>conv3 3 × 3, pad 1 + ReLU</td><td>64 × 14 × 14</td><td>18,496</td></tr>
+        <tr><td>Flatten</td><td>12,544</td><td>0</td></tr>
+        <tr><td>Linear + ReLU (fc1)</td><td>32</td><td>401,440</td></tr>
+        <tr><td>Linear (fc2)</td><td>10</td><td>330</td></tr>
+        <tr class="sum"><td>Total</td><td></td><td>433,514</td></tr>
+      </table>
+    </div>
+    <div class="arch">
+      <h3>CNN + GAP</h3>
+      <table>
+        <tr><th>Layer</th><th>Output</th><th>Parameters</th></tr>
+        <tr class="trunk"><td>conv1 5 × 5, pad 2 + ReLU</td><td>16 × 56 × 56</td><td>416</td></tr>
+        <tr class="trunk"><td>MaxPool 2 × 2</td><td>16 × 28 × 28</td><td>0</td></tr>
+        <tr class="trunk"><td>conv2 5 × 5, pad 2 + ReLU</td><td>32 × 28 × 28</td><td>12,832</td></tr>
+        <tr class="trunk"><td>MaxPool 2 × 2</td><td>32 × 14 × 14</td><td>0</td></tr>
+        <tr class="trunk"><td>conv3 3 × 3, pad 1 + ReLU</td><td>64 × 14 × 14</td><td>18,496</td></tr>
+        <tr><td>Global average pooling</td><td>64</td><td>0</td></tr>
+        <tr><td>Linear (fc1)</td><td>10</td><td>650</td></tr>
+        <tr class="sum"><td>Total</td><td></td><td>32,394</td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="note">The receptive field of conv3 is 24 × 24 pixels, so a single conv3 position does
+     not see a whole digit (28 × 28); the classifier combines several positions. In the CNN + FC,
+     93&nbsp;% of the parameters are in fc1, which has separate weights for each of the 64 × 14 × 14
+     conv3 values. The GAP head averages each conv3 channel over all positions and has 650
+     parameters. Training: cross-entropy, AdamW (learning rate 0.003), batch size 256, up to 20
+     epochs; the checkpoint with the best validation accuracy is kept.</p>
 </details>
 
 <details id="demo" open>
@@ -222,6 +300,99 @@
   </div>
   <p class="note">All maps are drawn at the same size, so they line up with the input. Each map is
      scaled to its own maximum (white). The dashed box marks the digit's position.</p>
+</details>
+
+<details id="questions" class="questions">
+  <summary>Questions</summary>
+  <p class="note">Use the setting "only top-left" for questions 1–3.</p>
+
+  <details>
+    <summary>1. Move the digit</summary>
+    <p>Drag the digit to the bottom-right corner. Which networks fail? Why does the CNN + FC
+       fail, although its convolutions are translation equivariant?</p>
+    <details>
+      <summary>Show answer</summary>
+      <p>The MLP and the CNN + FC fail: accuracy drops to about 10 %, which is chance level for
+         10 classes. The activation maps of the CNN + FC move with the digit, but the fully
+         connected layer has separate weights for every position of its 64 × 14 × 14 input. Only
+         the weights for the top-left positions have been trained on digits (see the weight map in
+         "Look inside the CNNs" and question 5). The MLP has the same problem directly on the
+         pixels.</p>
+    </details>
+  </details>
+
+  <details>
+    <summary>2. Look inside</summary>
+    <p>Open "Look inside the CNNs" and move the digit a few pixels. How do the activation maps of
+       conv1 and conv3 change? Which property, invariance or equivariance, does this
+       illustrate?</p>
+    <details>
+      <summary>Show answer</summary>
+      <p>The activation maps shift together with the input: f(t(x)) = t(f(x)), i.e. translation
+         equivariance. conv1 shifts by exactly the same number of pixels. conv3 operates after two
+         2 × 2 max-poolings and therefore shifts by a quarter of the distance; for shifts that are
+         not a multiple of 4 it only approximately keeps its pattern.</p>
+    </details>
+  </details>
+
+  <details>
+    <summary>3. Compare the heads</summary>
+    <p>Starting from the top-left position, move the digit by 1 pixel and by 4 pixels (arrow keys,
+       with Shift for 4 pixels). Compare the reported change of the classifier input for CNN + FC
+       and CNN + GAP. Why is the change for CNN + GAP small but not exactly zero?</p>
+    <details>
+      <summary>Show answer</summary>
+      <p>The input of the fully connected layer changes by roughly 40 % after 1 pixel and by more
+         than 100 % after 4 pixels, because the values move to positions with different weights.
+         Global average pooling averages over all positions, so its output changes by only about
+         5 %: the CNN + GAP is approximately translation invariant. It is not exactly invariant
+         because max-pooling with stride 2 is not equivariant to shifts that are not a multiple of
+         the stride (<a href="https://arxiv.org/abs/1805.12177" target="_blank" rel="noopener">Azulay
+         and Weiss, 2019</a>; <a href="https://arxiv.org/abs/1904.11486" target="_blank"
+         rel="noopener">Zhang, 2019</a>), and because of the zero-padding at the image border.</p>
+    </details>
+  </details>
+
+  <details>
+    <summary>4. Train on all positions</summary>
+    <p>Switch to "anywhere". The MLP now recognizes digits everywhere. What is the price?</p>
+    <details>
+      <summary>Show answer</summary>
+      <p>The MLP has to learn every position from data, i.e. the training data must contain the
+         digits at all positions (data augmentation). Even then it reaches only about 90 % accuracy
+         with 402,826 parameters, while the CNN + GAP reaches about 98 % with 32,394 parameters.
+         This is the inductive bias of convolutions at work.</p>
+    </details>
+  </details>
+
+  <details>
+    <summary>5. Weights of the FC head</summary>
+    <p>Open "Look inside the CNNs" and select CNN + FC. Explain the pattern of the weights of the
+       first FC layer for both types of training data: "only top-left" and "anywhere".</p>
+    <details>
+      <summary>Show answer</summary>
+      <p>The map shows, for each of the 14 × 14 positions of the conv3 map, the sum of the
+         absolute fc1 weights over all 64 channels and 32 neurons.</p>
+      <ul>
+        <li><b>only top-left</b>: the weights are large in the top-left corner (about 9 × 9
+            positions) and small and nearly uniform everywhere else. A digit at (0, 0) covers the
+            top-left 7 × 7 positions of the conv3 map (28 pixels / 4), and the receptive field of
+            conv3 widens this by about two positions. Everywhere else the conv3 maps are (almost)
+            always zero during training, so these weights receive (almost) no gradient and never
+            learn to recognize digits. A digit in the bottom-right corner meets exactly these
+            weights.</li>
+        <li><b>anywhere</b>: the weights are large at all positions, slightly larger in the center
+            and smaller towards the border. Every position has seen digits during training. The
+            center is covered by the digit for every offset, the border only for some offsets
+            (e.g. the right border only for large dx), so the weights there are trained less.</li>
+      </ul>
+      <p>In both cases each position has its own weights: the FC layer cannot share what it
+         learned at one position with the others. With "anywhere", it has learned the same digit
+         features separately for all 196 positions, from training data at every position. This is
+         why the CNN + FC needs 433,514 parameters, while the CNN + GAP reaches a similar accuracy
+         with 32,394.</p>
+    </details>
+  </details>
 </details>
 
 <details id="verify">
