@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.10.20">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -99,7 +99,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-29e00c98bbba659d91ab3844292f79dc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-79d1a0c49cc1dacd2e60a426aee88f06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -611,7 +611,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 </figure>
 </div>
 <p>It is easy for humans to describe the image. For example:</p>
-<div id="786269c4" class="cell" data-execution_count="1">
+<div id="93fed7be" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">A photograph of an elephant facing the camera.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">The elephant has large tusks and ears and is standing in a flat savannah.</span></span>
@@ -638,7 +638,7 @@ Figure&nbsp;1: Example image. <a href="https://unsplash.com/de/fotos/elefantenwa
 <li>Channels: 3 (RGB)</li>
 <li>Bits per pixel: 8 bits per channel</li>
 </ul>
-<div id="380c7179" class="cell" data-execution_count="2">
+<div id="9502795f" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="dataframe table table-sm table-striped align-middle caption-top small">
 <thead>
@@ -1353,8 +1353,8 @@ Figure&nbsp;19: Self-distilled DINOv3 features (ViT-B/16, [CLS] token) reveal fi
 </tr>
 <tr class="even">
 <td><strong>ResNet</strong></td>
-<td>Efficient supervised features</td>
-<td>Fast baselines</td>
+<td>Label-aligned features (ImageNet classes)</td>
+<td>Tasks close to the training classes</td>
 </tr>
 <tr class="odd">
 <td><strong>CLIP</strong></td>
@@ -1419,7 +1419,7 @@ Click for Discussion
 <ol type="1">
 <li><strong>DINOv3</strong>: Default choice for vision-centric tasks requiring discriminative power</li>
 <li><strong>CLIP</strong>: When zero-shot capabilities or text-image alignment is critical</li>
-<li><strong>Supervised CNN</strong>: When computation is limited and broad categories suffice</li>
+<li><strong>Supervised CNN</strong>: When the downstream task resembles the label set (e.g., ImageNet-like object categories)</li>
 <li><strong>Pixel space</strong>: Never for semantic tasks (only for exact duplicate detection)</li>
 </ol>
 </details>
@@ -2761,7 +2761,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-629"><a href="#cb2-629" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Model <span class="pp">|</span> Strength <span class="pp">|</span> Good For <span class="pp">|</span></span>
 <span id="cb2-630"><a href="#cb2-630" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|----------|----------|</span></span>
 <span id="cb2-631"><a href="#cb2-631" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Pixel** <span class="pp">|</span> Poor semantic similarity <span class="pp">|</span> Exact duplicates <span class="pp">|</span></span>
-<span id="cb2-632"><a href="#cb2-632" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ResNet** <span class="pp">|</span> Efficient supervised features <span class="pp">|</span> Fast baselines <span class="pp">|</span></span>
+<span id="cb2-632"><a href="#cb2-632" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **ResNet** <span class="pp">|</span> Label-aligned features (ImageNet classes) <span class="pp">|</span> Tasks close to the training classes <span class="pp">|</span></span>
 <span id="cb2-633"><a href="#cb2-633" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **CLIP** <span class="pp">|</span> Language-aligned semantics <span class="pp">|</span> Text-image search, zero-shot <span class="pp">|</span></span>
 <span id="cb2-634"><a href="#cb2-634" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **DINOv3** <span class="pp">|</span> Fine-grained visual similarity <span class="pp">|</span> Visual search, dense tasks <span class="pp">|</span></span>
 <span id="cb2-635"><a href="#cb2-635" aria-hidden="true" tabindex="-1"></a></span>
@@ -2809,7 +2809,7 @@ Siméoni, Oriane, Huy V. Vo, Maximilian Seitzer, et al. 2025. <em><span>DINOv3</
 <span id="cb2-677"><a href="#cb2-677" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-678"><a href="#cb2-678" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**DINOv3**: Default choice for vision-centric tasks requiring discriminative power</span>
 <span id="cb2-679"><a href="#cb2-679" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**CLIP**: When zero-shot capabilities or text-image alignment is critical</span>
-<span id="cb2-680"><a href="#cb2-680" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Supervised CNN**: When computation is limited and broad categories suffice</span>
+<span id="cb2-680"><a href="#cb2-680" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Supervised CNN**: When the downstream task resembles the label set (e.g., ImageNet-like object categories)</span>
 <span id="cb2-681"><a href="#cb2-681" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Pixel space**: Never for semantic tasks (only for exact duplicate detection)</span>
 <span id="cb2-682"><a href="#cb2-682" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-683"><a href="#cb2-683" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">details</span><span class="dt">&gt;</span></span>

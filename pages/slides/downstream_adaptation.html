@@ -7,8 +7,8 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e21500bb30e7ce080c64316834ee3be8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.10.19">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9ab36f385fac900fa0223a9633086f61.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.20">
 
   <meta name="author" content="Marco Willi">
   <title>CAS Deep Learning - Computer Vision – 6 - Adapting Models</title>
@@ -158,9 +158,6 @@
       margin-right: 0; 
     }
   </style>
-  <script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
-  <script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
-  <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -187,13 +184,17 @@ Marco Willi
 <h1>Motivation</h1>
 
 </section>
-<section id="the-question" class="slide level2 center">
-<h2>The Question</h2>
+<section id="why-adapt" class="slide level2 center">
+<h2>Why Adapt?</h2>
+<ul>
+<li class="fragment">Use <strong>powerful pretrained features</strong></li>
+<li class="fragment">Model a <strong>custom task</strong> with potentially <strong>few labeled images</strong></li>
+</ul>
+</section>
+<section id="how-to-adapt-and-train-a-model" class="slide level2 center">
+<h2>How to Adapt and Train a Model?</h2>
 <div class="fragment">
-<p>You have a pretrained encoder.</p>
-</div>
-<div class="fragment">
-<p>You have a task with <strong>limited labeled data</strong>.</p>
+<p>Which parts of the pretrained model stay frozen, which are trained?</p>
 </div>
 <div class="fragment">
 <p><strong>How much of the model should you train?</strong></p>
@@ -217,57 +218,41 @@ Marco Willi
 </section>
 <section id="five-strategies" class="slide level2">
 <h2>Five Strategies</h2>
-<div id="fig-da-strategies" class="quarto-float quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-da-strategies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell" data-reveal="true" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    subgraph K["&lt;div style='width:10em'&gt;k-NN&lt;/div&gt;"]
-        direction TB
-        K1["&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;frozen&lt;/div&gt;"] --&gt; K2["&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;frozen&lt;/div&gt;"] --&gt; K3["&lt;div style='width:8em'&gt;k-NN on features&lt;br/&gt;no training&lt;/div&gt;"]
-    end
-    subgraph A["&lt;div style='width:10em'&gt;Linear probe&lt;/div&gt;"]
-        direction TB
-        A1["&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;frozen&lt;/div&gt;"] --&gt; A2["&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;frozen&lt;/div&gt;"] --&gt; A3["&lt;div style='width:8em'&gt;Head&lt;br/&gt;trainable&lt;/div&gt;"]
-    end
-    subgraph B["&lt;div style='width:10em'&gt;Partial fine-tuning&lt;/div&gt;"]
-        direction TB
-        B1["&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;frozen&lt;/div&gt;"] --&gt; B2["&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;trainable&lt;/div&gt;"] --&gt; B3["&lt;div style='width:8em'&gt;Head&lt;br/&gt;trainable&lt;/div&gt;"]
-    end
-    subgraph D["&lt;div style='width:10em'&gt;LoRA&lt;/div&gt;"]
-        direction TB
-        D1["&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;frozen + LoRA&lt;/div&gt;"] --&gt; D2["&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;frozen + LoRA&lt;/div&gt;"] --&gt; D3["&lt;div style='width:8em'&gt;Head&lt;br/&gt;trainable&lt;/div&gt;"]
-    end
-    subgraph C["&lt;div style='width:10em'&gt;Full fine-tuning&lt;/div&gt;"]
-        direction TB
-        C1["&lt;div style='width:8em'&gt;Early blocks&lt;br/&gt;trainable&lt;/div&gt;"] --&gt; C2["&lt;div style='width:8em'&gt;Later blocks&lt;br/&gt;trainable&lt;/div&gt;"] --&gt; C3["&lt;div style='width:8em'&gt;Head&lt;br/&gt;trainable&lt;/div&gt;"]
-    end
-    K ~~~ A ~~~ B ~~~ D ~~~ C
-    classDef frozen fill:#dbeafe,stroke:#2563eb,color:#172554
-    classDef train fill:#ffedd5,stroke:#ea580c,color:#7c2d12
-    classDef mixed fill:#dbeafe,stroke:#ea580c,color:#172554,stroke-width:2px,stroke-dasharray:6 3
-    classDef none fill:#ffffff,stroke:#6b7280,color:#1f2328,stroke-dasharray:6 3
-    classDef panel fill:#f6f7f9,stroke:#d5d9e0,color:#1f2328
-    class K1,K2,A1,A2,B1 frozen
-    class A3,B2,B3,C1,C2,C3,D3 train
-    class D1,D2 mixed
-    class K3 none
-    class K,A,B,C,D panel
-</pre>
+<style>
+.da-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; font-size: 30px; text-align: center; }
+.da-col { background: #f6f7f9; border: 2px solid #d5d9e0; border-radius: 8px; padding: 14px; }
+.da-col b { display: block; margin-bottom: 12px; }
+.da-box { border: 2px solid; border-radius: 4px; padding: 10px 4px; line-height: 1.25; }
+.da-arrow { color: #6b7280; line-height: 1.3; }
+.da-frozen { background: #dbeafe; border-color: #2563eb; color: #172554; }
+.da-train { background: #ffedd5; border-color: #ea580c; color: #7c2d12; }
+.da-mixed { background: #dbeafe; border: 3px dashed #ea580c; color: #172554; }
+.da-none { background: #fff; border: 2px dashed #6b7280; color: #1f2328; }
+</style>
+<div class="da-grid">
+  <div class="da-col"><b>k-NN</b>
+    <div class="da-box da-frozen">Early blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-frozen">Later blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-none">k-NN on features<br>no training</div></div>
+  <div class="da-col"><b>Linear probe</b>
+    <div class="da-box da-frozen">Early blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-frozen">Later blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Head<br>trainable</div></div>
+  <div class="da-col"><b>Partial fine-tuning</b>
+    <div class="da-box da-frozen">Early blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Later blocks<br>trainable</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Head<br>trainable</div></div>
+  <div class="da-col"><b>LoRA</b>
+    <div class="da-box da-mixed">Early blocks<br>frozen + LoRA</div><div class="da-arrow">↓</div>
+    <div class="da-box da-mixed">Later blocks<br>frozen + LoRA</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Head<br>trainable</div></div>
+  <div class="da-col"><b>Full fine-tuning</b>
+    <div class="da-box da-train">Early blocks<br>trainable</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Later blocks<br>trainable</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Head<br>trainable</div></div>
 </div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-da-strategies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Blue: frozen, orange: trainable, dashed orange: frozen + trainable low-rank update.
-</figcaption>
-</figure>
+<div style="font-size: 70%;">
+<p>Blue: frozen, orange: trainable, dashed orange: frozen + trainable low-rank update.</p>
 </div>
 <div class="fragment highlight-red">
 <p><strong>Options to compare, not a fixed ranking: start with frozen features.</strong></p>
@@ -402,8 +387,8 @@ Figure&nbsp;1: Blue: frozen, orange: trainable, dashed orange: frozen + trainabl
 <h2>What Limits Your Baseline?</h2>
 <table class="caption-top">
 <colgroup>
-<col style="width: 40%">
-<col style="width: 60%">
+<col style="width: 35%">
+<col style="width: 65%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -421,40 +406,25 @@ Figure&nbsp;1: Blue: frozen, orange: trainable, dashed orange: frozen + trainabl
 <td>Compare general, vision-language and domain-specific encoders</td>
 </tr>
 <tr class="odd">
-<td>Does the task need spatial predictions?</td>
-<td>Patch / feature-map outputs and a decoder or detection head</td>
+<td>What output does the task need?</td>
+<td>Image-level vector, spatial features (decoder / detection head) or similarity embedding</td>
 </tr>
 <tr class="even">
 <td>Does the probe underfit?</td>
-<td>More capable head, partial FT, LoRA or full FT</td>
+<td>More capable head, partial FT, LoRA or full FT: keep it if <strong>held-out</strong> performance justifies the cost</td>
 </tr>
 <tr class="odd">
 <td>Is the model overfitting?</td>
 <td>Validation design, regularization, augmentation, less capacity</td>
 </tr>
 <tr class="even">
-<td>Is training expensive?</td>
-<td>Cache frozen features, smaller backbone, parameter-efficient methods</td>
-</tr>
-<tr class="odd">
-<td>Is inference expensive?</td>
-<td>Backbone, input size, precision; freezing alone does not help</td>
+<td>Is training or inference expensive?</td>
+<td>Training: cache frozen features, parameter-efficient methods. Inference: backbone, input size, precision</td>
 </tr>
 </tbody>
 </table>
 <div class="fragment">
-<p>Establish a reliable baseline, then investigate what limits it.</p>
-</div>
-</section>
-<section id="three-questions-before-fine-tuning" class="slide level2">
-<h2>Three Questions Before Fine-Tuning</h2>
-<ol type="1">
-<li class="fragment">Are the pretrained features already useful for the target task?</li>
-<li class="fragment">Does the task require an image-level vector, spatial features, or a similarity embedding?</li>
-<li class="fragment">Does updating the encoder improve <strong>held-out</strong> performance enough to justify the cost?</li>
-</ol>
-<div class="fragment">
-<p>There is <strong>no universal dataset-size threshold</strong> that determines the best strategy.</p>
+<p>Establish a reliable frozen baseline first. There is <strong>no universal dataset-size threshold</strong> that determines the best strategy.</p>
 </div>
 </section></section>
 <section>
@@ -487,7 +457,7 @@ Figure&nbsp;1: Blue: frozen, orange: trainable, dashed orange: frozen + trainabl
 <p>Recommended start: <strong>linear probe</strong> (optionally k-NN) on both encoders, with a <strong>patient-level split</strong>.</p>
 </div>
 <div class="fragment">
-<p>Evaluate AUROC and sensitivity. If both frozen baselines are inadequate, compare fine-tuning starting from the better encoder.</p>
+<p>If both frozen baselines are inadequate, compare fine-tuning starting from the better encoder.</p>
 </div>
 <div class="fragment">
 <p>The number of images alone does not decide the method.</p>

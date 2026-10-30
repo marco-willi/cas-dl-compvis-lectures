@@ -2235,7 +2235,7 @@ At a glance, the four representations differ in what they are good for:
 | Model | Strength | Good For |
 |-------|----------|----------|
 | **Pixel** | Poor semantic similarity | Exact duplicates |
-| **ResNet** | Efficient supervised features | Fast baselines |
+| **ResNet** | Label-aligned features (ImageNet classes) | Tasks close to the training classes |
 | **CLIP** | Language-aligned semantics | Text-image search, zero-shot |
 | **DINOv3** | Fine-grained visual similarity | Visual search, dense tasks |
 
@@ -2281,7 +2281,7 @@ Looking at the similarity matrices, which representation do you prefer and why?
 
 1. **DINOv3**: Default choice for vision-centric tasks requiring discriminative power
 2. **CLIP**: When zero-shot capabilities or text-image alignment is critical
-3. **Supervised CNN**: When computation is limited and broad categories suffice
+3. **Supervised CNN**: When the downstream task resembles the label set (e.g., ImageNet-like object categories)
 4. **Pixel space**: Never for semantic tasks (only for exact duplicate detection)
 
 **Task-Relevant Invariance**
@@ -3220,7 +3220,7 @@ Generally: inductive biases are beneficial because they do not need to be learne
 
 - **Global context tasks**: Classifying a scene (e.g., "kitchen" vs "office") requires understanding the spatial arrangement of objects across the entire image, not just local patterns.
 - **Long-range dependencies**: Detecting that a person is holding a leash connected to a dog requires relating distant image regions.
-- **Non-local textures**: Some textures and patterns are defined by relationships between non-adjacent regions.
+- **Comparing distant regions**: Deciding whether two objects are the same, or whether an image is symmetric, requires comparing regions that are far apart.
 
 In these cases, a ViT's ability to attend globally from the first layer can be an advantage — though the same effect can be achieved in CNNs by stacking many layers to grow the receptive field.
 

@@ -7,8 +7,8 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e21500bb30e7ce080c64316834ee3be8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.10.19">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9ab36f385fac900fa0223a9633086f61.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.20">
 
   <meta name="author" content="Marco Willi">
   <title>CAS Deep Learning - Computer Vision – 7 - Modern Vision Backbones</title>
@@ -287,14 +287,6 @@ Marco Willi
 <p>After even <strong>one</strong> transformer layer, every output has aggregated information from all patches.</p>
 </div>
 </section>
-<section id="what-attention-learns" class="slide level2">
-<h2>What Attention Learns</h2>
-
-<img data-src="../../assets/images/vision_transformers/attention_matrices.png" class="r-stretch quarto-figure-center" id="fig-vit-attention-maps1"><p class="caption">Attention weight matrices.</p></section>
-<section id="what-attention-learns-1" class="slide level2">
-<h2>What Attention Learns</h2>
-
-<img data-src="../../assets/images/vision_transformers/attention_spatial.png" class="r-stretch quarto-figure-center" id="fig-vit-attention-maps2"><p class="caption">Spatial attention maps overlaid on the image.</p></section>
 <section id="demo-attention-explorer" class="slide level2">
 <h2>Demo: Attention Explorer</h2>
 <iframe data-src="../../demos/vision_transformers/attention_explorer/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: ViT attention explorer">
@@ -382,27 +374,16 @@ Marco Willi
 </section>
 <section id="quiz-when-can-locality-hurt" class="slide level2">
 <h2>Quiz: When Can Locality Hurt?</h2>
-<p>Where might a strong local bias become limiting?</p>
+<p>Can you think of a task where the locality assumption of CNNs is a disadvantage?</p>
 <div class="fragment">
 <ul>
-<li><strong>Global layout</strong>: distinguishing scenes may require the arrangement of many regions, not just local patches</li>
+<li><strong>Global layout</strong>: “kitchen” vs.&nbsp;“office” depends on how objects are arranged across the whole image</li>
+<li><strong>Long-range relations</strong>: a person holding a leash attached to a dog far away</li>
+<li><strong>Comparing distant regions</strong>: are two objects the same? Is the image symmetric?</li>
 </ul>
 </div>
 <div class="fragment">
-<ul>
-<li><strong>Long-range relations</strong>: e.g.&nbsp;person, leash, and dog may be far apart in the image</li>
-</ul>
-</div>
-<div class="fragment">
-<ul>
-<li><strong>Repeated / non-local patterns</strong>: the relevant structure may be defined by relationships between distant regions</li>
-</ul>
-</div>
-<div class="fragment">
-<p>CNNs can capture these with enough depth and pooling, but global interactions are indirect.</p>
-</div>
-<div class="fragment">
-<p>ViTs model long-range interactions more directly through self-attention.</p>
+<p>CNNs get there only indirectly, by stacking layers until the receptive field is large enough. ViTs relate any two patches directly, from layer 1.</p>
 </div>
 </section></section>
 <section>

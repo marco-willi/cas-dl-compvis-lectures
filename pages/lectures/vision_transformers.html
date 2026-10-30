@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.10.20">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -99,7 +99,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-29e00c98bbba659d91ab3844292f79dc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-79d1a0c49cc1dacd2e60a426aee88f06.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -902,7 +902,7 @@ Key considerations
 <ul>
 <li><strong>Global context tasks</strong>: Classifying a scene (e.g., “kitchen” vs “office”) requires understanding the spatial arrangement of objects across the entire image, not just local patterns.</li>
 <li><strong>Long-range dependencies</strong>: Detecting that a person is holding a leash connected to a dog requires relating distant image regions.</li>
-<li><strong>Non-local textures</strong>: Some textures and patterns are defined by relationships between non-adjacent regions.</li>
+<li><strong>Comparing distant regions</strong>: Deciding whether two objects are the same, or whether an image is symmetric, requires comparing regions that are far apart.</li>
 </ul>
 <p>In these cases, a ViT’s ability to attend globally from the first layer can be an advantage — though the same effect can be achieved in CNNs by stacking many layers to grow the receptive field.</p>
 </details>
@@ -928,7 +928,7 @@ Key considerations
 <section id="in-practice" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="in-practice"><span class="header-section-number">5.2</span> In Practice</h3>
 <p>Both architectures are readily available through libraries such as <a href="https://github.com/huggingface/pytorch-image-models">timm</a>, which provides hundreds of pretrained models.</p>
-<div id="5852ae7f" class="cell" data-execution_count="1">
+<div id="5b8ada0a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> timm</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load a pretrained CNN</span></span>
@@ -1715,7 +1715,7 @@ Werff, Tobias van der. 2024. <em><span>CNN</span> Vs. <span>Vision</span> <span>
 <span id="cb3-265"><a href="#cb3-265" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-266"><a href="#cb3-266" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Global context tasks**: Classifying a scene (e.g., "kitchen" vs "office") requires understanding the spatial arrangement of objects across the entire image, not just local patterns.</span>
 <span id="cb3-267"><a href="#cb3-267" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Long-range dependencies**: Detecting that a person is holding a leash connected to a dog requires relating distant image regions.</span>
-<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Non-local textures**: Some textures and patterns are defined by relationships between non-adjacent regions.</span>
+<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Comparing distant regions**: Deciding whether two objects are the same, or whether an image is symmetric, requires comparing regions that are far apart.</span>
 <span id="cb3-269"><a href="#cb3-269" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-270"><a href="#cb3-270" aria-hidden="true" tabindex="-1"></a>In these cases, a ViT's ability to attend globally from the first layer can be an advantage — though the same effect can be achieved in CNNs by stacking many layers to grow the receptive field.</span>
 <span id="cb3-271"><a href="#cb3-271" aria-hidden="true" tabindex="-1"></a></span>

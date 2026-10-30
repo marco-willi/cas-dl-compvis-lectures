@@ -7,8 +7,8 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e21500bb30e7ce080c64316834ee3be8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.10.19">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9ab36f385fac900fa0223a9633086f61.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.20">
 
   <meta name="author" content="Marco Willi">
   <title>CAS Deep Learning - Computer Vision – 5 - Representation Learning</title>
@@ -213,7 +213,7 @@ Marco Willi
 </blockquote>
 </div>
 <div class="fragment">
-<div id="147efbf2" class="cell" data-execution_count="1">
+<div id="a50f632f" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-display" data-execution_count="1">
 <table class="dataframe table table-sm table-striped align-middle caption-top">
 <thead>
@@ -573,6 +573,14 @@ Shared embedding space for images and text
 </div>
 </div>
 </div>
+</section>
+<section id="demo-dinov3-patch-similarity" class="slide level2">
+<h2>Demo: DINOv3 Patch Similarity</h2>
+<div style="height: 835px;">
+<iframe data-src="../../demos/representation_learning/patch_similarity/index.html" width="1460" height="705" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.18); transform-origin: top left;" title="Interactive demo: DINOv3 patch similarity">
+</iframe>
+</div>
+<p>Select the ear of an elephant: which patches match in the rhino and the giraffe? <a href="../../demos/representation_learning/patch_similarity/index.html" target="_blank">Open in new tab</a></p>
 </section></section>
 <section>
 <section id="comparing-representations" class="title-slide slide level1 center">
@@ -699,22 +707,22 @@ Shared embedding space for images and text
 <tbody>
 <tr class="odd">
 <td><strong>Pixel</strong></td>
-<td>❌ Poor semantic similarity</td>
+<td>Poor semantic similarity</td>
 <td>Exact duplicates</td>
 </tr>
 <tr class="even">
 <td><strong>ResNet</strong></td>
-<td>⚠️ Efficient supervised features</td>
-<td>Fast baselines</td>
+<td>Label-aligned features (ImageNet classes)</td>
+<td>Tasks close to the training classes</td>
 </tr>
 <tr class="odd">
 <td><strong>CLIP</strong></td>
-<td>✅ Language-aligned semantics</td>
+<td>Language-aligned semantics</td>
 <td>Text-image search, zero-shot</td>
 </tr>
 <tr class="even">
 <td><strong>DINOv3</strong></td>
-<td>✅ Fine-grained visual similarity</td>
+<td>Fine-grained visual similarity</td>
 <td>Visual search, dense tasks</td>
 </tr>
 </tbody>
