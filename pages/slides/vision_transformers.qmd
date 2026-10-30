@@ -129,24 +129,6 @@ After even **one** transformer layer, every output has aggregated information fr
 :::
 
 
-## What Attention Learns
-
-::: {#fig-vit-attention-maps1}
-
-![Attention weight matrices.]({{< meta params.images_path >}}attention_matrices.png)
-
-:::
-
-
-
-## What Attention Learns
-
-::: {#fig-vit-attention-maps2}
-
-![Spatial attention maps overlaid on the image.]({{< meta params.images_path >}}attention_spatial.png)
-:::
-
-
 ## Demo: Attention Explorer
 
 <iframe data-src="../../demos/vision_transformers/attention_explorer/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: ViT attention explorer"></iframe>
@@ -200,26 +182,17 @@ A trained ViT learns some locality from data: wide in layer 1, more local in mid
 
 ## Quiz: When Can Locality Hurt?
 
-Where might a strong local bias become limiting?
+Can you think of a task where the locality assumption of CNNs is a disadvantage?
 
 ::: {.fragment}
-- **Global layout**:  distinguishing scenes may require the arrangement of many regions, not just local patches
+- **Global layout**: "kitchen" vs. "office" depends on how objects are arranged across the whole image
+- **Long-range relations**: a person holding a leash attached to a dog far away
+- **Comparing distant regions**: are two objects the same? Is the image symmetric?
 :::
 
 ::: {.fragment}
-- **Long-range relations**:  e.g. person, leash, and dog may be far apart in the image
-:::
-
-::: {.fragment}
-- **Repeated / non-local patterns**:  the relevant structure may be defined by relationships between distant regions
-:::
-
-::: {.fragment}
-CNNs can capture these with enough depth and pooling, but global interactions are indirect.
-:::
-
-::: {.fragment}
-ViTs model long-range interactions more directly through self-attention.
+CNNs get there only indirectly, by stacking layers until the receptive field is large enough.
+ViTs relate any two patches directly, from layer 1.
 :::
 
 

@@ -14,14 +14,18 @@ $$
 # Motivation
 
 
-## The Question {.center}
+## Why Adapt? {.center}
 
-::: {.fragment}
-You have a pretrained encoder.
+::: {.incremental}
+- Use **powerful pretrained features**
+- Model a **custom task** with potentially **few labeled images**
 :::
 
+
+## How to Adapt and Train a Model? {.center}
+
 ::: {.fragment}
-You have a task with **limited labeled data**.
+Which parts of the pretrained model stay frozen, which are trained?
 :::
 
 ::: {.fragment}
@@ -49,44 +53,43 @@ A larger training set helps, but it is not the only deciding factor.
 
 ## Five Strategies
 
-::: {#fig-da-strategies}
-
-```{mermaid}
-%%| echo: false
-flowchart LR
-    subgraph K["<div style='width:10em'>k-NN</div>"]
-        direction TB
-        K1["<div style='width:8em'>Early blocks<br/>frozen</div>"] --> K2["<div style='width:8em'>Later blocks<br/>frozen</div>"] --> K3["<div style='width:8em'>k-NN on features<br/>no training</div>"]
-    end
-    subgraph A["<div style='width:10em'>Linear probe</div>"]
-        direction TB
-        A1["<div style='width:8em'>Early blocks<br/>frozen</div>"] --> A2["<div style='width:8em'>Later blocks<br/>frozen</div>"] --> A3["<div style='width:8em'>Head<br/>trainable</div>"]
-    end
-    subgraph B["<div style='width:10em'>Partial fine-tuning</div>"]
-        direction TB
-        B1["<div style='width:8em'>Early blocks<br/>frozen</div>"] --> B2["<div style='width:8em'>Later blocks<br/>trainable</div>"] --> B3["<div style='width:8em'>Head<br/>trainable</div>"]
-    end
-    subgraph D["<div style='width:10em'>LoRA</div>"]
-        direction TB
-        D1["<div style='width:8em'>Early blocks<br/>frozen + LoRA</div>"] --> D2["<div style='width:8em'>Later blocks<br/>frozen + LoRA</div>"] --> D3["<div style='width:8em'>Head<br/>trainable</div>"]
-    end
-    subgraph C["<div style='width:10em'>Full fine-tuning</div>"]
-        direction TB
-        C1["<div style='width:8em'>Early blocks<br/>trainable</div>"] --> C2["<div style='width:8em'>Later blocks<br/>trainable</div>"] --> C3["<div style='width:8em'>Head<br/>trainable</div>"]
-    end
-    K ~~~ A ~~~ B ~~~ D ~~~ C
-    classDef frozen fill:#dbeafe,stroke:#2563eb,color:#172554
-    classDef train fill:#ffedd5,stroke:#ea580c,color:#7c2d12
-    classDef mixed fill:#dbeafe,stroke:#ea580c,color:#172554,stroke-width:2px,stroke-dasharray:6 3
-    classDef none fill:#ffffff,stroke:#6b7280,color:#1f2328,stroke-dasharray:6 3
-    classDef panel fill:#f6f7f9,stroke:#d5d9e0,color:#1f2328
-    class K1,K2,A1,A2,B1 frozen
-    class A3,B2,B3,C1,C2,C3,D3 train
-    class D1,D2 mixed
-    class K3 none
-    class K,A,B,C,D panel
+```{=html}
+<style>
+.da-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; font-size: 30px; text-align: center; }
+.da-col { background: #f6f7f9; border: 2px solid #d5d9e0; border-radius: 8px; padding: 14px; }
+.da-col b { display: block; margin-bottom: 12px; }
+.da-box { border: 2px solid; border-radius: 4px; padding: 10px 4px; line-height: 1.25; }
+.da-arrow { color: #6b7280; line-height: 1.3; }
+.da-frozen { background: #dbeafe; border-color: #2563eb; color: #172554; }
+.da-train { background: #ffedd5; border-color: #ea580c; color: #7c2d12; }
+.da-mixed { background: #dbeafe; border: 3px dashed #ea580c; color: #172554; }
+.da-none { background: #fff; border: 2px dashed #6b7280; color: #1f2328; }
+</style>
+<div class="da-grid">
+  <div class="da-col"><b>k-NN</b>
+    <div class="da-box da-frozen">Early blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-frozen">Later blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-none">k-NN on features<br>no training</div></div>
+  <div class="da-col"><b>Linear probe</b>
+    <div class="da-box da-frozen">Early blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-frozen">Later blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Head<br>trainable</div></div>
+  <div class="da-col"><b>Partial fine-tuning</b>
+    <div class="da-box da-frozen">Early blocks<br>frozen</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Later blocks<br>trainable</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Head<br>trainable</div></div>
+  <div class="da-col"><b>LoRA</b>
+    <div class="da-box da-mixed">Early blocks<br>frozen + LoRA</div><div class="da-arrow">↓</div>
+    <div class="da-box da-mixed">Later blocks<br>frozen + LoRA</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Head<br>trainable</div></div>
+  <div class="da-col"><b>Full fine-tuning</b>
+    <div class="da-box da-train">Early blocks<br>trainable</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Later blocks<br>trainable</div><div class="da-arrow">↓</div>
+    <div class="da-box da-train">Head<br>trainable</div></div>
+</div>
 ```
 
+::: {style="font-size: 70%;"}
 Blue: frozen, orange: trainable, dashed orange: frozen + trainable low-rank update.
 :::
 
@@ -203,29 +206,15 @@ At which rank does LoRA train as many parameters as full fine-tuning? [Open in n
 |---|---|
 | Are the features already useful? | Compare k-NN and linear probe |
 | Is the encoder right for this domain? | Compare general, vision-language and domain-specific encoders |
-| Does the task need spatial predictions? | Patch / feature-map outputs and a decoder or detection head |
-| Does the probe underfit? | More capable head, partial FT, LoRA or full FT |
+| What output does the task need? | Image-level vector, spatial features (decoder / detection head) or similarity embedding |
+| Does the probe underfit? | More capable head, partial FT, LoRA or full FT: keep it if **held-out** performance justifies the cost |
 | Is the model overfitting? | Validation design, regularization, augmentation, less capacity |
-| Is training expensive? | Cache frozen features, smaller backbone, parameter-efficient methods |
-| Is inference expensive? | Backbone, input size, precision; freezing alone does not help |
+| Is training or inference expensive? | Training: cache frozen features, parameter-efficient methods. Inference: backbone, input size, precision |
 
-: {tbl-colwidths="[40,60]"}
-
-::: {.fragment}
-Establish a reliable baseline, then investigate what limits it.
-:::
-
-
-## Three Questions Before Fine-Tuning
-
-::: {.incremental}
-1. Are the pretrained features already useful for the target task?
-2. Does the task require an image-level vector, spatial features, or a similarity embedding?
-3. Does updating the encoder improve **held-out** performance enough to justify the cost?
-:::
+: {tbl-colwidths="[35,65]"}
 
 ::: {.fragment}
-There is **no universal dataset-size threshold** that determines the best strategy.
+Establish a reliable frozen baseline first. There is **no universal dataset-size threshold** that determines the best strategy.
 :::
 
 
@@ -260,7 +249,7 @@ Recommended start: **linear probe** (optionally k-NN) on both encoders, with a *
 :::
 
 ::: {.fragment}
-Evaluate AUROC and sensitivity. If both frozen baselines are inadequate, compare fine-tuning starting from the better encoder.
+If both frozen baselines are inadequate, compare fine-tuning starting from the better encoder.
 :::
 
 ::: {.fragment}

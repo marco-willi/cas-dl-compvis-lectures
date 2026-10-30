@@ -382,6 +382,15 @@ What are the consequences if model training uses random left-right flips?
 :::
 
 
+## Demo: DINOv3 Patch Similarity
+
+<div style="height: 835px;">
+<iframe data-src="../../demos/representation_learning/patch_similarity/index.html" width="1460" height="705" style="border: 1px solid #ddd; border-radius: 6px; transform: scale(1.18); transform-origin: top left;" title="Interactive demo: DINOv3 patch similarity"></iframe>
+</div>
+
+Select the ear of an elephant: which patches match in the rhino and the giraffe? [Open in new tab](../../demos/representation_learning/patch_similarity/index.html){target="_blank"}
+
+
 # Comparing Representations
 
 ## Test Images Overview
@@ -447,10 +456,10 @@ Best semantic discrimination, excellent invariance to nuisance factors
 
 | Model | Strength | Good For |
 |-------|----------|----------|
-| **Pixel** | ❌ Poor semantic similarity | Exact duplicates |
-| **ResNet** | ⚠️ Efficient supervised features | Fast baselines |
-| **CLIP** | ✅ Language-aligned semantics | Text-image search, zero-shot |
-| **DINOv3** | ✅ Fine-grained visual similarity | Visual search, dense tasks |
+| **Pixel** | Poor semantic similarity | Exact duplicates |
+| **ResNet** | Label-aligned features (ImageNet classes) | Tasks close to the training classes |
+| **CLIP** | Language-aligned semantics | Text-image search, zero-shot |
+| **DINOv3** | Fine-grained visual similarity | Visual search, dense tasks |
 
 : {tbl-colwidths="[18,32,50]"}
 

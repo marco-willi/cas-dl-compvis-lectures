@@ -265,7 +265,7 @@ Generally: inductive biases are beneficial because they do not need to be learne
 
 - **Global context tasks**: Classifying a scene (e.g., "kitchen" vs "office") requires understanding the spatial arrangement of objects across the entire image, not just local patterns.
 - **Long-range dependencies**: Detecting that a person is holding a leash connected to a dog requires relating distant image regions.
-- **Non-local textures**: Some textures and patterns are defined by relationships between non-adjacent regions.
+- **Comparing distant regions**: Deciding whether two objects are the same, or whether an image is symmetric, requires comparing regions that are far apart.
 
 In these cases, a ViT's ability to attend globally from the first layer can be an advantage — though the same effect can be achieved in CNNs by stacking many layers to grow the receptive field.
 
