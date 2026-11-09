@@ -214,6 +214,11 @@ Marco Willi
 <li class="fragment">… continue until all pixels are generated</li>
 </ol>
 </section>
+<section id="demo-autoregressive-sampling" class="slide level2">
+<h2>Demo: Autoregressive Sampling</h2>
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=ar&amp;embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: autoregressive sampling">
+</iframe>
+</section>
 <section id="pros-cons" class="slide level2">
 <h2>Pros &amp; Cons</h2>
 <div class="fragment">
@@ -261,6 +266,11 @@ Marco Willi
 <div class="fragment">
 <p>Generator distribution tries to fool discriminator, while discriminator must distinguish real from fake (<span class="citation" data-cites="foster_generative_2023">Foster (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>).</p>
 </div>
+</section>
+<section id="demo-sampling-from-a-gan" class="slide level2">
+<h2>Demo: Sampling from a GAN</h2>
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=gan&amp;embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: sampling from a GAN">
+</iframe>
 </section>
 <section id="pros-cons-1" class="slide level2">
 <h2>Pros &amp; Cons</h2>
@@ -328,6 +338,11 @@ Marco Willi
 <p>Traversing the latent space → smooth interpolation between faces (<span class="citation" data-cites="prince_understanding_2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>).</p>
 </div>
 </section>
+<section id="demo-sampling-from-a-vae" class="slide level2">
+<h2>Demo: Sampling from a VAE</h2>
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=vae&amp;embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: sampling from a VAE">
+</iframe>
+</section>
 <section id="pros-cons-2" class="slide level2">
 <h2>Pros &amp; Cons</h2>
 <div class="fragment">
@@ -388,6 +403,11 @@ Marco Willi
 <p>The network is <strong>conditioned on the timestep <span class="math inline">\(t\)</span></strong> — noise level varies dramatically across steps.</p>
 </div>
 </section>
+<section id="demo-diffusion-sampling" class="slide level2">
+<h2>Demo: Diffusion Sampling</h2>
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=diffusion&amp;embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: diffusion sampling">
+</iframe>
+</section>
 <section id="training-objective" class="slide level2">
 <h2>Training Objective</h2>
 <div class="fragment">
@@ -416,7 +436,7 @@ Marco Willi
 <div class="fragment">
 <p><strong>Pros</strong></p>
 <ul>
-<li>High-quality, diverse outputs (currently SOTA)</li>
+<li>High-quality, diverse outputs</li>
 <li>Stable, reliable training</li>
 </ul>
 </div>
@@ -484,12 +504,10 @@ Marco Willi
 <p>No fresh noise is injected: given the initial noise, sampling is <strong>deterministic</strong>.</p>
 </div>
 </section>
-<section id="in-practice" class="slide level2">
-<h2>In Practice</h2>
-<ul>
-<li class="fragment"><strong>Stable Diffusion 3</strong> <span class="citation" data-cites="esser_scaling_2024">(<a href="#/references" role="doc-biblioref" onclick="">Esser et al. 2024</a>)</span>: transformer trained with a flow matching objective in latent space</li>
-<li class="fragment"><strong>FLUX.1 Kontext</strong> <span class="citation" data-cites="labs_flux1_2025">(<a href="#/references" role="doc-biblioref" onclick="">Labs et al. 2025</a>)</span>: flow matching for generation and instruction-based editing</li>
-</ul>
+<section id="demo-flow-matching-sampling" class="slide level2">
+<h2>Demo: Flow Matching Sampling</h2>
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=fm&amp;embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: flow matching sampling">
+</iframe>
 </section>
 <section id="pros-cons-4" class="slide level2">
 <h2>Pros &amp; Cons</h2>
@@ -570,17 +588,11 @@ Marco Willi
 <div id="ref-bansal_cold_2022" class="csl-entry" role="listitem">
 Bansal, Arpit, Eitan Borgnia, Hong-Min Chu, et al. 2022. <em>Cold <span>Diffusion</span>: <span>Inverting</span> <span>Arbitrary</span> <span>Image</span> <span>Transforms</span> <span>Without</span> <span>Noise</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2208.09392">https://doi.org/10.48550/arXiv.2208.09392</a>.
 </div>
-<div id="ref-esser_scaling_2024" class="csl-entry" role="listitem">
-Esser, Patrick, Sumith Kulal, Andreas Blattmann, et al. 2024. <span>“Scaling <span>Rectified</span> <span>Flow</span> <span>Transformers</span> for <span>High</span>-<span>Resolution</span> <span>Image</span> <span>Synthesis</span>.”</span> <em>Forty-First <span>International</span> <span>Conference</span> on <span>Machine</span> <span>Learning</span></em>. <a href="https://openreview.net/forum?id=FPnUhsQJ5B">https://openreview.net/forum?id=FPnUhsQJ5B</a>.
-</div>
 <div id="ref-foster_generative_2023" class="csl-entry" role="listitem">
 Foster, David. 2023. <em>Generative <span>Deep</span> <span>Learning</span></em>. 2nd ed. O’Reilly Media, Inc.
 </div>
 <div id="ref-goodfellow_generative_2014" class="csl-entry" role="listitem">
 Goodfellow, Ian J., Jean Pouget-Abadie, Mehdi Mirza, et al. 2014. <em>Generative <span>Adversarial</span> <span>Networks</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.1406.2661">https://doi.org/10.48550/arXiv.1406.2661</a>.
-</div>
-<div id="ref-labs_flux1_2025" class="csl-entry" role="listitem">
-Labs, Black Forest, Stephen Batifol, Andreas Blattmann, et al. 2025. <em><span>FLUX</span>.1 <span>Kontext</span>: <span>Flow</span> <span>Matching</span> for <span>In</span>-<span>Context</span> <span>Image</span> <span>Generation</span> and <span>Editing</span> in <span>Latent</span> <span>Space</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2506.15742">https://doi.org/10.48550/arXiv.2506.15742</a>.
 </div>
 <div id="ref-lipman_flow_2023" class="csl-entry" role="listitem">
 Lipman, Yaron, Ricky T. Q. Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le. 2023. <em>Flow <span>Matching</span> for <span>Generative</span> <span>Modeling</span></em>. arXiv. <a href="https://doi.org/10.48550/arXiv.2210.02747">https://doi.org/10.48550/arXiv.2210.02747</a>.

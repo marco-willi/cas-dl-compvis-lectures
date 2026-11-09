@@ -3862,6 +3862,26 @@ the figure illustrates how the families produce a sample: in a single network ev
 
 How different model families produce a sample. The images are computed from a real photo (masking, adding noise, interpolating with noise) and only illustrate the sampling process; they are not outputs of trained models. Modern diffusion and flow matching models usually operate in a compressed latent space rather than directly on pixels. The small sketches contrast the stochastic sampling path of many diffusion samplers with the smooth, deterministic path of flow matching.
 
+**Interactive Demo: How Models Sample an Image**
+
+The following demo shows the sampling mechanisms of the figure step by step, with one tab per model family. As in the figure, the intermediate steps are computed from fixed images and only illustrate the sampling process. The counter on the right shows how many network evaluations one image requires.
+
+**Explore the demo**
+
+1. Generate one image in every tab. How many network evaluations does each model family need?
+2. In the tab *Diffusion*, switch to *Forward (add noise)*. Why does the counter stay at 0?
+3. In the tab *VAE*, switch to *Reconstruct* and draw a few samples. Where does the sampled $\vect{z}$ lie, compared to *Generate*?
+4. In the tabs *Diffusion* and *Flow matching*, turn on *Compare paths* and press *Run again (same noise)*. What differs?
+
+**Click for possible answers**
+
+1. Autoregressive: one per token (144 here). GAN and VAE: a single forward pass of the generator or decoder. Diffusion and flow matching: one per step (50 here).
+2. The forward process is fixed and does not involve a network: it only adds noise and creates the training examples for the denoiser.
+3. Inside the ellipse of the encoder distribution $q_{\psi}(\vect{z} \mid \vect{x})$ of the input image. In *Generate*, $\vect{z}$ is drawn from the prior $\mathcal{N}(\vect{0}, \m{I})$, and the encoder is not needed.
+4. Diffusion takes a different path from the same starting noise, since fresh noise is added in every step. Flow matching repeats the path exactly: given the starting noise, sampling is deterministic.
+
+[Open the demo in a new tab](https://marco-willi.github.io/cas-dl-compvis-lectures/pages/demos/genai_models/image_sampling/index.html) or view the [source code](https://github.com/marco-willi/cas-dl-compvis-lectures-hs2026/tree/main/demos/genai_models/image_sampling).
+
 **Key idea**
 
 Generative models share a common goal: $p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})$. They differ in **what they optimize** to reach it and in **how they generate samples**.
