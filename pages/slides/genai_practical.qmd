@@ -31,35 +31,16 @@ The denoiser processes this full representation at **every** step.
 
 ![]({{< meta params.images_path >}}vae_roundtrip.png){.r-stretch}
 
-::: {.fragment}
-SD-XL VAE: the latent keeps what the denoiser needs, the decoder restores the pixels.
-:::
 
 
 ## Latent Diffusion Architecture
 
-![]({{< meta params.images_path >}}diffusion_sd_architecture_genbook.png){.r-stretch}
-
-::: {.fragment}
-**Training:** $\vect{x} \xrightarrow{\text{encoder}} \vect{z}$, add noise, learn to denoise $\vect{z}$
-:::
-
-::: {.fragment}
-**Generation:** $\vect{z}_T \rightarrow \cdots \rightarrow \vect{z}_0 \xrightarrow{\text{decoder}} \hat{\vect{x}}$. For editing, the encoder runs at inference too.
-:::
+![Source: Sanseviero et al., *Hands-On Generative AI with Transformers and Diffusion Models*, O'Reilly, 2024.]({{< meta params.images_path >}}diffusion_sd_architecture_genbook.png){.r-stretch}
 
 
 ## Why It Works, and What It Costs
 
 ![]({{< meta params.images_path >}}pixel_vs_latent_size.png){.r-stretch}
-
-::: {.fragment}
-Not 48× faster: cost also depends on the network, attention grows with tokens², plus one decoder pass.
-:::
-
-::: {.fragment}
-Fine detail (small text, faces) is limited by what the VAE can reconstruct.
-:::
 
 
 ## What Latent Diffusion Can Do
@@ -100,15 +81,6 @@ Latent → sequence of patch tokens, denoised with self-attention (@peebles_scal
 
 ::: {.fragment}
 SD3 / FLUX: diffusion transformer **+** flow matching. Architecture and objective are separate choices.
-:::
-
-
-## How Language Conditions the Image
-
-![]({{< meta params.images_path >}}cross_vs_joint_attention.svg){width=85%}
-
-::: {.fragment}
-Cross-attention: image tokens read fixed text tokens. Joint attention: text and image tokens update each other.
 :::
 
 
@@ -186,13 +158,6 @@ FLUX Kontext Pro (top) vs. Nano Banana 2 (bottom): who keeps the car's identity?
 :::
 
 
-## Quiz: Why a Vision-Language Model?
-
-Why might an **editing** model benefit from a vision-language model rather than only a text encoder?
-
-::: {.fragment}
-A text encoder sees only the words. A VLM reads the instruction **together with the input image**, so it can resolve *"the two trees"* or *"match the sofa"*.
-:::
 
 
 ## Exercise: Pretrained Generative Models and APIs {.center}
@@ -346,52 +311,3 @@ Provenance is a **system-level** problem.
 :::
 
 :::
-
-
-# Backup {visibility="uncounted"}
-
-## Where the Model Uses Each Word {visibility="uncounted"}
-
-![Cross-attention maps of Stable Diffusion 1.5, averaged over heads, layers and sampling steps.]({{< meta params.images_path >}}cross_attention_maps.png){width=90%}
-
-
-## U-Net vs. Diffusion Transformer {visibility="uncounted"}
-
-| Aspect | U-Net | Diffusion Transformer |
-|---|---|---|
-| Representation | spatial feature maps | token sequence |
-| Main op | conv + attention | self-attention + MLP |
-| Inductive bias | strong image locality | general sequence modeling |
-| Conditioning | cross-attention | cross-attn / joint attention |
-| Multimodal | possible | more natural |
-
-
-## The Adaptation Spectrum {visibility="uncounted"}
-
-| Method | What changes | When |
-|---|---|---|
-| Prompting | only the text | fast exploration |
-| Reference images / editing | input context | one-off subject or local edit |
-| Masks / inpainting / control | constrained generation | spatial / structural control |
-| Textual inversion | a learned token | lightweight concept |
-| LoRA / DreamBooth-LoRA | small adapter weights | persistent specialization |
-| Full fine-tuning | many / all weights | strongly specialized domain |
-
-
-## Adaptation Tooling {visibility="uncounted"}
-
-- [HF Diffusers LoRA](https://huggingface.co/docs/diffusers/en/training/lora)
-- [HF FLUX QLoRA](https://huggingface.co/blog/flux-qlora)
-- [Replicate FLUX fine-tuning](https://replicate.com/docs/get-started/fine-tune-with-flux)
-
-
-## Replicate {visibility="uncounted"}
-
-![]({{< meta params.images_path >}}replicate.jpg){.r-stretch}
-
-Hosted access to both proprietary and open-weight models.
-
-
-## Bias: The Washington Post Analysis {visibility="uncounted"}
-
-![]({{< meta params.images_path >}}ai_bias_wp_front.png){.r-stretch}
