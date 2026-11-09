@@ -231,7 +231,13 @@ $$\hat{\vect{x}} = g_{\theta}(\vect{y}, \vect{z}), \qquad \vect{z} \sim \mathcal
 - $\vect{z}$ → **how it varies** (diversity)
 :::
 
-::: {.fragment}
+
+## Latent Variables
+
+![]({{< meta params.images_path >}}intro_figures/conditional_generation.svg)
+
+## Latent Variables
+
 ::: {layout-ncol=3}
 
 ![]({{< meta params.images_path >}}elephant.jpg)
@@ -242,26 +248,23 @@ $$\hat{\vect{x}} = g_{\theta}(\vect{y}, \vect{z}), \qquad \vect{z} \sim \mathcal
 ![]({{< meta params.images_path >}}elephant_edit_dawn_nano-banana-2.jpg)
 
 :::
-:::
 
+- $\vect{y}$ → **what** to generate (control)
+- $\vect{z}$ → **how it varies** (diversity)
 
-
+**Question**: Where varies what?
 
 
 ## Quiz: Latent Variables {.center}
 
 ![Reproduced from @foster_generative_2023.]({{< meta params.images_path >}}intro_figures/latent_intuition_dataset.svg){width=60%}
 
-::: {.fragment}
-What could the latent variables be for this dataset?
-:::
 
-::: {.fragment}
-**Answer:** Width and height — 2 unobserved latent variables.
-:::
+**Question**: What could the latent variables be for this dataset?
 
 
-## Latent Space → Outputs
+
+## Latent Space to Outputs
 
 ![]({{< meta params.images_path >}}intro_figures/latent_intuition_space.svg){.r-stretch}
 
@@ -325,7 +328,7 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
 
 ## Creative vs. Faithful
 
-<style>
+<!-- <style>
 .creative-faithful-images {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -341,8 +344,20 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
   margin: 0 auto;
   display: block;
 }
-</style>
+</style> -->
 
+::: {layout-ncol=2}
+<!-- ::: {.creative-faithful-images} -->
+![]({{< meta params.images_path >}}monkey_toy.webp){width=30%}
+
+![]({{< meta params.images_path >}}monkey_toy_jungle_nano-banana-2.jpg){.fragment width=30%}
+<!-- ::: -->
+
+:::
+
+::: {.smaller}
+*Prompt: Create an image where this object is shown dancing in the jungle with a banana in one hand and a shampoo in the other hand.*
+:::
 
 ::: {.incremental}
 - **Creative**: unconditional, text-to-image — diversity, plausibility
@@ -350,19 +365,7 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
 - Most real systems need **both**
 :::
 
-::: {.fragment}
 
-::: {.creative-faithful-images}
-![]({{< meta params.images_path >}}monkey_toy.webp)
-
-![]({{< meta params.images_path >}}monkey_toy_jungle_nano-banana-2.jpg)
-:::
-
-::: {.smaller}
-*Prompt: Create an image where this object is shown dancing in the jungle with a banana in one hand and a shampoo in the other hand.*
-:::
-
-:::
 
 
 
@@ -370,11 +373,33 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
 
 ## The Objective
 
-![]({{< meta params.images_path >}}synthetic_quality/synthetic_quality_evaluation.png){.r-stretch}
+
+Create a generator that produces _synthetic data_, that looks like _real data_.
+
+
+::: {.fragment}
+More precisely, we want the generative model to produce samples that follow the same distribution as the real data.
+
+$$
+p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})
+$$
+
+:::
+
+
+## The Objective
+
+![]({{< meta params.images_path >}}intro_figures/density_digit_path.png){.r-stretch}
 
 ::: {.fragment}
 Generated $\hat{\vect{x}}$ should have **high probability** under the real data distribution $p_{\text{data}}(\vect{x})$.
 :::
+
+
+## The Objective
+
+![]({{< meta params.images_path >}}intro_figures/synthetic_quality_digits.png){.r-stretch}
+
 
 
 ## Fidelity and Coverage
@@ -403,6 +428,15 @@ Learn a probability density $p_{\theta}(\vect{x})$, then sample from it.
 :::
 
 
+## Density vs. Generator
+
+![]({{< meta params.images_path >}}intro_figures/density_vs_generator.svg){.r-stretch}
+
+::: {.fragment}
+Same distribution: a density **evaluates** $p_{\theta}(\vect{x})$, a generator **produces samples**.
+:::
+
+
 ## Density Models
 
 ::: {.fragment}
@@ -428,16 +462,10 @@ $$\arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})$$
 
 ## Learning a Density Model
 
-::: {layout-ncol=2}
-
-![Initial]({{< meta params.images_path >}}density_model_1d/initial_distribution.png)
-
-![Improved]({{< meta params.images_path >}}density_model_1d/improved_distribution.png)
-
-:::
+![]({{< meta params.images_path >}}intro_figures/density_model_mle.svg){.r-stretch}
 
 ::: {.fragment}
-The model adapts to place high probability where training data lies.
+Maximum likelihood moves density to where the training data lies. No negative examples needed.
 :::
 
 
@@ -450,16 +478,14 @@ Can a single Gaussian reach high fidelity *and* high coverage? [Open in new tab]
 
 ## Density ≠ Generation
 
-::: {.fragment}
-A density model evaluates $p_{\theta}(\vect{x})$ — useful for **outlier detection**.
-:::
+![]({{< meta params.images_path >}}intro_figures/density_vs_sampling.svg){.r-stretch}
 
 ::: {.fragment}
-To **generate**, we additionally need a sampling mechanism.
+Evaluating $p_{\theta}(\vect{x})$ is useful, e.g. for **outlier detection**. To **generate**, we additionally need a sampling mechanism.
 :::
 
 
-# Properties and Trade-offs
+# Properties and Trade-offs of Generative Models
 
 ## Efficient Sampling
 
@@ -474,13 +500,7 @@ GANs and VAEs: one forward pass. Diffusion and flow matching: tens of steps. Aut
 
 ![]({{< meta params.images_path >}}intro_figures/coverage_mode_collapse.svg){width=100%}
 
-::: {.fragment}
-(c) samples between the modes. (d) Mode collapse: realistic samples, but only of a few modes, a well-known problem of GANs.
-:::
 
-::: {.fragment}
-Techniques that increase fidelity often reduce coverage, e.g. guidance in diffusion models [@ho_classifier-free_2022] moves a model from (c) towards (d).
-:::
 
 
 ## Smooth Latent Space
@@ -496,18 +516,10 @@ Similar $\vect{z}$ → similar outputs: interpolation morphs one digit into anot
 
 ![]({{< meta params.images_path >}}intro_figures/disentanglement.svg){width=85%}
 
-::: {.fragment}
-Not required for control: modern models are controlled through conditioning (text, masks, reference images).
-:::
-
 
 ## Likelihood Computation
 
 ![]({{< meta params.images_path >}}intro_figures/likelihood_explicit_implicit.svg){width=85%}
-
-::: {.fragment}
-**Exact:** autoregressive, normalizing flows. **Bound or expensive:** VAEs, diffusion, flow matching. **None:** GANs.
-:::
 
 
 
@@ -556,7 +568,7 @@ Most meaningful for visual quality — but slow, subjective, expensive.
 :::
 
 ::: {.fragment}
-**Preference leaderboards**: blind pairwise comparisons, aggregated into a ranking.
+**Preference leaderboards**: blind pairwise comparisons, aggregated into a ranking. Example: [Arena AI leaderboard](https://arena.ai/leaderboard/image/text-to-image)
 :::
 
 
