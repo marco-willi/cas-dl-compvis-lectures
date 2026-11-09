@@ -212,29 +212,14 @@ Marco Willi
 <section id="compress-images-into-latents" class="slide level2">
 <h2>Compress Images into Latents</h2>
 <img data-src="../../assets/images/genai_modern/vae_roundtrip.png" class="r-stretch">
-<div class="fragment">
-<p>SD-XL VAE: the latent keeps what the denoiser needs, the decoder restores the pixels.</p>
-</div>
 </section>
 <section id="latent-diffusion-architecture" class="slide level2">
 <h2>Latent Diffusion Architecture</h2>
-<img data-src="../../assets/images/genai_modern/diffusion_sd_architecture_genbook.png" class="r-stretch">
-<div class="fragment">
-<p><strong>Training:</strong> <span class="math inline">\(\mathbf{x} \xrightarrow{\text{encoder}} \mathbf{z}\)</span>, add noise, learn to denoise <span class="math inline">\(\mathbf{z}\)</span></p>
-</div>
-<div class="fragment">
-<p><strong>Generation:</strong> <span class="math inline">\(\mathbf{z}_T \rightarrow \cdots \rightarrow \mathbf{z}_0 \xrightarrow{\text{decoder}} \hat{\mathbf{x}}\)</span>. For editing, the encoder runs at inference too.</p>
-</div>
-</section>
+
+<img data-src="../../assets/images/genai_modern/diffusion_sd_architecture_genbook.png" class="r-stretch quarto-figure-center"><p class="caption">Source: Sanseviero et al., <em>Hands-On Generative AI with Transformers and Diffusion Models</em>, O’Reilly, 2024.</p></section>
 <section id="why-it-works-and-what-it-costs" class="slide level2">
 <h2>Why It Works, and What It Costs</h2>
 <img data-src="../../assets/images/genai_modern/pixel_vs_latent_size.png" class="r-stretch">
-<div class="fragment">
-<p>Not 48× faster: cost also depends on the network, attention grows with tokens², plus one decoder pass.</p>
-</div>
-<div class="fragment">
-<p>Fine detail (small text, faces) is limited by what the VAE can reconstruct.</p>
-</div>
 </section>
 <section id="what-latent-diffusion-can-do" class="slide level2">
 <h2>What Latent Diffusion Can Do</h2>
@@ -269,13 +254,6 @@ Marco Willi
 </div>
 <div class="fragment">
 <p>SD3 / FLUX: diffusion transformer <strong>+</strong> flow matching. Architecture and objective are separate choices.</p>
-</div>
-</section>
-<section id="how-language-conditions-the-image" class="slide level2">
-<h2>How Language Conditions the Image</h2>
-
-<img data-src="../../assets/images/genai_modern/cross_vs_joint_attention.svg" style="width:85.0%" class="r-stretch"><div class="fragment">
-<p>Cross-attention: image tokens read fixed text tokens. Joint attention: text and image tokens update each other.</p>
 </div>
 </section>
 <section id="three-ways-to-build-multimodal-generators" class="slide level2">
@@ -335,13 +313,6 @@ Marco Willi
 <img data-src="../../assets/images/genai_modern/ferrari_comparison.jpg" class="r-stretch">
 <div class="fragment">
 <p>FLUX Kontext Pro (top) vs.&nbsp;Nano Banana 2 (bottom): who keeps the car’s identity?</p>
-</div>
-</section>
-<section id="quiz-why-a-vision-language-model" class="slide level2">
-<h2>Quiz: Why a Vision-Language Model?</h2>
-<p>Why might an <strong>editing</strong> model benefit from a vision-language model rather than only a text encoder?</p>
-<div class="fragment">
-<p>A text encoder sees only the words. A VLM reads the instruction <strong>together with the input image</strong>, so it can resolve <em>“the two trees”</em> or <em>“match the sofa”</em>.</p>
 </div>
 </section>
 <section id="exercise-pretrained-generative-models-and-apis" class="slide level2 center">
@@ -519,124 +490,9 @@ Zhao, Bing, Chenfei Wu, Deqing Li, et al. 2026. <em>Qwen-<span>Image</span>-2.0 
 </div>
 </div>
 </div>
-</section>
-
-<section>
-<section id="backup" class="title-slide slide level1 center" data-visibility="uncounted">
-<h1>Backup</h1>
-
-</section>
-<section id="where-the-model-uses-each-word" class="slide level2" data-visibility="uncounted">
-<h2>Where the Model Uses Each Word</h2>
-
-<img data-src="../../assets/images/genai_modern/cross_attention_maps.png" style="width:90.0%" class="r-stretch quarto-figure-center"><p class="caption">Cross-attention maps of Stable Diffusion 1.5, averaged over heads, layers and sampling steps.</p></section>
-<section id="u-net-vs.-diffusion-transformer" class="slide level2" data-visibility="uncounted">
-<h2>U-Net vs.&nbsp;Diffusion Transformer</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Aspect</th>
-<th>U-Net</th>
-<th>Diffusion Transformer</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Representation</td>
-<td>spatial feature maps</td>
-<td>token sequence</td>
-</tr>
-<tr class="even">
-<td>Main op</td>
-<td>conv + attention</td>
-<td>self-attention + MLP</td>
-</tr>
-<tr class="odd">
-<td>Inductive bias</td>
-<td>strong image locality</td>
-<td>general sequence modeling</td>
-</tr>
-<tr class="even">
-<td>Conditioning</td>
-<td>cross-attention</td>
-<td>cross-attn / joint attention</td>
-</tr>
-<tr class="odd">
-<td>Multimodal</td>
-<td>possible</td>
-<td>more natural</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="the-adaptation-spectrum" class="slide level2" data-visibility="uncounted">
-<h2>The Adaptation Spectrum</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Method</th>
-<th>What changes</th>
-<th>When</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Prompting</td>
-<td>only the text</td>
-<td>fast exploration</td>
-</tr>
-<tr class="even">
-<td>Reference images / editing</td>
-<td>input context</td>
-<td>one-off subject or local edit</td>
-</tr>
-<tr class="odd">
-<td>Masks / inpainting / control</td>
-<td>constrained generation</td>
-<td>spatial / structural control</td>
-</tr>
-<tr class="even">
-<td>Textual inversion</td>
-<td>a learned token</td>
-<td>lightweight concept</td>
-</tr>
-<tr class="odd">
-<td>LoRA / DreamBooth-LoRA</td>
-<td>small adapter weights</td>
-<td>persistent specialization</td>
-</tr>
-<tr class="even">
-<td>Full fine-tuning</td>
-<td>many / all weights</td>
-<td>strongly specialized domain</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="adaptation-tooling" class="slide level2" data-visibility="uncounted">
-<h2>Adaptation Tooling</h2>
-<ul>
-<li><a href="https://huggingface.co/docs/diffusers/en/training/lora">HF Diffusers LoRA</a></li>
-<li><a href="https://huggingface.co/blog/flux-qlora">HF FLUX QLoRA</a></li>
-<li><a href="https://replicate.com/docs/get-started/fine-tune-with-flux">Replicate FLUX fine-tuning</a></li>
-</ul>
-</section>
-<section id="replicate" class="slide level2" data-visibility="uncounted">
-<h2>Replicate</h2>
-<img data-src="../../assets/images/genai_modern/replicate.jpg" class="r-stretch">
-<p>Hosted access to both proprietary and open-weight models.</p>
-</section>
-<section id="bias-the-washington-post-analysis" class="slide level2" data-visibility="uncounted">
-<h2>Bias: The Washington Post Analysis</h2>
-<img data-src="../../assets/images/genai_modern/ai_bias_wp_front.png" class="r-stretch">
 
 
-</section></section>
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/fhnw_logo.png" class="slide-logo"></p>
