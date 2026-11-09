@@ -98,6 +98,7 @@ demos/genai_models/*
 !demos/genai_models/
 demos/genai_models/*
 !demos/genai_models/generative_paths/
+!demos/genai_models/image_sampling/
 !demos/vision_transformers/
 demos/vision_transformers/*
 !demos/vision_transformers/attention_explorer/

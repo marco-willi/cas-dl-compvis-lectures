@@ -25,6 +25,7 @@ project:
     - "!demos/genai_intro/*/tests/**"
     - "!demos/genai_intro/*/README.md"
     - demos/genai_models/generative_paths/**
+    - demos/genai_models/image_sampling/**
     - "!demos/genai_models/*/tests/**"
     - "!demos/genai_models/*/tools/**"
     - "!demos/genai_models/*/README.md"

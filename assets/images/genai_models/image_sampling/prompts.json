@@ -1,0 +1,56 @@
+[
+  {
+    "file": "elephant_01.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 1,
+    "prompt": "An African elephant walking through golden savanna grass at sunrise, warm orange light, acacia trees in the background. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  },
+  {
+    "file": "elephant_02.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 2,
+    "prompt": "An African elephant standing in a shallow river, splashing water with its trunk, green riverbank behind. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  },
+  {
+    "file": "elephant_03.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 3,
+    "prompt": "A mother elephant with a small calf walking on a dusty dirt track, dry bush on both sides. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  },
+  {
+    "file": "elephant_04.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 4,
+    "prompt": "An African elephant in front of snow-capped Mount Kilimanjaro, clear blue sky, short green grass. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  },
+  {
+    "file": "elephant_05.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 5,
+    "prompt": "An Asian elephant in a dense green tropical forest, soft light falling through the trees. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  },
+  {
+    "file": "elephant_06.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 6,
+    "prompt": "An African elephant under dark dramatic storm clouds, light rain, savanna landscape. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  },
+  {
+    "file": "elephant_07.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 7,
+    "prompt": "A silhouette of an African elephant against a red-orange sunset sky, flat horizon. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  },
+  {
+    "file": "elephant_08.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 8,
+    "prompt": "An African elephant covered in reddish dust, standing on red earth, bright midday sun. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  },
+  {
+    "file": "elephant_09.jpg",
+    "model": "black-forest-labs/flux-1.1-pro",
+    "seed": 9,
+    "prompt": "A small herd of African elephants crossing a wide open plain, distant mountains, late afternoon light. Wildlife photograph, natural light, realistic, sharp focus, the elephant is clearly visible and roughly centered."
+  }
+]

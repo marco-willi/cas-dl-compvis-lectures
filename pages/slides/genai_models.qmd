@@ -47,6 +47,11 @@ Each conditional $p(x_i \mid x_1, \ldots, x_{i-1})$ is modeled by a neural netwo
 :::
 
 
+## Demo: Autoregressive Sampling
+
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=ar&embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: autoregressive sampling"></iframe>
+
+
 
 ## Pros & Cons
 
@@ -97,6 +102,11 @@ $$\min_{g} \max_{d} \mathbb{E}_{\vect{x} \sim p_{\text{data}}}[\log d(\vect{x})]
 ::: {.fragment}
 Generator distribution tries to fool discriminator, while discriminator must distinguish real from fake (@foster_generative_2023).
 :::
+
+
+## Demo: Sampling from a GAN
+
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=gan&embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: sampling from a GAN"></iframe>
 
 
 ## Pros & Cons
@@ -172,6 +182,11 @@ Traversing the latent space → smooth interpolation between faces (@prince_unde
 :::
 
 
+## Demo: Sampling from a VAE
+
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=vae&embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: sampling from a VAE"></iframe>
+
+
 ## Pros & Cons
 
 ::: {.fragment}
@@ -240,6 +255,11 @@ The network is **conditioned on the timestep $t$** — noise level varies dramat
 :::
 
 
+## Demo: Diffusion Sampling
+
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=diffusion&embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: diffusion sampling"></iframe>
+
+
 ## Training Objective
 
 ::: {.fragment}
@@ -274,7 +294,7 @@ Encoder–decoder with skip connections; timestep $t$ embedded throughout (@prin
 ::: {.fragment}
 **Pros**
 
-- High-quality, diverse outputs (currently SOTA)
+- High-quality, diverse outputs
 - Stable, reliable training
 :::
 
@@ -356,12 +376,9 @@ No fresh noise is injected: given the initial noise, sampling is **deterministic
 :::
 
 
-## In Practice
+## Demo: Flow Matching Sampling
 
-::: {.incremental}
-- **Stable Diffusion 3** [@esser_scaling_2024]: transformer trained with a flow matching objective in latent space
-- **FLUX.1 Kontext** [@labs_flux1_2025]: flow matching for generation and instruction-based editing
-:::
+<iframe data-src="../../demos/genai_models/image_sampling/index.html?family=fm&embed=1" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: flow matching sampling"></iframe>
 
 
 ## Pros & Cons
