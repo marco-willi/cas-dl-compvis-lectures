@@ -3535,7 +3535,9 @@ $$
 p_{\theta}(\vect{x}) \approx p_{\text{data}}(\vect{x})
 $$
 
-Some models define $p_{\theta}$ explicitly as a formula that can be evaluated. Others define it only implicitly, through their sampling procedure.
+Some models define $p_{\theta}$ explicitly as a formula that can be evaluated. Others define it only implicitly, through their sampling procedure. the figure shows both views of the same distribution.
+
+Two representations of the same distribution, a mixture of three Gaussians in 2D. (a) A density model evaluates $p_{\theta}(\vect{x})$ at any point $\vect{x}$, but does not directly produce samples. (b) A generator $g_{\theta}$ transforms random inputs $\vect{z}$ into samples $\vect{x} = g_{\theta}(\vect{z})$, but does not tell us the density of a given point. Here, it chooses one of the three Gaussians and transforms standard Gaussian noise with that Gaussian's mean and covariance.
 
 **Probability densities**
 
@@ -3580,7 +3582,7 @@ It can be shown that, for a large number of training samples, this is equivalent
 
 the figure illustrates how the modelled distribution improves by increasing the likelihood of observing the training data.
 
-Maximum likelihood in 1D. A mixture of two Gaussians (orange) is fitted to training samples (blue). (a) The initial model assigns a low density to many training examples. (b) After fitting by maximum likelihood, the model places its density where the training data lies, and the average log-likelihood increases.
+Maximum likelihood in 1D. A mixture of two Gaussians (orange) is fitted to 50 training samples (blue ticks) drawn from the true distribution (dashed). (a) The initial model assigns a low density to many training examples. (b) After fitting by maximum likelihood (EM algorithm, starting from the model in (a)), the model has moved its density to where the training data lies, and the average log-likelihood increases. Only real examples are needed: no negative or synthetic examples.
 
 **Note:** Evaluating a density and sampling from it are different capabilities. A model that can evaluate $p_{\theta}(\vect{x})$ is useful on its own, for example to detect outliers, but it still needs a mechanism to generate samples. Conversely, some models can generate samples but cannot evaluate $p_{\theta}(\vect{x})$.
 
