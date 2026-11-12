@@ -140,12 +140,6 @@ Generator distribution tries to fool discriminator, while discriminator must dis
 :::
 
 
-## Probabilistic Twist
-
-::: {.fragment}
-Unlike standard autoencoders, the latent space is **structured probabilistically**, so random samples decode to meaningful outputs.
-:::
-
 
 ## Reparameterization Trick
 
