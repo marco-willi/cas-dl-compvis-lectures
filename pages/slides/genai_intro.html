@@ -179,11 +179,6 @@ Marco Willi
 </div>
 
 </section>
-<section>
-<section id="motivation" class="title-slide slide level1 center">
-<h1>Motivation</h1>
-
-</section>
 <section id="please-refund-me" class="slide level2">
 <h2>Please refund me!</h2>
 <img data-src="../../assets/images/genai/intro_receipt.jpg" class="r-stretch">
@@ -322,7 +317,7 @@ Marco Willi
 </blockquote>
 <p><a href="https://www.merriam-webster.com/wordplay/word-of-the-year">Merriam Webster - Word of the Year</a></p>
 <p>Examples on <a href="https://slopdetector.org/ai-slop-examples">slopdetector.org</a></p>
-</section></section>
+</section>
 <section>
 <section id="what-is-generative-modelling" class="title-slide slide level1 center">
 <h1>What is Generative Modelling?</h1>
@@ -342,20 +337,15 @@ Marco Willi
 <p><strong>One-to-many</strong>: one label → many possible elephant images.</p>
 </div>
 </section>
+<section id="the-diversity-challenge" class="slide level2">
+<h2>The Diversity Challenge</h2>
+<img data-src="../../assets/images/genai/basics_elephants_probabilistic.png" class="r-stretch">
+<p>A specific label should produce a diverse set of outputs.</p>
+</section>
 <section id="quiz-the-problem" class="slide level2 center">
 <h2>Quiz: The Problem</h2>
 <div class="r-fit-text">
 <p>If the input is just the label “elephant”, how can the model generate <strong>different</strong> elephants?</p>
-</div>
-<div class="fragment">
-<p><strong>Answer:</strong> Neural networks are deterministic. We need <strong>stochasticity</strong>.</p>
-</div>
-</section>
-<section id="the-diversity-challenge" class="slide level2">
-<h2>The Diversity Challenge</h2>
-<img data-src="../../assets/images/genai/basics_elephants_probabilistic.png" class="r-stretch">
-<div class="fragment">
-<p>A specific label should produce a diverse set of outputs.</p>
 </div>
 </section>
 <section id="solution-latent-variables" class="slide level2">
@@ -406,7 +396,7 @@ Marco Willi
 <section id="quiz-latent-variables" class="slide level2 center">
 <h2>Quiz: Latent Variables</h2>
 
-<img data-src="../../assets/images/genai/intro_figures/latent_intuition_dataset.svg" style="width:60.0%" class="r-stretch quarto-figure-center"><p class="caption">Reproduced from <span class="citation" data-cites="foster_generative_2023">Foster (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>.</p><p><strong>Question</strong>: What could the latent variables be for this dataset?</p>
+<img data-src="../../assets/images/genai/intro_figures/latent_intuition_dataset.svg" style="width:60.0%" class="r-stretch quarto-figure-center"><p class="caption">Reproduced from <span class="citation" data-cites="foster_generative_2023">Foster (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>.</p><p><strong>Question</strong>: What might latent variables represent in this dataset?</p>
 </section>
 <section id="latent-space-to-outputs" class="slide level2">
 <h2>Latent Space to Outputs</h2>
@@ -525,7 +515,7 @@ Marco Willi
 </section>
 <section id="creative-vs.-faithful" class="slide level2">
 <h2>Creative vs.&nbsp;Faithful</h2>
-<!-- <style>
+<style>
 .creative-faithful-images {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -541,30 +531,21 @@ Marco Willi
   margin: 0 auto;
   display: block;
 }
-</style> -->
-<div class="quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<!-- ::: {.creative-faithful-images} -->
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="../../assets/images/genai/monkey_toy.webp"></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<p><img data-src="../../assets/images/genai/monkey_toy_jungle_nano-banana-2.jpg" class="fragment" style="width:30.0%"> <!-- ::: --></p>
-</div>
-</div>
-</div>
-<div class="smaller">
-<p><em>Prompt: Create an image where this object is shown dancing in the jungle with a banana in one hand and a shampoo in the other hand.</em></p>
-</div>
+</style>
 <ul>
 <li class="fragment"><strong>Creative</strong>: unconditional, text-to-image — diversity, plausibility</li>
 <li class="fragment"><strong>Faithful</strong>: inpainting, super-res, translation, editing — identity, geometry, layout</li>
 <li class="fragment">Most real systems need <strong>both</strong></li>
 </ul>
+<div class="fragment">
+<div class="creative-faithful-images">
+<p><img data-src="../../assets/images/genai/monkey_toy.webp"></p>
+<p><img data-src="../../assets/images/genai/monkey_toy_jungle_nano-banana-2.jpg"></p>
+</div>
+<div class="smaller">
+<p><em>Prompt: Create an image where this object is shown dancing in the jungle with a banana in one hand and a shampoo in the other hand.</em></p>
+</div>
+</div>
 </section></section>
 <section>
 <section id="how-generative-models-learn" class="title-slide slide level1 center">
@@ -580,15 +561,15 @@ Marco Willi
 p_{\theta}(\mathbf{x}) \approx p_{\text{data}}(\mathbf{x})
 \]</span></p>
 </div>
+<!-- ## The Objective
+
+![](/assets/images/genai/intro_figures/density_digit_path.png){.r-stretch}
+
+::: {.fragment}
+Generated $\hat{\vect{x}}$ should have **high probability** under the real data distribution $p_{\text{data}}(\vect{x})$.
+::: -->
 </section>
 <section id="the-objective-1" class="slide level2">
-<h2>The Objective</h2>
-<img data-src="../../assets/images/genai/intro_figures/density_digit_path.png" class="r-stretch">
-<div class="fragment">
-<p>Generated <span class="math inline">\(\hat{\mathbf{x}}\)</span> should have <strong>high probability</strong> under the real data distribution <span class="math inline">\(p_{\text{data}}(\mathbf{x})\)</span>.</p>
-</div>
-</section>
-<section id="the-objective-2" class="slide level2">
 <h2>The Objective</h2>
 <img data-src="../../assets/images/genai/intro_figures/synthetic_quality_digits.png" class="r-stretch">
 </section>
@@ -600,11 +581,11 @@ p_{\theta}(\mathbf{x}) \approx p_{\text{data}}(\mathbf{x})
 <li class="fragment"><strong>Coverage</strong>: samples show the full variety of real data, in the right proportions</li>
 </ul>
 </section>
-<section id="two-approaches" class="slide level2">
-<h2>Two Approaches</h2>
+<section id="explicit-vs-implicit-models" class="slide level2">
+<h2>Explicit vs Implicit Models</h2>
 <div class="fragment">
 <p><strong>1. Direct (Implicit)</strong></p>
-<p>Learn a function that generates samples directly: <span class="math display">\[g(\mathbf{z}) = \mathbf{x}\]</span></p>
+<p>Learn a function that generates samples directly: <span class="math display">\[g_\theta(\mathbf{z}) = \mathbf{x}\]</span></p>
 </div>
 <div class="fragment">
 <p><strong>2. Indirect (Density)</strong></p>
@@ -617,22 +598,21 @@ p_{\theta}(\mathbf{x}) \approx p_{\text{data}}(\mathbf{x})
 <div class="fragment">
 <p>Same distribution: a density <strong>evaluates</strong> <span class="math inline">\(p_{\theta}(\mathbf{x})\)</span>, a generator <strong>produces samples</strong>.</p>
 </div>
+<div class="fragment">
+<p>Evaluating <span class="math inline">\(p_{\theta}(\mathbf{x})\)</span> is useful, e.g.&nbsp;for <strong>outlier detection</strong>. To <strong>generate</strong>, we additionally need a sampling mechanism.</p>
+</div>
 </section>
 <section id="density-models" class="slide level2">
 <h2>Density Models</h2>
 <div class="fragment">
-<p>Learn <span class="math inline">\(p_{\theta}: \mathcal{X} \to [0, \infty)\)</span> over the image space <span class="math inline">\(\mathcal{X}\)</span> with normalization:</p>
-<p><span class="math display">\[\int_{\mathcal{X}} p_{\theta}(\mathbf{x})\, d\mathbf{x} = 1\]</span></p>
-</div>
-<div class="fragment">
-<p>Goal: <span class="math inline">\(p_{\theta} \approx p_{\text{data}}\)</span>.</p>
+<p>Learn <span class="math inline">\(p_{\theta}: \mathcal{X} \to [0, \infty)\)</span> such that <span class="math inline">\(p_{\theta} \approx p_{\text{data}}\)</span>.</p>
 </div>
 <div class="fragment">
 <p><strong>Maximum likelihood objective:</strong></p>
-<p><span class="math display">\[\arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\mathbf{x}^{(i)})\]</span></p>
+<p><span class="math display">\[\theta^* = \arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\mathbf{x}^{(i)})\]</span></p>
 </div>
 <div class="fragment">
-<p><strong>Examples:</strong> VAEs, normalizing flows, autoregressive models.</p>
+<p>Implicit models need a different training signal (e.g.&nbsp;a discriminator in GANs). We will see that in the next lecture.</p>
 </div>
 </section>
 <section id="learning-a-density-model" class="slide level2">
@@ -647,13 +627,6 @@ p_{\theta}(\mathbf{x}) \approx p_{\text{data}}(\mathbf{x})
 <iframe data-src="../../demos/genai_intro/distribution_fitting/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: learning a 1D distribution">
 </iframe>
 <p>Can a single Gaussian reach high fidelity <em>and</em> high coverage? <a href="../../demos/genai_intro/distribution_fitting/index.html" target="_blank">Open in new tab</a></p>
-</section>
-<section id="density-generation" class="slide level2">
-<h2>Density ≠ Generation</h2>
-<img data-src="../../assets/images/genai/intro_figures/density_vs_sampling.svg" class="r-stretch">
-<div class="fragment">
-<p>Evaluating <span class="math inline">\(p_{\theta}(\mathbf{x})\)</span> is useful, e.g.&nbsp;for <strong>outlier detection</strong>. To <strong>generate</strong>, we additionally need a sampling mechanism.</p>
-</div>
 </section></section>
 <section>
 <section id="properties-and-trade-offs-of-generative-models" class="title-slide slide level1 center">
@@ -738,12 +711,6 @@ p_{\theta}(\mathbf{x}) \approx p_{\text{data}}(\mathbf{x})
 <p><strong>FID</strong> <span class="citation" data-cites="heusel_gans_2018">(<a href="#/references" role="doc-biblioref" onclick="">Heusel et al. 2018</a>)</span>: Fréchet distance between Gaussians fitted to Inception features of real and generated images. Lower is better.</p>
 </div>
 </section>
-<section id="demo-fid-precision-and-recall" class="slide level2">
-<h2>Demo: FID, Precision and Recall</h2>
-<iframe data-src="../../demos/genai_intro/fid_precision_recall/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: FID, precision and recall">
-</iframe>
-<p>Compare <em>Shifted</em> and <em>Mode collapse</em>: which metric tells them apart? <a href="../../demos/genai_intro/fid_precision_recall/index.html" target="_blank">Open in new tab</a></p>
-</section>
 <section id="limitations-of-distribution-metrics" class="slide level2">
 <h2>Limitations of Distribution Metrics</h2>
 <ul>
@@ -752,6 +719,12 @@ p_{\theta}(\mathbf{x}) \approx p_{\text{data}}(\mathbf{x})
 <li class="fragment">Don’t evaluate prompt adherence or input fidelity</li>
 <li class="fragment">Can hide failures on rare classes, spatial relations, text rendering</li>
 </ul>
+</section>
+<section id="demo-fid-precision-and-recall" class="slide level2">
+<h2>Demo: FID, Precision and Recall</h2>
+<iframe data-src="../../demos/genai_intro/fid_precision_recall/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: FID, precision and recall">
+</iframe>
+<p>Compare <em>Shifted</em> and <em>Mode collapse</em>: which metric tells them apart? <a href="../../demos/genai_intro/fid_precision_recall/index.html" target="_blank">Open in new tab</a></p>
 </section>
 <section id="conditional-generation-metrics" class="slide level2">
 <h2>Conditional Generation Metrics</h2>

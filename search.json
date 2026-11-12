@@ -678,17 +678,6 @@
     ]
   },
   {
-    "objectID": "pages/slides/genai_models.html#probabilistic-twist",
-    "href": "pages/slides/genai_models.html#probabilistic-twist",
-    "title": "9 - GenAI Model Families",
-    "section": "Probabilistic Twist",
-    "text": "Probabilistic Twist\n\nUnlike standard autoencoders, the latent space is structured probabilistically, so random samples decode to meaningful outputs.",
-    "crumbs": [
-      "Slides",
-      "9 - GenAI Model Families"
-    ]
-  },
-  {
     "objectID": "pages/slides/genai_models.html#reparameterization-trick",
     "href": "pages/slides/genai_models.html#reparameterization-trick",
     "title": "9 - GenAI Model Families",
@@ -2878,7 +2867,7 @@
     "href": "pages/background/frameworks.html#tensors",
     "title": "3 - Software & Hardware",
     "section": "2.2 Tensors",
-    "text": "2.2 Tensors\ntorch.Tensor is the central data structure in PyTorch. Essentially very similar to numpy.array, it can be easily loaded onto GPUs.\nTensors can be created in various ways. For example, from lists:\n\ndata = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)\nprint(x_data)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from numpy.ndarray:\n\nnp_array = np.array(data)\nx_np = torch.from_numpy(np_array)\nprint(x_np)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from other tensors:\n\nx_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")\n\nOnes Tensor: \n tensor([[1, 1],\n        [1, 1]]) \n\nRandom Tensor: \n tensor([[0.7561, 0.6420],\n        [0.9653, 0.1313]]) \n\n\n\nOr with randomly generated numbers or constants:\n\nshape = (2,3,)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")\n\nRandom Tensor: \n tensor([[0.1039, 0.7310, 0.8808],\n        [0.7808, 0.5972, 0.0745]]) \n\nOnes Tensor: \n tensor([[1., 1., 1.],\n        [1., 1., 1.]]) \n\nZeros Tensor: \n tensor([[0., 0., 0.],\n        [0., 0., 0.]])\n\n\nTensor attributes:\n\ntensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")\n\nShape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu\n\n\nThere are over 100 operations that can be performed on a tensor. The full list is available here.\nIndexing and Slicing:\n\ntensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[:, -1]}\")\ntensor[:,1] = 0\nprint(tensor)\n\nFirst row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\n\nJoining tensors:\n\nt1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)\n\ntensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n\n\nArithmetic operations:\n\n# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)\n\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
+    "text": "2.2 Tensors\ntorch.Tensor is the central data structure in PyTorch. Essentially very similar to numpy.array, it can be easily loaded onto GPUs.\nTensors can be created in various ways. For example, from lists:\n\ndata = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)\nprint(x_data)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from numpy.ndarray:\n\nnp_array = np.array(data)\nx_np = torch.from_numpy(np_array)\nprint(x_np)\n\ntensor([[1, 2],\n        [3, 4]])\n\n\nOr from other tensors:\n\nx_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")\n\nOnes Tensor: \n tensor([[1, 1],\n        [1, 1]]) \n\nRandom Tensor: \n tensor([[0.7099, 0.0974],\n        [0.6246, 0.4847]]) \n\n\n\nOr with randomly generated numbers or constants:\n\nshape = (2,3,)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")\n\nRandom Tensor: \n tensor([[0.7464, 0.1079, 0.3473],\n        [0.7960, 0.0925, 0.6572]]) \n\nOnes Tensor: \n tensor([[1., 1., 1.],\n        [1., 1., 1.]]) \n\nZeros Tensor: \n tensor([[0., 0., 0.],\n        [0., 0., 0.]])\n\n\nTensor attributes:\n\ntensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")\n\nShape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu\n\n\nThere are over 100 operations that can be performed on a tensor. The full list is available here.\nIndexing and Slicing:\n\ntensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[:, -1]}\")\ntensor[:,1] = 0\nprint(tensor)\n\nFirst row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\n\nJoining tensors:\n\nt1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)\n\ntensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n\n\nArithmetic operations:\n\n# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)\n\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
     "crumbs": [
       "Preparation",
       "3 - Software & Hardware"
@@ -2889,7 +2878,7 @@
     "href": "pages/background/frameworks.html#autograd",
     "title": "3 - Software & Hardware",
     "section": "2.3 Autograd",
-    "text": "2.3 Autograd\nTo train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an auto-diff functionality: torch.autograd. This can automatically compute gradients for a computational graph.\n\n\n\n\n\n\nTipAutograd Key Points\n\n\n\n\nSet requires_grad=True on tensors you want to track for gradient computation\nCall .backward() on a scalar loss to compute all gradients\nAccess gradients via .grad attribute of tensors\nUse torch.no_grad() context for inference to save memory and speed up computation\n\n\n\nThe following is an example using a 1-layer neural network (see Figure 4 ):\n\n\n\n\n\n\nFigure 4: Source: PyTorch\n\n\n\nThe network from Figure 4 is defined in PyTorch code in Listing 4.\n\n\n\n\nListing 4: Example computational graph.\n\n\nimport torch\n\nx = torch.ones(5)  # input tensor\ny = torch.zeros(3)  # expected output\nw = torch.randn(5, 3, requires_grad=True)\nb = torch.randn(3, requires_grad=True)\nz = torch.matmul(x, w)+b\nloss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)\n\n\n\n\nWe can now use Autograd to compute the gradient:\n\nloss.backward()\nprint(w.grad)\nprint(b.grad)\n\ntensor([[0.0921, 0.0115, 0.2760],\n        [0.0921, 0.0115, 0.2760],\n        [0.0921, 0.0115, 0.2760],\n        [0.0921, 0.0115, 0.2760],\n        [0.0921, 0.0115, 0.2760]])\ntensor([0.0921, 0.0115, 0.2760])",
+    "text": "2.3 Autograd\nTo train neural networks, backpropagation is typically used. This calculates the gradient of the loss function with respect to the model parameters. To compute these gradients, PyTorch provides an auto-diff functionality: torch.autograd. This can automatically compute gradients for a computational graph.\n\n\n\n\n\n\nTipAutograd Key Points\n\n\n\n\nSet requires_grad=True on tensors you want to track for gradient computation\nCall .backward() on a scalar loss to compute all gradients\nAccess gradients via .grad attribute of tensors\nUse torch.no_grad() context for inference to save memory and speed up computation\n\n\n\nThe following is an example using a 1-layer neural network (see Figure 4 ):\n\n\n\n\n\n\nFigure 4: Source: PyTorch\n\n\n\nThe network from Figure 4 is defined in PyTorch code in Listing 4.\n\n\n\n\nListing 4: Example computational graph.\n\n\nimport torch\n\nx = torch.ones(5)  # input tensor\ny = torch.zeros(3)  # expected output\nw = torch.randn(5, 3, requires_grad=True)\nb = torch.randn(3, requires_grad=True)\nz = torch.matmul(x, w)+b\nloss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)\n\n\n\n\nWe can now use Autograd to compute the gradient:\n\nloss.backward()\nprint(w.grad)\nprint(b.grad)\n\ntensor([[0.0309, 0.1122, 0.0975],\n        [0.0309, 0.1122, 0.0975],\n        [0.0309, 0.1122, 0.0975],\n        [0.0309, 0.1122, 0.0975],\n        [0.0309, 0.1122, 0.0975]])\ntensor([0.0309, 0.1122, 0.0975])",
     "crumbs": [
       "Preparation",
       "3 - Software & Hardware"
@@ -2900,7 +2889,7 @@
     "href": "pages/background/frameworks.html#torch.nn",
     "title": "3 - Software & Hardware",
     "section": "2.4 torch.nn",
-    "text": "2.4 torch.nn\nPyTorch provides various building blocks for creating neural networks. These are available in torch.nn. Additionally, you can define any compositions of such building blocks that inherit from torch.nn.Module. A neural network is typically a torch.nn.Module. Each module implements the forward() method to define how data is processed.\n\n\n\n\n\n\nTipBuilding Blocks in torch.nn\n\n\n\nCommon layers:\n\nnn.Linear: Fully connected layer\nnn.Conv2d: 2D convolutional layer\nnn.MaxPool2d: Max pooling layer\nnn.Dropout: Regularization via random dropout\nnn.BatchNorm2d: Batch normalization\n\nCommon activations:\n\nnn.ReLU(), nn.LeakyReLU(), nn.GELU()\nnn.Sigmoid(), nn.Softmax()\n\nLoss functions:\n\nnn.CrossEntropyLoss(): Classification\nnn.BCEWithLogitsLoss(): Binary classification\nnn.MSELoss(): Regression\n\n\n\nListing 5 depicts an example of a class that inherits from torch.nn.Module.\n\n\n\n\nListing 5: Example nn.Module.\n\n\nfrom torch import nn\n\nclass NeuralNetwork(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.flatten = nn.Flatten()\n        self.linear_relu_stack = nn.Sequential(\n            nn.Linear(28*28, 512),\n            nn.ReLU(),\n            nn.Linear(512, 512),\n            nn.ReLU(),\n            nn.Linear(512, 10),\n        )\n\n    def forward(self, x):\n        x = self.flatten(x)\n        logits = self.linear_relu_stack(x)\n        return logits\n\n\n\n\nYou can also visualize the model:\n\nmodel = NeuralNetwork()\nprint(model)\n\nNeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)\n\n\nTo use the model, you can pass input data. This will execute the forward() method, along with background operations.\n\nX = torch.rand(1, 28, 28)\nlogits = model(X)\npred_probab = nn.Softmax(dim=1)(logits)\ny_pred = pred_probab.argmax(1)\nprint(f\"Predicted class: {y_pred}\")\n\nPredicted class: tensor([2])\n\n\nThe executed operations will look like this:\n\nfrom torchviz import make_dot\nmake_dot(logits)\n\n\n\n\n\n\n\n\nFor more in-depth information about the model you can use the external library torchinfo as seen in Listing 6.\n\n\n\n\nListing 6: Example output of torchinfo.\n\n\nfrom torchinfo import summary\nmodel = NeuralNetwork()\nsummary(model, input_size=(128, 1, 28, 28))\n\n\n\n\n==========================================================================================\nLayer (type:depth-idx)                   Output Shape              Param #\n==========================================================================================\nNeuralNetwork                            [128, 10]                 --\n├─Flatten: 1-1                           [128, 784]                --\n├─Sequential: 1-2                        [128, 10]                 --\n│    └─Linear: 2-1                       [128, 512]                401,920\n│    └─ReLU: 2-2                         [128, 512]                --\n│    └─Linear: 2-3                       [128, 512]                262,656\n│    └─ReLU: 2-4                         [128, 512]                --\n│    └─Linear: 2-5                       [128, 10]                 5,130\n==========================================================================================\nTotal params: 669,706\nTrainable params: 669,706\nNon-trainable params: 0\nTotal mult-adds (Units.MEGABYTES): 85.72\n==========================================================================================\nInput size (MB): 0.40\nForward/backward pass size (MB): 1.06\nParams size (MB): 2.68\nEstimated Total Size (MB): 4.14\n==========================================================================================",
+    "text": "2.4 torch.nn\nPyTorch provides various building blocks for creating neural networks. These are available in torch.nn. Additionally, you can define any compositions of such building blocks that inherit from torch.nn.Module. A neural network is typically a torch.nn.Module. Each module implements the forward() method to define how data is processed.\n\n\n\n\n\n\nTipBuilding Blocks in torch.nn\n\n\n\nCommon layers:\n\nnn.Linear: Fully connected layer\nnn.Conv2d: 2D convolutional layer\nnn.MaxPool2d: Max pooling layer\nnn.Dropout: Regularization via random dropout\nnn.BatchNorm2d: Batch normalization\n\nCommon activations:\n\nnn.ReLU(), nn.LeakyReLU(), nn.GELU()\nnn.Sigmoid(), nn.Softmax()\n\nLoss functions:\n\nnn.CrossEntropyLoss(): Classification\nnn.BCEWithLogitsLoss(): Binary classification\nnn.MSELoss(): Regression\n\n\n\nListing 5 depicts an example of a class that inherits from torch.nn.Module.\n\n\n\n\nListing 5: Example nn.Module.\n\n\nfrom torch import nn\n\nclass NeuralNetwork(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.flatten = nn.Flatten()\n        self.linear_relu_stack = nn.Sequential(\n            nn.Linear(28*28, 512),\n            nn.ReLU(),\n            nn.Linear(512, 512),\n            nn.ReLU(),\n            nn.Linear(512, 10),\n        )\n\n    def forward(self, x):\n        x = self.flatten(x)\n        logits = self.linear_relu_stack(x)\n        return logits\n\n\n\n\nYou can also visualize the model:\n\nmodel = NeuralNetwork()\nprint(model)\n\nNeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)\n\n\nTo use the model, you can pass input data. This will execute the forward() method, along with background operations.\n\nX = torch.rand(1, 28, 28)\nlogits = model(X)\npred_probab = nn.Softmax(dim=1)(logits)\ny_pred = pred_probab.argmax(1)\nprint(f\"Predicted class: {y_pred}\")\n\nPredicted class: tensor([8])\n\n\nThe executed operations will look like this:\n\nfrom torchviz import make_dot\nmake_dot(logits)\n\n\n\n\n\n\n\n\nFor more in-depth information about the model you can use the external library torchinfo as seen in Listing 6.\n\n\n\n\nListing 6: Example output of torchinfo.\n\n\nfrom torchinfo import summary\nmodel = NeuralNetwork()\nsummary(model, input_size=(128, 1, 28, 28))\n\n\n\n\n==========================================================================================\nLayer (type:depth-idx)                   Output Shape              Param #\n==========================================================================================\nNeuralNetwork                            [128, 10]                 --\n├─Flatten: 1-1                           [128, 784]                --\n├─Sequential: 1-2                        [128, 10]                 --\n│    └─Linear: 2-1                       [128, 512]                401,920\n│    └─ReLU: 2-2                         [128, 512]                --\n│    └─Linear: 2-3                       [128, 512]                262,656\n│    └─ReLU: 2-4                         [128, 512]                --\n│    └─Linear: 2-5                       [128, 10]                 5,130\n==========================================================================================\nTotal params: 669,706\nTrainable params: 669,706\nNon-trainable params: 0\nTotal mult-adds (Units.MEGABYTES): 85.72\n==========================================================================================\nInput size (MB): 0.40\nForward/backward pass size (MB): 1.06\nParams size (MB): 2.68\nEstimated Total Size (MB): 4.14\n==========================================================================================",
     "crumbs": [
       "Preparation",
       "3 - Software & Hardware"
@@ -4161,22 +4150,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#quiz-the-problem",
-    "href": "pages/slides/genai_intro.html#quiz-the-problem",
+    "objectID": "pages/slides/genai_intro.html#the-diversity-challenge",
+    "href": "pages/slides/genai_intro.html#the-diversity-challenge",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "Quiz: The Problem",
-    "text": "Quiz: The Problem\n\nIf the input is just the label “elephant”, how can the model generate different elephants?\n\n\nAnswer: Neural networks are deterministic. We need stochasticity.",
+    "section": "The Diversity Challenge",
+    "text": "The Diversity Challenge\n\nA specific label should produce a diverse set of outputs.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#the-diversity-challenge",
-    "href": "pages/slides/genai_intro.html#the-diversity-challenge",
+    "objectID": "pages/slides/genai_intro.html#quiz-the-problem",
+    "href": "pages/slides/genai_intro.html#quiz-the-problem",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "The Diversity Challenge",
-    "text": "The Diversity Challenge\n\n\nA specific label should produce a diverse set of outputs.",
+    "section": "Quiz: The Problem",
+    "text": "Quiz: The Problem\n\nIf the input is just the label “elephant”, how can the model generate different elephants?",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4220,7 +4209,7 @@
     "href": "pages/slides/genai_intro.html#quiz-latent-variables",
     "title": "8 - Generative AI for Computer Vision",
     "section": "Quiz: Latent Variables",
-    "text": "Quiz: Latent Variables\n\nReproduced from Foster (2023).Question: What could the latent variables be for this dataset?",
+    "text": "Quiz: Latent Variables\n\nReproduced from Foster (2023).Question: What might latent variables represent in this dataset?",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4275,7 +4264,7 @@
     "href": "pages/slides/genai_intro.html#creative-vs.-faithful",
     "title": "8 - Generative AI for Computer Vision",
     "section": "Creative vs. Faithful",
-    "text": "Creative vs. Faithful\n\n\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\nPrompt: Create an image where this object is shown dancing in the jungle with a banana in one hand and a shampoo in the other hand.\n\n\nCreative: unconditional, text-to-image — diversity, plausibility\nFaithful: inpainting, super-res, translation, editing — identity, geometry, layout\nMost real systems need both",
+    "text": "Creative vs. Faithful\n\n\nCreative: unconditional, text-to-image — diversity, plausibility\nFaithful: inpainting, super-res, translation, editing — identity, geometry, layout\nMost real systems need both\n\n\n\n\n\n\n\nPrompt: Create an image where this object is shown dancing in the jungle with a banana in one hand and a shampoo in the other hand.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4297,17 +4286,6 @@
     "href": "pages/slides/genai_intro.html#the-objective-1",
     "title": "8 - Generative AI for Computer Vision",
     "section": "The Objective",
-    "text": "The Objective\n\n\nGenerated \\(\\hat{\\mathbf{x}}\\) should have high probability under the real data distribution \\(p_{\\text{data}}(\\mathbf{x})\\).",
-    "crumbs": [
-      "Slides",
-      "8 - Generative AI for Computer Vision"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_intro.html#the-objective-2",
-    "href": "pages/slides/genai_intro.html#the-objective-2",
-    "title": "8 - Generative AI for Computer Vision",
-    "section": "The Objective",
     "text": "The Objective",
     "crumbs": [
       "Slides",
@@ -4326,11 +4304,11 @@
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#two-approaches",
-    "href": "pages/slides/genai_intro.html#two-approaches",
+    "objectID": "pages/slides/genai_intro.html#explicit-vs-implicit-models",
+    "href": "pages/slides/genai_intro.html#explicit-vs-implicit-models",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "Two Approaches",
-    "text": "Two Approaches\n\n1. Direct (Implicit)\nLearn a function that generates samples directly: \\[g(\\mathbf{z}) = \\mathbf{x}\\]\n\n\n2. Indirect (Density)\nLearn a probability density \\(p_{\\theta}(\\mathbf{x})\\), then sample from it.",
+    "section": "Explicit vs Implicit Models",
+    "text": "Explicit vs Implicit Models\n\n1. Direct (Implicit)\nLearn a function that generates samples directly: \\[g_\\theta(\\mathbf{z}) = \\mathbf{x}\\]\n\n\n2. Indirect (Density)\nLearn a probability density \\(p_{\\theta}(\\mathbf{x})\\), then sample from it.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4341,7 +4319,7 @@
     "href": "pages/slides/genai_intro.html#density-vs.-generator",
     "title": "8 - Generative AI for Computer Vision",
     "section": "Density vs. Generator",
-    "text": "Density vs. Generator\n\n\nSame distribution: a density evaluates \\(p_{\\theta}(\\mathbf{x})\\), a generator produces samples.",
+    "text": "Density vs. Generator\n\n\nSame distribution: a density evaluates \\(p_{\\theta}(\\mathbf{x})\\), a generator produces samples.\n\n\nEvaluating \\(p_{\\theta}(\\mathbf{x})\\) is useful, e.g. for outlier detection. To generate, we additionally need a sampling mechanism.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4352,7 +4330,7 @@
     "href": "pages/slides/genai_intro.html#density-models",
     "title": "8 - Generative AI for Computer Vision",
     "section": "Density Models",
-    "text": "Density Models\n\nLearn \\(p_{\\theta}: \\mathcal{X} \\to [0, \\infty)\\) over the image space \\(\\mathcal{X}\\) with normalization:\n\\[\\int_{\\mathcal{X}} p_{\\theta}(\\mathbf{x})\\, d\\mathbf{x} = 1\\]\n\n\nGoal: \\(p_{\\theta} \\approx p_{\\text{data}}\\).\n\n\nMaximum likelihood objective:\n\\[\\arg\\max_{\\theta} \\frac{1}{N} \\sum_{i=1}^{N} \\log p_{\\theta}(\\mathbf{x}^{(i)})\\]\n\n\nExamples: VAEs, normalizing flows, autoregressive models.",
+    "text": "Density Models\n\nLearn \\(p_{\\theta}: \\mathcal{X} \\to [0, \\infty)\\) such that \\(p_{\\theta} \\approx p_{\\text{data}}\\).\n\n\nMaximum likelihood objective:\n\\[\\theta^* = \\arg\\max_{\\theta} \\frac{1}{N} \\sum_{i=1}^{N} \\log p_{\\theta}(\\mathbf{x}^{(i)})\\]\n\n\nImplicit models need a different training signal (e.g. a discriminator in GANs). We will see that in the next lecture.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4375,17 +4353,6 @@
     "title": "8 - Generative AI for Computer Vision",
     "section": "Demo: Learning a 1D Distribution",
     "text": "Demo: Learning a 1D Distribution\n\n\nCan a single Gaussian reach high fidelity and high coverage? Open in new tab",
-    "crumbs": [
-      "Slides",
-      "8 - Generative AI for Computer Vision"
-    ]
-  },
-  {
-    "objectID": "pages/slides/genai_intro.html#density-generation",
-    "href": "pages/slides/genai_intro.html#density-generation",
-    "title": "8 - Generative AI for Computer Vision",
-    "section": "Density ≠ Generation",
-    "text": "Density ≠ Generation\n\n\nEvaluating \\(p_{\\theta}(\\mathbf{x})\\) is useful, e.g. for outlier detection. To generate, we additionally need a sampling mechanism.",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
@@ -4491,22 +4458,22 @@
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#demo-fid-precision-and-recall",
-    "href": "pages/slides/genai_intro.html#demo-fid-precision-and-recall",
+    "objectID": "pages/slides/genai_intro.html#limitations-of-distribution-metrics",
+    "href": "pages/slides/genai_intro.html#limitations-of-distribution-metrics",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "Demo: FID, Precision and Recall",
-    "text": "Demo: FID, Precision and Recall\n\n\nCompare Shifted and Mode collapse: which metric tells them apart? Open in new tab",
+    "section": "Limitations of Distribution Metrics",
+    "text": "Limitations of Distribution Metrics\n\nOne FID value does not say whether fidelity or coverage is the problem: precision and recall (Kynkäänniemi et al. 2019) separate them\nFID depends on the number of samples and on ImageNet features\nDon’t evaluate prompt adherence or input fidelity\nCan hide failures on rare classes, spatial relations, text rendering",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
     ]
   },
   {
-    "objectID": "pages/slides/genai_intro.html#limitations-of-distribution-metrics",
-    "href": "pages/slides/genai_intro.html#limitations-of-distribution-metrics",
+    "objectID": "pages/slides/genai_intro.html#demo-fid-precision-and-recall",
+    "href": "pages/slides/genai_intro.html#demo-fid-precision-and-recall",
     "title": "8 - Generative AI for Computer Vision",
-    "section": "Limitations of Distribution Metrics",
-    "text": "Limitations of Distribution Metrics\n\nOne FID value does not say whether fidelity or coverage is the problem: precision and recall (Kynkäänniemi et al. 2019) separate them\nFID depends on the number of samples and on ImageNet features\nDon’t evaluate prompt adherence or input fidelity\nCan hide failures on rare classes, spatial relations, text rendering",
+    "section": "Demo: FID, Precision and Recall",
+    "text": "Demo: FID, Precision and Recall\n\n\nCompare Shifted and Mode collapse: which metric tells them apart? Open in new tab",
     "crumbs": [
       "Slides",
       "8 - Generative AI for Computer Vision"
