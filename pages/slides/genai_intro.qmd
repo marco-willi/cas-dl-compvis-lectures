@@ -11,7 +11,6 @@ $$
 :::
 
 
-# Motivation
 
 ## Please refund me!
 
@@ -190,24 +189,18 @@ Examples on [slopdetector.org](https://slopdetector.org/ai-slop-examples)
 **One-to-many**: one label → many possible elephant images.
 :::
 
+## The Diversity Challenge
+
+![]({{< meta params.images_path >}}basics_elephants_probabilistic.png){.r-stretch}
+
+
+A specific label should produce a diverse set of outputs.
+
 
 ## Quiz: The Problem {.center}
 
 ::: {.r-fit-text}
 If the input is just the label "elephant", how can the model generate **different** elephants?
-:::
-
-::: {.fragment}
-**Answer:** Neural networks are deterministic. We need **stochasticity**.
-:::
-
-
-## The Diversity Challenge
-
-![]({{< meta params.images_path >}}basics_elephants_probabilistic.png){.r-stretch}
-
-::: {.fragment}
-A specific label should produce a diverse set of outputs.
 :::
 
 
@@ -260,7 +253,7 @@ $$\hat{\vect{x}} = g_{\theta}(\vect{y}, \vect{z}), \qquad \vect{z} \sim \mathcal
 ![Reproduced from @foster_generative_2023.]({{< meta params.images_path >}}intro_figures/latent_intuition_dataset.svg){width=60%}
 
 
-**Question**: What could the latent variables be for this dataset?
+**Question**: What might latent variables represent in this dataset?
 
 
 
@@ -325,10 +318,9 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
 | Video | prompt / frames | clips, motion |
 
 
-
 ## Creative vs. Faithful
 
-<!-- <style>
+<style>
 .creative-faithful-images {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -344,20 +336,8 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
   margin: 0 auto;
   display: block;
 }
-</style> -->
+</style>
 
-::: {layout-ncol=2}
-<!-- ::: {.creative-faithful-images} -->
-![]({{< meta params.images_path >}}monkey_toy.webp){width=30%}
-
-![]({{< meta params.images_path >}}monkey_toy_jungle_nano-banana-2.jpg){.fragment width=30%}
-<!-- ::: -->
-
-:::
-
-::: {.smaller}
-*Prompt: Create an image where this object is shown dancing in the jungle with a banana in one hand and a shampoo in the other hand.*
-:::
 
 ::: {.incremental}
 - **Creative**: unconditional, text-to-image — diversity, plausibility
@@ -365,8 +345,19 @@ $\vect{c}$ specifies what should be generated, preserved, completed, enhanced, o
 - Most real systems need **both**
 :::
 
+::: {.fragment}
 
+::: {.creative-faithful-images}
+![]({{< meta params.images_path >}}monkey_toy.webp)
 
+![]({{< meta params.images_path >}}monkey_toy_jungle_nano-banana-2.jpg)
+:::
+
+::: {.smaller}
+*Prompt: Create an image where this object is shown dancing in the jungle with a banana in one hand and a shampoo in the other hand.*
+:::
+
+:::
 
 
 # How Generative Models Learn
@@ -387,13 +378,13 @@ $$
 :::
 
 
-## The Objective
+<!-- ## The Objective
 
 ![]({{< meta params.images_path >}}intro_figures/density_digit_path.png){.r-stretch}
 
 ::: {.fragment}
 Generated $\hat{\vect{x}}$ should have **high probability** under the real data distribution $p_{\text{data}}(\vect{x})$.
-:::
+::: -->
 
 
 ## The Objective
@@ -412,13 +403,13 @@ Generated $\hat{\vect{x}}$ should have **high probability** under the real data 
 :::
 
 
-## Two Approaches
+## Explicit vs Implicit Models
 
 ::: {.fragment}
 **1. Direct (Implicit)**
 
 Learn a function that generates samples directly:
-$$g(\vect{z}) = \vect{x}$$
+$$g_\theta(\vect{z}) = \vect{x}$$
 :::
 
 ::: {.fragment}
@@ -436,29 +427,27 @@ Learn a probability density $p_{\theta}(\vect{x})$, then sample from it.
 Same distribution: a density **evaluates** $p_{\theta}(\vect{x})$, a generator **produces samples**.
 :::
 
+::: {.fragment}
+Evaluating $p_{\theta}(\vect{x})$ is useful, e.g. for **outlier detection**. To **generate**, we additionally need a sampling mechanism.
+:::
+
+
 
 ## Density Models
 
 ::: {.fragment}
-Learn $p_{\theta}: \mathcal{X} \to [0, \infty)$ over the image space $\mathcal{X}$ with normalization:
-
-$$\int_{\mathcal{X}} p_{\theta}(\vect{x})\, d\vect{x} = 1$$
-:::
-
-::: {.fragment}
-Goal: $p_{\theta} \approx p_{\text{data}}$.
+Learn $p_{\theta}: \mathcal{X} \to [0, \infty)$  such that  $p_{\theta} \approx p_{\text{data}}$.
 :::
 
 ::: {.fragment}
 **Maximum likelihood objective:**
 
-$$\arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})$$
+$$\theta^* = \arg\max_{\theta} \frac{1}{N} \sum_{i=1}^{N} \log p_{\theta}(\vect{x}^{(i)})$$
 :::
 
 ::: {.fragment}
-**Examples:** VAEs, normalizing flows, autoregressive models.
+Implicit models need a different training signal (e.g. a discriminator in GANs). We will see that in the next lecture.
 :::
-
 
 ## Learning a Density Model
 
@@ -476,13 +465,6 @@ Maximum likelihood moves density to where the training data lies. No negative ex
 Can a single Gaussian reach high fidelity *and* high coverage? [Open in new tab](../../demos/genai_intro/distribution_fitting/index.html){target="_blank"}
 
 
-## Density ≠ Generation
-
-![]({{< meta params.images_path >}}intro_figures/density_vs_sampling.svg){.r-stretch}
-
-::: {.fragment}
-Evaluating $p_{\theta}(\vect{x})$ is useful, e.g. for **outlier detection**. To **generate**, we additionally need a sampling mechanism.
-:::
 
 
 # Properties and Trade-offs of Generative Models
@@ -499,7 +481,6 @@ GANs and VAEs: one forward pass. Diffusion and flow matching: tens of steps. Aut
 ## Fidelity and Coverage
 
 ![]({{< meta params.images_path >}}intro_figures/coverage_mode_collapse.svg){width=100%}
-
 
 
 
@@ -581,13 +562,6 @@ Most meaningful for visual quality — but slow, subjective, expensive.
 :::
 
 
-## Demo: FID, Precision and Recall
-
-<iframe data-src="../../demos/genai_intro/fid_precision_recall/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: FID, precision and recall"></iframe>
-
-Compare *Shifted* and *Mode collapse*: which metric tells them apart? [Open in new tab](../../demos/genai_intro/fid_precision_recall/index.html){target="_blank"}
-
-
 ## Limitations of Distribution Metrics
 
 ::: {.incremental}
@@ -596,6 +570,13 @@ Compare *Shifted* and *Mode collapse*: which metric tells them apart? [Open in n
 - Don't evaluate prompt adherence or input fidelity
 - Can hide failures on rare classes, spatial relations, text rendering
 :::
+
+
+## Demo: FID, Precision and Recall
+
+<iframe data-src="../../demos/genai_intro/fid_precision_recall/index.html" width="100%" height="830" style="border: 1px solid #ddd; border-radius: 6px;" title="Interactive demo: FID, precision and recall"></iframe>
+
+Compare *Shifted* and *Mode collapse*: which metric tells them apart? [Open in new tab](../../demos/genai_intro/fid_precision_recall/index.html){target="_blank"}
 
 
 ## Conditional Generation Metrics
